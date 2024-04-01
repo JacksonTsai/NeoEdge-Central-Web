@@ -2,7 +2,7 @@
   "name": "neoedge-central-web",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
+  "prefix": "nec",
   "sourceRoot": "apps/neoedge-central-web/src",
   "tags": [],
   "targets": {
