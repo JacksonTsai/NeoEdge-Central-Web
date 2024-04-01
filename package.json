@@ -2,7 +2,10 @@
   "name": "@neo-edge-web/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "start": "run-p \"start:nx {1} --open --port {2}\" --",
+    "start:nx": "nx serve"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "17.3.0",
@@ -52,10 +55,15 @@
     "jest": "^29.4.1",
     "jest-environment-jsdom": "29.4.1",
     "jest-preset-angular": "14.0.3",
+    "npm-run-all": "^4.1.5",
     "nx": "18.2.1",
     "prettier": "2.6.2",
     "ts-jest": "29.1.0",
     "ts-node": "10.9.1",
     "typescript": "5.4.2"
+  },
+  "volta": {
+    "node": "20.11.1",
+    "npm": "10.2.4"
   }
 }
