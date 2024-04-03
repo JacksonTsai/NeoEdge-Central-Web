@@ -4,7 +4,10 @@
   "license": "MIT",
   "scripts": {
     "start": "run-p \"start:nx {1} --open --port {2}\" --",
-    "start:nx": "nx serve"
+    "start:nx": "nx serve",
+    "build": "run-p \"build:nx {1} --configuration {2}\" --",
+    "build:nx": "nx build",
+    "icon-sprite:generate": "rm -f icons/icons.svg && pnpm dlx svg2sprite-cli icons icons/icons-sprite.svg"
   },
   "private": true,
   "dependencies": {
