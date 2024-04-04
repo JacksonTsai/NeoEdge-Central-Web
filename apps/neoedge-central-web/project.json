@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "nec",
   "sourceRoot": "apps/neoedge-central-web/src",
-  "tags": [],
+  "tags": ["type:webapp"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
@@ -18,9 +18,17 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/neoedge-central-web/src/favicon.ico",
-          "apps/neoedge-central-web/src/assets"
+          "apps/neoedge-central-web/src/assets",
+          {
+            "glob": "icons-sprite.svg",
+            "input": "./icons",
+            "output": "assets/"
+          }
         ],
         "styles": ["apps/neoedge-central-web/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/"]
+        },
         "scripts": []
       },
       "configurations": {
@@ -79,7 +87,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "neoedge-central-web:build",
-        "staticFilePath": "dist/apps/neoedge-central-web/browser",
+        "staticFilePath": "dist/apps/neoedge-central-web",
         "spa": true
       }
     }

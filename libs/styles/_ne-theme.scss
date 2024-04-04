@@ -1,0 +1,98 @@
+@use 'colors' as *;
+@use '@angular/material' as mat;
+@include mat.core();
+
+$ne-primary: (
+  100: #e8edf5,
+  300: #6084bd,
+  500: #1d50a2,
+  700: #143871,
+  900: #0e2851,
+  contrast: (
+    100: $white,
+    300: $white,
+    500: $white,
+    700: $white,
+    900: $white
+  )
+);
+
+$ne-secondary: (
+  100: #ccecf9,
+  300: #4ebeec,
+  500: #00a3e5,
+  700: #0072a0,
+  900: #00202d,
+  contrast: (
+    100: $white,
+    300: $white,
+    500: $white,
+    700: $white,
+    900: $white
+  )
+);
+
+$ne-warn: (
+  100: #f8d6d9,
+  300: #e6717c,
+  500: #dc3545,
+  700: #9a2530,
+  900: #2c0a0d,
+  contrast: (
+    100: $white,
+    300: $white,
+    500: $white,
+    700: $white,
+    900: $white
+  )
+);
+
+$ne-primary: mat.define-palette($ne-primary, 500);
+$ne-accent: mat.define-palette($ne-secondary, 500);
+$ne-warn: mat.define-palette($ne-warn, 500);
+
+// light
+$ne-light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $ne-primary,
+      accent: $ne-accent,
+      warn: $ne-warn
+    ),
+    typography:
+      mat.define-typography-config(
+        $body-1: mat.define-typography-level(14px, 20px, 400),
+        $body-2: mat.define-typography-level(16px, 22px, 400),
+        $subtitle-1: mat.define-typography-level(21px, 26px, 500),
+        $subtitle-2: mat.define-typography-level(14px, 14px, 400),
+        $headline-5: mat.define-typography-level(24px, 30px, 700),
+        $headline-6: mat.define-typography-level(18px, 26px, 600),
+        $font-family: 'Plus Jakarta Sans',
+        $button: mat.define-typography-level(14px, 14px, 400)
+      )
+  )
+);
+
+// dark
+$ne-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $ne-primary,
+      accent: $ne-accent,
+      warn: $ne-warn
+    ),
+    typography:
+      mat.define-typography-config(
+        $body-1: mat.define-typography-level(14px, 20px, 400),
+        $body-2: mat.define-typography-level(16px, 22px, 400),
+        $subtitle-1: mat.define-typography-level(21px, 26px, 500),
+        $subtitle-2: mat.define-typography-level(14px, 14px, 400),
+        $headline-5: mat.define-typography-level(24px, 30px, 700),
+        $headline-6: mat.define-typography-level(18px, 26px, 600),
+        $font-family: 'Plus Jakarta Sans',
+        $button: mat.define-typography-level(14px, 14px, 400)
+      )
+  )
+);
+
+@include mat.all-component-themes($ne-light-theme);
