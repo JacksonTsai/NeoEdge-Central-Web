@@ -1,0 +1,32 @@
+<mat-toolbar class="toolbar" color="primary">
+  <button mat-icon-button aria-label="menu icon" (click)="onMenuToggle()">
+    <mat-icon svgIcon="icon:menu"></mat-icon>
+  </button>
+  <div class="toolbar__left">
+    <img class="logo-img" [src]="logoPath()" alt="NeoEdge web" />
+    <div class="version">Beta 1.0.0</div>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container class="ne-layout__sidenav-container" autosize>
+  <mat-sidenav
+    [mode]="sidenavMode"
+    [opened]="sidenavMode === 'side'"
+    class="ne-layout__sidenav"
+    [ngClass]="{ 'ne-layout__sidenav': true, 'ne-layout__sidenav--collapsed': !isMenuExtend() }"
+  >
+    <mat-nav-list class="sidebar-list">
+      <!-- <app-nav-item [item]="item" (notify)="sidenav.toggle()"> </app-nav-item> -->
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content
+    class="main-content"
+    [ngClass]="{ 'main-content': true, 'main-content--full': !isMenuExtend() }"
+    #mainContent
+  >
+    <main>
+      <ng-content></ng-content>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
