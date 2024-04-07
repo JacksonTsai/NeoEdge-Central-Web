@@ -15,7 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@neo-edge-web/components": ["libs/components/src/index.ts"]
+      "@neo-edge-web/components": ["libs/components/src/index.ts"],
+      "@neo-edge-web/global-store": ["libs/global-store/index.ts"],
+      "@neo-edge-web/menu-store": ["libs/global-store/menu-store/src/index.ts"],
+      "@neo-edge-web/models": ["libs/models/index.ts"],
+      "@neo-edge-web/users": ["libs/pages/users/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

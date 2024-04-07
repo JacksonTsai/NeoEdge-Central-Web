@@ -1,11 +1,12 @@
 $sidenav-width: 270px;
-$sidenav-collapsed-width: 80px;
+$sidenav-collapsed-width: 75px;
 $topbar-height: 70px;
 
 .mat-drawer-container.ne-layout__sidenav-container {
   height: calc(100vh - $topbar-height);
   .mat-drawer.ne-layout__sidenav {
     width: $sidenav-width;
+    padding: 0 8px;
     overflow-x: hidden;
     transition: width ease 0.1s;
     &--collapsed {
@@ -33,10 +34,12 @@ $topbar-height: 70px;
 .toolbar {
   display: flex;
   align-items: center;
+  font-weight: 400;
   &__left {
     display: flex;
     align-items: center;
     .logo-img {
+      margin-left: 8px;
       width: 130px;
       height: 26px;
     }

@@ -4,7 +4,7 @@
   "sourceRoot": "libs/components/src",
   "prefix": "ne",
   "projectType": "library",
-  "tags": ["type:lib", "scope:component-lib"],
+  "tags": ["type:lib", "scope:components"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

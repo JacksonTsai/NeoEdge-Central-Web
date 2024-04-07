@@ -15,9 +15,7 @@
     class="ne-layout__sidenav"
     [ngClass]="{ 'ne-layout__sidenav': true, 'ne-layout__sidenav--collapsed': !isMenuExtend() }"
   >
-    <mat-nav-list class="sidebar-list">
-      <!-- <app-nav-item [item]="item" (notify)="sidenav.toggle()"> </app-nav-item> -->
-    </mat-nav-list>
+    <ng-content select="[sideMenu]"></ng-content>
   </mat-sidenav>
 
   <mat-sidenav-content

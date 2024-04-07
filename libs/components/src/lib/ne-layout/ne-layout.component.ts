@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { NgClass, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewChild, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild, inject, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -45,16 +45,10 @@ export class NeLayoutComponent {
       .subscribe((state: { breakpoints: any }) => {
         if (state.breakpoints[SMALL_VIEW]) {
           this.isMenuExtend.set(false);
-          console.log('🚀 ~ NeLayoutComponent ~ .subscribe ~ this.isMenuExtend:', this.isMenuExtend());
         } else {
-          console.log('🚀 ~ NeLayoutComponent ~ .subscribe ~ this.isMenuExtend:', this.isMenuExtend());
           this.isMenuExtend.set(true);
         }
       });
-
-    effect(() => {
-      console.log(this.isMenuExtend());
-    });
   }
 
   protected onMenuToggle() {
