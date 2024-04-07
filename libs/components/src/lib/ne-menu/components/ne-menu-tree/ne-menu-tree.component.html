@@ -1,0 +1,28 @@
+<a
+  mat-list-item
+  (click)="onMenuItemSelected(menuItem())"
+  class="menu"
+  [ngClass]="{ 'menu--active': menuItem().isActive }"
+>
+  <div class="menu-item">
+    <div class="menu-item__left">
+      <mat-icon svgIcon="icon:{{ menuItem().icon }}" matListItemIcon></mat-icon>
+      <span class="display-name">{{ menuItem().displayName }}</span>
+    </div>
+    @if(menuItem().children && menuItem().children?.length) {
+    <div class="menu-item__right">
+      <mat-icon
+        class="menu-item__right__icon"
+        [@more-icon-rotate]="menuItem().isExpanded ? 'expanded' : 'collapsed'"
+        svgIcon="icon:expand-more"
+      >
+      </mat-icon>
+    </div>
+    }
+  </div>
+</a>
+@if(menuItem().isExpanded && menuItem().children?.length) { @for(children of menuItem().children; track children.path) {
+<ne-menu-tree [menuItem]="children" (click)="onMenuItemSelected(children)"> </ne-menu-tree>
+} }
+<!-- [ngClass]="{ 'mat-toolbar mat-primary activeMenu': menuItem.path ? router.isActive(menuItem.path, true) : false,
+expanded: isExpanded, }" -->
