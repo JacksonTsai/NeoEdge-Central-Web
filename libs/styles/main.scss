@@ -1,8 +1,8 @@
 @use 'colors' as *;
-@use 'material-override' as *;
 
 @import 'ne-theme';
 @import 'variables';
+@import 'material-override';
 
 *,
 :before,
