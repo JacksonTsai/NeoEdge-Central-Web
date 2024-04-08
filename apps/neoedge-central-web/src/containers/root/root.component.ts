@@ -45,7 +45,7 @@ import { ShellComponent } from '../shell/shell.component';
         (handleMenuItemSelected)="onMenuItemSelected($event)"
       >
       </ne-menu>
-      <nec-shell></nec-shell>
+      <router-outlet></router-outlet>
     </ne-layout>
   `,
 

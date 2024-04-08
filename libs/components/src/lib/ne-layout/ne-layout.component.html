@@ -12,7 +12,6 @@
   <mat-sidenav
     [mode]="sidenavMode"
     [opened]="sidenavMode === 'side'"
-    class="ne-layout__sidenav"
     [ngClass]="{ 'ne-layout__sidenav': true, 'ne-layout__sidenav--collapsed': !isMenuExtend() }"
   >
     <ng-content select="[sideMenu]"></ng-content>
