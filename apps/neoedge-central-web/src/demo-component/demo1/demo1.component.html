@@ -1,0 +1,61 @@
+<section>
+  <h2>Button</h2>
+  <div class="example-button-row">
+    <button mat-flat-button color="primary">SAVE</button>
+    <button mat-flat-button color="primary">APPLY</button>
+    <button mat-flat-button color="primary">UPDATE</button>
+    <button mat-flat-button color="warn">DELETE</button>
+    <button mat-flat-button disabled>DISABLED</button>
+    <button mat-button>CANCEL</button>
+  </div>
+</section>
+
+<section>
+  <h2>Input</h2>
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>IP address</mat-label>
+    <input matInput placeholder="" />
+    <mat-hint>Hint</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Email</mat-label>
+    <input matInput [formControl]="email" (blur)="updateErrorMessage()" required />
+    @if (email.invalid) {
+    <mat-error>Required</mat-error>
+    }
+  </mat-form-field>
+</section>
+
+<section>
+  <h2>Select</h2>
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Demo</mat-label>
+    <mat-select [(ngModel)]="selectedValue" name="food">
+      @for (food of foods; track food) {
+      <mat-option [value]="food.value">{{ food.viewValue }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</section>
+<section>
+  <h2>Radio</h2>
+  <section>
+    <mat-radio-group [(ngModel)]="color">
+      <mat-radio-button color="primary" value="primary"> Primary </mat-radio-button>
+      <mat-radio-button color="primary" value="accent"> Accent </mat-radio-button>
+      <mat-radio-button color="primary" value="warn"> Warn </mat-radio-button>
+    </mat-radio-group>
+  </section>
+</section>
+
+<section>
+  <h2>Toggle</h2>
+  <mat-slide-toggle color="primary" [(ngModel)]="isToggleChecked">
+    Slide Toggle Checked: {{ isToggleChecked }}
+  </mat-slide-toggle>
+</section>
+
+<section>
+  <h2>Checkbox</h2>
+  <mat-checkbox color="primary">Check me!</mat-checkbox>
+</section>

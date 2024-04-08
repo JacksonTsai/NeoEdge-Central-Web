@@ -1,0 +1,14 @@
+@use 'colors' as *;
+
+.mdc-card {
+  overflow: hidden;
+  box-shadow: none !important;
+  border: 1px solid $border-color !important;
+  &.shadow-none {
+    border: 0 !important;
+  }
+}
+
+.mat-tab-wrapper {
+  margin: 16px !important;
+}

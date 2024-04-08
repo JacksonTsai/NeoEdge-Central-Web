@@ -8,10 +8,28 @@ export const MENU_TREE: MenuItem[] = [
     isExpanded: true,
     children: [
       {
+        displayName: 'Demo 1',
+        icon: 'dot',
+        path: '/project/demo1',
+        isActive: true
+      },
+      {
+        displayName: 'Demo 2',
+        icon: 'dot',
+        path: '/project/demo2',
+        isActive: false
+      },
+      {
+        displayName: 'Demo 3',
+        icon: 'dot',
+        path: '/project/demo3',
+        isActive: false
+      },
+      {
         displayName: 'Dashboard',
         icon: 'dot',
         path: '/project/dashboard',
-        isActive: true
+        isActive: false
       },
       {
         displayName: 'Gateway',
