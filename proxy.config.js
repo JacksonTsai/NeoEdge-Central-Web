@@ -5,7 +5,7 @@ dotenv.config({ path: path.join(__dirname, `./.env`) });
 
 const PROXY_CONFIG = {
   '/api/*': {
-    target: process.env.PROXY_TARGET || 'http://localhost:5555',
+    target: process.env.PROXY_TARGET || 'http://localhost:4200',
     changeOrigin: true,
     pathRewrite: (reqPath) => {
       if (process.env.PROXY_BASE_PATH) {

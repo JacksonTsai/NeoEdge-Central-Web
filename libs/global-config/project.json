@@ -1,16 +1,16 @@
 {
-  "name": "menu-store",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/global-store/menu-store/src",
+  "name": "global-config",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/global-config/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:store"],
+  "tags": ["type:lib", "scope:config"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/global-store/menu-store/jest.config.ts"
+        "jestConfig": "libs/global-config/jest.config.ts"
       }
     },
     "lint": {

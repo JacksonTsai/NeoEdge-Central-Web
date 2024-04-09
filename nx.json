@@ -76,7 +76,9 @@
       "strict": false
     },
     "@nx/angular:component": {
-      "style": "scss"
+      "style": "scss",
+      "changeDetection": "OnPush",
+      "displayBlock": true
     }
   }
 }

@@ -16,7 +16,10 @@
     "baseUrl": ".",
     "paths": {
       "@neo-edge-web/components": ["libs/components/src/index.ts"],
+      "@neo-edge-web/global-config": ["libs/global-config/src/index.ts"],
+      "@neo-edge-web/global-service": ["libs/global-service/src/index.ts"],
       "@neo-edge-web/global-store": ["libs/global-store/index.ts"],
+      "@neo-edge-web/http": ["libs/interceptors/http/src/index.ts"],
       "@neo-edge-web/menu-store": ["libs/global-store/menu-store/src/index.ts"],
       "@neo-edge-web/models": ["libs/models/index.ts"],
       "@neo-edge-web/users": ["libs/pages/users/src/index.ts"]
