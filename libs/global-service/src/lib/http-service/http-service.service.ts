@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 export interface RestConfig {
@@ -20,7 +20,10 @@ export class HttpService {
   constructor(private http: HttpClient, @Inject(REST_CONFIG) private restConfig: RestConfig) {}
 
   private formatError = (error: HttpErrorResponse) => {
-    throw error;
+    console.log(error);
+
+    // throw error;
+    return EMPTY;
   };
 
   get(
