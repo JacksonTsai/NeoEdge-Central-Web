@@ -99,7 +99,7 @@ $ne-light-theme: mat.define-light-theme(
         $headline-5: mat.define-typography-level(24px, 30px, 700),
         $headline-6: mat.define-typography-level(18px, 26px, 600),
         $font-family: $font-family,
-        $button: mat.define-typography-level(14px, 14px, 400)
+        $button: mat.define-typography-level(16px, 16px, 400)
       )
   )
 );
@@ -121,7 +121,7 @@ $ne-dark-theme: mat.define-dark-theme(
         $headline-5: mat.define-typography-level(24px, 30px, 700),
         $headline-6: mat.define-typography-level(18px, 26px, 600),
         $font-family: $font-family,
-        $button: mat.define-typography-level(14px, 14px, 400)
+        $button: mat.define-typography-level(16px, 16px, 400)
       )
   )
 );

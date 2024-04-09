@@ -1,0 +1,8 @@
+@use 'colors' as *;
+@use 'variables' as *;
+
+.mat-mdc-card.mdc-card {
+  overflow: hidden;
+  border: $border;
+  box-shadow: none;
+}
