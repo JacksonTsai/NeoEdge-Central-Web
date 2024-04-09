@@ -33,6 +33,12 @@
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/neoedge-central-web/environments/environment.ts",
+              "with": "apps/neoedge-central-web/environments/environment.prod.ts"
+            }
+          ],
           "budgets": [
             {
               "type": "initial",
@@ -62,7 +68,8 @@
           "buildTarget": "neoedge-central-web:build:production"
         },
         "development": {
-          "buildTarget": "neoedge-central-web:build:development"
+          "buildTarget": "neoedge-central-web:build:development",
+          "proxyConfig": "proxy.config.js"
         }
       },
       "defaultConfiguration": "development"
