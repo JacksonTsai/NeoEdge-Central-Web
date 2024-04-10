@@ -17,7 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideRouterStore({ serializer: CustomRouterStateSerializer }),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(withInterceptors([AuthInterceptor])),
-    provideRouterStore(),
     {
       provide: REST_CONFIG,
       useValue: {

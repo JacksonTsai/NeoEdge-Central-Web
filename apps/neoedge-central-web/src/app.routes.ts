@@ -8,7 +8,3 @@ export const appRoutes: Route[] = [
     children: []
   }
 ];
-
-export function provideRouterConfig() {
-  return [];
-}
