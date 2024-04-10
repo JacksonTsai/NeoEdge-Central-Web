@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'global-store-router-store',
+  displayName: 'global-store',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../coverage/libs/global-store/router-store',
+  coverageDirectory: '../../../coverage/libs/global-store/global-store',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

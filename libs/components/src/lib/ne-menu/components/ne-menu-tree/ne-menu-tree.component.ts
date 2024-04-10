@@ -27,12 +27,5 @@ export class NeMenuTreeComponent {
 
   onMenuItemSelected = (menuItem: MenuItem) => {
     this.handleMenuItemSelected.emit(menuItem);
-    // if (!menuItem.children || !menuItem.children.length) {
-    //   this.router.navigate([menuItem.path]);
-    // }
-
-    // if (menuItem.children && menuItem.children.length) {
-    //   this.isExpanded = !this.isExpanded;
-    // }
   };
 }
