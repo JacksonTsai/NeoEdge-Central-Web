@@ -12,7 +12,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error && (error.status === 401 || error.status === 403)) {
-        snackBar.open('"warn": "Your login token has expired. Get a new token and try again.', 'CLOSE', {
+        snackBar.open('"warn": "Login token has expired. Please login again.', 'CLOSE', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom'
         });
