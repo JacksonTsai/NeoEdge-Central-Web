@@ -1,0 +1,59 @@
+<div class="login-wrapper">
+  <img class="logo-img" src="assets/images/neoedge_logo_blue.png" alt="NeoEdge web" />
+
+  <form [formGroup]="form">
+    <mat-card class="login-card">
+      <h2 class="welcome-title">
+        Welcome to
+        <span class="neoedge">NeoEdge</span>
+      </h2>
+      <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="account" type="text" maxlength="128" />
+        @if (accountCtrl.hasError('required')) {
+        <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" [type]="isTogglePwd() ? 'password' : 'text'" maxlength="128" />
+        <button type="button" mat-icon-button matSuffix (click)="togglePwd()">
+          @if (isTogglePwd()) {
+          <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
+          } @else {
+          <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
+          }
+        </button>
+        @if (passwordCtrl.hasError('required')) {
+        <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-checkbox color="primary" [formControl]="rememberMeCtrl">Remember me</mat-checkbox>
+
+      <button
+        type="button"
+        class="login-card__btn login-btn"
+        mat-raised-button
+        color="primary"
+        (click)="singIn()"
+        [disabled]="form.invalid"
+      >
+        Sing In
+      </button>
+      <div class="or-container">
+        <div class="divider"></div>
+        <div class="or-label">or</div>
+        <div class="divider"></div>
+      </div>
+
+      <button type="button" class="login-card__btn" mat-stroked-button (click)="singInWithAzure()">
+        Sign in with Azure AD
+      </button>
+
+      <span class="forgot-password">
+        <a [routerLink]="'/login/forgot-password'"> Forgot password ? </a>
+      </span>
+    </mat-card>
+  </form>
+</div>
