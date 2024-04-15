@@ -1,10 +1,35 @@
 <mat-toolbar class="toolbar" color="primary">
-  <button mat-icon-button aria-label="menu icon" (click)="onMenuToggle()">
-    <mat-icon svgIcon="icon:menu"></mat-icon>
-  </button>
   <div class="toolbar__left">
+    <button mat-icon-button aria-label="menu icon" (click)="onMenuToggle()">
+      <mat-icon svgIcon="icon:menu"></mat-icon>
+    </button>
     <img class="logo-img" [src]="logoPath()" alt="NeoEdge web" />
     <div class="version">Beta 1.0.0</div>
+  </div>
+  <div class="toolbar__right" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Notifications">
+    <div>
+      <p class="toolbar__right__name">Jackson</p>
+      <p class="toolbar__right__role">Administrator</p>
+    </div>
+    <mat-icon svgIcon="icon:expand-more"></mat-icon>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <!-- <mat-icon>dialpad</mat-icon> -->
+        <span>My Company</span>
+      </button>
+      <button mat-menu-item>
+        <!-- <mat-icon>voicemail</mat-icon> -->
+        <span>My Profile</span>
+      </button>
+      <button mat-menu-item>
+        <!-- <mat-icon>notifications_off</mat-icon> -->
+        <span>Switch Project</span>
+      </button>
+      <button mat-menu-item (click)="onLogout()">
+        <!-- <mat-icon>notifications_off</mat-icon> -->
+        <span>Logout</span>
+      </button>
+    </mat-menu>
   </div>
 </mat-toolbar>
 
