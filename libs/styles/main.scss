@@ -13,15 +13,47 @@
 html,
 body {
   margin: 0;
+  padding: 0;
   height: 100%;
   font-size: 14px;
   font-weight: 400;
   font-family: $font-family;
   color: $text-primary;
-  letter-spacing: 0.015em;
+  letter-spacing: 0.02em;
   line-height: 1.225rem;
+  p {
+    padding: 0;
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 0;
+    font-weight: 400;
+  }
+  .page-title {
+    margin: 0 0 24px 0;
+  }
 }
 
 html .mat-drawer-container {
   background-color: $white;
+}
+
+*[color='warn'] {
+  color: $warning;
+}
+
+*[color='danger'] {
+  color: $danger;
+}
+
+*[color='accent'] {
+  color: $accent;
+}
+
+*[color='primary'] {
+  color: $primary;
 }

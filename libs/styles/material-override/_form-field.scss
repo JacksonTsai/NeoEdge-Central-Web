@@ -1,0 +1,10 @@
+.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+  mat-label {
+    font-size: 20px;
+  }
+}
+.mat-mdc-form-field.search-input-field {
+  width: 100%;
+  max-width: 360px;
+  min-width: 220px;
+}
