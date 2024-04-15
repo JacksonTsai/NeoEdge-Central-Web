@@ -1,3 +1,4 @@
-export * from './lib/users.routes';
+export * from './lib/users-page.routes';
 
-export * from './lib/users/users.component';
+export * from './lib/components';
+export * from './lib/containers';
