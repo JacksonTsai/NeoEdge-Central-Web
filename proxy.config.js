@@ -11,7 +11,8 @@ const PROXY_CONFIG = {
     changeOrigin: true,
     logLevel: 'debug',
     pathRewrite: {
-      '^/api/v1': ''
+      '^/api/v1': '',
+      '^/api': ''
     },
     secure: false,
     ws: true,

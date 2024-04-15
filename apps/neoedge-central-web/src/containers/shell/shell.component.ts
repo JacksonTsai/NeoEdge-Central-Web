@@ -1,21 +1,23 @@
 import { NgClass, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
+import * as AuthStore from '@neo-edge-web/auth-store';
 import { NeLayoutComponent, NeMenuComponent } from '@neo-edge-web/components';
+import { RouterStoreService, selectMenuTree, updateMenu } from '@neo-edge-web/global-store';
 import { MenuItem } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LetDirective } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-// import { selectMenuTree, updateMenu } from 'libs/global-store/global-store/src/lib/menu-store/src';
-// import { RouterStoreService } from 'libs/global-store123';
-import { RouterStoreService, selectMenuTree, updateMenu } from '@neo-edge-web/global-store';
-import { tap } from 'rxjs';
+import { map, take, tap } from 'rxjs';
 import { MENU_TREE } from '../../configs/nec-menu.config';
+
+const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
+
 @UntilDestroy()
 @Component({
   selector: 'nec-shell',
@@ -49,10 +51,8 @@ import { MENU_TREE } from '../../configs/nec-menu.config';
   styleUrl: './shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShellComponent {
+export class ShellComponent implements OnInit {
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
-  // #matIconRegistry = inject(MatIconRegistry);
-  // #domSanitizer = inject(DomSanitizer);
   #routerStoreService = inject(RouterStoreService);
   #globalStore = inject(Store);
   #router = inject(Router);
@@ -109,10 +109,18 @@ export class ShellComponent {
     });
   };
 
-  // #registryIcons() {
-  //   this.#matIconRegistry.addSvgIconSetInNamespace(
-  //     'icon',
-  //     this.#domSanitizer.bypassSecurityTrustResourceUrl('assets/icons-sprite.svg?ts=' + new Date().getTime())
-  //   );
-  // }
+  ngOnInit() {
+    this.#globalStore
+      .select(AuthStore.selectAuthToken)
+      .pipe(
+        untilDestroyed(this),
+        take(1),
+        map((d) => {
+          this.#globalStore.dispatch(
+            AuthStore.refreshAccessTokenAction({ refreshToken: d.refreshToken, interval: REFRESH_TOKEN_INTERVAL })
+          );
+        })
+      )
+      .subscribe();
+  }
 }
