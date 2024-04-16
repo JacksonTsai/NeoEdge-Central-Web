@@ -17,7 +17,7 @@ export class UserService {
     return throwError(() => err);
   }
 
-  private USER_PROFILE_PATH = '/user/profile';
+  private USER_PROFILE_PATH = '/my/profile';
 
   userProfile$: Observable<IGetUserProfileResp> = this.#http.get(this.USER_PROFILE_PATH).pipe(
     catchError((err) => {

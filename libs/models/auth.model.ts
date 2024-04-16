@@ -3,9 +3,10 @@ export interface IAuthState {
   tryLoginCount: number;
   isAuthVerifying: boolean;
   jwt: IJwtInfo | null;
-  permissions: IPermission[];
+  permissions: IAllPermission[];
   accessToken: string;
   refreshToken: string;
+  userProfile: IGetUserProfileResp | null;
 }
 
 export interface ILoginReq {
@@ -27,13 +28,13 @@ export interface IJwtInfo {
   fqdn: string;
 }
 
-export interface IPermission {
+export interface IAllPermission {
   permissionId: number;
   permissionName: string;
 }
 
-export interface IPermissionResp {
-  list: IPermission[];
+export interface IAllPermissionResp {
+  list: IAllPermission[];
 }
 
 export interface IAuthState {
@@ -41,7 +42,7 @@ export interface IAuthState {
   tryLoginCount: number;
   isAuthVerifying: boolean;
   jwt: IJwtInfo | null;
-  permissions: IPermission[];
+  permissions: IAllPermission[];
   accessToken: string;
   refreshToken: string;
 }
@@ -69,23 +70,21 @@ export interface ISetPasswordReq {
 
 export interface IGetUserProfileResp {
   account: string;
+  isMfaEnable: number;
+  name: string;
+  timeZone: string;
+  language: string;
+  idleTimeout: number;
   defaultProjectId: number;
   defaultProjectName: string;
-  firstName: string;
-  idleTimeout: number;
-  isMFAEnable: number;
-  language: number;
-  lastName: string;
-  zone: string;
+  role: IUserRole;
 }
 
-export interface IPutUserProfileResp {
-  Name: string;
-  defaultProjectId: number;
-  idleTimeout: number;
-  isMfaEnable: number;
-  language: number;
-  timezone: string;
+export interface IUserRole {
+  id: number;
+  name: string;
+  description: string;
+  permissions: number[];
 }
 
 export enum PERMISSION {

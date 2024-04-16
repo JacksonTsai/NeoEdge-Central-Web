@@ -1,11 +1,15 @@
-import { IGetUserProfileResp, ILoginReq, ILoginResp, IPermission, IRefreshTokenResp } from '@neo-edge-web/models';
+import { IGetUserProfileResp, ILoginReq, ILoginResp, IRefreshTokenResp } from '@neo-edge-web/models';
 import { createAction, props } from '@ngrx/store';
 
 export const loginAction = createAction('[Auth] Login', props<{ loginReq: ILoginReq }>());
 
-export const loginSuccess = createAction(
-  '[Auth] Login Success',
-  props<{ loginResp: ILoginResp; permissions: IPermission[]; userProfile: IGetUserProfileResp }>()
+export const loginSuccess = createAction('[Auth] Login Success', props<{ loginResp: ILoginResp }>());
+
+export const userProfileAction = createAction('[Auth] Get Profile');
+
+export const userProfileSuccess = createAction(
+  '[Auth] Get Profile Success',
+  props<{ userProfile: IGetUserProfileResp }>()
 );
 
 export const loginFail = createAction('[Auth] Login Fail');

@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, UserService } from '@neo-edge-web/global-service';
-import { IGetUserProfileResp, ILoginResp, IPermission } from '@neo-edge-web/models';
+import { IGetUserProfileResp, ILoginResp } from '@neo-edge-web/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { LocalStorageService } from 'ngx-webstorage';
-import { EMPTY, combineLatest, interval, of } from 'rxjs';
+import { SessionStorageService } from 'ngx-webstorage';
+import { EMPTY, interval, of } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
 
@@ -14,35 +14,15 @@ export class AuthEffects {
   #authService = inject(AuthService);
   #userService = inject(UserService);
   #router = inject(Router);
-  #storage = inject(LocalStorageService);
-
-  // login$ = createEffect(() =>
-  //   this.#actions.pipe(
-  //     ofType(AuthAction.loginAction),
-  //     exhaustMap(({ loginReq }) =>
-  //       this.#authService.login$(loginReq).pipe(
-  //         switchMap((loginResp: ILoginResp) => {
-  //           return this.#authService.permission$.pipe(
-  //             tap((permissions) => AuthAction.loginSuccess({ loginResp, permissions: permissions.list }))
-  //           );
-  //         }),
-  //         catchError(() => of(AuthAction.loginFail))
-  //       )
-  //     )
-  //   )
-  // );
+  #storage = inject(SessionStorageService);
 
   login$ = createEffect(() =>
     this.#actions.pipe(
       ofType(AuthAction.loginAction),
-      exhaustMap(({ loginReq }) =>
+      switchMap(({ loginReq }) =>
         this.#authService.login$(loginReq).pipe(
-          switchMap((loginResp: ILoginResp) => {
-            return combineLatest([this.#authService.permission$, this.#userService.userProfile$]).pipe(
-              map(([permissions, userProfile]) => {
-                return AuthAction.loginSuccess({ loginResp, permissions: permissions.list, userProfile });
-              })
-            );
+          map((loginResp: ILoginResp) => {
+            return AuthAction.loginSuccess({ loginResp });
           }),
           catchError(() => of(AuthAction.loginFail))
         )
@@ -50,27 +30,36 @@ export class AuthEffects {
     )
   );
 
-  loginSuccess$ = createEffect(
-    () =>
-      this.#actions.pipe(
-        ofType(AuthAction.loginSuccess),
-        tap(
-          (loginSuccessProps: {
-            loginResp: ILoginResp;
-            permissions: IPermission[];
-            userProfile: IGetUserProfileResp;
-          }) => {
-            this.#storage.store('account', loginSuccessProps.loginResp);
-            this.#storage.store('permissions', loginSuccessProps.permissions);
-            this.#storage.store('user_profile', loginSuccessProps.userProfile);
-            if (loginSuccessProps?.userProfile?.defaultProjectName) {
-              // todo jackson navigate by url
+  loginSuccess$ = createEffect(() =>
+    this.#actions.pipe(
+      ofType(AuthAction.loginSuccess),
+      map((loginSuccessProps: { loginResp: ILoginResp }) => {
+        this.#storage.store('account', loginSuccessProps.loginResp);
+        return AuthAction.userProfileAction();
+      })
+    )
+  );
+
+  userProfile$ = createEffect(() =>
+    this.#actions.pipe(
+      ofType(AuthAction.userProfileAction),
+      exhaustMap(() =>
+        this.#userService.userProfile$.pipe(
+          map((userProfile: IGetUserProfileResp) => {
+            this.#storage.store('user_profile', userProfile);
+            if (userProfile?.defaultProjectName) {
+              // to dashboard
+              this.#router.navigateByUrl('/user-management/users');
+            } else {
+              // to company
               this.#router.navigateByUrl('/user-management/users');
             }
-          }
+            return AuthAction.userProfileSuccess({ userProfile });
+          }),
+          catchError(() => of(AuthAction.loginFail))
         )
-      ),
-    { dispatch: false }
+      )
+    )
   );
 
   refreshAccessTokenAction$ = createEffect(() => {

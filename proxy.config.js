@@ -3,19 +3,15 @@ const dotenv = require('dotenv');
 
 dotenv.config({ path: path.join(__dirname, `./.env`) });
 
-// PROXY_TARGET=https://virtserver.swaggerhub.com
-// PROXY_BASE_PATH=/ABOUTSKYGOOOGLE_1/ecv-user/1.0.0
 const PROXY_CONFIG = {
   '/api/**': {
     target: process.env.PROXY_TARGET,
     changeOrigin: true,
     logLevel: 'debug',
-    pathRewrite: {
-      '^/api/v1': '',
-      '^/api': ''
-    },
+    pathRewrite: {},
     secure: false,
     ws: true,
+    headers: { origin: process.env.HEADER_ORIGIN ? process.env.HEADER_ORIGIN : '' },
     cookieDomainRewrite: { '*': 'localhost' }
   }
 };
