@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import * as AuthAction from '@neo-edge-web/auth-store';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
-import { LocalStorageService } from 'ngx-webstorage';
+import { SessionStorageService } from 'ngx-webstorage';
 
 @UntilDestroy()
 @Component({
@@ -20,7 +20,7 @@ export class RootComponent implements OnInit {
   #matIconRegistry = inject(MatIconRegistry);
   #domSanitizer = inject(DomSanitizer);
   #globalStore = inject(Store);
-  #storage = inject(LocalStorageService);
+  #storage = inject(SessionStorageService);
   constructor() {
     this.#registryIcons();
   }
@@ -34,10 +34,10 @@ export class RootComponent implements OnInit {
 
   ngOnInit() {
     const loginResp = this.#storage.retrieve('account');
-    const permissions = this.#storage.retrieve('permissions');
     const userProfile = this.#storage.retrieve('user_profile');
-    if (loginResp && permissions && userProfile) {
-      this.#globalStore.dispatch(AuthAction.loginSuccess({ loginResp, permissions, userProfile }));
+    if (loginResp && userProfile) {
+      this.#globalStore.dispatch(AuthAction.loginSuccess({ loginResp }));
+      this.#globalStore.dispatch(AuthAction.userProfileSuccess({ userProfile }));
     }
   }
 }
