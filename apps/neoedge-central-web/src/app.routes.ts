@@ -8,6 +8,20 @@ export const appRoutes: Route[] = [
     canActivateChild: [AuthGuard],
     children: [
       {
+        path: 'project/dashboard',
+        loadChildren: () => import('@neo-edge-web/dashboard').then((m) => m.dashboardRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
+        path: 'company-account/company-info',
+        loadChildren: () => import('@neo-edge-web/company-info').then((m) => m.companyInfoRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: 'user-management/users',
         loadChildren: () => import('@neo-edge-web/users').then((m) => m.usersRoutes),
         data: {
