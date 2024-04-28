@@ -1,0 +1,44 @@
+@use 'colors' as *;
+
+.users-top-action {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.users-card {
+  &__table {
+    width: 100%;
+  }
+  .table-action {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .mat-column-no {
+    width: 58px;
+  }
+  .mat-column-action {
+    width: 237px;
+  }
+  .mat-column-name {
+    width: 237px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .mat-column-accountStatus {
+    width: 230px;
+  }
+  .link {
+    margin-left: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  td {
+    button + button {
+      margin-left: 8px;
+    }
+  }
+}

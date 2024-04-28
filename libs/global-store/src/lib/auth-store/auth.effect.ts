@@ -19,23 +19,45 @@ export class AuthEffects {
   login$ = createEffect(() =>
     this.#actions.pipe(
       ofType(AuthAction.loginAction),
-      switchMap(({ loginReq }) =>
-        this.#authService.login$(loginReq).pipe(
+      switchMap(({ loginReq }) => {
+        return this.#authService.login$(loginReq).pipe(
           map((loginResp: ILoginResp) => {
-            return AuthAction.loginSuccess({ loginResp });
+            this.#storage.store('account', loginResp);
+            return AuthAction.loginSuccess({ loginResp, fromUserLogin: true });
           }),
-          catchError(() => of(AuthAction.loginFail))
-        )
-      )
+          catchError(() => of(AuthAction.loginFail).pipe(map(() => EMPTY)))
+        );
+      })
     )
   );
 
   loginSuccess$ = createEffect(() =>
     this.#actions.pipe(
       ofType(AuthAction.loginSuccess),
-      map((loginSuccessProps: { loginResp: ILoginResp }) => {
-        this.#storage.store('account', loginSuccessProps.loginResp);
-        return AuthAction.userProfileAction();
+      switchMap(({ fromUserLogin }) => {
+        return this.#userService.userProfile$.pipe(
+          map((userProfile: IGetUserProfileResp) => {
+            this.#storage.store('user_profile', userProfile);
+            return AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin });
+          }),
+          catchError(() => of(AuthAction.loginFail))
+        );
+      })
+    )
+  );
+
+  loginSuccessRedirect$ = createEffect(() =>
+    this.#actions.pipe(
+      ofType(AuthAction.loinSuccessRedirect),
+      map(({ userProfile, isRedirectDefaultPage }) => {
+        if (isRedirectDefaultPage) {
+          if (userProfile?.defaultProjectName) {
+            this.#router.navigateByUrl('/project/dashboard');
+          } else {
+            this.#router.navigateByUrl('/company-account/company-info');
+          }
+        }
+        return AuthAction.userProfileSuccess({ userProfile });
       })
     )
   );
@@ -47,13 +69,6 @@ export class AuthEffects {
         this.#userService.userProfile$.pipe(
           map((userProfile: IGetUserProfileResp) => {
             this.#storage.store('user_profile', userProfile);
-            if (userProfile?.defaultProjectName) {
-              // to dashboard
-              this.#router.navigateByUrl('/user-management/users');
-            } else {
-              // to company
-              this.#router.navigateByUrl('/user-management/users');
-            }
             return AuthAction.userProfileSuccess({ userProfile });
           }),
           catchError(() => of(AuthAction.loginFail))

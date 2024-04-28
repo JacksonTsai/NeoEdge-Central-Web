@@ -3,9 +3,17 @@ import { createAction, props } from '@ngrx/store';
 
 export const loginAction = createAction('[Auth] Login', props<{ loginReq: ILoginReq }>());
 
-export const loginSuccess = createAction('[Auth] Login Success', props<{ loginResp: ILoginResp }>());
+export const loginSuccess = createAction(
+  '[Auth] Login Success',
+  props<{ loginResp: ILoginResp; fromUserLogin: boolean }>()
+);
 
 export const userProfileAction = createAction('[Auth] Get Profile');
+
+export const loinSuccessRedirect = createAction(
+  '[Auth] Redirect To Default Page',
+  props<{ userProfile: IGetUserProfileResp; isRedirectDefaultPage: boolean }>()
+);
 
 export const userProfileSuccess = createAction(
   '[Auth] Get Profile Success',

@@ -1,6 +1,6 @@
 @use 'colors' as *;
 
-.mdc-button.mdc-button--outlined.mat-mdc-outlined-button.mat-mdc-button-base:not(:disabled) {
+.mdc-button.mdc-button--outlined.mat-mdc-outlined-button.mat-mdc-button-base {
   border-color: $black-gary;
   .mat-icon {
     width: 24px;

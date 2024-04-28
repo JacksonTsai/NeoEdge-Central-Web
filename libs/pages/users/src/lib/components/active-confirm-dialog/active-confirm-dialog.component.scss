@@ -1,3 +1,11 @@
-:host {
-  display: block;
+.item {
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 8px;
+  }
+  & + .item {
+    margin-top: 20px;
+  }
 }

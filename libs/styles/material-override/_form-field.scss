@@ -1,8 +1,20 @@
+@use 'colors' as *;
+
+:root {
+  --mdc-outlined-text-field-label-text-color: rgba(0, 0, 0, 0.87);
+  --mdc-outlined-text-field-disabled-outline-color: rgba(0, 0, 0, 0.18);
+  --mdc-outlined-text-field-disabled-input-text-color: rgba(0, 0, 0, 0.57);
+  --mdc-outlined-text-field-disabled-label-text-color: rgba(0, 0, 0, 0.57);
+  --mdc-outlined-text-field-disabled-outline-color: rgba(0, 0, 0, 0.57);
+  --mat-select-disabled-trigger-text-color: rgba(0, 0, 0, 0.57);
+}
+
 .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
   mat-label {
     font-size: 20px;
   }
 }
+
 .mat-mdc-form-field.search-input-field {
   width: 100%;
   max-width: 360px;

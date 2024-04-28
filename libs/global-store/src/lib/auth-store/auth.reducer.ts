@@ -1,11 +1,9 @@
-// import { IAuthState } from '@neo-edge-web/models';
 import { IAuthState, IJwtInfo } from '@neo-edge-web/models';
 import { createReducer, on } from '@ngrx/store';
 import * as AuthAction from './auth.actions';
 
 const initialState: IAuthState = {
   jwt: null,
-  permissions: [],
   accessToken: '',
   refreshToken: '',
   isLoginSuccess: null,

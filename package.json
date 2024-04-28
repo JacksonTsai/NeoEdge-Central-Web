@@ -1,11 +1,14 @@
 {
   "name": "@neo-edge-web/source",
   "version": "0.0.0",
+  "betaVersion": "Beta 0.1.0",
   "license": "MIT",
   "scripts": {
     "start": "run-p \"start:nx {1} --open --port {2}\" --",
     "start:nx": "nx serve",
     "build": "run-p \"build:nx {1} --configuration {2}\" --",
+    "build-dev": "run-p \"build:nx {1} --configuration build-dev\" --",
+    "build-prod": "run-p \"build:nx {1} --configuration production\" --",
     "build:nx": "nx build",
     "icon-sprite:generate": "rm -f icons/icons.svg && pnpm dlx svg2sprite-cli icons icons/icons-sprite.svg"
   },
@@ -31,6 +34,7 @@
     "@ngrx/store": "17.1.1",
     "@ngrx/store-devtools": "17.1.1",
     "@nx/angular": "18.2.1",
+    "dayjs": "^1.11.10",
     "ng": "^0.0.0",
     "ngx-permissions": "^17.1.0",
     "ngx-webstorage": "13.0.1",

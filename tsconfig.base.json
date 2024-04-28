@@ -13,6 +13,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "noImplicitAny": false,
     "baseUrl": ".",
     "paths": {
       "@neo-edge-web/auth-store": ["libs/global-store/src/lib/auth-store/index.ts"],
@@ -25,7 +26,10 @@
       "@neo-edge-web/global-store": ["libs/global-store/src/index.ts"],
       "@neo-edge-web/login": ["libs/pages/login/src/index.ts"],
       "@neo-edge-web/models": ["libs/models/index.ts"],
-      "@neo-edge-web/users": ["libs/pages/users/src/index.ts"]
+      "@neo-edge-web/package-json": ["./package.json"],
+      "@neo-edge-web/roles": ["libs/pages/roles/src/index.ts"],
+      "@neo-edge-web/users": ["libs/pages/users/src/index.ts"],
+      "@neo-edge-web/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

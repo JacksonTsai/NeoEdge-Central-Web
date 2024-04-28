@@ -1,7 +1,7 @@
 <div class="login-wrapper">
   <img class="logo-img" src="assets/images/neoedge_logo_blue.png" alt="NeoEdge web" />
 
-  <form [formGroup]="form">
+  <form [formGroup]="form" (keyup.enter)="singIn()" (ngSubmit)="singIn()">
     <mat-card class="login-card">
       <h2 class="welcome-title">
         Welcome to
@@ -9,15 +9,21 @@
       </h2>
       <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
         <mat-label>Email</mat-label>
-        <input matInput formControlName="account" type="text" maxlength="128" />
+        <input matInput formControlName="account" type="text" maxlength="128" id="login-email" />
         @if (accountCtrl.hasError('required')) {
         <mat-error>Required.</mat-error>
         }
       </mat-form-field>
       <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" [type]="isTogglePwd() ? 'password' : 'text'" maxlength="128" />
-        <button type="button" mat-icon-button matSuffix (click)="togglePwd()">
+        <input
+          matInput
+          formControlName="password"
+          [type]="isTogglePwd() ? 'password' : 'text'"
+          maxlength="128"
+          id="login-password"
+        />
+        <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="togglePwd()">
           @if (isTogglePwd()) {
           <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
           } @else {
@@ -34,24 +40,32 @@
       <button
         type="button"
         class="login-card__btn login-btn"
-        mat-raised-button
+        mat-flat-button
         color="primary"
         (click)="singIn()"
         [disabled]="form.invalid"
+        id="login-password-sign"
       >
-        Sing In
+        Sign In
       </button>
+
       <div class="or-container">
         <div class="divider"></div>
         <div class="or-label">or</div>
         <div class="divider"></div>
       </div>
 
-      <button type="button" class="login-card__btn" mat-stroked-button (click)="singInWithAzure()">
+      <button
+        type="button"
+        class="login-card__btn"
+        mat-stroked-button
+        (click)="singInWithAzure()"
+        id="login-password-sign-azure"
+      >
         Sign in with Azure AD
       </button>
 
-      <span class="forgot-password">
+      <span class="forgot-password" id="login-password-forgot">
         <a [routerLink]="'/login/forgot-password'"> Forgot password ? </a>
       </span>
     </mat-card>

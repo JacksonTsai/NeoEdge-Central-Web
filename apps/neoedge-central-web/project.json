@@ -10,7 +10,7 @@
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/neoedge-central-web",
+        "outputPath": "dist/neoedge-central-web",
         "index": "apps/neoedge-central-web/src/index.html",
         "browser": "apps/neoedge-central-web/src/main.ts",
         "polyfills": ["zone.js"],
@@ -51,6 +51,16 @@
               "maximumError": "40kb"
             }
           ],
+          "outputHashing": "all"
+        },
+        "build-dev": {
+          "fileReplacements": [
+            {
+              "replace": "apps/neoedge-central-web/environments/environment.ts",
+              "with": "apps/neoedge-central-web/environments/environment.build-dev.ts"
+            }
+          ],
+          "optimization": true,
           "outputHashing": "all"
         },
         "development": {

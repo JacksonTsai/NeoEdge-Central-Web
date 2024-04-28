@@ -8,10 +8,13 @@ export const selectAuthToken = createSelector(selectAuthState, (state) => ({
   refreshToken: state.refreshToken
 }));
 
+export const selectUserProfile = createSelector(selectAuthState, (state) => ({
+  userProfile: state.userProfile
+}));
+
 export const selectLoginState = createSelector(selectAuthState, (state) => ({
   isLoginSuccess: state.isLoginSuccess,
   tryLoginCount: state.tryLoginCount,
   isAuthVerifying: state.isAuthVerifying,
-  jwt: state.jwt,
-  permissions: state.permissions
+  jwt: state.jwt
 }));

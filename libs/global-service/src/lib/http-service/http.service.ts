@@ -15,7 +15,7 @@ export const REST_CONFIG = new InjectionToken<RestConfig>('REST_CONFIG');
 })
 export class HttpService {
   private httpOptions = {
-    withCredentials: true
+    withCredentials: false
   };
 
   #restConfig = inject(REST_CONFIG);

@@ -1,3 +1,21 @@
-:host {
+.item {
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 8px;
+  }
+  & + .item {
+    margin-top: 20px;
+  }
+  .projects {
+    display: flex;
+    gap: 8px;
+  }
+}
+mat-form-field {
   display: block;
+}
+.role {
+  margin-top: 28px;
 }

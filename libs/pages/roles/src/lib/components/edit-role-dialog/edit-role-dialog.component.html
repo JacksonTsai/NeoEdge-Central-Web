@@ -1,0 +1,57 @@
+<h1 mat-dialog-title>
+  @if (isEditMode) {
+  <span>Edit</span>
+  }@else{
+  <span>Add</span>
+  } Role
+</h1>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+      <mat-label>Role name</mat-label>
+      <input matInput formControlName="name" type="text" maxlength="64" id="roles-edit-dialog-name" />
+      @if (nameCtrl.hasError('required')) {
+      <mat-error>Required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field tpOneError appearance="outline" floatLabel="always" id="roles-edit-dialog-desc">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" maxlength="512"></textarea>
+    </mat-form-field>
+  </form>
+  <section class="permission-option">
+    <mat-label>Permissions</mat-label>
+    @for ( permission of permissionOpts(); track permission.permissionId ) {
+    <mat-checkbox
+      id="roles-edit-dialog-permission-{{ permission.permissionId }}"
+      color="primary"
+      (change)="changeSelectedPermission(permission, $event.checked)"
+      [checked]="permission.checked"
+    >
+      <span class="checkbox-label-info">
+        <span>
+          {{ permission.permissionName }}
+        </span>
+
+        <mat-icon svgIcon="icon:info_gary" [matTooltip]="permission.desc" matTooltipClass="tooltip"></mat-icon>
+      </span>
+    </mat-checkbox>
+    }
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close id="roles-edit-dialog-cancel">Cancel</button>
+
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="form.invalid || !isSelectedPermissionOpts()"
+    id="roles-edit-dialog-submit"
+  >
+    Submit
+  </button>
+</mat-dialog-actions>

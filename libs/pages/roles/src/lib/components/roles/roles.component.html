@@ -1,0 +1,97 @@
+<h1 class="page-title">Roles</h1>
+
+<div class="users-top-action">
+  <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+    <mat-label>Search</mat-label>
+    <input matInput [formControl]="searchCtrl" placeholder="Search role" maxlength="128" type="text" />
+    <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+  </mat-form-field>
+  <button type="button" mat-stroked-button color="primary" (click)="onEditRole()">
+    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+    Add role
+  </button>
+</div>
+<mat-card class="users-card">
+  <table [fixedLayout]="false" mat-table [dataSource]="dataSource" class="users-card__table">
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.name ? element.name : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createBy">
+      <th mat-header-cell *matHeaderCellDef>createBy</th>
+      <td mat-cell *matCellDef="let element">{{ element?.createBy ? element?.createBy : '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createDate">
+      <th mat-header-cell *matHeaderCellDef>createDate</th>
+      <td mat-cell *matCellDef="let element">{{ element?.createDate ? getFormatDate(element.createDate) : '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="users">
+      <th mat-header-cell *matHeaderCellDef>Users</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="letters">
+          @if (element.users.length > 0) { @for ( user of element.users; track user) {
+          <span class="letter letter--border letter--primary-bg" [matTooltip]="user">
+            {{ user }}
+          </span>
+          } }@else {
+          <span>-</span>
+          }
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        @if (!isBuildIn(element)) {
+
+        <div class="table-action">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onEditRole(element)"
+            id="roles-edit-{{ element.id }}"
+          >
+            <mat-icon svgIcon="icon:edit_primary"></mat-icon>
+            Edit
+          </button>
+          <button
+            mat-stroked-button
+            type="button"
+            color="warn"
+            (click)="onDeleteRole(element)"
+            [disabled]="includeUsers(element)"
+            id="roles-delete-{{ element.id }}"
+          >
+            @if (includeUsers(element)) {
+            <mat-icon svgIcon="icon:delete_disabled"></mat-icon>
+            } @else {
+            <mat-icon svgIcon="icon:delete_red"></mat-icon>
+            } Delete
+          </button>
+        </div>
+        }
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    id="roles-pagination"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [length]="rolesLength()"
+    showFirstLastButtons
+    aria-label="Select page of users"
+  ></mat-paginator>
+</mat-card>

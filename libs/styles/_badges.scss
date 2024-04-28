@@ -1,0 +1,22 @@
+@use 'colors' as *;
+
+.badge {
+  border-radius: $border-radius;
+  padding: 8px;
+  &--primary {
+    background-color: $primary-bg;
+    color: $primary;
+  }
+  &--accent {
+    background-color: $accent-bg;
+    color: $accent;
+  }
+  &--danger {
+    background-color: $danger-bg;
+    color: $danger;
+  }
+  &--gary {
+    background-color: $black-gary;
+    color: $black;
+  }
+}

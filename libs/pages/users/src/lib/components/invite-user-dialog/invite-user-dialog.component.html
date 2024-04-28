@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Invite User</h1>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Email (Login ID)</mat-label>
+      <input matInput formControlName="account" type="text" maxlength="128" />
+      @if (form.get('account')?.hasError('required')) {
+      <mat-error>Required.</mat-error>
+      } @if (form.get('account')?.hasError('email') && !form.get('account')?.hasError('required')) {
+      <mat-error> Please enter a valid email address </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="" appearance="outline" floatLabel="always">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        @for (role of roleOpt ; track role.id) {
+        <mat-option [value]="role"> {{ role.name }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+
+  <button type="button" mat-flat-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">Submit</button>
+</mat-dialog-actions>

@@ -4,7 +4,7 @@
   "sourceRoot": "libs/global-store/global-store/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["type:lib", "scope:store"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",

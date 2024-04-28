@@ -1,11 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import * as AuthAction from '@neo-edge-web/auth-store';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { Store } from '@ngrx/store';
-import { SessionStorageService } from 'ngx-webstorage';
+import { environment } from '../../../environments/environment';
 
 @UntilDestroy()
 @Component({
@@ -16,28 +12,12 @@ import { SessionStorageService } from 'ngx-webstorage';
   styleUrl: './root.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RootComponent implements OnInit {
-  #matIconRegistry = inject(MatIconRegistry);
-  #domSanitizer = inject(DomSanitizer);
-  #globalStore = inject(Store);
-  #storage = inject(SessionStorageService);
+export class RootComponent {
   constructor() {
-    this.#registryIcons();
-  }
-
-  #registryIcons() {
-    this.#matIconRegistry.addSvgIconSetInNamespace(
-      'icon',
-      this.#domSanitizer.bypassSecurityTrustResourceUrl('assets/icons-sprite.svg?ts=' + new Date().getTime())
+    const appVersion = environment.version;
+    console.log(
+      `\n%c ✨NeoEdge Central Web ✨\n ${appVersion} 🚀`,
+      'color:#1d50a2; background:#fafafa; font-size:1rem; padding:0.8rem 0.15rem; margin:0.5rem auto; font-family: Rockwell; border: 1px solid #0dd8d8; border-radius: 4px;font-weight: 400'
     );
-  }
-
-  ngOnInit() {
-    const loginResp = this.#storage.retrieve('account');
-    const userProfile = this.#storage.retrieve('user_profile');
-    if (loginResp && userProfile) {
-      this.#globalStore.dispatch(AuthAction.loginSuccess({ loginResp }));
-      this.#globalStore.dispatch(AuthAction.userProfileSuccess({ userProfile }));
-    }
   }
 }

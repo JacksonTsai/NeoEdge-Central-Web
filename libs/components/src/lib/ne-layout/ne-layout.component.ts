@@ -36,8 +36,11 @@ const LARGE_VIEW = 'screen and (min-width: 1281px)';
 })
 export class NeLayoutComponent {
   logoPath = input<string>('');
-  @ViewChild('mainContent', { static: true }) mainContent!: MatSidenavContent;
+  version = input<string>('');
+  role = input<string>('');
+  userName = input<string>('');
 
+  @ViewChild('mainContent', { static: true }) mainContent!: MatSidenavContent;
   #globalStore = inject(Store);
   #router = inject(Router);
   #breakpointObserver = inject(BreakpointObserver);
@@ -55,7 +58,7 @@ export class NeLayoutComponent {
       .observe([SMALL_VIEW, MEDIUM_VIEW, LARGE_VIEW])
       .pipe(untilDestroyed(this))
       .subscribe((state: { breakpoints: any }) => {
-        if (state.breakpoints[SMALL_VIEW]) {
+        if (state.breakpoints[SMALL_VIEW] || state.breakpoints[MEDIUM_VIEW]) {
           this.isMenuExtend.set(false);
         } else {
           this.isMenuExtend.set(true);

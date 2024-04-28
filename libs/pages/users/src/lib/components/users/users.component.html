@@ -1,62 +1,141 @@
 <h1 class="page-title">Users</h1>
-
-<mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
-  <mat-label>Search</mat-label>
-  <input matInput [formControl]="searchCtrl" maxlength="128" type="text" />
-  <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
-</mat-form-field>
-
+<div class="users-top-action">
+  <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+    <mat-label>Search</mat-label>
+    <input
+      id="users-search"
+      matInput
+      placeholder="Search email"
+      [formControl]="searchCtrl"
+      maxlength="128"
+      type="text"
+    />
+    <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+  </mat-form-field>
+  <button id="users-invite-user" type="button" mat-stroked-button color="primary" (click)="onInviteUser()">
+    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+    Invite user
+  </button>
+</div>
 <mat-card class="users-card">
-  <table mat-table [dataSource]="dataSource" class="users-card__table">
+  <table [fixedLayout]="false" mat-table [dataSource]="dataSource" class="users-card__table">
     <ng-container matColumnDef="no">
       <th mat-header-cell *matHeaderCellDef>No.</th>
       <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="user">
+    <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>User</th>
-      <td mat-cell *matCellDef="let element">{{ element.user }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.name ? element.name : getEmailName(element.account) }}
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="email">
+    <ng-container matColumnDef="account">
       <th mat-header-cell *matHeaderCellDef>Email</th>
-      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.account }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="role">
+    <ng-container matColumnDef="roleName">
       <th mat-header-cell *matHeaderCellDef>Role</th>
-      <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.roleName }}</td>
     </ng-container>
 
     <ng-container matColumnDef="project">
-      <th mat-header-cell *matHeaderCellDef>Project</th>
-      <td mat-cell *matCellDef="let element">{{ element.project }}</td>
+      <th mat-header-cell *matHeaderCellDef>Projects</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.project && element?.project?.length > 0 ? element.project.join(',') : '-' }}
+      </td>
     </ng-container>
 
-    <ng-container matColumnDef="status">
+    <ng-container matColumnDef="isMfaEnable">
+      <th mat-header-cell *matHeaderCellDef>MFA</th>
+      <td mat-cell *matCellDef="let element">
+        @if (element.isMfaEnable===0) {
+        <mat-icon matTooltip="Disabled" svgIcon="icon:ok_gary"></mat-icon>
+        } @else {
+        <mat-icon matTooltip="Enabled" svgIcon="icon:ok_primary"></mat-icon>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="accountStatus">
       <th mat-header-cell *matHeaderCellDef>Status</th>
-      <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+      <td mat-cell *matCellDef="let element">
+        @if (userStatus[element.accountStatus] === 'Active') {
+        <span class="badge badge--primary">
+          {{ userStatus[element.accountStatus] }}
+        </span>
+        }@else if(userStatus[element.accountStatus] === 'Inactive'){
+        <span class="badge badge--danger"> userStatus[element.accountStatus] </span>
+        }@else {
+        <span class="badge badge--accent">
+          {{ userStatus[element.accountStatus] ? userStatus[element.accountStatus] : userStatus[userStatus.Waiting] }}
+        </span>
+        <span id="users-resend-email-{{ element.id }}" class="link" color="accent" (click)="onResendEmail(element)">
+          Resend email
+        </span>
+        }
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="action">
       <th mat-header-cell *matHeaderCellDef>Action</th>
       <td mat-cell *matCellDef="let element">
         <div class="table-action">
-          <button type="button" mat-stroked-button color="primary">
+          <button
+            id="users-permission-{{ element.id }}"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onPermission(element)"
+          >
             <mat-icon svgIcon="icon:permission_blue"></mat-icon>
             Permission
           </button>
-          <button type="button" mat-stroked-button color="primary">
-            <mat-icon svgIcon="icon:disabled_red"></mat-icon>
+          @if(userStatus[element.accountStatus] === 'Inactive'){
+          <button
+            id="users-status-disable-{{ element.id }}"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onDisable(element)"
+          >
+            <mat-icon svgI con="icon:disabled_red"></mat-icon>
             Disable
           </button>
-          <button mat-icon-button [matMenuTriggerFor]="menu">
+          } @else {
+          <button
+            type="button"
+            id="users-status-enable-{{ element.id }}"
+            mat-stroked-button
+            color="primary"
+            (click)="onEnable(element)"
+            [disabled]="userStatus[element.accountStatus] === 'Waiting'"
+          >
+            @if (userStatus[element.accountStatus] === 'Waiting') {
+            <mat-icon svgIcon="icon:ok_gary"></mat-icon>
+            }@else {
+            <mat-icon svgIcon="icon:ok_primary"></mat-icon>
+            } Enable
+          </button>
+          }
+          <button id="user-more" mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item (click)="onDelete(element)" id="users-delete-{{ element.id }}">
               <mat-icon svgIcon="icon:delete_red"></mat-icon>
               <span color="danger">Delete</span>
+            </button>
+            <button
+              mat-menu-item
+              (click)="onDisableMFA(element)"
+              [disabled]="element.isMfaEnable === 0"
+              id="users-disableMFA-{{ element.id }}"
+            >
+              <mat-icon svgIcon="icon:disabled_red"></mat-icon>
+              <span color="danger">Disable MFA</span>
             </button>
           </mat-menu>
         </div>
@@ -66,6 +145,11 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons aria-label="paginator"> </mat-paginator>
+  <mat-paginator
+    id="users-pagination"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [length]="usersLength()"
+    showFirstLastButtons
+    aria-label="Select page of users"
+  ></mat-paginator>
 </mat-card>

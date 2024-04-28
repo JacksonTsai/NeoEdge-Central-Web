@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, InjectionToken, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  IAllPermission,
   IAllPermissionResp,
   ILoginReq,
   ILoginResp,
@@ -11,6 +12,8 @@ import {
 } from '@neo-edge-web/models';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { HttpService, REST_CONFIG } from '../http-service';
+
+export const PERMISSION_OPTIONS = new InjectionToken<{ options: IAllPermission[] }>('PERMISSION_OPTIONS');
 
 @Injectable({
   providedIn: 'root'

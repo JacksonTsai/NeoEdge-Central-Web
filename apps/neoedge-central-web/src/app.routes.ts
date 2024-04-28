@@ -29,6 +29,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'user-management/roles',
+        loadChildren: () => import('@neo-edge-web/roles').then((m) => m.rolesRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: '',
         redirectTo: 'user-management/users',
         pathMatch: 'full'

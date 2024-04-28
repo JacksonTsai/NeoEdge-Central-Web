@@ -1,0 +1,12 @@
+mat-form-field {
+  display: block;
+  &:first-child {
+    margin-top: 4px;
+  }
+  + mat-form-field {
+    margin-top: 8px;
+  }
+}
+form {
+  margin-top: 8px;
+}

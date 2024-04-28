@@ -1,1 +1,33 @@
-<p>user-permission-dialog works!</p>
+<h1 mat-dialog-title class="gl-h6">Permission</h1>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="item">
+      <div class="label">Email (login ID)</div>
+      <div class="value">{{ data.user.account }}</div>
+    </div>
+    <div class="item">
+      <div class="label">Projects</div>
+      <div class="value projects">
+        @if (data.user.projects.length > 0) { @for (item of data.user.projects; track item) {
+        <div class="badge badge--gary">{{ item }}</div>
+        } } @else { <span>-</span> }
+      </div>
+    </div>
+    <div class="role">
+      <mat-form-field class="" appearance="outline" floatLabel="always">
+        <mat-label>Role</mat-label>
+        <mat-select id="users-permission-dialog-role-selection" formControlName="role">
+          @for (role of roleOpt ; track role.id) {
+          <mat-option [value]="role"> {{ role.name }} </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <button type="button" mat-stroked-button mat-dialog-close id="users-permission-dialog-cancel">Cancel</button>
+  <button type="button" mat-flat-button color="primary" (click)="onSubmit()" id="users-permission-dialog-role-submit">
+    Submit
+  </button>
+</mat-dialog-actions>

@@ -3,7 +3,6 @@ export interface IAuthState {
   tryLoginCount: number;
   isAuthVerifying: boolean;
   jwt: IJwtInfo | null;
-  permissions: IAllPermission[];
   accessToken: string;
   refreshToken: string;
   userProfile: IGetUserProfileResp | null;
@@ -31,20 +30,11 @@ export interface IJwtInfo {
 export interface IAllPermission {
   permissionId: number;
   permissionName: string;
+  desc: string;
 }
 
 export interface IAllPermissionResp {
   list: IAllPermission[];
-}
-
-export interface IAuthState {
-  isLoginSuccess: boolean | null;
-  tryLoginCount: number;
-  isAuthVerifying: boolean;
-  jwt: IJwtInfo | null;
-  permissions: IAllPermission[];
-  accessToken: string;
-  refreshToken: string;
 }
 
 export interface IRefreshTokenReq {

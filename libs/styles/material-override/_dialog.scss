@@ -1,0 +1,38 @@
+@use 'colors' as *;
+
+mat-dialog-content {
+}
+
+h1[mat-dialog-title] {
+  border-bottom: 1px solid $border-color;
+}
+
+.lg-dialog {
+  width: 75vw;
+}
+
+.med-dialog {
+  width: 550px;
+  .mat-dialog-content {
+    letter-spacing: 0.44px;
+    line-height: 19px;
+  }
+}
+.sm-dialog {
+  width: 330px;
+}
+
+.mat-mdc-dialog-component-host {
+  .mat-mdc-dialog-content.mdc-dialog__content {
+    font-size: 16px;
+    margin-top: 24px;
+    color: $text-primary;
+  }
+  .dialog__action {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin: 0px 8px;
+    margin-bottom: 10px;
+  }
+}
