@@ -36,6 +36,14 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'company-account/subscription-plan',
+        loadChildren: () => import('@neo-edge-web/subscription-plan').then((m) => m.subscriptionPlanRoutes),
+        data: {
+          preload: true
+        }
+      },
+
+      {
         path: '',
         redirectTo: 'user-management/users',
         pathMatch: 'full'
