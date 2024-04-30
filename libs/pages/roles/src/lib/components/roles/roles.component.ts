@@ -21,8 +21,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IRole, ROLES_LOADING, TableQueryForRoles } from '@neo-edge-web/models';
+import { datetimeFormat } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import dayjs from 'dayjs';
 import { debounceTime, tap } from 'rxjs';
 
 @UntilDestroy()
@@ -87,7 +87,7 @@ export class RolesComponent implements AfterViewInit {
   };
 
   getFormatDate(timestamp: number) {
-    return isNaN(timestamp) ? '-' : dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss');
+    return isNaN(timestamp) ? '-' : datetimeFormat(timestamp);
   }
 
   includeUsers = (role: IRole) => {

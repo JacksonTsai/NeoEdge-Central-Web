@@ -6,6 +6,7 @@ export * from './ne-menu.model';
 export * from './region.model';
 export * from './roles.model';
 export * from './router-state.model';
+export * from './subscription-plan.model';
 export * from './table-query.model';
 export * from './users.model';
 export * from './utils.model';

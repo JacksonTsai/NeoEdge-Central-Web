@@ -1,0 +1,133 @@
+@use 'variables' as *;
+@use 'colors' as *;
+.subscription {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+  flex-wrap: wrap;
+  gap: 64px;
+  &__plan {
+    padding-top: 150px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    background-color: $white;
+    width: 40%;
+    height: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 24px;
+  }
+  &__plan-card {
+    color: $white;
+    padding: 24px;
+    background: linear-gradient(35deg, #edecec 5%, #fff 10%, #ccc 30%, #afacac 50%, #ccc 70%, #fbfbfb 80%, #c4c4c4 95%);
+    box-shadow: 0 10px 20px 0 rgba(90, 116, 148, 0.4);
+    position: absolute;
+    top: -20%;
+    width: 80%;
+    height: 200px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .card-title {
+      position: relative;
+      font-size: 16px;
+      .plan-level-icon {
+        position: absolute;
+        right: -15px;
+        top: -35px;
+      }
+    }
+    .plan-level {
+      font-size: 60px;
+      font-weight: 500;
+      align-self: center;
+    }
+    .plan-duration {
+      align-self: flex-end;
+    }
+    .plans-comparation {
+      cursor: pointer;
+      align-self: flex-end;
+      border: 1px solid $black-gary;
+      padding: 8px 16px;
+      border-radius: 30px;
+    }
+  }
+
+  &__plan-detail {
+    width: 100%;
+    padding: 0 10%;
+    &.current-plan {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .current-plan__fee {
+      margin-top: 16px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+    .upgrade-send-email {
+      width: 100%;
+      &__item {
+        display: flex;
+        margin-bottom: 8px;
+        &__name {
+          width: 80px;
+        }
+      }
+      &__content {
+        margin-top: 24px;
+        mat-form-field {
+          display: block;
+        }
+      }
+      .send-btn {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+    .send-email-success {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+}
+
+.item {
+  height: 60px;
+  &.agreement-no {
+    width: 100%;
+  }
+
+  &.customer-service {
+    width: 100%;
+  }
+  &.eula {
+    width: 100%;
+  }
+
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 8px;
+  }
+  .unit {
+    font-size: 14px;
+  }
+}
+.divider {
+  background-color: $black-gary;
+  height: 60px;
+  width: 1.2px;
+}
