@@ -104,6 +104,12 @@ export const MENU_TREE: MenuItem[] = [
         icon: 'dot',
         isActive: false,
         path: '/company-account/subscription-plan'
+      },
+      {
+        displayName: 'Usage & Billing Records',
+        icon: 'dot',
+        isActive: false,
+        path: '/company-account/usage-billing'
       }
     ]
   }
