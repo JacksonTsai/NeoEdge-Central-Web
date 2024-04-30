@@ -63,6 +63,16 @@
           "optimization": true,
           "outputHashing": "all"
         },
+        "build-test": {
+          "fileReplacements": [
+            {
+              "replace": "apps/neoedge-central-web/environments/environment.ts",
+              "with": "apps/neoedge-central-web/environments/environment.build-test.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all"
+        },
         "development": {
           "optimization": false,
           "extractLicenses": false,
