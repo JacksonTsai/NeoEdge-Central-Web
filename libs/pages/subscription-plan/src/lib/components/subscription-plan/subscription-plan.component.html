@@ -55,6 +55,7 @@
       </div>
     </div>
   </div>
+  @if (subscriptionPlan.premium !== currentPlan().planId) {
   <div class="subscription__plan">
     <mat-card class="subscription__plan-card">
       <div class="card-title">
@@ -77,15 +78,21 @@
       <div class="upgrade-send-email">
         <div class="upgrade-send-email__item">
           <div class="upgrade-send-email__item__name">Sender</div>
-          <div class="upgrade-send-email__item__value">
-            :
-            {{ userProfile().account }}
-          </div>
+          <div class="upgrade-send-email__item__value">: {{ 'neoedge_service@ecloudvalley.com' }}</div>
         </div>
         <div class="upgrade-send-email__item">
           <div class="upgrade-send-email__item__name">To</div>
           <div class="upgrade-send-email__item__value">: {{ 'ECV_Info@ecloudvalley.com' }}</div>
         </div>
+
+        <div class="upgrade-send-email__item">
+          <div class="upgrade-send-email__item__name">CC</div>
+          <div class="upgrade-send-email__item__value">
+            :
+            {{ userProfile().account }}
+          </div>
+        </div>
+
         <div class="upgrade-send-email__item">
           <div class="upgrade-send-email__item__name">Subject</div>
           <div class="upgrade-send-email__item__value">: Upgrade NeoEdge Central to Premium Plan</div>
@@ -126,5 +133,6 @@
       }
     </div>
   </div>
+  }
 </div>
 }

@@ -61,6 +61,7 @@ export class SubscriptionPlanComponent {
   sendEmail = () => {
     if (this.emailContentCtrl.value) {
       this.handleSendEmail.emit({
+        requester: `${this.userProfile().name}, ${this.userProfile().account}`,
         message: this.emailContentCtrl.value,
         planId: this.currentPlan().planId + 1
       });

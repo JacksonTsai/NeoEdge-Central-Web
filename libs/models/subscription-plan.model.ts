@@ -23,6 +23,7 @@ export interface IGetSubscriptionResp {
 
 export interface IUpgradePlanReq {
   message: string;
+  requester: string;
   planId: SUBSCRIPTION_PLAN;
 }
 
