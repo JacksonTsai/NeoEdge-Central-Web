@@ -27,6 +27,7 @@
       "@neo-edge-web/login": ["libs/pages/login/src/index.ts"],
       "@neo-edge-web/models": ["libs/models/index.ts"],
       "@neo-edge-web/package-json": ["./package.json"],
+      "@neo-edge-web/projects": ["libs/pages/projects/src/index.ts"],
       "@neo-edge-web/roles": ["libs/pages/roles/src/index.ts"],
       "@neo-edge-web/subscription-plan": ["libs/pages/subscription-plan/src/index.ts"],
       "@neo-edge-web/users": ["libs/pages/users/src/index.ts"],

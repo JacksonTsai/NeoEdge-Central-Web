@@ -1,16 +1,15 @@
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, forwardRef, input } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormGroup,
-  NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
-  UntypedFormControl
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+
+interface ISelectedItem {
+  id: number;
+  label: string;
+}
 
 @Component({
   selector: 'ne-multi-select-chips',
@@ -32,13 +31,13 @@ import { MatSelectModule } from '@angular/material/select';
         <mat-select-trigger>
           <mat-chip-set>
             <mat-chip *ngFor="let chip of selectCtrl.value" [removable]="true" (removed)="onRemovedChip(chip)">
-              {{ chip }}
+              {{ chip?.label }}
               <mat-icon matChipRemove svgIcon="icon:close"></mat-icon>
             </mat-chip>
           </mat-chip-set>
         </mat-select-trigger>
 
-        <mat-option *ngFor="let option of options" [value]="option">{{ option }}</mat-option>
+        <mat-option *ngFor="let option of options()" [value]="option">{{ option.label }}</mat-option>
       </mat-select>
     </mat-form-field>
   `,
@@ -55,12 +54,10 @@ import { MatSelectModule } from '@angular/material/select';
 export class NeMultiSelectChipsComponent implements OnInit, ControlValueAccessor {
   label = input('');
   selectCtrl = new UntypedFormControl([]);
-  options: string[] = [];
+  options = input<ISelectedItem[]>([]);
 
-  form!: FormGroup;
-
-  registerOnTouched!: (fn) => void;
-  change!: (value) => void;
+  onChange!: (value: ISelectedItem[]) => void;
+  onTouched!: (value) => void;
 
   onRemovedChip(item: string) {
     const selected = this.selectCtrl.value as string[];
@@ -69,22 +66,26 @@ export class NeMultiSelectChipsComponent implements OnInit, ControlValueAccessor
   }
 
   ngOnInit() {
-    this.selectCtrl.valueChanges.subscribe((data) => {
-      this.change(data);
+    this.selectCtrl.valueChanges.subscribe((d) => {
+      this.change();
     });
   }
 
-  writeValue(data: string[]) {
-    this.options = [...data];
+  writeValue(data: ISelectedItem[]) {
+    this.selectCtrl.setValue(data.map((d) => this.options().find((v) => v.id == d.id)));
   }
 
-  registerOnChange(fn: any) {
-    this.change = fn;
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
-  onChange() {
-    if (this.change) {
-      this.change(this.form.value);
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  change() {
+    if (this.onChange) {
+      this.onChange(this.selectCtrl.value);
     }
   }
 }

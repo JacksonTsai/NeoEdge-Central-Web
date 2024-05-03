@@ -1,0 +1,127 @@
+<h1 class="page-title">
+  @if ( isSwitchMode()) {
+  <span> Switch</span>
+  } Projects
+</h1>
+<div class="projects-top-action">
+  <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+    <mat-label>Search</mat-label>
+    <input
+      id="projects-search"
+      matInput
+      placeholder="Search name"
+      [formControl]="searchCtrl"
+      maxlength="128"
+      type="text"
+    />
+    <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+  </mat-form-field>
+  @if ( !isSwitchMode()) {
+  <button id="projects-create-project" type="button" mat-stroked-button color="primary" (click)="onEditProject()">
+    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+    Create Project
+  </button>
+  }
+</div>
+<mat-card class="project-card">
+  <table [fixedLayout]="false" mat-table [dataSource]="dataSource" class="project-card__table">
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.name ? element.name : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="customer">
+      <th mat-header-cell *matHeaderCellDef>Customer</th>
+      <td mat-cell *matCellDef="let element">{{ element.customer }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdBy">
+      <th mat-header-cell *matHeaderCellDef>Created By</th>
+      <td mat-cell *matCellDef="let element">{{ element.createdBy }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Create Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.createdAt ? getFormatDate(element?.createdAt) : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="users">
+      <th mat-header-cell *matHeaderCellDef>Users</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="letters">
+          @if (element.users.length > 0) { @for ( user of element.users; track user.id) {
+          <span class="letter letter--border letter--gary-bg" [matTooltip]="user.name">
+            @if (user.name) {
+            {{ user.name[0] }}
+            }
+          </span>
+          } }@else {
+          <span>-</span>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="table-action">
+          @if (isSwitchMode()) {
+
+          <button
+            id="projects-switch-project-{{ element.id }}"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onSwitchProject(element)"
+          >
+            <mat-icon svgIcon="icon:switch_primary"></mat-icon>
+            Switch
+          </button>
+
+          }@else {
+          <button
+            id="projects-edit-{{ element.id }}"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onEditProject(element)"
+          >
+            <mat-icon svgIcon="icon:edit_primary"></mat-icon>
+            Edit
+          </button>
+          <button
+            id="projects-delete-{{ element.id }}"
+            type="button"
+            mat-stroked-button
+            color="warn"
+            (click)="onDeleteProject(element)"
+          >
+            <mat-icon svgIcon="icon:delete_red"></mat-icon>
+            Delete
+          </button>
+          }
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    id="projects-pagination"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [length]="projectsLength()"
+    showFirstLastButtons
+    aria-label="Select page of projects"
+  ></mat-paginator>
+</mat-card>

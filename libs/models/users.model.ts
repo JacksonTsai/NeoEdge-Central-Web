@@ -38,6 +38,7 @@ export interface IEditUserStatusReq {
 }
 
 export type TableQueryForUsers = ITableQuery & { accounts?: string };
+export type TableQueryForUserProjects = ITableQuery & { name?: string };
 
 export enum USER_STATUE {
   Waiting = 0,

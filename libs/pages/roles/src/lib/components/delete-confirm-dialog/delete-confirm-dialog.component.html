@@ -9,7 +9,7 @@
   </div>
   <div>Please input name to confirm this action.</div>
 
-  <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+  <mat-form-field appearance="outline" floatLabel="always">
     <mat-label>Input role name</mat-label>
     <input matInput [formControl]="roleNameCtrl" type="text" maxlength="128" id="roles-delete-dialog-name" />
     @if (roleNameCtrl.hasError('required')) {

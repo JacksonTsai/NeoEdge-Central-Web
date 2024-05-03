@@ -6,7 +6,7 @@
     <input matInput [formControl]="searchCtrl" placeholder="Search role" maxlength="128" type="text" />
     <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
   </mat-form-field>
-  <button type="button" mat-stroked-button color="primary" (click)="onEditRole()">
+  <button id="roles-add-role" type="button" mat-stroked-button color="primary" (click)="onEditRole()">
     <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
     Add role
   </button>
@@ -26,12 +26,12 @@
     </ng-container>
 
     <ng-container matColumnDef="createBy">
-      <th mat-header-cell *matHeaderCellDef>createBy</th>
+      <th mat-header-cell *matHeaderCellDef>Created By</th>
       <td mat-cell *matCellDef="let element">{{ element?.createBy ? element?.createBy : '-' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="createDate">
-      <th mat-header-cell *matHeaderCellDef>createDate</th>
+      <th mat-header-cell *matHeaderCellDef>Created Date</th>
       <td mat-cell *matCellDef="let element">{{ element?.createDate ? getFormatDate(element.createDate) : '-' }}</td>
     </ng-container>
 
@@ -40,8 +40,10 @@
       <td mat-cell *matCellDef="let element">
         <div class="letters">
           @if (element.users.length > 0) { @for ( user of element.users; track user) {
-          <span class="letter letter--border letter--primary-bg" [matTooltip]="user">
-            {{ user }}
+          <span class="letter letter--border letter--gary-bg" [matTooltip]="user">
+            @if (user) {
+            {{ user[0] }}
+            }
           </span>
           } }@else {
           <span>-</span>
@@ -92,6 +94,6 @@
     [pageSizeOptions]="[10, 25, 50, 100]"
     [length]="rolesLength()"
     showFirstLastButtons
-    aria-label="Select page of users"
+    aria-label="Select page of roles"
   ></mat-paginator>
 </mat-card>
