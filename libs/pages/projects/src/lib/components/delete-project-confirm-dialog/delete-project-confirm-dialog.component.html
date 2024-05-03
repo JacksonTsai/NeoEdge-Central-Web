@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Delete Role</h1>
+<mat-dialog-content>
+  <div>
+    You are going to delete project (
+    <span color="danger">
+      {{ data?.project?.name ? data.project.name : '-' }}
+    </span>
+    ).
+  </div>
+  <div>Please input project name to confirm this action.</div>
+
+  <mat-form-field class="projects-form-field" appearance="outline" floatLabel="always">
+    <mat-label>Input project name</mat-label>
+    <input
+      id="projects-delete-project-dialog-input"
+      matInput
+      [formControl]="projectNameCtrl"
+      type="text"
+      maxlength="128"
+      id="roles-delete-dialog-name"
+    />
+    @if (projectNameCtrl.hasError('required')) {
+    <mat-error>Required.</mat-error>
+    } @else if (projectNameCtrl.hasError('incorrectRoleName')) {
+    <mat-error>The input verification content is incorrect.</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close id="projects-delete-dialog-cancel">Cancel</button>
+
+  <button
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="projectNameCtrl.invalid"
+    (click)="onDelete()"
+    id="porjects-delete-dialog-delete"
+  >
+    Delete
+  </button>
+</mat-dialog-actions>

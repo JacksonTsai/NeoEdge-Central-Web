@@ -1,0 +1,108 @@
+<h1 mat-dialog-title class="gl-h6">
+  @if (isEditMode) {
+  <span>Edit</span>
+  }@else{
+  <span>Create</span>
+  } project
+</h1>
+<mat-dialog-content #content>
+  <ng-container class="project-Info-form">
+    <form [formGroup]="form">
+      <h3 class="subtitle">Basic</h3>
+      <div class="project-Info-form__basic">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" type="text" maxlength="64" />
+          @if (nameCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Project short name</mat-label>
+          <input matInput formControlName="shortName" type="text" maxlength="20" />
+          @if (shortNameCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Customer</mat-label>
+          <input matInput formControlName="customer" type="text" maxlength="64" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" maxlength="512"></textarea>
+        </mat-form-field>
+      </div>
+
+      <ne-multi-select-chips
+        [label]="'Users'"
+        formControlName="users"
+        [options]="allUserName()"
+      ></ne-multi-select-chips>
+
+      <h3 class="subtitle">Customize field name</h3>
+      <div class="project-Info-form__custom-fields" formArrayName="projectFields">
+        @for (projectFieldFg of projectFieldsArr.controls;let i = $index ; track projectFieldFg.value.name) {
+        <div class="project-Info-form__custom-fields__item" [formGroup]="projectFieldFg">
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>name</mat-label>
+            <input matInput formControlName="name" type="text" maxlength="64" />
+
+            @if (projectFieldNameCtrl(i).hasError('required')) {
+            <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+          <mat-icon class="colon" svgIcon="icon:colon_gary"></mat-icon>
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label> value</mat-label>
+            <input matInput formControlName="value" type="text" maxlength="64" />
+
+            @if (projectFieldValueCtrl(i).hasError('required')) {
+            <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+          <button
+            id="projects-edit-project-dialog-delete-project-field-{{ i }}"
+            type="button"
+            mat-icon-button
+            class=""
+            (click)="removeProjectField(i)"
+          >
+            <mat-icon class="delete-icon" svgIcon="icon:delete_red"></mat-icon>
+          </button>
+        </div>
+        }
+      </div>
+    </form>
+
+    <button
+      id="projects-edit-project-dialog-add-project-field"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="setNewProjectField()"
+      [disabled]="projectFieldsArr.length >= MAX_CUSTOMIZE_FIELD"
+    >
+      @if (projectFieldsArr.length <10) {
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      } Add Customize the field ({{ projectFieldsArr.length }} / {{ MAX_CUSTOMIZE_FIELD }})
+    </button>
+  </ng-container>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close id="projects-edit-project-dialog-cancel">Cancel</button>
+  <button
+    type="button"
+    mat-flat-button
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="form.invalid || form.pristine"
+    id="projects-edit-project-dialog-submit"
+  >
+    Submit
+  </button>
+</mat-dialog-actions>

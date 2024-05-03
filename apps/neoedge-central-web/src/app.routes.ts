@@ -42,10 +42,23 @@ export const appRoutes: Route[] = [
           preload: true
         }
       },
-
+      {
+        path: 'project-management/projects',
+        loadChildren: () => import('@neo-edge-web/projects').then((m) => m.projectsRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
+        path: 'user/switch-project',
+        loadChildren: () => import('@neo-edge-web/projects').then((m) => m.projectsRoutes),
+        data: {
+          preload: true
+        }
+      },
       {
         path: '',
-        redirectTo: 'user-management/users',
+        redirectTo: '/login',
         pathMatch: 'full'
       }
     ]
