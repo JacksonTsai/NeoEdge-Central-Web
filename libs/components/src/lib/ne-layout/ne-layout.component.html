@@ -13,18 +13,7 @@
     </div>
     <mat-icon svgIcon="icon:expand-more"></mat-icon>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
-        <span>My Company</span>
-      </button>
-      <button mat-menu-item>
-        <span>My Profile</span>
-      </button>
-      <button mat-menu-item>
-        <span>Switch Project</span>
-      </button>
-      <button mat-menu-item (click)="onLogout()">
-        <span>Logout</span>
-      </button>
+      <ng-content select="[userMenu]"></ng-content>
     </mat-menu>
   </div>
 </mat-toolbar>

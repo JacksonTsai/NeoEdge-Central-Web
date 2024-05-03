@@ -1,8 +1,9 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
@@ -35,7 +36,7 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
     ShellComponent,
     LetDirective,
     NgClass,
-    NgIf
+    MatMenuModule
   ],
   template: `
     <ne-layout
@@ -45,6 +46,20 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
       [version]="appVersion"
       [logoPath]="'assets/images/neoedge_logo_light.png'"
     >
+      <div userMenu>
+        <button mat-menu-item>
+          <span>My Company</span>
+        </button>
+        <button mat-menu-item>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item (click)="onSwitchProject()">
+          <span>Switch Project</span>
+        </button>
+        <button mat-menu-item (click)="onLogout()">
+          <span>Logout</span>
+        </button>
+      </div>
       <ne-menu
         *ngrxLet="necMenuTree$ as necMenuTree"
         sideMenu
@@ -114,6 +129,14 @@ export class ShellComponent implements OnInit {
         return { ...menuItem, isActive: false };
       }
     });
+  };
+
+  onSwitchProject = () => {
+    this.#router.navigate(['user/switch-project']);
+  };
+
+  protected onLogout = () => {
+    this.#globalStore.dispatch(AuthStore.logoutAction());
   };
 
   ngOnInit() {

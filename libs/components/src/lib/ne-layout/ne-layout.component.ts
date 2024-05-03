@@ -8,7 +8,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavigationEnd, Router } from '@angular/router';
-import * as AuthStore from '@neo-edge-web/auth-store';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
@@ -65,10 +64,6 @@ export class NeLayoutComponent {
         }
       });
   }
-
-  protected onLogout = () => {
-    this.#globalStore.dispatch(AuthStore.logoutAction());
-  };
 
   protected onMenuToggle = () => {
     this.isMenuExtend.set(!this.isMenuExtend());

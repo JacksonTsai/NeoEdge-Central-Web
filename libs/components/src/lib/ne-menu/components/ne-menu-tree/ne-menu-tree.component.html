@@ -24,5 +24,3 @@
 @if(menuItem().isExpanded && menuItem().children?.length) { @for(children of menuItem().children; track children.path) {
 <ne-menu-tree [menuItem]="children" (click)="onMenuItemSelected(children)"> </ne-menu-tree>
 } }
-<!-- [ngClass]="{ 'mat-toolbar mat-primary activeMenu': menuItem.path ? router.isActive(menuItem.path, true) : false,
-expanded: isExpanded, }" -->
