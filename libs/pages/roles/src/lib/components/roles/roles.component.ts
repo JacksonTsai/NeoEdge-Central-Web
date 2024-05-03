@@ -86,10 +86,6 @@ export class RolesComponent implements AfterViewInit {
     this.handleDeleteRole.emit(role);
   };
 
-  getFormatDate(timestamp: number) {
-    return isNaN(timestamp) ? '-' : datetimeFormat(timestamp);
-  }
-
   includeUsers = (role: IRole) => {
     return role?.users?.length > 1 ? true : false;
   };
@@ -97,6 +93,10 @@ export class RolesComponent implements AfterViewInit {
   isBuildIn = (role: IRole) => {
     return role?.createBy === 'NeoEdge Central' ? true : false;
   };
+
+  getFormatDate(timestamp: number) {
+    return isNaN(timestamp) ? '-' : datetimeFormat(timestamp);
+  }
 
   ngAfterViewInit() {
     this.paginator.page
