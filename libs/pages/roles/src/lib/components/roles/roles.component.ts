@@ -63,7 +63,7 @@ export class RolesComponent implements AfterViewInit {
   userStatus = ROLES_LOADING;
   searchCtrl = new FormControl('');
 
-  displayedColumns: string[] = ['no', 'name', 'createBy', 'createDate', 'users', 'action'];
+  displayedColumns: string[] = ['no', 'name', 'createdBy', 'createdAt', 'users', 'action'];
   dataSource = new MatTableDataSource<any>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -91,7 +91,7 @@ export class RolesComponent implements AfterViewInit {
   };
 
   isBuildIn = (role: IRole) => {
-    return role?.createBy === 'NeoEdge Central' ? true : false;
+    return role?.createdBy === 'NeoEdge Central' ? true : false;
   };
 
   getFormatDate(timestamp: number) {

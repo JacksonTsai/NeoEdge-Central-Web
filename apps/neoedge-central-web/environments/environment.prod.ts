@@ -25,7 +25,7 @@ export const environment = {
       desc: 'Authorize the necessary permissions to create, update, and delete projects, enabling them to effectively manage the entire lifecycle of projects within the organization.'
     },
     {
-      permissionName: 'Application Account',
+      permissionName: 'Application Management',
       permissionId: 400,
       desc: 'Authorize the necessary permissions to enroll new Gateways on NeoEdge Central, oversee the entire lifecycle management of Gateways, facilitate the upgrading of NeoEdge X software, and enable remote access to Gateways. Additionally, grant permission for the creation, design, and deployment of IIoT applications, including OT Devices, IT Apps, and NeoFlows on NeoEdge Central.'
     }

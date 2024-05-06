@@ -98,8 +98,8 @@ export class UsersService {
     );
   };
 
-  deleteUser$ = (userId: number) => {
-    return this.#http.delete(this.EDIT_USERS_PATH(userId)).pipe(
+  deleteUser$ = (userId: number, account: string) => {
+    return this.#http.delete(this.EDIT_USERS_PATH(userId), { account }).pipe(
       tap(() => {
         this.#snackBar.open('Delete success.', 'X', {
           horizontalPosition: 'end',

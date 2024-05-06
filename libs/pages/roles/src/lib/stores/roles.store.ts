@@ -66,11 +66,11 @@ export const RolesStore = signalStore(
         )
       )
     ),
-    deleteUser: rxMethod<{ roleId: number }>(
+    deleteUser: rxMethod<{ roleId: number; name: string }>(
       pipe(
         tap(() => patchState(store, { isLoading: ROLES_LOADING.DELETE_ROLE })),
-        switchMap(({ roleId }) =>
-          rolesService.deleteRole$(roleId).pipe(
+        switchMap(({ roleId, name }) =>
+          rolesService.deleteRole$(roleId, name).pipe(
             tap(() => {
               patchState(store, { isLoading: ROLES_LOADING.REFRESH_TABLE });
             }),

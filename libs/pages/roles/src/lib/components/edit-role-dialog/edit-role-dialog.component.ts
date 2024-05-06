@@ -95,6 +95,14 @@ export class EditRoleDialogComponent implements OnInit {
   };
 
   onSubmit = () => {
+    if (this.form.invalid) {
+      return;
+    }
+    if (this.nameCtrl.value.trim() === '') {
+      return;
+    }
+
+    this.nameCtrl.setValue(this.nameCtrl.value.trim());
     const payload: IEditRoleReq = {
       description: this.descriptionCtrl.value,
       name: this.nameCtrl.value,

@@ -31,7 +31,7 @@ export class DeleteConfirmDialogComponent {
 
   onDelete = () => {
     if (this.roleNameCtrl.valid) {
-      this.data.rolesStore.deleteUser({ roleId: this.data.role.id });
+      this.data.rolesStore.deleteUser({ roleId: this.data.role.id, name: this.data.role.name });
     }
   };
 }

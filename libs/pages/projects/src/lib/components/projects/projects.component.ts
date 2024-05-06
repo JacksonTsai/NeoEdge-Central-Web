@@ -61,9 +61,7 @@ export class ProjectsComponent implements AfterViewInit {
 
   constructor() {
     effect(() => {
-      if (this.projects()?.length > 0) {
-        this.dataSource.data = this.projects();
-      }
+      this.dataSource.data = this.projects();
     });
   }
 

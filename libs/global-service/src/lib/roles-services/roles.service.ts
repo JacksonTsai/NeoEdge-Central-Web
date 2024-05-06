@@ -90,8 +90,8 @@ export class RolesService {
       })
     );
 
-  deleteRole$ = (userId: number) => {
-    return this.#http.delete(`${this.ROLES_PATH}/${userId}`).pipe(
+  deleteRole$ = (userId: number, name: string) => {
+    return this.#http.delete(`${this.ROLES_PATH}/${userId}`, { name }).pipe(
       tap(() => {
         this.#snackBar.open('Delete success.', 'X', {
           horizontalPosition: 'end',

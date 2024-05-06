@@ -171,6 +171,8 @@ export class CompanyComponent implements OnInit {
     });
     if (compInfo?.logo !== '') {
       this.companyLogo.set(this.logoCtrl.value);
+    } else {
+      this.companyLogo.set(defaultCompLogo);
     }
   };
 

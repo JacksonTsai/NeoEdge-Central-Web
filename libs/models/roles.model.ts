@@ -17,8 +17,8 @@ export interface IGetRolesResp {
 export interface IRole {
   id: number;
   name: string;
-  createBy: string;
-  createDate: number;
+  createdBy: string;
+  createdAt: number;
   users: string[];
 }
 

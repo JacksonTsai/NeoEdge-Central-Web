@@ -91,11 +91,11 @@ export const UsersStore = signalStore(
           )
         )
       ),
-      deleteUser: rxMethod<{ userId: number }>(
+      deleteUser: rxMethod<{ userId: number; account: string }>(
         pipe(
           tap(() => patchState(store, { isLoading: USERS_LOADING.DELETE_USER })),
-          switchMap(({ userId }) =>
-            usersService.deleteUser$(userId).pipe(
+          switchMap(({ userId, account }) =>
+            usersService.deleteUser$(userId, account).pipe(
               tap(() => {
                 patchState(store, { isLoading: USERS_LOADING.REFRESH_TABLE });
               }),
