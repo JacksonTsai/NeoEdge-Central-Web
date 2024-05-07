@@ -45,10 +45,11 @@ export const ProjectsStore = signalStore(
             ]).pipe(
               map(([projects, users]) => {
                 patchState(store, {
-                  projects: projects?.projects.map((project) => ({
-                    ...project,
-                    users: [...project.users.map((userId) => users.users.find((user) => user.id === userId))]
-                  })),
+                  projects:
+                    projects?.projects?.map((project) => ({
+                      ...project,
+                      users: [...project.users.map((userId) => users.users.find((user) => user.id === userId))]
+                    })) ?? [],
                   users: [...users.users],
                   page,
                   size,
