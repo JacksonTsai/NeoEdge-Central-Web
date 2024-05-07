@@ -63,9 +63,7 @@
       <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let element">
         @if (userStatus[element.accountStatus] === 'Active') {
-        <span class="badge badge--primary">
-          {{ userStatus[element.accountStatus] }}
-        </span>
+        <span class="badge badge--primary"> {{ userStatus[element.accountStatus] }} </span>
         }@else if(userStatus[element.accountStatus] === 'Inactive'){
         <span class="badge badge--danger"> userStatus[element.accountStatus] </span>
         }@else {
@@ -102,7 +100,7 @@
             (click)="onDisable(element)"
           >
             <mat-icon svgI con="icon:disabled_red"></mat-icon>
-            Disable
+            Enable
           </button>
           } @else {
           <button
@@ -117,7 +115,8 @@
             <mat-icon svgIcon="icon:ok_gary"></mat-icon>
             }@else {
             <mat-icon svgIcon="icon:ok_primary"></mat-icon>
-            } Enable
+            }
+            <span> Disable </span>
           </button>
           }
           <button id="user-more" mat-icon-button [matMenuTriggerFor]="menu">
