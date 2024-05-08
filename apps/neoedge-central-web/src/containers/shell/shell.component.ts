@@ -11,11 +11,11 @@ import * as AuthStore from '@neo-edge-web/auth-store';
 import { NeLayoutComponent, NeMenuComponent } from '@neo-edge-web/components';
 import { RouterStoreService, selectMenuTree, selectUserProfile, updateMenu } from '@neo-edge-web/global-store';
 import { MenuItem } from '@neo-edge-web/models';
+import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LetDirective } from '@ngrx/component';
 import { Store } from '@ngrx/store';
 import { map, take, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { MENU_TREE } from '../../configs/nec-menu.config';
 
 const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
@@ -78,7 +78,9 @@ export class ShellComponent implements OnInit {
   #routerStoreService = inject(RouterStoreService);
   #globalStore = inject(Store);
   #router = inject(Router);
-  appVersion = environment.version;
+  envVairable = inject(ENV_VARIABLE);
+
+  appVersion = this.envVairable.version;
   userName = signal('');
   role = signal('');
   isMobile = false;

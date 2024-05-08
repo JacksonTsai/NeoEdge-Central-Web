@@ -1,10 +1,8 @@
-import packageJson from '@neo-edge-web/package-json';
-
 export const environment = {
   production: true,
   basePath: 'https://api.neoedge-dev.net/api/v1',
   authPath: 'https://api.neoedge-dev.net/api',
-  version: packageJson.betaVersion,
+  eulaVersion: '1.0',
   socket: {
     host: location.host
   },

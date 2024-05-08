@@ -35,8 +35,8 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/neoedge-central-web/environments/environment.ts",
-              "with": "apps/neoedge-central-web/environments/environment.prod.ts"
+              "replace": "libs/environments/neoedge-central-web/environment.ts",
+              "with": "libs/environments/neoedge-central-web/environment.prod.ts"
             }
           ],
           "budgets": [
@@ -56,8 +56,8 @@
         "build-dev": {
           "fileReplacements": [
             {
-              "replace": "apps/neoedge-central-web/environments/environment.ts",
-              "with": "apps/neoedge-central-web/environments/environment.build-dev.ts"
+              "replace": "libs/environments/neoedge-central-web/environment.ts",
+              "with": "libs/environments/neoedge-central-web/environment.build-dev.ts"
             }
           ],
           "optimization": true,
@@ -66,8 +66,8 @@
         "build-test": {
           "fileReplacements": [
             {
-              "replace": "apps/neoedge-central-web/environments/environment.ts",
-              "with": "apps/neoedge-central-web/environments/environment.build-test.ts"
+              "replace": "libs/environments/neoedge-central-web/environment.ts",
+              "with": "libs/environments/neoedge-central-web/environment.build-test.ts"
             }
           ],
           "optimization": true,
