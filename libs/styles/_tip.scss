@@ -1,0 +1,27 @@
+@use 'colors' as *;
+
+.tip {
+  border-radius: $border-radius;
+  padding: 16px;
+  height: 52px;
+  &.tip--primary {
+    color: $primary;
+    background-color: $primary-bg;
+    border-left: 5px solid $primary;
+  }
+  &.tip--accent {
+    color: $accent;
+    background-color: $accent-bg;
+    border-left: 5px solid $accent;
+  }
+  &.tip--danger {
+    color: $danger;
+    background-color: $danger-bg;
+    border-left: 5px solid $danger;
+  }
+  &.tip--gary {
+    color: $black;
+    background-color: $black-gary;
+    border-left: 5px solid $black-gary;
+  }
+}

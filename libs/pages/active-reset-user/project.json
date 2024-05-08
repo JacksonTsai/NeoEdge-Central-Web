@@ -1,8 +1,8 @@
 {
-  "name": "login",
+  "name": "active-reset-user",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/pages/login/src",
-  "prefix": "ne",
+  "sourceRoot": "libs/pages/active-reset-user/src",
+  "prefix": "lib",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/pages/login/jest.config.ts"
+        "jestConfig": "libs/pages/active-reset-user/jest.config.ts"
       }
     },
     "lint": {

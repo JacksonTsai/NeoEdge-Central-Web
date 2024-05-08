@@ -1,0 +1,103 @@
+<div class="active-reset-user-wrapper">
+  <img class="logo-img" src="assets/images/neoedge_logo_blue.png" alt="NeoEdge web" />
+
+  <form [formGroup]="form" (keyup.enter)="onSubmit()" (ngSubmit)="onSubmit()">
+    <mat-card class="active-reset-user-card">
+      <h2 class="welcome-title">Active User</h2>
+      @if (pageState().isTokenInvalid ) {
+      <h3 class="tip tip--danger invalid">Invalid token</h3>
+      }
+      <div class="item">
+        <div class="label">Email (Login ID)</div>
+        <div class="value">
+          @if (accountCtrl.value) {
+          <span color="primary">
+            {{ accountCtrl.value }}
+          </span>
+          } @else {
+          <span>-</span>
+          }
+        </div>
+      </div>
+      @if (activeResetAction.ACTIVE_USER === pageState().action && actionResult.NONE === pageState().actionResult) {
+      <mat-form-field class="password-field" appearance="outline" floatLabel="always">
+        <mat-label>New password</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="isTogglePwd() ? 'password' : 'text'"
+          maxlength="128"
+          id="active-reset-user-password"
+        />
+        <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="togglePwd()">
+          @if (isTogglePwd()) {
+          <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
+          } @else {
+          <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
+          }
+        </button>
+        <mat-hint> 8-64 characters, including uppercase, lowercase, numbers, symbols </mat-hint>
+        @if (passwordCtrl.hasError('required')) {
+        <mat-error>Required.</mat-error>
+        }@else if (passwordCtrl.hasError('pattern')){
+        <mat-error> 8-64 characters, including uppercase, lowercase, numbers, symbols </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="password-field" appearance="outline" floatLabel="always">
+        <mat-label>Confirm password</mat-label>
+        <input
+          matInput
+          formControlName="confirmPassword"
+          [type]="isToggleConfirmPwd() ? 'password' : 'text'"
+          maxlength="128"
+          id="active-reset-user-password-confirm"
+        />
+        <button id="" type="button" mat-icon-button matSuffix (click)="toggleConfirmPwd()">
+          @if (isToggleConfirmPwd()) {
+          <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
+          } @else {
+          <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
+          }
+        </button>
+        @if (confirmPasswordCtrl.hasError('required')) {
+        <mat-error>Required.</mat-error>
+        } @else if (confirmPasswordCtrl.hasError('notMachPassword')) {
+        <mat-error>Password don't match.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-checkbox color="primary" formControlName="eula">
+        I have carefully reviewed and consented to the End User License Agreement (EULA).
+      </mat-checkbox>
+
+      <button
+        type="button"
+        class="active-reset-user-card__btn"
+        mat-flat-button
+        color="primary"
+        (click)="onSubmit()"
+        [disabled]="form.invalid || !eulaCtrl.value"
+        id="active-reset-user-submit"
+      >
+        Submit
+      </button>
+      } @if (activeResetAction.ACTIVE_USER === pageState().action && actionResult.SUCCESS === pageState().actionResult)
+      {
+      <div class="active-user-result">
+        <h3 color="primary">Activation Success.</h3>
+        <h3>You are welcome to access to NeoEdge Central.</h3>
+        <a [routerLink]="['/login']">
+          <button class="active-reset-user-card__btn" type="button" mat-flat-button color="primary">Go to login</button>
+        </a>
+      </div>
+      } @if (activeResetAction.ACTIVE_USER === pageState().action && actionResult.FAILURE === pageState().actionResult)
+      {
+      <div class="active-user-result">
+        <h3 class="tip tip--danger">Activation Failure.</h3>
+        <div>We have problem to activate your account.</div>
+        <div>Please contact with your company administrator or inviter.</div>
+      </div>
+      }
+    </mat-card>
+  </form>
+</div>

@@ -12,7 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/global-store';
 import { Store } from '@ngrx/store';
 @Component({
-  selector: 'lib-login',
+  selector: 'ne-login',
   standalone: true,
   imports: [
     MatCardModule,

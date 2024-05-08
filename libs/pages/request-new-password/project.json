@@ -1,7 +1,7 @@
 {
-  "name": "login",
+  "name": "forget-password",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/pages/login/src",
+  "sourceRoot": "libs/pages/forget-password/src",
   "prefix": "ne",
   "projectType": "library",
   "tags": [],
@@ -10,7 +10,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/pages/login/jest.config.ts"
+        "jestConfig": "libs/pages/forget-password/jest.config.ts"
       }
     },
     "lint": {
