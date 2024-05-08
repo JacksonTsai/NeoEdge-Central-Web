@@ -9,14 +9,14 @@
             <mat-icon svgIcon="icon:camera_white" matTooltip="Change company logo."></mat-icon>
           </div>
           } @if (companyLogo() !== '') {
-          <img width="100px" height="100px" [src]="companyLogo()" />
+          <img width="100%" height="100%" [src]="companyLogo()" />
           }
           <input
             #inputFile
             type="file"
             class="file-input"
             (click)="inputFile.value = null"
-            accept="image/gif,image/jpeg,image/jpg,image/png,.svg"
+            accept="image/gif,image/jpeg,image/jpg,image/png"
           />
         </div>
         <h3>

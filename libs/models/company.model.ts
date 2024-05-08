@@ -11,7 +11,7 @@ export interface ICompanyProfileResp {
   datetimeFormat: string;
   fqdn: string;
   language: string;
-  logo: string;
+  iconPath: string;
   name: string;
   planId: number;
   shortName: string;
@@ -26,12 +26,16 @@ export interface BizContact {
 }
 
 export interface IEditCompanyProfileReq {
-  bizContact: BizContact;
+  profile: ICompanyProfile;
+  companyIcon?: File;
+}
+
+export interface ICompanyProfile {
   country: string;
-  datetimeFormat: string;
   language: string;
+  bizContact: BizContact;
   techContact: BizContact;
-  logo: string;
+  datetimeFormat: string;
 }
 
 export enum COMP_INFO_LOADING {

@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ICompanyProfileResp, IEditCompanyProfileReq } from '@neo-edge-web/models';
+import { obj2FormData } from '@neo-edge-web/utils';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpService, REST_CONFIG } from '../http-service';
 
@@ -31,7 +32,19 @@ export class CompanyInfoService {
   );
 
   editCompanyProfile$ = (payload: IEditCompanyProfileReq) => {
-    return this.#http.put(this.COMPANY_PROFILE_PATH, payload).pipe(
+    let multiPartFormData;
+    if (payload.companyIcon) {
+      multiPartFormData = obj2FormData({
+        profile: JSON.stringify(payload.profile),
+        companyIcon: payload.companyIcon
+      });
+    } else {
+      multiPartFormData = obj2FormData({
+        profile: JSON.stringify(payload.profile)
+      });
+    }
+
+    return this.#http.put(this.COMPANY_PROFILE_PATH, multiPartFormData).pipe(
       tap(() => {
         this.#snackBar.open('Edit success.', 'X', {
           horizontalPosition: 'end',

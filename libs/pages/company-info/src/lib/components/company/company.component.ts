@@ -23,6 +23,7 @@ import {
   COMPANY_STATUS,
   COMP_INFO_LOADING,
   DATE_FORMAT,
+  ICompanyProfile,
   ICompanyProfileResp,
   IEditCompanyProfileReq,
   LANG,
@@ -50,8 +51,7 @@ interface ICompForm {
   website: string;
 }
 
-const defaultCompLogo =
-  'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iMTIwMHB0IiBoZWlnaHQ9IjEyMDBwdCIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMTIwMCAxMjAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPHBhdGggZD0ibTM4Ny41IDEwMTUuMmg3MDB2LTM3LjVoLTgzdi03NjEuMzhsLTIwNy4zOC0xMjIuMzgtNDI4Ljc1IDExOC41djE4MGwtMTcyLjg4IDQ4LjM3NXY1MzYuODhoLTgydjM3LjV6bS0xNTQuNS00MTkuODggMjQ5LjEyLTY5djg3LjVsLTI0OS4xMiA2OC42MjV6bTAgMTI2LjEyIDI0OS4xMi02OS4xMjV2ODcuNWwtMjQ5LjEyIDY4Ljc1em0yODYuNjIgMjU2LjI1di01NjkuMjVsOTcuMTI1IDU3LjI1djUxMi41em00NDcuMzggMGgtMTUzLjg4di04MzAuNzVsMTUzLjg4IDkwLjV6bS01NjEuMTItNzM2LjM4IDM2OS43NS0xMDIuNXY4MzguODhoLTEyMS4zOHYtNTMzLjM4bC0xNTAuNzUtODktOTcuNjI1IDI3LjEyNXptNzYuMjUgMTU4LjYydjg3LjVsLTI0OS4xMiA2OXYtODcuNXptLTI0OS4xMiA0NDcuNSAyNDkuMTItNjl2MTk5LjI1aC0yNDkuMTJ6bTg1My41IDI1OC41aC05NzN2LTM3LjVoOTczeiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K';
+const defaultCompLogo = 'assets/images/default_company_white.png';
 
 @Component({
   selector: 'ne-company',
@@ -95,6 +95,7 @@ export class CompanyComponent implements OnInit {
     const companyImg = file;
     img2Base64(companyImg).subscribe((d) => {
       this.companyLogo.set(`data:${file.type};base64,${d}`);
+      this.iconPathCtrl.setValue(companyImg);
       this.form.markAsDirty();
     });
   }
@@ -127,8 +128,8 @@ export class CompanyComponent implements OnInit {
     return this.form.get('language') as UntypedFormControl;
   }
 
-  get logoCtrl() {
-    return this.form.get('logo') as UntypedFormControl;
+  get iconPathCtrl() {
+    return this.form.get('iconPath') as UntypedFormControl;
   }
 
   get companyProfile() {
@@ -160,7 +161,7 @@ export class CompanyComponent implements OnInit {
       datetimeFormat: compInfo?.datetimeFormat ?? '',
       fqdn: compInfo?.fqdn ?? '',
       language: compInfo?.language ?? '',
-      logo: compInfo?.logo !== '' ? compInfo.logo : defaultCompLogo,
+      iconPath: compInfo?.iconPath !== '' ? compInfo.iconPath : defaultCompLogo,
       name: compInfo?.name ?? '',
       planId: compInfo?.planId ?? '',
       shortName: compInfo?.shortName ?? '',
@@ -169,8 +170,8 @@ export class CompanyComponent implements OnInit {
       techContactName: compInfo?.techContact?.name ?? '',
       website: compInfo?.website ?? ''
     });
-    if (compInfo?.logo !== '') {
-      this.companyLogo.set(this.logoCtrl.value);
+    if (compInfo?.iconPath !== '') {
+      this.companyLogo.set(this.iconPathCtrl.value);
     } else {
       this.companyLogo.set(defaultCompLogo);
     }
@@ -190,7 +191,7 @@ export class CompanyComponent implements OnInit {
       this.countryCtrl.enable();
       this.datetimeFormatCtrl.enable();
       this.languageCtrl.enable();
-      this.logoCtrl.enable();
+      this.iconPathCtrl.enable();
     } else {
       this.bizContactEmailCtrl.disable();
       this.bizContactNameCtrl.disable();
@@ -199,14 +200,14 @@ export class CompanyComponent implements OnInit {
       this.countryCtrl.disable();
       this.datetimeFormatCtrl.disable();
       this.languageCtrl.disable();
-      this.logoCtrl.disable();
+      this.iconPathCtrl.disable();
     }
   };
 
   onCancelEdit = () => {
     this.changeEditMode(false);
     this.setFormValue(this.compInfo());
-    this.companyLogo.set(this.compInfo()?.logo !== '' ? this.compInfo().logo : defaultCompLogo);
+    this.companyLogo.set(this.compInfo()?.iconPath !== '' ? this.compInfo().iconPath : defaultCompLogo);
     this.form.markAsPristine();
   };
 
@@ -215,7 +216,7 @@ export class CompanyComponent implements OnInit {
   };
 
   onSave = () => {
-    const companyProfileReq: IEditCompanyProfileReq = {
+    const companyProfile: ICompanyProfile = {
       bizContact: {
         email: (this.bizContactEmailCtrl.value as string).trim(),
         name: (this.bizContactNameCtrl.value as string).trim()
@@ -223,12 +224,20 @@ export class CompanyComponent implements OnInit {
       country: this.countryCtrl.value,
       datetimeFormat: this.datetimeFormatCtrl.value,
       language: this.languageCtrl.value,
-      logo: this.companyLogo(),
       techContact: {
         email: (this.techContactEmailCtrl.value as string).trim(),
         name: (this.techContactNameCtrl.value as string).trim()
       }
     };
+
+    const companyProfileReq: IEditCompanyProfileReq = {
+      profile: companyProfile
+    };
+
+    if (typeof this.iconPathCtrl.value !== 'string') {
+      Object.assign(companyProfileReq, { companyIcon: this.iconPathCtrl.value });
+    }
+
     this.handleEditCompInfo.emit(companyProfileReq);
   };
 
@@ -248,7 +257,7 @@ export class CompanyComponent implements OnInit {
       datetimeFormat: [{ value: this.compInfo()?.datetimeFormat ?? '', disabled: true }, [Validators.required]],
       fqdn: [{ value: this.compInfo()?.fqdn ?? '' }, [Validators.required]],
       language: [{ value: this.compInfo()?.language ?? '', disabled: true }, [Validators.required]],
-      logo: [{ value: this.compInfo()?.logo !== '' ? this.compInfo()?.logo : defaultCompLogo }],
+      iconPath: [{ value: this.compInfo()?.iconPath !== '' ? this.compInfo()?.iconPath : defaultCompLogo }],
       name: [{ value: this.compInfo()?.name ?? '' }, [Validators.required]],
       planId: [{ value: this.compInfo()?.planId ?? '' }],
       shortName: [{ value: this.compInfo()?.shortName ?? '' }],
