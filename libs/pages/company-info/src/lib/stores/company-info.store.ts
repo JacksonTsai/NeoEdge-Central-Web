@@ -36,7 +36,7 @@ export const CompanyInfoStore = signalStore(
             map(() => {
               patchState(store, {
                 companyInfo: { ...store.companyInfo(), ...payload },
-                isLoading: COMP_INFO_LOADING.NONE
+                isLoading: COMP_INFO_LOADING.REFRESH
               });
             }),
             catchError(() => EMPTY)
