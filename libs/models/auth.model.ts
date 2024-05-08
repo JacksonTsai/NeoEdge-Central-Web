@@ -55,7 +55,10 @@ export interface IForgetPasswordResp {
 }
 
 export interface ISetPasswordReq {
+  account: string;
   password: string;
+  eulaVersion?: string;
+  verifyToken: string;
 }
 
 export interface IGetUserProfileResp {
@@ -75,6 +78,14 @@ export interface IUserRole {
   name: string;
   description: string;
   permissions: number[];
+}
+
+export interface IVerifyInitTokenReq {
+  verifyToken: string;
+}
+
+export interface IVerifyInitTokenResp {
+  account: string;
 }
 
 export enum PERMISSION {

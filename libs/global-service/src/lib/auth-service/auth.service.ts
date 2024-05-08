@@ -4,11 +4,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   IAllPermission,
   IAllPermissionResp,
+  IForgetPasswordReq,
   ILoginReq,
   ILoginResp,
   IRefreshTokenReq,
   IRefreshTokenResp,
-  ISetPasswordReq
+  ISetPasswordReq,
+  IVerifyInitTokenReq,
+  IVerifyInitTokenResp
 } from '@neo-edge-web/models';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { HttpService, REST_CONFIG } from '../http-service';
@@ -26,6 +29,7 @@ export class AuthService {
 
   FORGET_PASSWORD_PATH = '/forget-password';
   INIT_PATH = '/init';
+  VERIFY_INIT_TOKEN_PATH = '/verify-init-token';
   LOGIN_PATH = '/login';
   LOGOUT_PATH = '/logout';
   REFRESH_TOKEN_PATH = '/refresh';
@@ -35,8 +39,8 @@ export class AuthService {
     return throwError(() => err);
   }
 
-  forgetPassword$ = (payload: ILoginReq) =>
-    this.#http.post(this.LOGIN_PATH, payload, { basePath: this.AUTH_BASE_PATH }).pipe(
+  forgetPassword$ = (payload: IForgetPasswordReq) =>
+    this.#http.post(this.FORGET_PASSWORD_PATH, payload, { basePath: this.AUTH_BASE_PATH }).pipe(
       catchError((err) => {
         this.#snackBar.open('Settings failed.', 'X', {
           horizontalPosition: 'end',
@@ -58,6 +62,20 @@ export class AuthService {
         return this.handleError(err);
       })
     );
+
+  verifyInitToken$ = (payload: IVerifyInitTokenReq): Observable<IVerifyInitTokenResp> =>
+    this.#http
+      .post(`${this.VERIFY_INIT_TOKEN_PATH}`, { verifyToken: payload.verifyToken }, { basePath: this.AUTH_BASE_PATH })
+      .pipe(
+        catchError((err) => {
+          this.#snackBar.open('Verify failed.', 'X', {
+            horizontalPosition: 'end',
+            verticalPosition: 'bottom',
+            duration: 5000
+          });
+          return this.handleError(err);
+        })
+      );
 
   login$ = (payload: ILoginReq): Observable<ILoginResp> =>
     this.#http.post(this.LOGIN_PATH, payload, { basePath: this.AUTH_BASE_PATH }).pipe(

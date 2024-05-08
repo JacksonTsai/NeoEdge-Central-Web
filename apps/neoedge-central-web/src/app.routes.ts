@@ -64,6 +64,21 @@ export const appRoutes: Route[] = [
     ]
   },
   {
+    path: 'active-user',
+    loadChildren: () => import('@neo-edge-web/active-reset-user').then((m) => m.ActiveResetUserRoutes),
+    data: {
+      trigger: 'active-user',
+      preload: true
+    }
+  },
+  {
+    path: 'request-new-password',
+    loadChildren: () => import('@neo-edge-web/request-new-password').then((m) => m.RequestNewPasswordRoutes),
+    data: {
+      preload: true
+    }
+  },
+  {
     path: 'login',
     loadChildren: () => import('@neo-edge-web/login').then((m) => m.loginRoutes),
     data: {

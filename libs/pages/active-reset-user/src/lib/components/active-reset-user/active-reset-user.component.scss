@@ -1,0 +1,80 @@
+@use 'colors' as *;
+@use 'variables' as *;
+
+.item {
+  margin-bottom: 32px;
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 8px;
+  }
+}
+
+.active-reset-user-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-width: 375px;
+  min-height: 667px;
+  background-image: url('/assets/images/bg-img.jpg');
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  .welcome-title {
+    margin-bottom: 32px;
+    .neoedge {
+      color: $primary;
+    }
+  }
+  .logo-img {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    width: 200px;
+    height: 40px;
+  }
+  .active-reset-user-card {
+    display: flex;
+    flex-direction: column;
+    padding: 32px;
+    height: 580px;
+    width: 543px;
+    min-width: 375px;
+    min-height: 530px;
+    border: 0;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 4px;
+    overflow: auto;
+    border-radius: 16px;
+    .invalid {
+      margin-bottom: 16px;
+    }
+    .password-field {
+      margin-bottom: 16px;
+    }
+    &__btn {
+      margin-top: 32px;
+      height: 46px;
+      width: 100%;
+    }
+    .active-user-result {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      h3,
+      div {
+        margin-bottom: 16px;
+      }
+      button {
+        position: absolute;
+        bottom: 0;
+      }
+    }
+    .visibility-icon {
+      color: $black-gary;
+    }
+  }
+}
