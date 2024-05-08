@@ -40,8 +40,9 @@
   .active-reset-user-card {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     padding: 32px;
-    height: 580px;
+    height: 650px;
     width: 543px;
     min-width: 375px;
     min-height: 530px;

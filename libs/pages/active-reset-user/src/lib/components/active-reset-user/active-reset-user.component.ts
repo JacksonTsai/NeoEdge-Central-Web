@@ -20,6 +20,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '@neo-edge-web/global-service';
 import { RouterStoreService } from '@neo-edge-web/global-store';
+import { ISetPasswordReq } from '@neo-edge-web/models';
 import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
@@ -95,16 +96,20 @@ export class ActiveResetUserComponent implements OnInit {
     this.isToggleConfirmPwd.set(!this.isToggleConfirmPwd());
   };
 
-  onSubmit = () => {
-    if (this.form.invalid && !this.eulaCtrl.value) {
-      return;
+  activeResetUser = () => {
+    const payload: ISetPasswordReq = {
+      account: this.accountCtrl.value ?? '',
+      password: this.passwordCtrl.value,
+      eulaVersion: this.envVariable.eulaVersion,
+      verifyToken: this.verifyTokenCtrl.value
+    };
+    if (ACTIVE_RESET_ACTION.FORGOT_PASSWORD === this.pageState().action) {
+      delete payload.eulaVersion;
     }
+
     this.authService
       .setPassword$({
-        account: this.accountCtrl.value ?? '',
-        password: this.passwordCtrl.value,
-        eulaVersion: this.envVariable.eulaVersion,
-        verifyToken: this.verifyTokenCtrl.value
+        ...payload
       })
       .pipe(
         take(1),
@@ -127,11 +132,18 @@ export class ActiveResetUserComponent implements OnInit {
       .subscribe();
   };
 
+  onSubmit = () => {
+    if (this.form.invalid && !this.eulaCtrl.value) {
+      return;
+    }
+    this.activeResetUser();
+  };
+
   passwordMatch = (control: AbstractControl): ValidationErrors | null => {
     return control.value === this.passwordCtrl.value ? null : { notMachPassword: true };
   };
 
-  enableField = (isEnable) => {
+  enableUserField = (isEnable) => {
     if (isEnable) {
       this.passwordCtrl.enable();
       this.confirmPasswordCtrl.enable();
@@ -143,12 +155,12 @@ export class ActiveResetUserComponent implements OnInit {
     }
   };
 
-  activeUserAction = () => {
+  activeResetUserAction = () => {
     this.routerStoreService.getQueryParams$
       .pipe(
         map(({ token }: { token: string }) => {
           if (!token) {
-            this.enableField(false);
+            this.enableUserField(false);
             this.pageState.update((state) => ({
               ...state,
               isTokenInvalid: true
@@ -162,7 +174,7 @@ export class ActiveResetUserComponent implements OnInit {
           return this.authService.verifyInitToken$({ verifyToken: token }).pipe(
             tap(({ account }) => {
               this.accountCtrl.setValue(account);
-              this.enableField(true);
+              this.enableUserField(true);
               this.#cd.markForCheck();
             })
           );
@@ -205,14 +217,17 @@ export class ActiveResetUserComponent implements OnInit {
               ...state,
               action: ACTIVE_RESET_ACTION.ACTIVE_USER
             }));
-            this.activeUserAction();
           }
           if ('forget-password' === trigger) {
             this.pageState.update((state) => ({
               ...state,
-              action: ACTIVE_RESET_ACTION.ACTIVE_USER
+
+              action: ACTIVE_RESET_ACTION.FORGOT_PASSWORD
             }));
+            this.eulaCtrl.setValue(true);
           }
+
+          this.activeResetUserAction();
         })
       )
       .subscribe();

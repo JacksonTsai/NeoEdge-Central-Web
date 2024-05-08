@@ -6,7 +6,7 @@ export interface IPageState {
 
 export enum ACTIVE_RESET_ACTION {
   ACTIVE_USER,
-  FORGET_PASSWORD,
+  FORGOT_PASSWORD,
   NONE
 }
 

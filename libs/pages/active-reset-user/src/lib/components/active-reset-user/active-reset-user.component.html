@@ -3,7 +3,12 @@
 
   <form [formGroup]="form" (keyup.enter)="onSubmit()" (ngSubmit)="onSubmit()">
     <mat-card class="active-reset-user-card">
+      @if (activeResetAction.FORGOT_PASSWORD ===pageState().action) {
+      <h2 class="welcome-title">Reset password</h2>
+      }@else {
       <h2 class="welcome-title">Active User</h2>
+      }
+      <!--  -->
       @if (pageState().isTokenInvalid ) {
       <h3 class="tip tip--danger invalid">Invalid token</h3>
       }
@@ -19,7 +24,7 @@
           }
         </div>
       </div>
-      @if (activeResetAction.ACTIVE_USER === pageState().action && actionResult.NONE === pageState().actionResult) {
+      @if (actionResult.NONE === pageState().actionResult) {
       <mat-form-field class="password-field" appearance="outline" floatLabel="always">
         <mat-label>New password</mat-label>
         <input
@@ -66,36 +71,53 @@
         }
       </mat-form-field>
 
+      @if (activeResetAction.ACTIVE_USER === pageState().action) {
       <mat-checkbox color="primary" formControlName="eula">
         I have carefully reviewed and consented to the End User License Agreement (EULA).
       </mat-checkbox>
+      }
+      <div>
+        <button
+          type="button"
+          class="active-reset-user-card__btn"
+          mat-flat-button
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="form.invalid || !eulaCtrl.value"
+          id="active-reset-user-submit"
+        >
+          Submit
+        </button>
 
-      <button
-        type="button"
-        class="active-reset-user-card__btn"
-        mat-flat-button
-        color="primary"
-        (click)="onSubmit()"
-        [disabled]="form.invalid || !eulaCtrl.value"
-        id="active-reset-user-submit"
-      >
-        Submit
-      </button>
-      } @if (activeResetAction.ACTIVE_USER === pageState().action && actionResult.SUCCESS === pageState().actionResult)
-      {
+        <a [routerLink]="['/login']">
+          <button class="active-reset-user-card__btn" type="button" mat-button color="primary">Go to login</button>
+        </a>
+      </div>
+      } @if ( actionResult.SUCCESS === pageState().actionResult) {
       <div class="active-user-result">
+        @if (activeResetAction.ACTIVE_USER === pageState().action) {
         <h3 color="primary">Activation Success.</h3>
+        } @else {
+        <h3 color="primary">Reset Success.</h3>
+        }
         <h3>You are welcome to access to NeoEdge Central.</h3>
         <a [routerLink]="['/login']">
           <button class="active-reset-user-card__btn" type="button" mat-flat-button color="primary">Go to login</button>
         </a>
       </div>
-      } @if (activeResetAction.ACTIVE_USER === pageState().action && actionResult.FAILURE === pageState().actionResult)
-      {
+      } @if ( actionResult.FAILURE === pageState().actionResult) {
       <div class="active-user-result">
+        @if (activeResetAction.ACTIVE_USER === pageState().action) {
         <h3 class="tip tip--danger">Activation Failure.</h3>
+        } @else {
+        <h3 class="tip tip--danger">Reset Failure.</h3>
+        }
         <div>We have problem to activate your account.</div>
         <div>Please contact with your company administrator or inviter.</div>
+
+        <a [routerLink]="['/login']">
+          <button class="active-reset-user-card__btn" type="button" mat-flat-button color="primary">Go to login</button>
+        </a>
       </div>
       }
     </mat-card>

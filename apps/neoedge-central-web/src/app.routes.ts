@@ -72,6 +72,14 @@ export const appRoutes: Route[] = [
     }
   },
   {
+    path: 'forget-password',
+    loadChildren: () => import('@neo-edge-web/active-reset-user').then((m) => m.ActiveResetUserRoutes),
+    data: {
+      trigger: 'forget-password',
+      preload: true
+    }
+  },
+  {
     path: 'request-new-password',
     loadChildren: () => import('@neo-edge-web/request-new-password').then((m) => m.RequestNewPasswordRoutes),
     data: {
@@ -87,6 +95,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '/user-management/users'
+    redirectTo: '/company-account/company-info'
   }
 ];
