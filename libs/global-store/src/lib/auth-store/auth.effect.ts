@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, UserService } from '@neo-edge-web/global-service';
-import { IGetUserProfileResp, ILoginResp } from '@neo-edge-web/models';
+import { IGetUserProfileResp, ILoginResp, PERMISSION } from '@neo-edge-web/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { NgxPermissionsService } from 'ngx-permissions';
 import { SessionStorageService } from 'ngx-webstorage';
 import { EMPTY, interval, of } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
-
 @Injectable()
 export class AuthEffects {
   #actions = inject(Actions);
@@ -15,6 +15,7 @@ export class AuthEffects {
   #userService = inject(UserService);
   #router = inject(Router);
   #storage = inject(SessionStorageService);
+  #permissionsService = inject(NgxPermissionsService);
 
   login$ = createEffect(() =>
     this.#actions.pipe(
@@ -38,6 +39,7 @@ export class AuthEffects {
         return this.#userService.userProfile$.pipe(
           map((userProfile: IGetUserProfileResp) => {
             this.#storage.store('user_profile', userProfile);
+            this.#permissionsService.loadPermissions([...userProfile.role.permissions.map((d) => PERMISSION[d])]);
             return AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin });
           }),
           catchError(() => of(AuthAction.loginFail))

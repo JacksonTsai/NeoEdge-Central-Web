@@ -9,7 +9,9 @@ const initialState: IAuthState = {
   isLoginSuccess: null,
   tryLoginCount: 0,
   isAuthVerifying: false,
-  userProfile: null
+  userProfile: null,
+  currentProjectId: 0,
+  currentProjectName: ''
 };
 
 const decodeJWT = (jwt: string): IJwtInfo | null => {
@@ -38,7 +40,14 @@ export const authReducer = createReducer(
       tryLoginCount: 0
     };
   }),
-  on(AuthAction.userProfileSuccess, (state, { userProfile }) => ({ ...state, userProfile })),
+  on(AuthAction.loinSuccessRedirect, AuthAction.userProfileSuccess, (state, { userProfile }) => {
+    return {
+      ...state,
+      userProfile,
+      currentProjectId: userProfile.defaultProjectId,
+      currentProjectName: userProfile.defaultProjectName
+    };
+  }),
   on(AuthAction.loginFail, (state) => ({ ...state, isLoginSuccess: false, isAuthVerifying: false })),
   on(AuthAction.updateAccessTokenAction, (state, { accessToken }) => ({ ...state, accessToken })),
   on(AuthAction.resetAuthState, () => ({ ...initialState }))

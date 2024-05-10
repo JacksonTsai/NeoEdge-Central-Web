@@ -129,7 +129,7 @@
           </mat-form-field>
         </div>
         <div class="company-info-action">
-          <div class="edit-btn">
+          <div class="edit-btn" *ngxPermissionsOnly="[permission[permission.COMPANY_ACCOUNT]]">
             @if (!isEditMode()) {
             <button type="button" mat-stroked-button color="primary" (click)="onEdit()">
               <mat-icon svgIcon="icon:edit_primary"></mat-icon>

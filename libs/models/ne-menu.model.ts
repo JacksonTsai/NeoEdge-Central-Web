@@ -4,6 +4,6 @@ export interface MenuItem {
   path: string;
   isExpanded?: boolean;
   isActive?: boolean;
-  permission?: [];
+  permissions?: string[];
   children?: MenuItem[];
 }

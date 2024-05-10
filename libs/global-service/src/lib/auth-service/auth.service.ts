@@ -13,7 +13,7 @@ import {
   IVerifyInitTokenReq,
   IVerifyInitTokenResp
 } from '@neo-edge-web/models';
-import { Observable, catchError, map, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { HttpService, REST_CONFIG } from '../http-service';
 
 export const PERMISSION_OPTIONS = new InjectionToken<{ options: IAllPermission[] }>('PERMISSION_OPTIONS');
@@ -90,24 +90,7 @@ export class AuthService {
       })
     );
 
-  logout$ = () =>
-    this.#http.post(this.LOGOUT_PATH, {}, { basePath: this.AUTH_BASE_PATH }).pipe(
-      tap(() => {
-        this.#snackBar.open('Logout success.', 'X', {
-          horizontalPosition: 'end',
-          verticalPosition: 'bottom',
-          duration: 5000
-        });
-      }),
-      catchError((err) => {
-        this.#snackBar.open('Logout failed.', 'X', {
-          horizontalPosition: 'end',
-          verticalPosition: 'bottom',
-          duration: 5000
-        });
-        return this.handleError(err);
-      })
-    );
+  logout$ = () => of(true);
 
   permission$: Observable<IAllPermissionResp> = this.#http.get(this.PERMISSION_PATH).pipe(
     catchError((err) => {

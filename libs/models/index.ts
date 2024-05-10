@@ -3,6 +3,7 @@ export * from './company.model';
 export * from './dateFormat.model';
 export * from './language.model';
 export * from './ne-menu.model';
+export * from './permissions.model';
 export * from './projects.model';
 export * from './region.model';
 export * from './roles.model';

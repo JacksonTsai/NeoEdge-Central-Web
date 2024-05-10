@@ -1,4 +1,4 @@
-import { NgClass } from '@angular/common';
+import { AsyncPipe, NgClass, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,12 +10,12 @@ import { Router, RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/auth-store';
 import { NeLayoutComponent, NeMenuComponent } from '@neo-edge-web/components';
 import { RouterStoreService, selectMenuTree, selectUserProfile, updateMenu } from '@neo-edge-web/global-store';
-import { MenuItem } from '@neo-edge-web/models';
+import { MenuItem, PERMISSION } from '@neo-edge-web/models';
 import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LetDirective } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { map, take, tap } from 'rxjs';
+import { map, take } from 'rxjs';
 import { MENU_TREE } from '../../configs/nec-menu.config';
 
 const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
@@ -36,39 +36,38 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
     ShellComponent,
     LetDirective,
     NgClass,
-    MatMenuModule
+    MatMenuModule,
+    AsyncPipe,
+    NgIf
   ],
   template: `
-    <ne-layout
-      *ngrxLet="changePath$"
-      [role]="role()"
-      [userName]="userName()"
-      [version]="appVersion"
-      [logoPath]="'assets/images/neoedge_logo_light.png'"
-    >
-      <div userMenu>
-        <button mat-menu-item>
-          <span>My Company</span>
-        </button>
-        <button mat-menu-item>
-          <span>My Profile</span>
-        </button>
-        <button mat-menu-item (click)="onSwitchProject()">
-          <span>Switch Project</span>
-        </button>
-        <button mat-menu-item (click)="onLogout()">
-          <span>Logout</span>
-        </button>
-      </div>
-      <ne-menu
-        *ngrxLet="necMenuTree$ as necMenuTree"
-        sideMenu
-        [menuTree]="necMenuTree"
-        (handleMenuItemSelected)="onMenuItemSelected($event)"
+    <div *ngIf="necMenuTree$ | async">
+      <ne-layout
+        *ngrxLet="changePath$"
+        [role]="role()"
+        [userName]="userName()"
+        [version]="appVersion"
+        [logoPath]="'assets/images/neoedge_logo_light.png'"
       >
-      </ne-menu>
-      <router-outlet></router-outlet>
-    </ne-layout>
+        <div userMenu>
+          <button mat-menu-item (click)="goToCompany()">
+            <span>My Company</span>
+          </button>
+          <button mat-menu-item>
+            <span>My Profile</span>
+          </button>
+          <button mat-menu-item (click)="onSwitchProject()">
+            <span>Switch Project</span>
+          </button>
+          <button mat-menu-item (click)="onLogout()">
+            <span>Logout</span>
+          </button>
+        </div>
+        <ne-menu sideMenu [menuTree]="menuTreeByPermission()" (handleMenuItemSelected)="onMenuItemSelected($event)">
+        </ne-menu>
+        <router-outlet></router-outlet>
+      </ne-layout>
+    </div>
   `,
   styleUrl: './shell.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -78,36 +77,31 @@ export class ShellComponent implements OnInit {
   #routerStoreService = inject(RouterStoreService);
   #globalStore = inject(Store);
   #router = inject(Router);
-  envVairable = inject(ENV_VARIABLE);
-
-  appVersion = this.envVairable.version;
+  envVariable = inject(ENV_VARIABLE);
+  appVersion = this.envVariable.version;
   userName = signal('');
   role = signal('');
+  defaultMenuTree = MENU_TREE;
+  menuTreeByPermission = signal<MenuItem[]>([]);
   isMobile = false;
   isMenuCollapsed = true;
-  defaultMenuTree = MENU_TREE;
-  necMenuTree: MenuItem[] = [];
   necMenuTree$ = this.#globalStore.select(selectMenuTree).pipe(
-    tap((d) => {
-      this.necMenuTree = d;
+    map((d) => {
+      this.menuTreeByPermission.set(d);
+      return d;
     })
   );
 
-  constructor() {
-    this.#globalStore.dispatch(updateMenu({ menuTree: this.defaultMenuTree }));
-  }
-
-  protected changePath$ = this.#routerStoreService.getUrl$.pipe(
-    tap((url) => {
-      const menuTree = this.#updateMenuTree(url, this.defaultMenuTree);
+  changePath$ = this.#routerStoreService.getUrl$.pipe(
+    map((url) => {
+      const menuTree = this.#updateMenuTree(url, this.menuTreeByPermission());
       this.#globalStore.dispatch(updateMenu({ menuTree }));
-    }),
-    untilDestroyed(this)
+    })
   );
 
   protected onMenuItemSelected = (menuItem: MenuItem) => {
     if (menuItem?.children && menuItem.children?.length) {
-      const menuTree = this.necMenuTree.map((d) =>
+      const menuTree = this.menuTreeByPermission().map((d) =>
         d.path === menuItem.path ? { ...d, isExpanded: !d.isExpanded } : d
       );
       this.#globalStore.dispatch(updateMenu({ menuTree }));
@@ -133,8 +127,12 @@ export class ShellComponent implements OnInit {
     });
   };
 
-  onSwitchProject = () => {
+  protected onSwitchProject = () => {
     this.#router.navigate(['user/switch-project']);
+  };
+
+  protected goToCompany = () => {
+    this.#router.navigate(['company-account/company-info']);
   };
 
   protected onLogout = () => {
@@ -158,6 +156,34 @@ export class ShellComponent implements OnInit {
           this.#globalStore.dispatch(
             AuthStore.refreshAccessTokenAction({ refreshToken: d.refreshToken, interval: REFRESH_TOKEN_INTERVAL })
           );
+        })
+      )
+      .subscribe();
+
+    this.#globalStore
+      .select(AuthStore.selectUserProfile)
+      .pipe(
+        untilDestroyed(this),
+        map(({ userProfile }) => {
+          if (!userProfile) {
+            return;
+          }
+          const userPermission = userProfile.role.permissions;
+          if (userPermission.length > 0) {
+            let newMenu = this.defaultMenuTree?.filter((menu) => {
+              const hasCurrentProject =
+                menu.permissions.includes(PERMISSION[PERMISSION.CURRENT_PROJECT]) &&
+                userProfile.defaultProjectName !== '';
+              const hasUserPermission = menu.permissions.some((menuPermission) =>
+                userPermission.includes(PERMISSION[menuPermission])
+              );
+              return hasCurrentProject || hasUserPermission;
+            });
+            newMenu = newMenu.map((d) =>
+              d.displayName === '{USER_PROJECT_NAME}' ? { ...d, displayName: userProfile.defaultProjectName } : d
+            );
+            this.#globalStore.dispatch(updateMenu({ menuTree: newMenu }));
+          }
         })
       )
       .subscribe();

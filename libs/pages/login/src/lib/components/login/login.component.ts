@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/global-store';
 import { Store } from '@ngrx/store';
 @Component({
@@ -32,7 +32,6 @@ import { Store } from '@ngrx/store';
 })
 export class LoginComponent implements OnInit {
   #globalStore = inject(Store);
-  #router = inject(Router);
   #fb = inject(FormBuilder);
 
   spinner = false;
@@ -81,7 +80,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.rememberMeCtrl.setValue(this.rememberAccount ? true : false);
     this.form = this.#fb.group({
-      account: [this.rememberAccount ?? '', Validators.required],
+      account: [this.rememberAccount ?? '', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }

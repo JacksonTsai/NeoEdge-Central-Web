@@ -2,10 +2,11 @@ import { MenuItem } from '@neo-edge-web/models';
 
 export const MENU_TREE: MenuItem[] = [
   {
-    displayName: 'Default Project',
+    displayName: '{USER_PROJECT_NAME}',
     icon: 'dashboard',
     path: '/project',
     isExpanded: true,
+    permissions: ['CURRENT_PROJECT'],
     children: [
       {
         displayName: 'Dashboard',
@@ -26,6 +27,7 @@ export const MENU_TREE: MenuItem[] = [
     icon: 'neoflow',
     path: '/neoflow',
     isExpanded: false,
+    permissions: ['CURRENT_PROJECT'],
     children: [
       {
         displayName: 'NeoFlow Settings',
@@ -52,6 +54,7 @@ export const MENU_TREE: MenuItem[] = [
     icon: 'users',
     path: '/user-management',
     isExpanded: false,
+    permissions: ['USER_MANAGEMENT'],
     children: [
       {
         displayName: 'Users',
@@ -72,6 +75,7 @@ export const MENU_TREE: MenuItem[] = [
     icon: 'manufacturing',
     path: '/project-management',
     isExpanded: false,
+    permissions: ['PROJECT_MANAGEMENT'],
     children: [
       {
         displayName: 'Projects',
@@ -86,6 +90,7 @@ export const MENU_TREE: MenuItem[] = [
     icon: 'source-environment',
     path: '/company-account',
     isExpanded: false,
+    permissions: ['COMPANY_ACCOUNT'],
     children: [
       {
         displayName: 'Company Info',

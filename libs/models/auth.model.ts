@@ -6,6 +6,8 @@ export interface IAuthState {
   accessToken: string;
   refreshToken: string;
   userProfile: IGetUserProfileResp | null;
+  currentProjectId: number;
+  currentProjectName: string;
 }
 
 export interface ILoginReq {
@@ -86,11 +88,4 @@ export interface IVerifyInitTokenReq {
 
 export interface IVerifyInitTokenResp {
   account: string;
-}
-
-export enum PERMISSION {
-  COMPANY_ACCOUNT = 100,
-  USER_MANAGEMENT = 200,
-  PROJECT_MANAGEMENT = 300,
-  APPLICATION_MANAGEMENT = 400
 }

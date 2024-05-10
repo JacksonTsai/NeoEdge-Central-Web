@@ -18,3 +18,7 @@ export const selectLoginState = createSelector(selectAuthState, (state) => ({
   isAuthVerifying: state.isAuthVerifying,
   jwt: state.jwt
 }));
+
+export const selectUserPermission = createSelector(selectAuthState, (state) => ({
+  permissions: state.userProfile?.role?.permissions ?? []
+}));

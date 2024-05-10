@@ -9,7 +9,7 @@ const initialState: MenuItem[] = [
     path: '',
     isExpanded: false,
     isActive: false,
-    permission: [],
+    permissions: [],
     children: []
   }
 ];

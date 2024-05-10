@@ -12,6 +12,8 @@
         <input matInput formControlName="account" type="text" maxlength="128" id="login-email" />
         @if (accountCtrl.hasError('required')) {
         <mat-error>Required.</mat-error>
+        } @if (accountCtrl.hasError('email')) {
+        <mat-error> Please enter a valid email address </mat-error>
         }
       </mat-form-field>
       <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">

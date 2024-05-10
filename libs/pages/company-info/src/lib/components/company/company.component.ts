@@ -27,10 +27,12 @@ import {
   ICompanyProfileResp,
   IEditCompanyProfileReq,
   LANG,
+  PERMISSION,
   REGION,
   SUBSCRIPTION_PLAN
 } from '@neo-edge-web/models';
 import { datetimeFormat, img2Base64 } from '@neo-edge-web/utils';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 interface ICompForm {
   agreementBegin: number;
@@ -66,7 +68,8 @@ const defaultCompLogo = 'assets/images/default_company_white.png';
     MatFormFieldModule,
     MatIconModule,
     MatTooltipModule,
-    NgClass
+    NgClass,
+    NgxPermissionsModule
   ],
   templateUrl: './company.component.html',
   styleUrl: './company.component.scss',
@@ -77,7 +80,7 @@ export class CompanyComponent implements OnInit {
   #fb = inject(FormBuilder);
   compInfo = input<ICompanyProfileResp>();
   isLoading = input<COMP_INFO_LOADING>();
-
+  permission = PERMISSION;
   isEditMode = signal(false);
 
   companyLogo = signal('');
