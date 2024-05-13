@@ -78,7 +78,7 @@ export class ShellComponent implements OnInit {
   #globalStore = inject(Store);
   #router = inject(Router);
   envVariable = inject(ENV_VARIABLE);
-  appVersion = this.envVariable.version;
+  appVersion = this.envVariable.betaVersion;
   userName = signal('');
   role = signal('');
   defaultMenuTree = MENU_TREE;
