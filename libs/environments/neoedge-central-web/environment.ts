@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  basePath: '/api/v1',
+  basePath: '/api/v2',
   authPath: '/api',
   eulaVersion: '1.0',
   socket: {
