@@ -1,7 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IEditProjectReq, IGetProjectsResp, IProjectByIdResp, TableQueryForProjects } from '@neo-edge-web/models';
+import {
+  IEditProjectReq,
+  IGetProjectsResp,
+  IProjectByIdResp,
+  IProjectLabelsReqResp,
+  TableQueryForProjects
+} from '@neo-edge-web/models';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
 
@@ -13,6 +19,7 @@ export class ProjectsService {
   #snackBar = inject(MatSnackBar);
 
   private PROJECTS_PATH = '/projects';
+  private LABEL_BY_PROJECT_ID_PATH = (projectId: number) => `/${this.PROJECTS_PATH}/${projectId}/labels`;
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);
@@ -108,4 +115,36 @@ export class ProjectsService {
       })
     );
   };
+
+  getProjectLabels$ = (projectId: number): Observable<IProjectLabelsReqResp> => {
+    return this.#http.get(this.LABEL_BY_PROJECT_ID_PATH(projectId)).pipe(
+      catchError((err) => {
+        this.#snackBar.open('Get project labels failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  editProjectLabels$ = (projectId: number, payload: IProjectLabelsReqResp) =>
+    this.#http.put(this.LABEL_BY_PROJECT_ID_PATH(projectId), payload).pipe(
+      tap(() => {
+        this.#snackBar.open('Edit successfully.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Get project labels failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
 }
