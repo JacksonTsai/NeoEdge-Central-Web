@@ -1,4 +1,13 @@
 import { Route } from '@angular/router';
-import { GatewaysPageComponent } from './containers';
+import { GatewayDetailPageComponent, GatewaysPageComponent } from './containers';
 
-export const gatewaysRoutes: Route[] = [{ path: '', component: GatewaysPageComponent }];
+export const gatewaysRoutes: Route[] = [
+  {
+    path: '',
+    component: GatewaysPageComponent
+  },
+  {
+    path: ':id',
+    component: GatewayDetailPageComponent
+  }
+];

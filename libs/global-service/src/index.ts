@@ -2,6 +2,7 @@ export * from './lib/auth-service';
 export * from './lib/auto-logout.service';
 export * from './lib/company-services';
 export * from './lib/form-service';
+export * from './lib/gateway-detail-services';
 export * from './lib/gateways-services';
 export * from './lib/http-interceptor';
 export * from './lib/http-service';

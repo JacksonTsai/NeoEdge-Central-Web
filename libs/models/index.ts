@@ -1,6 +1,7 @@
 export * from './auth.model';
 export * from './company.model';
 export * from './dateFormat.model';
+export * from './gateway-detail.mode';
 export * from './gateways.model';
 export * from './ipcs.model';
 export * from './language.model';

@@ -39,7 +39,7 @@ export class GatewayDetailService {
       })
     );
 
-  editGatewayProfile = (gatewayId: number, gatewayProfile: IEditGatewayProfileReq, gatewayIcon: File) => {
+  editGatewayProfile$ = (gatewayId: number, gatewayProfile: IEditGatewayProfileReq, gatewayIcon: File) => {
     const formData = obj2FormData({ profile: JSON.stringify(gatewayProfile), gatewayIcon });
     return this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/profile`, formData).pipe(
       tap(() => {
