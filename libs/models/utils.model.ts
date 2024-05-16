@@ -9,3 +9,9 @@ export enum COMPANY_STATUS {
   Suspend = 1,
   Terminate = 2
 }
+
+export interface IGatewayLabels {
+  colorCode: string;
+  name: string;
+  id?: number;
+}

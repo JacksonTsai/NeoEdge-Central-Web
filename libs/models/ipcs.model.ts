@@ -21,7 +21,7 @@ export interface IPartnerIpc {
 export interface IPartnerModelSeries {
   id: number;
   name: string;
-  os: IPartnersOs;
+  os: IPartnersOs[];
   models: IPartnerModel[] | null;
 }
 
@@ -29,7 +29,12 @@ export interface IPartnerModel {
   id: number;
   name: string;
   modelIconPath: string;
-  serialPorts: string;
+  serialPorts: SerialPort[];
+}
+
+interface SerialPort {
+  name: string;
+  path: string;
 }
 
 export interface IPartnersOs {

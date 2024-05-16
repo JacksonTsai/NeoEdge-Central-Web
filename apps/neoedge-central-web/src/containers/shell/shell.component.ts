@@ -97,7 +97,8 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   changePath$ = this.#routerStoreService.getUrl$.pipe(
     map((url) => {
-      const menuTree = this.#updateMenuTree(url, this.menuTreeByPermission());
+      const shortUrl = url.split('/').splice(1, 2).join('/');
+      const menuTree = this.#updateMenuTree(`/${shortUrl}`, this.menuTreeByPermission());
       this.#globalStore.dispatch(updateMenu({ menuTree }));
     })
   );

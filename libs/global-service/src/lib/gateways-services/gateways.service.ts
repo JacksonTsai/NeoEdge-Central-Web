@@ -29,15 +29,15 @@ export class GatewaysService {
         params.set('size', queryStr.size.toString());
       }
       if (queryStr?.names) {
-        params.set('name', queryStr.names);
+        params.set('names', queryStr.names);
       }
-      if (queryStr?.label) {
-        params.set('label', queryStr.label);
+      if (queryStr?.labelIds) {
+        params.set('labelIds', queryStr.labelIds.toString());
       }
     }
     return this.#http.get(`${this.GATEWAYS_PATH}?${params}`).pipe(
       catchError((err) => {
-        this.#snackBar.open('Get user projects failure', 'X', {
+        this.#snackBar.open('Get gateways failure', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
@@ -50,7 +50,7 @@ export class GatewaysService {
   addGateway$ = (payload: IAddGatewayReq): Observable<IAddGatewayResp> =>
     this.#http.post(this.GATEWAYS_PATH, payload).pipe(
       map((resp) => {
-        this.#snackBar.open('Enroll successfully.', 'X', {
+        this.#snackBar.open('Add gateway successfully.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
@@ -59,7 +59,7 @@ export class GatewaysService {
         return resp;
       }),
       catchError((err) => {
-        this.#snackBar.open('Add failure.', 'X', {
+        this.#snackBar.open('Add gateway failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

@@ -64,7 +64,7 @@ export const appRoutes: Route[] = [
         }
       },
       {
-        path: 'project/gateway',
+        path: 'project/gateways',
         loadChildren: () => import('@neo-edge-web/gateways').then((m) => m.gatewaysRoutes),
         data: {
           preload: true

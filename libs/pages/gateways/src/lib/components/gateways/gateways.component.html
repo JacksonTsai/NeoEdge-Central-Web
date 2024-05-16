@@ -1,53 +1,59 @@
 <h1 class="page-title">Gateways</h1>
 <div class="gateway-top-action">
-  <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
-    <mat-label>Search</mat-label>
-    <input
-      id="gateways-search-name"
-      matInput
-      placeholder="Search gateway"
-      [formControl]="searchGatewayCtrl"
-      maxlength="128"
-      type="text"
-    />
-    <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
-  </mat-form-field>
+  <div class="gateway-top-action__left">
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Search Gateway Name</mat-label>
+      <input
+        id="gateways-search-name"
+        matInput
+        placeholder="Search gateway"
+        [formControl]="searchGatewayCtrl"
+        maxlength="128"
+        type="text"
+      />
+      <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+    </mat-form-field>
 
-  <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
-    <mat-label>Search</mat-label>
-    <input
-      id="gateways-search-name"
-      matInput
-      placeholder="Search label"
-      [formControl]="searchLabelCtrl"
-      maxlength="128"
-      type="text"
-    />
-    <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
-  </mat-form-field>
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Search Label</mat-label>
+      <mat-select [formControl]="searchLabelCtrl">
+        <mat-option [value]="'all'"> All </mat-option>
+        @for (label of gwLabels(); track label.id) {
+          <mat-option [value]="label"> {{ label.name }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-  <button id="users-invite-user" type="button" mat-stroked-button color="primary" (click)="onMangeLabel()">
-    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
-    Manage Label
-  </button>
+  <div class="gateway-top-action__right">
+    <button id="gateways-manage-label" type="button" mat-stroked-button color="primary" (click)="onMangeLabel()">
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Manage Label
+    </button>
 
-  <button id="users-invite-user" type="button" mat-stroked-button color="primary" (click)="addGateway()">
-    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
-    Add Gateway
-  </button>
+    <button id="gateways-add-gateway" type="button" mat-stroked-button color="primary" (click)="addGateway()">
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Add Gateway
+    </button>
+  </div>
 </div>
 <mat-card class="gateways-card">
-  <table [fixedLayout]="false" mat-table [dataSource]="dataSource" class="users-card__table">
+  <table [fixedLayout]="false" mat-table [dataSource]="dataSource">
     <ng-container matColumnDef="no">
       <th mat-header-cell *matHeaderCellDef>No.</th>
       <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
     </ng-container>
 
+    <!-- data="/assets/images/default_{{ element.ipcVendorName }}-{{ element.ipcModelSeriesName }}.png" -->
     <ng-container matColumnDef="gatewayIcon">
       <th mat-header-cell *matHeaderCellDef>Icon</th>
       <td mat-cell *matCellDef="let element">
-        @if (element?.gatewayIconPath ) {
-        <img width="100%" height="100%" [src]="element.gatewayIconPath" />
+        @if (element.isPartnerIpc) {
+          <object [data]="getImagePath(element)" type="image/png">
+            <img width="100%" height="100%" [src]="element.gatewayIconPath" />
+          </object>
+        } @else {
+          <img width="100%" height="100%" src="/assets/images/default_gateway.png" />
         }
       </td>
     </ng-container>
@@ -65,6 +71,27 @@
       <td mat-cell *matCellDef="let element">{{ element.name }}</td>
     </ng-container>
 
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        @if (gwCurrentMode.PASSIVE === element.currentMode) {
+          <span color="accent">Passive</span>
+        }
+        @if (gwCurrentMode.DETACH === element.currentMode) {
+          <span color="danger">Detach</span>
+        }
+        @if (gwCurrentMode.ACTIVE === element.currentMode) {
+          @if (gwStatus.Waiting === element.connectionStatus) {
+            <span color="accent">Waiting onboard</span>
+          } @else if (gwStatus.Connected === element.connectionStatus) {
+            <span color="primary">Connected</span>
+          } @else if (gwStatus.Disconnected === element.connectionStatus) {
+            <span color="gary">Disconnected</span>
+          }
+        }
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="tagNumber">
       <th mat-header-cell *matHeaderCellDef>Tag Number</th>
       <td mat-cell *matCellDef="let element">
@@ -72,13 +99,23 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="neoflow">
+      <th mat-header-cell *matHeaderCellDef>NeoFlow</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.neoflow }}
+        @if (needSyncGateway.YES === element.sync) {
+          <mat-icon svgIcon="icon:sync_danger"></mat-icon>
+        }
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="sshMode">
       <th mat-header-cell *matHeaderCellDef>SSH Service</th>
       <td mat-cell *matCellDef="let element">
-        @if ( gwSshMode.TRUE === element.sshMode) {
-        <span>Enable</span>
+        @if (gwSshMode.TRUE === element.sshMode) {
+          <span>Enable</span>
         } @else {
-        <span>Disabled</span>
+          <span>Disabled</span>
         }
       </td>
     </ng-container>
@@ -87,8 +124,8 @@
       <th mat-header-cell *matHeaderCellDef>Labels</th>
       <td mat-cell *matCellDef="let element">
         @if (!element.labels) {
-        {{ element.labels.name }}/
-        {{ element.labels.value }}
+          {{ element.labels.name }}/
+          {{ element.labels.value }}
         }
       </td>
     </ng-container>
@@ -118,6 +155,6 @@
     [pageSizeOptions]="[10, 25, 50, 100]"
     [length]="gatewaysLength()"
     showFirstLastButtons
-    aria-label="Select page of users"
+    aria-label="Select page of gateways"
   ></mat-paginator>
 </mat-card>

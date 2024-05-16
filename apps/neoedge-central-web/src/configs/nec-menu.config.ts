@@ -15,9 +15,9 @@ export const MENU_TREE: MenuItem[] = [
         isActive: true
       },
       {
-        displayName: 'Gateway',
+        displayName: 'Gateways',
         icon: 'dot',
-        path: 'project/gateway',
+        path: '/project/gateways',
         isActive: false
       }
     ]
@@ -33,19 +33,19 @@ export const MENU_TREE: MenuItem[] = [
         displayName: 'NeoFlow Settings',
         icon: 'dot',
         isActive: false,
-        path: 'neoflow/noeflow-info'
+        path: '/neoflow/noeflow-info'
       },
       {
         displayName: 'OT Device Profile',
         icon: 'dot',
         isActive: false,
-        path: 'neoflow/ot-device-profile'
+        path: '/neoflow/ot-device-profile'
       },
       {
         displayName: 'IT Service Profile',
         icon: 'dot',
         isActive: false,
-        path: 'neoflow/it-service-profile'
+        path: '/neoflow/it-service-profile'
       }
     ]
   },

@@ -19,7 +19,7 @@ export class ProjectsService {
   #snackBar = inject(MatSnackBar);
 
   private PROJECTS_PATH = '/projects';
-  private LABEL_BY_PROJECT_ID_PATH = (projectId: number) => `/${this.PROJECTS_PATH}/${projectId}/labels`;
+  private LABEL_BY_PROJECT_ID_PATH = (projectId: number) => `${this.PROJECTS_PATH}/${projectId}/labels`;
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);

@@ -45,13 +45,13 @@ export const GatewaysStore = signalStore(
       queryGatewayTableByPage: rxMethod<TableQueryForGateways>(
         pipe(
           tap(() => patchState(store, { isLoading: GATEWAYS_LOADING.TABLE })),
-          switchMap(({ page, size, names, label }) => {
+          switchMap(({ page, size, names, labelIds }) => {
             return gwService
               .gatewaysByProjectId$(store.projectId(), {
                 page: page ?? INIT_TABLE_PAGE,
                 size: size ?? INIT_TABLE_SIZE,
                 names: names ?? '',
-                label: label ?? ''
+                labelIds: labelIds
               })
               .pipe(
                 map((d) => {

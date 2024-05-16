@@ -15,14 +15,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   GATEWAYS_LOADING,
   GATEWAY_SSH_MODE,
+  GATEWAY_STATUE,
   GW_CURRENT_MODE,
   Gateway,
+  IGatewayLabels,
+  NEED_SYNC_GATEWAYS,
   TableQueryForGateways
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -44,7 +48,8 @@ import { combineLatest, debounceTime, map, startWith, tap } from 'rxjs';
     MatInputModule,
     ReactiveFormsModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   templateUrl: './gateways.component.html',
   styleUrl: './gateways.component.scss',
@@ -60,9 +65,12 @@ export class GatewaysComponent implements AfterViewInit {
   page = input<number>(0);
   size = input<number>(0);
   gatewaysLength = input<number>(0);
+  gwLabels = input<IGatewayLabels[]>([]);
   isLoading = input<GATEWAYS_LOADING>(GATEWAYS_LOADING.NONE);
   gwCurrentMode = GW_CURRENT_MODE;
   gwSshMode = GATEWAY_SSH_MODE;
+  gwStatus = GATEWAY_STATUE;
+  needSyncGateway = NEED_SYNC_GATEWAYS;
   searchGatewayCtrl = new FormControl('');
   searchLabelCtrl = new FormControl('');
   displayedColumns: string[] = [
@@ -70,7 +78,9 @@ export class GatewaysComponent implements AfterViewInit {
     'gatewayIcon',
     'gatewayModel',
     'name',
+    'status',
     'tagNumber',
+    'neoflow',
     'sshMode',
     'labels',
     'action'
@@ -98,6 +108,10 @@ export class GatewaysComponent implements AfterViewInit {
     this.handleGatewayDetail.emit(row);
   };
 
+  getImagePath = (element) => {
+    return `/assets/images/default_${element.ipcVendorName}-${element.ipcModelSeriesName}.png `;
+  };
+
   ngAfterViewInit() {
     this.dataSource.data = this.gatewayDataTable();
     this.paginator.page
@@ -109,44 +123,24 @@ export class GatewaysComponent implements AfterViewInit {
       )
       .subscribe();
 
-    combineLatest([this.searchGatewayCtrl.valueChanges, this.searchLabelCtrl.valueChanges])
+    combineLatest([
+      this.searchGatewayCtrl.valueChanges.pipe(startWith('')),
+      this.searchLabelCtrl.valueChanges.pipe(startWith(''))
+    ])
       .pipe(
-        startWith(['', '']),
         untilDestroyed(this),
         debounceTime(250),
         map(([gatewayName, label]) => {
-          // 須確認第一次觸發時機
-          console.log(gatewayName, label);
+          const filterCondition = { page: 1, size: this.size() };
+          if (gatewayName) {
+            filterCondition['names'] = gatewayName;
+          }
+          if (label && label !== 'all') {
+            filterCondition['labelIds'] = (label as any).id;
+          }
+          this.pageChange.emit({ ...filterCondition });
         })
       )
       .subscribe();
-
-    // this.searchGatewayCtrl.valueChanges
-    //   .pipe(
-    //     debounceTime(250),
-    //     tap((str) => {
-    //       if (str) {
-    //         this.pageChange.emit({ page: 1, size: this.size(), names: str, label: this.searchLabelCtrl.value });
-    //       } else {
-    //         this.pageChange.emit({ page: 1, size: this.size() });
-    //       }
-    //     }),
-    //     untilDestroyed(this)
-    //   )
-    //   .subscribe();
-
-    // this.searchLabelCtrl.valueChanges
-    //   .pipe(
-    //     debounceTime(250),
-    //     tap((str) => {
-    //       if (str) {
-    //         this.pageChange.emit({ page: 1, size: this.size(), names:this.searchGatewayCtrl.value str, label: str });
-    //       } else {
-    //         this.pageChange.emit({ page: 1, size: this.size() });
-    //       }
-    //     }),
-    //     untilDestroyed(this)
-    //   )
-    //   .subscribe();
   }
 }

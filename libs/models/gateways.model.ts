@@ -1,5 +1,6 @@
 import { ICustomOss, IPartnerIpc } from './ipcs.model';
 import { ITableQuery } from './table-query.model';
+import { IGatewayLabels } from './utils.model';
 
 export interface GatewaysState {
   projectId: number;
@@ -12,11 +13,6 @@ export interface GatewaysState {
   labels: IGatewayLabels[];
   partnersIpc: IPartnerIpc[];
   customOs: ICustomOss[];
-}
-
-export interface IGatewayLabels {
-  colorCode: string;
-  name: string;
 }
 
 export interface IGetGatewaysResp {
@@ -38,10 +34,12 @@ export interface Gateway {
   neoFlow: string;
   sync: number;
   sshMode: number;
+  isPartnerIpc: number;
+  ipcModelSeriesName: string;
   labels: IGatewayLabels[] | null;
 }
 
-export type TableQueryForGateways = ITableQuery & { names?: string; label?: string };
+export type TableQueryForGateways = ITableQuery & { names?: string; labelIds?: number };
 
 export interface IAddGatewayReq {
   ipcModelName: string;
@@ -78,10 +76,14 @@ export enum GATEWAYS_LOADING {
   NONE,
   TABLE,
   REFRESH_TABLE,
-  CUSTOM_FIELD,
   MANAGE_LABEL,
   REFRESH_LABEL,
   ADD_GATEWAY
+}
+
+export enum GATEWAYS_TYPE {
+  OTHER = 0,
+  PARTNER
 }
 
 export enum NEED_SYNC_GATEWAYS {

@@ -21,7 +21,7 @@ export class IpcsService {
 
   customIpcOS$: Observable<ICustomOSResp> = this.#http.get(`${this.IPC_CUSTOM_OS_PATH}`).pipe(
     catchError((err) => {
-      this.#snackBar.open('Get user projects failure', 'X', {
+      this.#snackBar.open('Get ipc os failure', 'X', {
         horizontalPosition: 'end',
         verticalPosition: 'bottom',
         duration: 5000

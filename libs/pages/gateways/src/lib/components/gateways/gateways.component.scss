@@ -1,0 +1,23 @@
+.gateway-top-action {
+  display: flex;
+  justify-content: space-between;
+  &__left,
+  &__right {
+    display: flex;
+    gap: 8px;
+  }
+}
+.mat-column-gatewayIcon {
+  object {
+    max-width: 60px;
+    max-height: 60px;
+  }
+  img {
+    max-width: 60px;
+    max-height: 60px;
+  }
+}
+
+.mat-column-labels {
+  width: 150px;
+}
