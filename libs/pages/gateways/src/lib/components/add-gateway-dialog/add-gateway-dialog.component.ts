@@ -79,7 +79,7 @@ export class AddGatewayDialogComponent implements OnInit {
       this.data.gwStore
         .partnersIpc()
         ?.find((d) => d.name === ipcName)
-        ?.partnerModelSeries?.find((v) => v?.name === seriesName)?.os ?? []
+        ?.partnerModelSeries?.find((v) => v?.name === seriesName)?.oss ?? []
     );
   }
 

@@ -44,13 +44,12 @@
       <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
     </ng-container>
 
-    <!-- data="/assets/images/default_{{ element.ipcVendorName }}-{{ element.ipcModelSeriesName }}.png" -->
     <ng-container matColumnDef="gatewayIcon">
       <th mat-header-cell *matHeaderCellDef>Icon</th>
       <td mat-cell *matCellDef="let element">
         @if (element.isPartnerIpc) {
-          <object [data]="getImagePath(element)" type="image/png">
-            <img width="100%" height="100%" [src]="element.gatewayIconPath" />
+          <object [data]="this.getImagePath(element) | safe: 'resourceUrl'" type="image/png">
+            <img width="100%" height="100%" [src]="element.gatewayIconPath | safe: 'resourceUrl'" />
           </object>
         } @else {
           <img width="100%" height="100%" src="/assets/images/default_gateway.png" />
@@ -82,7 +81,7 @@
         }
         @if (gwCurrentMode.ACTIVE === element.currentMode) {
           @if (gwStatus.Waiting === element.connectionStatus) {
-            <span color="accent">Waiting onboard</span>
+            <span color="accent">Waiting</span>
           } @else if (gwStatus.Connected === element.connectionStatus) {
             <span color="primary">Connected</span>
           } @else if (gwStatus.Disconnected === element.connectionStatus) {
@@ -93,7 +92,7 @@
     </ng-container>
 
     <ng-container matColumnDef="tagNumber">
-      <th mat-header-cell *matHeaderCellDef>Tag Number</th>
+      <th mat-header-cell *matHeaderCellDef>Tags</th>
       <td mat-cell *matCellDef="let element">
         {{ element.tagNumber }}
       </td>
@@ -102,7 +101,7 @@
     <ng-container matColumnDef="neoflow">
       <th mat-header-cell *matHeaderCellDef>NeoFlow</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.neoflow }}
+        {{ element?.neoflow ? element?.neoflow : '-' }}
         @if (needSyncGateway.YES === element.sync) {
           <mat-icon svgIcon="icon:sync_danger"></mat-icon>
         }
@@ -110,7 +109,7 @@
     </ng-container>
 
     <ng-container matColumnDef="sshMode">
-      <th mat-header-cell *matHeaderCellDef>SSH Service</th>
+      <th mat-header-cell *matHeaderCellDef>SSH</th>
       <td mat-cell *matCellDef="let element">
         @if (gwSshMode.TRUE === element.sshMode) {
           <span>Enable</span>

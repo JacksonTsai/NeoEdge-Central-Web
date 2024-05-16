@@ -19,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { SafePipe } from '@neo-edge-web/directives';
 import {
   GATEWAYS_LOADING,
   GATEWAY_SSH_MODE,
@@ -49,7 +50,8 @@ import { combineLatest, debounceTime, map, startWith, tap } from 'rxjs';
     ReactiveFormsModule,
     MatButtonModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    SafePipe
   ],
   templateUrl: './gateways.component.html',
   styleUrl: './gateways.component.scss',
@@ -109,6 +111,9 @@ export class GatewaysComponent implements AfterViewInit {
   };
 
   getImagePath = (element) => {
+    if (!element.ipcVendorName || !element.ipcModelSeriesName) {
+      return '/assets/images/default_gateway.png';
+    }
     return `/assets/images/default_${element.ipcVendorName}-${element.ipcModelSeriesName}.png `;
   };
 

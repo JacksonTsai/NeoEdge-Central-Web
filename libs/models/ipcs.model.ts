@@ -21,7 +21,7 @@ export interface IPartnerIpc {
 export interface IPartnerModelSeries {
   id: number;
   name: string;
-  os: IPartnersOs[];
+  oss: IPartnersOs[];
   models: IPartnerModel[] | null;
 }
 
