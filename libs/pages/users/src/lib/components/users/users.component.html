@@ -44,17 +44,23 @@
     <ng-container matColumnDef="project">
       <th mat-header-cell *matHeaderCellDef>Projects</th>
       <td mat-cell *matCellDef="let element">
-        {{ element?.project && element?.project?.length > 0 ? element.project.join(',') : '-' }}
+        @if (element?.projects && element?.projects?.length > 0) {
+          <span [matTooltip]="element.projects.join(',')" matTooltipPosition="below">
+            {{ element.projects.join(',') }}
+          </span>
+        } @else {
+          <span> - </span>
+        }
       </td>
     </ng-container>
 
     <ng-container matColumnDef="isMfaEnable">
       <th mat-header-cell *matHeaderCellDef>MFA</th>
       <td mat-cell *matCellDef="let element">
-        @if (element.isMfaEnable===0) {
-        <mat-icon matTooltip="Disabled" svgIcon="icon:ok_gary"></mat-icon>
+        @if (element.isMfaEnable === 0) {
+          <mat-icon matTooltip="Disabled" svgIcon="icon:ok_gary"></mat-icon>
         } @else {
-        <mat-icon matTooltip="Enabled" svgIcon="icon:ok_primary"></mat-icon>
+          <mat-icon matTooltip="Enabled" svgIcon="icon:ok_primary"></mat-icon>
         }
       </td>
     </ng-container>
@@ -63,16 +69,16 @@
       <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let element">
         @if (userStatus[element.accountStatus] === 'Active') {
-        <span class="badge badge--primary"> {{ userStatus[element.accountStatus] }} </span>
-        }@else if(userStatus[element.accountStatus] === 'Inactive'){
-        <span class="badge badge--danger"> userStatus[element.accountStatus] </span>
-        }@else {
-        <span class="badge badge--accent">
-          {{ userStatus[element.accountStatus] ? userStatus[element.accountStatus] : userStatus[userStatus.Waiting] }}
-        </span>
-        <span id="users-resend-email-{{ element.id }}" class="link" color="accent" (click)="onResendEmail(element)">
-          Resend email
-        </span>
+          <span class="badge badge--primary"> {{ userStatus[element.accountStatus] }} </span>
+        } @else if (userStatus[element.accountStatus] === 'Inactive') {
+          <span class="badge badge--danger"> userStatus[element.accountStatus] </span>
+        } @else {
+          <span class="badge badge--accent">
+            {{ userStatus[element.accountStatus] ? userStatus[element.accountStatus] : userStatus[userStatus.Waiting] }}
+          </span>
+          <span id="users-resend-email-{{ element.id }}" class="link" color="accent" (click)="onResendEmail(element)">
+            Resend email
+          </span>
         }
       </td>
     </ng-container>
@@ -91,33 +97,33 @@
             <mat-icon svgIcon="icon:permission_blue"></mat-icon>
             Permission
           </button>
-          @if(userStatus[element.accountStatus] === 'Inactive'){
-          <button
-            id="users-status-disable-{{ element.id }}"
-            type="button"
-            mat-stroked-button
-            color="primary"
-            (click)="onDisable(element)"
-          >
-            <mat-icon svgI con="icon:disabled_red"></mat-icon>
-            Enable
-          </button>
+          @if (userStatus[element.accountStatus] === 'Inactive') {
+            <button
+              id="users-status-disable-{{ element.id }}"
+              type="button"
+              mat-stroked-button
+              color="primary"
+              (click)="onDisable(element)"
+            >
+              <mat-icon svgI con="icon:disabled_red"></mat-icon>
+              Enable
+            </button>
           } @else {
-          <button
-            type="button"
-            id="users-status-enable-{{ element.id }}"
-            mat-stroked-button
-            color="primary"
-            (click)="onEnable(element)"
-            [disabled]="userStatus[element.accountStatus] === 'Waiting'"
-          >
-            @if (userStatus[element.accountStatus] === 'Waiting') {
-            <mat-icon svgIcon="icon:ok_gary"></mat-icon>
-            }@else {
-            <mat-icon svgIcon="icon:ok_primary"></mat-icon>
-            }
-            <span> Disable </span>
-          </button>
+            <button
+              type="button"
+              id="users-status-enable-{{ element.id }}"
+              mat-stroked-button
+              color="primary"
+              (click)="onEnable(element)"
+              [disabled]="userStatus[element.accountStatus] === 'Waiting'"
+            >
+              @if (userStatus[element.accountStatus] === 'Waiting') {
+                <mat-icon svgIcon="icon:ok_gary"></mat-icon>
+              } @else {
+                <mat-icon svgIcon="icon:ok_primary"></mat-icon>
+              }
+              <span> Disable </span>
+            </button>
           }
           <button id="user-more" mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
