@@ -1,10 +1,11 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectsService, UserService, UsersService } from '@neo-edge-web/global-service';
-import { RouterStoreService } from '@neo-edge-web/global-store';
+import { RouterStoreService, selectCurrentProject } from '@neo-edge-web/global-store';
 import { IEditProjectReq, IProjectsState, PROJECTS_LOADING, TableQueryForProjects } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { EMPTY, catchError, combineLatest, map, pipe, switchMap, take, tap } from 'rxjs';
 
 const INIT_TABLE_PAGE = 1;
@@ -18,7 +19,8 @@ const initialState: IProjectsState = {
   projectsLength: 0,
   queryKey: '',
   isLoading: PROJECTS_LOADING.NONE,
-  isSwitchProject: false
+  isSwitchProject: false,
+  currentProject: 0
 };
 
 export type ProjectsStore = InstanceType<typeof ProjectsStore>;
@@ -112,7 +114,7 @@ export const ProjectsStore = signalStore(
       )
     })
   ),
-  withHooks((store, routerStoreService = inject(RouterStoreService)) => {
+  withHooks((store, routerStoreService = inject(RouterStoreService), globalStore = inject(Store)) => {
     return {
       onInit() {
         routerStoreService.getUrl$
@@ -125,6 +127,16 @@ export const ProjectsStore = signalStore(
             })
           )
           .subscribe();
+
+        globalStore
+          .select(selectCurrentProject)
+          .pipe(
+            tap((d) => {
+              patchState(store, { currentProject: d.currentProjectId });
+            })
+          )
+          .subscribe();
+
         store.queryProjectsTableByPage({});
       }
     };

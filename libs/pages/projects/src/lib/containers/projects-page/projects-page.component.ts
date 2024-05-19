@@ -14,18 +14,19 @@ import { ProjectsStore } from '../../stores/projects.store';
   imports: [CommonModule, ProjectsComponent, LetDirective],
   template: `
     @if (projects()) {
-    <ne-projects
-      [isSwitchMode]="isSwitchProject()"
-      [projects]="projects()"
-      [page]="tablePage()"
-      [size]="tableSize()"
-      [projectsLength]="projectsLength()"
-      (handleEditProject)="onEditProject($event)"
-      (handleDeleteProject)="onDeleteProject($event)"
-      (handlePageChange)="onPageChange($event)"
-      (handleSwitchProject)="onSwitchProject($event)"
-    >
-    </ne-projects>
+      <ne-projects
+        [isSwitchMode]="isSwitchProject()"
+        [projects]="projects()"
+        [page]="tablePage()"
+        [size]="tableSize()"
+        [currentProject]="currentProject()"
+        [projectsLength]="projectsLength()"
+        (handleEditProject)="onEditProject($event)"
+        (handleDeleteProject)="onDeleteProject($event)"
+        (handlePageChange)="onPageChange($event)"
+        (handleSwitchProject)="onSwitchProject($event)"
+      >
+      </ne-projects>
     }
   `,
   styleUrl: './projects-page.component.scss',
@@ -40,6 +41,7 @@ export class ProjectsPageComponent {
   tablePage = this.#projectStore.page;
   projectsLength = this.#projectStore.projectsLength;
   isSwitchProject = this.#projectStore.isSwitchProject;
+  currentProject = this.#projectStore.currentProject;
 
   #dialog = inject(MatDialog);
   isSwitchMode = signal(false);

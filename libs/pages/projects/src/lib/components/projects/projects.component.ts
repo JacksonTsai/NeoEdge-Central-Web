@@ -53,11 +53,16 @@ export class ProjectsComponent implements AfterViewInit {
   page = input<number>(0);
   size = input<number>(0);
   projectsLength = input<number>(0);
+  currentProject = input<number>(0);
   displayedColumns: string[] = ['no', 'name', 'customer', 'createdBy', 'createdAt', 'users', 'action'];
 
   isLoading = input<PROJECTS_LOADING>(PROJECTS_LOADING.NONE);
   searchCtrl = new FormControl('');
   dataSource = new MatTableDataSource<any>([]);
+
+  isCurrentProject(element) {
+    return this.currentProject() === element.id;
+  }
 
   constructor() {
     effect(() => {

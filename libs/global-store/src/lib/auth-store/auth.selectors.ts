@@ -22,3 +22,8 @@ export const selectLoginState = createSelector(selectAuthState, (state) => ({
 export const selectUserPermission = createSelector(selectAuthState, (state) => ({
   permissions: state.userProfile?.role?.permissions ?? []
 }));
+
+export const selectCurrentProject = createSelector(selectAuthState, (state) => ({
+  currentProjectId: state.currentProjectId,
+  currentProjectName: state.currentProjectName
+}));

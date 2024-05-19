@@ -10,6 +10,7 @@ export interface IProjectsState {
   users: User[];
   isLoading: PROJECTS_LOADING;
   isSwitchProject: boolean;
+  currentProject: number;
 }
 
 export interface IProjectsForUI extends Omit<IProjectByIdResp, 'users'> {
