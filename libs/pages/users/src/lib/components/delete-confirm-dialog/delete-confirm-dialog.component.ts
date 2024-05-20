@@ -24,12 +24,12 @@ import { UsersStore } from '../../stores/users.store';
       <div>Please input user’s email to confirm this action.</div>
 
       <mat-form-field appearance="outline" floatLabel="always">
-        <mat-label>Input role name</mat-label>
+        <mat-label>Input user's email</mat-label>
         <input matInput [formControl]="userNameCtrl" type="text" maxlength="128" id="roles-delete-dialog-name" />
         @if (userNameCtrl.hasError('required')) {
-        <mat-error>Required.</mat-error>
+          <mat-error>Required.</mat-error>
         } @else if (userNameCtrl.hasError('incorrectName')) {
-        <mat-error>The input verification content is incorrect.</mat-error>
+          <mat-error>The input verification content is incorrect.</mat-error>
         }
       </mat-form-field>
     </mat-dialog-content>
