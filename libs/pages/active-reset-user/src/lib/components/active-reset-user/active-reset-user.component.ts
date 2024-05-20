@@ -1,14 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  UntypedFormControl,
-  UntypedFormGroup,
-  ValidationErrors,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -88,6 +80,10 @@ export class ActiveResetUserComponent implements OnInit {
     return this.form.get('eula') as UntypedFormControl;
   }
 
+  get isNotMatchError() {
+    return this.confirmPasswordCtrl.value === this.passwordCtrl.value ? false : true;
+  }
+
   togglePwd = () => {
     this.isTogglePwd.set(!this.isTogglePwd());
   };
@@ -133,14 +129,10 @@ export class ActiveResetUserComponent implements OnInit {
   };
 
   onSubmit = () => {
-    if (this.form.invalid && !this.eulaCtrl.value) {
+    if (this.form.invalid || !this.eulaCtrl.value || this.isNotMatchError) {
       return;
     }
     this.activeResetUser();
-  };
-
-  passwordMatch = (control: AbstractControl): ValidationErrors | null => {
-    return control.value === this.passwordCtrl.value ? null : { notMachPassword: true };
   };
 
   enableUserField = (isEnable) => {
@@ -196,12 +188,12 @@ export class ActiveResetUserComponent implements OnInit {
       account: ['', Validators.required],
       password: [
         { value: '', disabled: true },
-        [
-          Validators.required,
-          Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
-        ]
+        [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,64}$/)]
       ],
-      confirmPassword: [{ value: '', disabled: true }, [Validators.required, this.passwordMatch]],
+      confirmPassword: [
+        { value: '', disabled: true },
+        [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,64}$/)]
+      ],
       eula: [{ value: false, disabled: true }],
       eulaVersion: [this.envVariable.eulaVersion],
       verifyToken: ['', Validators.required]
