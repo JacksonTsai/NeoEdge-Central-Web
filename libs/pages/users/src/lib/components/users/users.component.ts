@@ -52,7 +52,6 @@ import { debounceTime, tap } from 'rxjs';
 export class UsersComponent implements AfterViewInit, OnChanges {
   @Output() pageChange = new EventEmitter<TableQueryForUsers>();
   @Output() handlePermission = new EventEmitter();
-  @Output() handleDisable = new EventEmitter<User>();
   @Output() handleEnable = new EventEmitter<User>();
   @Output() handleDelete = new EventEmitter<User>();
   @Output() handleResendEmail = new EventEmitter<number>();
@@ -84,10 +83,6 @@ export class UsersComponent implements AfterViewInit, OnChanges {
 
   onPermission = (element: User) => {
     this.handlePermission.emit(element);
-  };
-
-  onDisable = (element: User) => {
-    this.handleDisable.emit(element);
   };
 
   onEnable = (element: User) => {

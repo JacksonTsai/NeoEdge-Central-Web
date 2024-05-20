@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { TableQueryForUsers, USERS_LOADING, User } from '@neo-edge-web/models';
+import { TableQueryForUsers, USERS_LOADING, USER_STATUE, User } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LetDirective } from '@ngrx/component';
 import { ActiveConfirmDialogComponent } from '../../components/active-confirm-dialog/active-confirm-dialog.component';
@@ -25,7 +25,6 @@ import { UsersStore } from '../../stores/users.store';
       [usersLength]="usersLength()"
       (pageChange)="onPageChange($event)"
       (handlePermission)="onPermission($event)"
-      (handleDisable)="onDisable($event)"
       (handleEnable)="onEnable($event)"
       (handleDelete)="onDelete($event)"
       (handleResendEmail)="onResendEmail($event)"
@@ -76,30 +75,17 @@ export class UsersPageComponent {
       });
   };
 
-  onDisable = (user: User) => {
-    let activeDialogRef: any = this.#dialog.open(ActiveConfirmDialogComponent, {
-      panelClass: 'med-dialog',
-      disableClose: true,
-      autoFocus: false,
-      restoreFocus: false,
-      data: { actionType: 'disable', user, usersStore: this.usersStore }
-    });
-
-    activeDialogRef
-      .afterClosed()
-      .pipe(untilDestroyed(this))
-      .subscribe(() => {
-        activeDialogRef = undefined;
-      });
-  };
-
   onEnable = (user: User) => {
     let activeDialogRef: any = this.#dialog.open(ActiveConfirmDialogComponent, {
       panelClass: 'med-dialog',
       disableClose: true,
       autoFocus: false,
       restoreFocus: false,
-      data: { actionType: 'enable', user, usersStore: this.usersStore }
+      data: {
+        actionType: USER_STATUE.Active === user.accountStatus ? USER_STATUE.Inactive : USER_STATUE.Active,
+        user,
+        usersStore: this.usersStore
+      }
     });
 
     activeDialogRef

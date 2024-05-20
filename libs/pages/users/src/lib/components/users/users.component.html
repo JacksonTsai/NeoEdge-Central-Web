@@ -71,7 +71,7 @@
         @if (userStatus[element.accountStatus] === 'Active') {
           <span class="badge badge--primary"> {{ userStatus[element.accountStatus] }} </span>
         } @else if (userStatus[element.accountStatus] === 'Inactive') {
-          <span class="badge badge--danger"> userStatus[element.accountStatus] </span>
+          <span class="badge badge--danger"> {{ userStatus[element.accountStatus] }} </span>
         } @else {
           <span class="badge badge--accent">
             {{ userStatus[element.accountStatus] ? userStatus[element.accountStatus] : userStatus[userStatus.Waiting] }}
@@ -103,9 +103,9 @@
               type="button"
               mat-stroked-button
               color="primary"
-              (click)="onDisable(element)"
+              (click)="onEnable(element)"
             >
-              <mat-icon svgI con="icon:disabled_red"></mat-icon>
+              <mat-icon svgIcon="icon:ok_primary"></mat-icon>
               Enable
             </button>
           } @else {
@@ -120,7 +120,7 @@
               @if (userStatus[element.accountStatus] === 'Waiting') {
                 <mat-icon svgIcon="icon:ok_gary"></mat-icon>
               } @else {
-                <mat-icon svgIcon="icon:ok_primary"></mat-icon>
+                <mat-icon svgIcon="icon:disabled_primary"></mat-icon>
               }
               <span> Disable </span>
             </button>
@@ -139,7 +139,7 @@
               [disabled]="element.isMfaEnable === 0"
               id="users-disableMFA-{{ element.id }}"
             >
-              <mat-icon svgIcon="icon:disabled_red"></mat-icon>
+              <mat-icon svgIcon="icon:disabled_danger"></mat-icon>
               <span color="danger">Disable MFA</span>
             </button>
           </mat-menu>
