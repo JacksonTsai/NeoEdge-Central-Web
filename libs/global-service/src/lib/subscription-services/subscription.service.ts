@@ -35,7 +35,7 @@ export class SubscriptionPlanService {
   upgradePlan$ = (payload: IUpgradePlanReq) =>
     this.#http.post(this.UPGRADE_PLAN_PATH, payload).pipe(
       tap(() => {
-        this.#snackBar.open('Emil Sent successfully.', 'X', {
+        this.#snackBar.open('Email Sent successfully.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
