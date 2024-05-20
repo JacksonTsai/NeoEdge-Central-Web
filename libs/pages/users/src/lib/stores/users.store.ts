@@ -1,5 +1,7 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { selectUserProfile } from '@neo-edge-web/auth-store';
 import { RolesService, UsersService } from '@neo-edge-web/global-service';
 import {
   IEditUserStatusReq,
@@ -11,6 +13,7 @@ import {
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { EMPTY, catchError, map, pipe, switchMap, tap } from 'rxjs';
 
 const INIT_TABLE_PAGE = 1;
@@ -31,7 +34,14 @@ export type UsersStore = InstanceType<typeof UsersStore>;
 export const UsersStore = signalStore(
   withState(initialState),
   withMethods(
-    (store, dialog = inject(MatDialog), usersService = inject(UsersService), rolesService = inject(RolesService)) => ({
+    (
+      store,
+      dialog = inject(MatDialog),
+      usersService = inject(UsersService),
+      rolesService = inject(RolesService),
+      globalStore = inject(Store),
+      router = inject(Router)
+    ) => ({
       queryUsersTableByPage: rxMethod<TableQueryForUsers>(
         pipe(
           tap(() => patchState(store, { isLoading: USERS_LOADING.TABLE })),
@@ -100,6 +110,15 @@ export const UsersStore = signalStore(
                 patchState(store, { isLoading: USERS_LOADING.REFRESH_TABLE });
               }),
               tap(() => dialog.closeAll()),
+              switchMap(() =>
+                globalStore.select(selectUserProfile).pipe(
+                  map(({ userProfile }) => {
+                    if (userProfile.account === account) {
+                      router.navigate(['/login']);
+                    }
+                  })
+                )
+              ),
               catchError(() => EMPTY)
             )
           )
