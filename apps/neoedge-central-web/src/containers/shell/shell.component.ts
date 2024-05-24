@@ -54,7 +54,7 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
           <button mat-menu-item (click)="goToCompany()">
             <span>My Company</span>
           </button>
-          <button mat-menu-item>
+          <button mat-menu-item (click)="goToUserProfile()">
             <span>My Profile</span>
           </button>
           <button mat-menu-item (click)="onSwitchProject()">
@@ -132,6 +132,10 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   protected onSwitchProject = () => {
     this.#router.navigate(['user/switch-project']);
+  };
+
+  protected goToUserProfile = () => {
+    this.#router.navigate(['user/profile']);
   };
 
   protected goToCompany = () => {

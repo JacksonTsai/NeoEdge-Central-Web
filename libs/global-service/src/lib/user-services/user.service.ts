@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IGetProjectsResp, IGetUserProfileResp, TableQueryForUserProjects } from '@neo-edge-web/models';
-import { Observable, catchError, throwError } from 'rxjs';
+import { IGetProjectsResp, IGetUserProfileResp, IUserProfile, TableQueryForUserProjects } from '@neo-edge-web/models';
+import { Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpService, REST_CONFIG } from '../http-service';
 
 @Injectable({
@@ -30,6 +30,26 @@ export class UserService {
       return this.handleError(err);
     })
   );
+
+  editUserProfile$ = (payload: IUserProfile) => {
+    return this.#http.put(this.USER_PROFILE_PATH, payload).pipe(
+      tap(() => {
+        this.#snackBar.open('Edit successfully.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Edit failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
 
   userProjects$ = (queryStr?: TableQueryForUserProjects): Observable<IGetProjectsResp> => {
     let queryString = '';
