@@ -1,0 +1,41 @@
+<h1 class="page-title">Gateway View - Profile</h1>
+<mat-card class="gateway-detail-wrapper">
+  <div class="gateway-detail-wrapper">
+    <div class="gateway-detail-wrapper__left">
+      @if (gatewayStatusInfo()) {
+        <ne-gateway-status-info [gatewayStatusInfo]="gatewayStatusInfo()"></ne-gateway-status-info>
+      }
+    </div>
+    <div class="gateway-detail-wrapper__right">
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Gateway Profile">
+          <div class="gw-tab">
+            @if (gwDetailStore.gatewayDetail()) {
+              <ne-gateway-profile
+                [isLoading]="isLoading()"
+                [gwDetail]="gwDetailStore.gatewayDetail()"
+                [definedLabels]="gwDetailStore.labels()"
+                (handleSaveProfile)="onSaveProfile($event)"
+              ></ne-gateway-profile>
+            }
+          </div>
+        </mat-tab>
+        <mat-tab label="Gateway Operation">
+          <div class="gw-tab">
+            <ne-gateway-operation></ne-gateway-operation>
+          </div>
+        </mat-tab>
+        <mat-tab label="NeoFlow">
+          <div class="gw-tab">
+            <ne-gateway-neoflow></ne-gateway-neoflow>
+          </div>
+        </mat-tab>
+        <mat-tab label="Log And Alert">
+          <div class="gw-tab">
+            <ne-gateway-log></ne-gateway-log>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</mat-card>

@@ -22,5 +22,3 @@
   },
   "angular.enable-strict-mode-prompt": false
 }
-// "auto-rename-tag.activationOnLanguage": ["html", "xml"],
-// "commentAnchors.workspace.excludeFiles": "**/{node_modules,.git,.idea,target,out,build,vendor,.vscode}/**/*",

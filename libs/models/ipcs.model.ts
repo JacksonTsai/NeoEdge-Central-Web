@@ -39,8 +39,5 @@ interface SerialPort {
 
 export interface IPartnersOs {
   id: number;
-  arch: string;
   name: string;
-  version: string;
-  installFilePath: string;
 }

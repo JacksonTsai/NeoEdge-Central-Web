@@ -15,8 +15,8 @@ export interface IGetGatewaysDetailResp {
   customField: IGatewayCustomField[];
   desiredMode: number;
   gatewayIconPath: string;
-  gatewayProfileUpdateAt: string;
-  gatewayReportProfile: string;
+  gatewaySystemInfo: GatewaySystemInfo;
+  gatewaySystemInfoUpdateAt: number;
   ipcModelName: string;
   ipcSerialPorts: IIpcSerialPort[];
   ipcVendorName: string;
@@ -27,14 +27,28 @@ export interface IGetGatewaysDetailResp {
   neoFlow: string;
   neoedgeXArch: string;
   neoedgeXVersion: string;
-  sshConnectedAt: string;
+  sshConnectedAt: number;
   sshMode: number;
   sshServer: string;
   sshToken: string;
   sync: number;
   tagNumber: number;
   tpmEnabled: number;
-  vendorIconPath: string;
+  isPartnerIpc: number;
+  ipcModelSeriesName: string;
+}
+
+export interface GatewaySystemInfo {
+  os: string;
+  ram: number;
+  hasTPM: boolean;
+  cpuCount: number;
+  cpuModel: string;
+  hostname: string;
+  timeZone: string;
+  ipAddress: string;
+  timestamp: string;
+  agentVersion: string;
 }
 
 export interface IEditGatewayProfileReq {
@@ -44,8 +58,8 @@ export interface IEditGatewayProfileReq {
   longitude: number;
   latitude: number;
   selectedLabel: number[];
-  customField: IGatewayCustomField;
-  serialPorts: IIpcSerialPort;
+  customField: IGatewayCustomField[];
+  serialPorts: IIpcSerialPort[];
 }
 
 export interface IGetInstallCommandResp {
@@ -63,8 +77,40 @@ export interface IGatewayCustomField {
   value: string;
 }
 
+export type TMetaData = Pick<
+  IGetGatewaysDetailResp,
+  | 'name'
+  | 'longitude'
+  | 'latitude'
+  | 'ipcVendorName'
+  | 'ipcModelName'
+  | 'ipcSerialPorts'
+  | 'labels'
+  | 'customField'
+  | 'isPartnerIpc'
+  | 'ipcModelSeriesName'
+  | 'gatewayIconPath'
+>;
+
+export type TGatewayStatusInfo = Pick<
+  IGetGatewaysDetailResp,
+  | 'name'
+  | 'ipcVendorName'
+  | 'ipcModelName'
+  | 'gatewayIconPath'
+  | 'connectionStatus'
+  | 'currentMode'
+  | 'sshMode'
+  | 'tpmEnabled'
+  | 'gatewaySystemInfoUpdateAt'
+  | 'isPartnerIpc'
+  | 'ipcModelSeriesName'
+>;
+
 export enum GATEWAY_LOADING {
   NONE,
+  REFRESH_METADATA,
+  EDIT_METADATA,
   GET_DETAIL,
   DELETE_GW,
   DETACH_GW,

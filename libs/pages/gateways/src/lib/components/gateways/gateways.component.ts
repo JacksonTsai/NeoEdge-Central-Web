@@ -114,7 +114,7 @@ export class GatewaysComponent implements AfterViewInit {
     if (!element.ipcVendorName || !element.ipcModelSeriesName) {
       return '/assets/images/default_gateway.png';
     }
-    return `/assets/images/default_${element.ipcVendorName}-${element.ipcModelSeriesName}.png `;
+    return `/assets/images/default_${element.ipcVendorName.toLowerCase()}-${element.ipcModelSeriesName}.png `;
   };
 
   ngAfterViewInit() {

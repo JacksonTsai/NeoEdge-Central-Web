@@ -48,7 +48,7 @@
       <th mat-header-cell *matHeaderCellDef>Icon</th>
       <td mat-cell *matCellDef="let element">
         @if (element.isPartnerIpc) {
-          <object [data]="this.getImagePath(element) | safe: 'resourceUrl'" type="image/png">
+          <object [data]="getImagePath(element) | safe: 'resourceUrl'" type="image/png">
             <img width="100%" height="100%" [src]="element.gatewayIconPath | safe: 'resourceUrl'" />
           </object>
         } @else {

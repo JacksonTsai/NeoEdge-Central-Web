@@ -34,7 +34,8 @@ export const GatewayDetailStore = signalStore(
             return gwDetailService.gatewayDetail$(store.gatewayId()).pipe(
               map((data) => {
                 patchState(store, {
-                  gatewayDetail: data
+                  gatewayDetail: data,
+                  isLoading: GATEWAY_LOADING.NONE
                 });
               }),
               catchError(() => EMPTY)
@@ -44,10 +45,11 @@ export const GatewayDetailStore = signalStore(
       ),
       editGatewayProfile: rxMethod<{ gatewayProfile: IEditGatewayProfileReq; gatewayIcon: File }>(
         pipe(
+          tap(() => patchState(store, { isLoading: GATEWAY_LOADING.EDIT_METADATA })),
           switchMap(({ gatewayProfile, gatewayIcon }) =>
             gwDetailService.editGatewayProfile$(store.gatewayId(), gatewayProfile, gatewayIcon).pipe(
               tap((d) => {
-                patchState(store, { labels: d.labels });
+                patchState(store, { isLoading: GATEWAY_LOADING.REFRESH_METADATA });
               }),
               catchError(() => EMPTY)
             )
@@ -89,13 +91,15 @@ export const GatewayDetailStore = signalStore(
   withHooks((store, globalStore = inject(Store), routerStoreService = inject(RouterStoreService)) => {
     return {
       onInit() {
-        combineLatest([routerStoreService.getParams$, globalStore.select(selectCurrentProject)]).pipe(
-          map(([urlParm, curProject]) => {
-            patchState(store, { gatewayId: parseInt(urlParm['id']), projectId: curProject.currentProjectId });
-            store.gatewayDetail();
-            store.getProjectLabels();
-          })
-        );
+        combineLatest([routerStoreService.getParams$, globalStore.select(selectCurrentProject)])
+          .pipe(
+            map(([urlParm, curProject]) => {
+              patchState(store, { gatewayId: parseInt(urlParm['id']), projectId: curProject.currentProjectId });
+              store.getGatewayDetail();
+              store.getProjectLabels();
+            })
+          )
+          .subscribe();
       }
     };
   })

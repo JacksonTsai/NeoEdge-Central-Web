@@ -1,1 +1,93 @@
-<p>gateway-status-info works!</p>
+<div class="gw-status-info-wrapper">
+  @if (gatewayStatusInfo()) {
+    <div class="gateway-img">
+      @if (gatewayStatusInfo().isPartnerIpc) {
+        <img width="100%" height="100%" [src]="logo() | safe: 'resourceUrl'" />
+      } @else {
+        <img width="100%" height="100%" src="/assets/images/default_gateway.png" />
+      }
+    </div>
+
+    @if (gatewayStatusInfo().isPartnerIpc === booleanStatus.TRUE) {
+      <div class="partner-logo">
+        <img width="100%" height="100%" src="assets/images/neoedge_logo_blue.png" />
+        <h5 class="certified-partner">Certified Partner</h5>
+      </div>
+    }
+    <div class="gw-info">
+      <div class="gw-info__name">
+        <h3>{{ gatewayStatusInfo().name }}</h3>
+        <h5>{{ gatewayStatusInfo().ipcModelName }}</h5>
+      </div>
+
+      <div>
+        @if (isSecurity()) {
+          <mat-icon class="security-icon" svgIcon="icon:security_danger"></mat-icon>
+        }
+      </div>
+    </div>
+    <div class="item item__first">
+      <div class="label">Status</div>
+      <div class="value">
+        @if (gwCurrentMode.PASSIVE === gatewayStatusInfo().currentMode) {
+          <span color="accent">Passive</span>
+        }
+        @if (gwCurrentMode.DETACH === gatewayStatusInfo().currentMode) {
+          <span color="danger">Detach</span>
+        }
+        @if (gwCurrentMode.ACTIVE === gatewayStatusInfo().currentMode) {
+          @if (gwStatus.Waiting === gatewayStatusInfo().connectionStatus) {
+            <span color="accent">Waiting</span>
+          } @else if (gwStatus.Connected === gatewayStatusInfo().connectionStatus) {
+            <span color="primary">Connected</span>
+          } @else if (gwStatus.Disconnected === gatewayStatusInfo().connectionStatus) {
+            <span color="gary">Disconnected</span>
+          }
+        }
+      </div>
+    </div>
+    <div class="item">
+      <div class="label">Update time</div>
+      <div class="value">{{ gatewayProfileUpdateTime() }}</div>
+    </div>
+
+    <div class="gw-action">
+      <button mat-stroked-button color="primary" [matMenuTriggerFor]="gwAction">
+        Action
+        <mat-icon svgIcon="icon:down_primary"></mat-icon>
+      </button>
+      <mat-menu #gwAction="matMenu">
+        <button mat-menu-item>
+          <span>Reboot Gateway</span>
+        </button>
+        <button mat-menu-item>
+          <span>Delete Gateway</span>
+        </button>
+        <button mat-menu-item>
+          <span>Detach Gateway</span>
+        </button>
+        <button mat-menu-item>
+          <span>Switch Gateway To Action Mode</span>
+        </button>
+        <button mat-menu-item>
+          <span>Switch Gateway To Passive Mode</span>
+        </button>
+        <button mat-menu-item>
+          <span>Get Install Command</span>
+        </button>
+        <button mat-menu-item>
+          <span>Upgrade NeoEdge X Agent</span>
+        </button>
+        <button mat-menu-item>
+          <span>Enable Remote Access</span>
+        </button>
+        <button mat-menu-item>
+          <span>Disable Remote Access</span>
+        </button>
+        <button mat-menu-item>
+          <span>Fetch Gateway Hardware Information</span>
+        </button>
+      </mat-menu>
+    </div>
+  }
+</div>

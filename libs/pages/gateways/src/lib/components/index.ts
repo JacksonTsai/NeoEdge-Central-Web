@@ -5,6 +5,8 @@ export * from './gateway-log/gateway-log.component';
 export * from './gateway-meta-data/gateway-meta-data.component';
 export * from './gateway-neoedgx/gateway-neoedgx.component';
 export * from './gateway-neoflow/gateway-neoflow.component';
+export * from './gateway-operation/gateway-operation.component';
+export * from './gateway-profile/gateway-profile.component';
 export * from './gateway-remote-access/gateway-remote-access.component';
 export * from './gateway-status-info/gateway-status-info.component';
 export * from './gateways/gateways.component';

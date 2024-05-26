@@ -15,3 +15,8 @@ export interface IGatewayLabels {
   name: string;
   id?: number;
 }
+
+export enum BOOLEAN_STATUS {
+  FALSE = 0,
+  TRUE = 1
+}

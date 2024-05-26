@@ -1,3 +1,18 @@
-:host {
-  display: block;
+.gateway-detail-wrapper {
+  padding: 16px;
+  height: calc(100% - 48px);
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  overflow: auto;
+  &__left {
+    flex: 1 1 0;
+  }
+  &__right {
+    flex: 9 1 0;
+    .gw-tab {
+      padding: 16px;
+    }
+  }
 }

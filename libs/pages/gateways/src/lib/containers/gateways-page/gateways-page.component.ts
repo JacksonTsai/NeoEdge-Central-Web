@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GatewaysService } from '@neo-edge-web/global-service';
 import { GATEWAYS_LOADING, Gateway, TableQueryForGateways } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -33,6 +34,8 @@ import { GatewaysStore } from '../../stores/gateways.store';
 export class GatewaysPageComponent {
   gatewaysStore = inject(GatewaysStore);
   gatewaysService = inject(GatewaysService);
+  #dialog = inject(MatDialog);
+  #router = inject(Router);
   gatewaysTable = this.gatewaysStore.gatewayTable;
   tablePage = this.gatewaysStore.page;
   tableSize = this.gatewaysStore.size;
@@ -40,8 +43,6 @@ export class GatewaysPageComponent {
   queryKey = this.gatewaysStore.queryKey;
   isLoading = this.gatewaysStore.isLoading;
   gwLabels = this.gatewaysStore.labels;
-  #dialog = inject(MatDialog);
-
   constructor() {
     effect(
       () => {
@@ -88,7 +89,7 @@ export class GatewaysPageComponent {
   };
 
   onGatewayDetail = (event: Gateway) => {
-    console.log(event);
+    this.#router.navigate([`project/gateways/${event.id}`]);
   };
 
   onPageChange = (event: TableQueryForGateways) => {

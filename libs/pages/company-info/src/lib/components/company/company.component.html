@@ -3,21 +3,22 @@
   <form [formGroup]="form">
     <div class="comp-info-wrapper">
       <div class="comp-info-wrapper__left">
-        <div class="comp-img">
+        <div class="circle-img">
           @if (isEditMode()) {
-          <div class="change-img" (click)="inputFile.click()">
-            <mat-icon svgIcon="icon:camera_white" matTooltip="Change company logo."></mat-icon>
-          </div>
-          } @if (companyLogo() !== '') {
-          <img width="100%" height="100%" [src]="companyLogo()" />
+            <div class="change-img" (click)="inputFile.click()">
+              <mat-icon svgIcon="icon:camera_white" matTooltip="Change company logo."></mat-icon>
+              <input
+                #inputFile
+                type="file"
+                class="file-input"
+                (click)="inputFile.value = null"
+                accept="image/gif,image/jpeg,image/jpg,image/png"
+              />
+            </div>
           }
-          <input
-            #inputFile
-            type="file"
-            class="file-input"
-            (click)="inputFile.value = null"
-            accept="image/gif,image/jpeg,image/jpg,image/png"
-          />
+          @if (companyLogo() !== '') {
+            <img width="100%" height="100%" [src]="companyLogo()" />
+          }
         </div>
         <h3>
           {{ companyProfile?.name ? companyProfile?.name : '-' }}
@@ -68,16 +69,17 @@
             <mat-label> User Name</mat-label>
             <input matInput formControlName="bizContactName" type="text" maxlength="64" />
             @if (bizContactNameCtrl.hasError('required')) {
-            <mat-error>Required.</mat-error>
+              <mat-error>Required.</mat-error>
             }
           </mat-form-field>
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label> Email</mat-label>
             <input matInput formControlName="bizContactEmail" type="text" maxlength="64" />
             @if (bizContactEmailCtrl.hasError('required')) {
-            <mat-error>Required.</mat-error>
-            } @if (bizContactEmailCtrl.hasError('email') && !bizContactEmailCtrl.hasError('required')) {
-            <mat-error> Please enter a valid email address </mat-error>
+              <mat-error>Required.</mat-error>
+            }
+            @if (bizContactEmailCtrl.hasError('email') && !bizContactEmailCtrl.hasError('required')) {
+              <mat-error> Please enter a valid email address </mat-error>
             }
           </mat-form-field>
 
@@ -86,16 +88,17 @@
             <mat-label> User Name</mat-label>
             <input matInput formControlName="techContactName" type="text" maxlength="64" />
             @if (techContactNameCtrl.hasError('required') || techContactNameCtrl.hasError('pattern')) {
-            <mat-error>Required.</mat-error>
+              <mat-error>Required.</mat-error>
             }
           </mat-form-field>
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label> Email</mat-label>
             <input matInput formControlName="techContactEmail" type="text" maxlength="64" />
             @if (techContactEmailCtrl.hasError('required')) {
-            <mat-error>Required.</mat-error>
-            } @if (techContactEmailCtrl.hasError('email') && !techContactEmailCtrl.hasError('required')) {
-            <mat-error> Please enter a valid email address </mat-error>
+              <mat-error>Required.</mat-error>
+            }
+            @if (techContactEmailCtrl.hasError('email') && !techContactEmailCtrl.hasError('required')) {
+              <mat-error> Please enter a valid email address </mat-error>
             }
           </mat-form-field>
         </div>
@@ -104,8 +107,8 @@
           <mat-form-field class="edit-other" appearance="outline" floatLabel="always">
             <mat-label>Language</mat-label>
             <mat-select formControlName="language">
-              @for (lang of langOpts |keyvalue ; track lang.key) {
-              <mat-option [value]="lang.key"> {{ lang.value }} </mat-option>
+              @for (lang of langOpts | keyvalue; track lang.key) {
+                <mat-option [value]="lang.key"> {{ lang.value }} </mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -113,8 +116,8 @@
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Country</mat-label>
             <mat-select formControlName="country">
-              @for (region of regionOpts | keyvalue ; track region.key) {
-              <mat-option [value]="region.value"> {{ region.value }} </mat-option>
+              @for (region of regionOpts | keyvalue; track region.key) {
+                <mat-option [value]="region.value"> {{ region.value }} </mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -122,8 +125,8 @@
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Date-Time Format</mat-label>
             <mat-select formControlName="datetimeFormat">
-              @for (format of dateFormatOpts | keyvalue ; track format.key) {
-              <mat-option [value]="format.value"> {{ format.value }} </mat-option>
+              @for (format of dateFormatOpts | keyvalue; track format.key) {
+                <mat-option [value]="format.value"> {{ format.value }} </mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -131,25 +134,25 @@
         <div class="company-info-action">
           <div class="edit-btn" *ngxPermissionsOnly="[permission[permission.COMPANY_ACCOUNT]]">
             @if (!isEditMode()) {
-            <button type="button" mat-stroked-button color="primary" (click)="onEdit()">
-              <mat-icon svgIcon="icon:edit_primary"></mat-icon>
-              Edit
-            </button>
+              <button type="button" mat-stroked-button color="primary" (click)="onEdit()">
+                <mat-icon svgIcon="icon:edit_primary"></mat-icon>
+                Edit
+              </button>
             }
           </div>
           @if (isEditMode()) {
-          <div class="save-btn">
-            <button type="button" mat-stroked-button color="primary" (click)="onCancelEdit()">Cancel</button>
-            <button
-              type="button"
-              mat-flat-button
-              color="primary"
-              (click)="onSave()"
-              [disabled]="form.invalid || form.pristine"
-            >
-              Save
-            </button>
-          </div>
+            <div class="save-btn">
+              <button type="button" mat-stroked-button color="primary" (click)="onCancelEdit()">Cancel</button>
+              <button
+                type="button"
+                mat-flat-button
+                color="primary"
+                (click)="onSave()"
+                [disabled]="form.invalid || form.pristine"
+              >
+                Save
+              </button>
+            </div>
           }
         </div>
       </div>

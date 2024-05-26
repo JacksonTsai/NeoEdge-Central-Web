@@ -1,29 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { GATEWAY_LOADING, IEditGatewayProfileReq } from '@neo-edge-web/models';
+import { GatewayOperationComponent, GatewayProfileComponent } from '../../components';
 import { DeleteGatewayConfirmComponent } from '../../components/delete-gateway-confirm/delete-gateway-confirm.component';
-import { GatewayHwInfoComponent } from '../../components/gateway-hw-info/gateway-hw-info.component';
 import { GatewayLogComponent } from '../../components/gateway-log/gateway-log.component';
-import { GatewayMetaDataComponent } from '../../components/gateway-meta-data/gateway-meta-data.component';
-import { GatewayNeoedgxComponent } from '../../components/gateway-neoedgx/gateway-neoedgx.component';
 import { GatewayNeoflowComponent } from '../../components/gateway-neoflow/gateway-neoflow.component';
-import { GatewayRemoteAccessComponent } from '../../components/gateway-remote-access/gateway-remote-access.component';
 import { GatewayStatusInfoComponent } from '../../components/gateway-status-info/gateway-status-info.component';
 import { GatewayDetailStore } from '../../stores/gateway-detail.store';
-
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
+    MatTabsModule,
+    GatewayProfileComponent,
     GatewayStatusInfoComponent,
-    GatewayRemoteAccessComponent,
     GatewayNeoflowComponent,
-    GatewayNeoedgxComponent,
-    GatewayMetaDataComponent,
     GatewayLogComponent,
+    GatewayOperationComponent,
     DeleteGatewayConfirmComponent,
-    GatewayHwInfoComponent
+    MatCardModule
   ],
   templateUrl: './gateway-detail-page.component.html',
   styleUrl: './gateway-detail-page.component.scss',
@@ -32,4 +29,53 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
 })
 export class GatewayDetailPageComponent {
   gwDetailStore = inject(GatewayDetailStore);
+  definedLabel = this.gwDetailStore.labels;
+  isLoading = this.gwDetailStore.isLoading;
+
+  constructor() {
+    effect(
+      () => {
+        if (this.isLoading() === GATEWAY_LOADING.REFRESH_METADATA) {
+          this.gwDetailStore.getGatewayDetail();
+        }
+      },
+      { allowSignalWrites: true }
+    );
+  }
+
+  gatewayStatusInfo = computed(() => {
+    if (!this.gwDetailStore.gatewayDetail()) {
+      return null;
+    }
+    const {
+      name,
+      ipcVendorName,
+      gatewayIconPath,
+      connectionStatus,
+      currentMode,
+      sshMode,
+      tpmEnabled,
+      gatewaySystemInfoUpdateAt,
+      ipcModelName,
+      isPartnerIpc,
+      ipcModelSeriesName
+    } = this.gwDetailStore.gatewayDetail();
+    return {
+      name,
+      ipcVendorName,
+      ipcModelName,
+      gatewayIconPath,
+      connectionStatus,
+      currentMode,
+      sshMode,
+      tpmEnabled,
+      gatewaySystemInfoUpdateAt,
+      isPartnerIpc,
+      ipcModelSeriesName
+    };
+  });
+
+  onSaveProfile = ({ gatewayProfile, gatewayIcon }: { gatewayProfile: IEditGatewayProfileReq; gatewayIcon: File }) => {
+    this.gwDetailStore.editGatewayProfile({ gatewayProfile, gatewayIcon });
+  };
 }
