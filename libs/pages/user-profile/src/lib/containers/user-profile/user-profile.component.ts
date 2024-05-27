@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import * as AuthStore from '@neo-edge-web/auth-store';
 import { UserService } from '@neo-edge-web/global-service';
-import { IUserProfile, USER_INFO_LOADING } from '@neo-edge-web/models';
+import { IGetUserProfileResp, IUserProfile, USER_INFO_LOADING } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { UserInfoComponent } from '../../components';
-import { UserInfoStore } from '../../stores/user-profile.store';
+import { EditPasswordDialogComponent } from '../../components/edit-password-dialog/edit-password-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -20,14 +21,16 @@ import { UserInfoStore } from '../../stores/user-profile.store';
         [isLoading]="isLoading()"
         [userInfo]="vm?.userProfile"
         (handleEditUserInfo)="onEditUserProfile($event)"
+        (handleEditPassword)="onEditPassword($event)"
       ></ne-user-info>
     </div>
   `,
   styleUrl: './user-profile.component.scss',
-  providers: [UserInfoStore],
+  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserProfileComponent {
+  #dialog = inject(MatDialog);
   #globalStore = inject(Store);
   userService = inject(UserService);
   userInfo$ = this.#globalStore.select(AuthStore.selectUserProfile);
@@ -45,5 +48,24 @@ export class UserProfileComponent {
         })
       )
       .subscribe();
+  };
+
+  onEditPassword = (userInfo: IGetUserProfileResp) => {
+    let editPasswordDialogRef = this.#dialog.open(EditPasswordDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: false,
+      autoFocus: true,
+      restoreFocus: true,
+      data: {
+        userInfo
+      }
+    });
+
+    editPasswordDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        editPasswordDialogRef = undefined;
+      });
   };
 }

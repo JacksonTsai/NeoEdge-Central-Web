@@ -5,6 +5,11 @@ export interface IUserProfileState {
   isLoading: USER_INFO_LOADING;
 }
 
+export interface IEditPasswordReq {
+  newPassword: string;
+  oldPassword: string;
+}
+
 export enum USER_INFO_LOADING {
   NONE,
   EDIT_PROFILE,
