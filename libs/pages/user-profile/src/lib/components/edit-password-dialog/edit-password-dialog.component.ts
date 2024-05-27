@@ -21,8 +21,8 @@ import { catchError, EMPTY } from 'rxjs';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatFormFieldModule,
     MatDialogModule,
+    MatFormFieldModule,
     MatInputModule
   ],
   templateUrl: './edit-password-dialog.component.html',

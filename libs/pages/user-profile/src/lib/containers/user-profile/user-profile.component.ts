@@ -8,6 +8,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { UserInfoComponent } from '../../components';
+import { AddMfaDialogComponent } from '../../components/add-mfa-dialog/add-mfa-dialog.component';
 import { EditPasswordDialogComponent } from '../../components/edit-password-dialog/edit-password-dialog.component';
 
 @UntilDestroy()
@@ -22,6 +23,7 @@ import { EditPasswordDialogComponent } from '../../components/edit-password-dial
         [userInfo]="vm?.userProfile"
         (handleEditUserInfo)="onEditUserProfile($event)"
         (handleEditPassword)="onEditPassword($event)"
+        (handleAddMfa)="onAddMfa()"
       ></ne-user-info>
     </div>
   `,
@@ -55,7 +57,7 @@ export class UserProfileComponent {
       panelClass: 'med-dialog',
       disableClose: false,
       autoFocus: true,
-      restoreFocus: true,
+      restoreFocus: false,
       data: {
         userInfo
       }
@@ -66,6 +68,23 @@ export class UserProfileComponent {
       .pipe(untilDestroyed(this))
       .subscribe(() => {
         editPasswordDialogRef = undefined;
+      });
+  };
+
+  onAddMfa = () => {
+    let addMfaDialogRef = this.#dialog.open(AddMfaDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: false,
+      autoFocus: false,
+      restoreFocus: false,
+      data: {}
+    });
+
+    addMfaDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        addMfaDialogRef = undefined;
       });
   };
 }

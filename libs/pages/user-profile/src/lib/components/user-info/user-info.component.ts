@@ -49,6 +49,7 @@ import { map } from 'rxjs';
 export class UserInfoComponent implements OnInit {
   @Output() handleEditUserInfo = new EventEmitter<IUserProfile>();
   @Output() handleEditPassword = new EventEmitter<IGetUserProfileResp>();
+  @Output() handleAddMfa = new EventEmitter();
   #fb = inject(FormBuilder);
   userService = inject(UserService);
   isLoading = input<USER_INFO_LOADING>();
@@ -162,6 +163,10 @@ export class UserInfoComponent implements OnInit {
 
   onEditPassword = () => {
     this.handleEditPassword.emit(this.userInfo());
+  };
+
+  onAddMfa = () => {
+    this.handleAddMfa.emit();
   };
 
   ngOnInit(): void {
