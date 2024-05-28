@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
+import { FormService } from '@neo-edge-web/global-service';
 import * as AuthStore from '@neo-edge-web/global-store';
 import { Store } from '@ngrx/store';
 @Component({
@@ -33,12 +34,12 @@ import { Store } from '@ngrx/store';
 export class LoginComponent implements OnInit {
   #globalStore = inject(Store);
   #fb = inject(FormBuilder);
+  formService = inject(FormService);
 
   spinner = false;
 
   rememberAccount = localStorage.getItem('account');
   form!: FormGroup;
-  isTogglePwd = signal(true);
   rememberMeCtrl = new FormControl(false);
 
   get accountCtrl() {
@@ -48,10 +49,6 @@ export class LoginComponent implements OnInit {
   get passwordCtrl() {
     return this.form.get('password') as FormControl;
   }
-
-  togglePwd = () => {
-    this.isTogglePwd.set(!this.isTogglePwd());
-  };
 
   singIn = () => {
     if (this.form.invalid) {

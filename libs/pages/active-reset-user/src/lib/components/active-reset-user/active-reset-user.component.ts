@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '@neo-edge-web/global-service';
+import { AuthService, FormService, ValidatorsService } from '@neo-edge-web/global-service';
 import { RouterStoreService } from '@neo-edge-web/global-store';
 import { ISetPasswordReq } from '@neo-edge-web/models';
 import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
@@ -47,11 +47,11 @@ export class ActiveResetUserComponent implements OnInit {
   #fb = inject(FormBuilder);
   #cd = inject(ChangeDetectorRef);
   authService = inject(AuthService);
+  formService = inject(FormService);
+  validatorService = inject(ValidatorsService);
   form!: UntypedFormGroup;
   activeResetAction = ACTIVE_RESET_ACTION;
   actionResult = ACTION_RESULT;
-  isTogglePwd = signal(true);
-  isToggleConfirmPwd = signal(true);
   httpService = inject(HttpClient);
 
   pageState = signal<IPageState>({
@@ -79,18 +79,6 @@ export class ActiveResetUserComponent implements OnInit {
   get eulaCtrl() {
     return this.form.get('eula') as UntypedFormControl;
   }
-
-  get isNotMatchError() {
-    return this.confirmPasswordCtrl.value === this.passwordCtrl.value ? false : true;
-  }
-
-  togglePwd = () => {
-    this.isTogglePwd.set(!this.isTogglePwd());
-  };
-
-  toggleConfirmPwd = () => {
-    this.isToggleConfirmPwd.set(!this.isToggleConfirmPwd());
-  };
 
   activeResetUser = () => {
     const payload: ISetPasswordReq = {
@@ -129,7 +117,7 @@ export class ActiveResetUserComponent implements OnInit {
   };
 
   onSubmit = () => {
-    if (this.form.invalid || !this.eulaCtrl.value || this.isNotMatchError) {
+    if (this.form.invalid || !this.eulaCtrl.value || this.confirmPasswordCtrl.hasError('isNotMatch')) {
       return;
     }
     this.activeResetUser();
@@ -186,13 +174,10 @@ export class ActiveResetUserComponent implements OnInit {
   ngOnInit() {
     this.form = this.#fb.group({
       account: ['', Validators.required],
-      password: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,64}$/)]
-      ],
+      password: [{ value: '', disabled: true }, [Validators.required, this.validatorService.passwordValidator()]],
       confirmPassword: [
         { value: '', disabled: true },
-        [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,64}$/)]
+        [Validators.required, this.validatorService.matchValidator('password')]
       ],
       eula: [{ value: false, disabled: true }],
       eulaVersion: [this.envVariable.eulaVersion],

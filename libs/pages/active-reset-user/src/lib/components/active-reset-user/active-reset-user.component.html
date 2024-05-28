@@ -29,12 +29,12 @@
           <input
             matInput
             formControlName="password"
-            [type]="isTogglePwd() ? 'password' : 'text'"
+            [type]="formService.getPasswordVisibility('activeUserNewPassword')() ? 'password' : 'text'"
             maxlength="128"
             id="active-reset-user-password"
           />
-          <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="togglePwd()">
-            @if (isTogglePwd()) {
+          <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="formService.togglePasswordVisibility('activeUserNewPassword')">
+            @if (formService.getPasswordVisibility('activeUserNewPassword')()) {
               <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
             } @else {
               <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
@@ -43,7 +43,7 @@
           <mat-hint> 8-64 characters, including uppercase, lowercase, numbers, symbols </mat-hint>
           @if (passwordCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
-          } @else if (passwordCtrl.hasError('pattern')) {
+          } @else if (passwordCtrl.hasError('invalidPassword')) {
             <mat-error> 8-64 characters, including uppercase, lowercase, numbers, symbols </mat-error>
           }
         </mat-form-field>
@@ -52,12 +52,12 @@
           <input
             matInput
             formControlName="confirmPassword"
-            [type]="isToggleConfirmPwd() ? 'password' : 'text'"
+            [type]="formService.getPasswordVisibility('activeUserConfirmPassword')() ? 'password' : 'text'"
             maxlength="128"
             id="active-reset-user-password-confirm"
           />
-          <button id="" type="button" mat-icon-button matSuffix (click)="toggleConfirmPwd()">
-            @if (isToggleConfirmPwd()) {
+          <button id="" type="button" mat-icon-button matSuffix (click)="formService.togglePasswordVisibility('activeUserConfirmPassword')">
+            @if (formService.getPasswordVisibility('activeUserConfirmPassword')()) {
               <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
             } @else {
               <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
@@ -65,13 +65,10 @@
           </button>
           @if (confirmPasswordCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
-          }
-        </mat-form-field>
-        <div class="not-match-error">
-          @if (isNotMatchError && passwordCtrl.touched && confirmPasswordCtrl.touched) {
+          } @else if (passwordCtrl.touched && confirmPasswordCtrl.touched && confirmPasswordCtrl.hasError('isNotMatch')) {
             <mat-error>Password don't match.</mat-error>
           }
-        </div>
+        </mat-form-field>
         @if (activeResetAction.ACTIVE_USER === pageState().action) {
           <mat-checkbox color="primary" formControlName="eula">
             I have carefully reviewed and consented to the End User License Agreement (EULA).
@@ -84,7 +81,7 @@
             mat-flat-button
             color="primary"
             (click)="onSubmit()"
-            [disabled]="form.invalid || !eulaCtrl.value || isNotMatchError"
+            [disabled]="form.invalid || !eulaCtrl.value || confirmPasswordCtrl.hasError('isNotMatch')"
             id="active-reset-user-submit"
           >
             Submit
