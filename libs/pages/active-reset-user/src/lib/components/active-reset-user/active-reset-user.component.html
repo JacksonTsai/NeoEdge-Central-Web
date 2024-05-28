@@ -65,10 +65,11 @@
           </button>
           @if (confirmPasswordCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
-          } @else if (passwordCtrl.touched && confirmPasswordCtrl.touched && confirmPasswordCtrl.hasError('isNotMatch')) {
-            <mat-error>Password don't match.</mat-error>
           }
         </mat-form-field>
+        @if (form.errors?.['isNotMatch'] && (confirmPasswordCtrl.touched || passwordCtrl.touched)) {
+          <mat-error class="not-match-error">Password don't match.</mat-error>
+        }
         @if (activeResetAction.ACTIVE_USER === pageState().action) {
           <mat-checkbox color="primary" formControlName="eula">
             I have carefully reviewed and consented to the End User License Agreement (EULA).

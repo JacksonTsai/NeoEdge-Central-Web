@@ -80,10 +80,13 @@ export class EditPasswordDialogComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.form = this.#fb.group({
-      oldPassword: [null, [Validators.required]],
-      newPassword: [null, [Validators.required, this.validatorsService.passwordValidator()]],
-      confirmPassword: [null, [Validators.required, this.validatorsService.matchValidator('newPassword')]]
-    });
+    this.form = this.#fb.group(
+      {
+        oldPassword: [null, [Validators.required]],
+        newPassword: [null, [Validators.required, this.validatorsService.passwordValidator()]],
+        confirmPassword: [null, [Validators.required, this.validatorsService.matchValidator('newPassword')]]
+      },
+      { validator: [this.validatorsService.match2Field('newPassword', 'confirmPassword')] }
+    );
   }
 }

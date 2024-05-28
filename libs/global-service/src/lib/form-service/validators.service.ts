@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,22 @@ export class ValidatorsService {
       return !!control.parent && !!control.parent.value && control.value === control.parent.get(matchTo)?.value
         ? null
         : { isNotMatch: true };
+    };
+  }
+
+  /**
+   * A validator function that checks if the values of two form controls are equal.
+   *
+   * @param {string} selected - The name of the form control whose value will be compared.
+   * @param {string} compare - The name of the form control to compare with.
+   * @returns A validation function that returns an error object with `{ isNotMatch: true }` if the values do not match, otherwise `null`.
+   */
+  match2Field(selected: string, compare: string): ValidatorFn {
+    return (formGroup: FormGroup) => {
+      const selectedControl = formGroup.controls[selected].value;
+      const compareControl = formGroup.controls[compare].value;
+
+      return selectedControl && compareControl && selectedControl !== compareControl ? { isNotMatch: true } : null;
     };
   }
 

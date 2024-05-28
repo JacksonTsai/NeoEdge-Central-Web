@@ -48,7 +48,7 @@ export class ActiveResetUserComponent implements OnInit {
   #cd = inject(ChangeDetectorRef);
   authService = inject(AuthService);
   formService = inject(FormService);
-  validatorService = inject(ValidatorsService);
+  validatorsService = inject(ValidatorsService);
   form!: UntypedFormGroup;
   activeResetAction = ACTIVE_RESET_ACTION;
   actionResult = ACTION_RESULT;
@@ -172,17 +172,20 @@ export class ActiveResetUserComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.form = this.#fb.group({
-      account: ['', Validators.required],
-      password: [{ value: '', disabled: true }, [Validators.required, this.validatorService.passwordValidator()]],
-      confirmPassword: [
-        { value: '', disabled: true },
-        [Validators.required, this.validatorService.matchValidator('password')]
-      ],
-      eula: [{ value: false, disabled: true }],
-      eulaVersion: [this.envVariable.eulaVersion],
-      verifyToken: ['', Validators.required]
-    });
+    this.form = this.#fb.group(
+      {
+        account: ['', Validators.required],
+        password: [{ value: '', disabled: true }, [Validators.required, this.validatorsService.passwordValidator()]],
+        confirmPassword: [
+          { value: '', disabled: true },
+          [Validators.required, this.validatorsService.matchValidator('password')]
+        ],
+        eula: [{ value: false, disabled: true }],
+        eulaVersion: [this.envVariable.eulaVersion],
+        verifyToken: ['', Validators.required]
+      },
+      { validator: [this.validatorsService.match2Field('password', 'confirmPassword')] }
+    );
 
     this.routerStoreService.getDataFromRouter$
       .pipe(
