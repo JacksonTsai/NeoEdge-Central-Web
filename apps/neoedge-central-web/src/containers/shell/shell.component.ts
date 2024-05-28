@@ -1,5 +1,5 @@
 import { AsyncPipe, NgClass, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -9,6 +9,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/auth-store';
 import { NeLayoutComponent, NeMenuComponent } from '@neo-edge-web/components';
+import { AutoLogoutService } from '@neo-edge-web/global-service';
 import { RouterStoreService, selectMenuTree, selectUserProfile, updateMenu } from '@neo-edge-web/global-store';
 import { MenuItem, PERMISSION } from '@neo-edge-web/models';
 import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
@@ -70,11 +71,13 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
     </div>
   `,
   styleUrl: './shell.component.scss',
+  providers: [AutoLogoutService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ShellComponent implements OnInit {
+export class ShellComponent implements OnInit, OnDestroy {
   @ViewChild(MatSidenav) sidenav!: MatSidenav;
   #routerStoreService = inject(RouterStoreService);
+  #autoLogoutService = inject(AutoLogoutService);
   #globalStore = inject(Store);
   #router = inject(Router);
   envVariable = inject(ENV_VARIABLE);
@@ -139,7 +142,12 @@ export class ShellComponent implements OnInit {
     this.#globalStore.dispatch(AuthStore.logoutAction());
   };
 
+  ngOnDestroy() {
+    this.#autoLogoutService.destroy();
+  }
+
   ngOnInit() {
+    this.#autoLogoutService.init();
     this.#globalStore.select(selectUserProfile).subscribe(({ userProfile }) => {
       if (userProfile) {
         this.userName.set(userProfile.name);
