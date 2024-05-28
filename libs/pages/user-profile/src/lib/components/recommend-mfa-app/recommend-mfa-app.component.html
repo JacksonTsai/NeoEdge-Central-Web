@@ -1,0 +1,24 @@
+<section class="sec">
+  <h2 class="title">Virtual authenticator apps</h2>
+  <p>Download apps tailored to your smartphone from its respective app store. Some providers offer web and desktop versions too. Refer to the table below for examples.</p>
+  <table mat-table
+         [dataSource]="dataSource">
+    <ng-container matColumnDef="title">
+      <td mat-cell
+          *matCellDef="let col"> {{col.title}} </td>
+    </ng-container>
+    <ng-container matColumnDef="list">
+      <td mat-cell
+          *matCellDef="let col">
+        @for (item of col.list; track item.name) {
+        <a class="link" [href]="item.url" target="_blank">{{ item.name }}</a>
+        @if ($index !== col.list.length - 1) {
+        ,
+        }
+        }
+      </td>
+    </ng-container>
+    <tr mat-row
+        *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</section>

@@ -71,13 +71,15 @@ export class UserProfileComponent {
       });
   };
 
-  onAddMfa = () => {
+  onAddMfa = (userInfo: IGetUserProfileResp) => {
     let addMfaDialogRef = this.#dialog.open(AddMfaDialogComponent, {
       panelClass: 'med-dialog',
       disableClose: false,
       autoFocus: false,
       restoreFocus: false,
-      data: {}
+      data: {
+        userInfo
+      }
     });
 
     addMfaDialogRef

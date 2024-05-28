@@ -34,3 +34,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.mfa-qrcode {
+  display: block;
+  margin: 0 auto;
+  transform: translateX(-0.5em);
+}

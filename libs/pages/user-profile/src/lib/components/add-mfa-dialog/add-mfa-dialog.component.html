@@ -5,13 +5,16 @@
   <form [formGroup]="form">
     <ol class="list">
       <li class="item">
-        <p>Install a compatible application such as Google Authenticator, Duo Mobile, or Authy app on your mobile device or computer.</p>
+        <p>Install a compatible application such as Google Authenticator, Microsoft Authenticator, Duo Mobile, or Authy app on your mobile device or computer.</p>
         <button mat-stroked-button
-                id="add-mfa-btn-recommend-app">See a list of compatible applications </button>
+                type="button"
+                id="add-mfa-btn-recommend-app"
+                (click)="openRecommandApp()">See a list of compatible applications </button>
       </li>
       <li class="item">
         <p>Open your authenticator app, then use the app to scan the code. Alternatively, you can type a secret key.</p>
-        (QR Code Image)
+        <canvas class="mfa-qrcode"
+                #canvas></canvas>
       </li>
       <li class="item">
         <p>Enter a code from your virtual app below</p>
@@ -41,5 +44,6 @@
           mat-flat-button
           color="primary"
           [disabled]="form.invalid || form.pristine"
-          id="add-mfa-btn-submit">Submit</button>
+          id="add-mfa-btn-submit"
+          (click)="onSubmit()">Submit</button>
 </mat-dialog-actions>
