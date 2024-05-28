@@ -42,7 +42,7 @@ export class AutoLogoutService {
   }
 
   private check() {
-    if (this.lastOperationTime() === 0 || !this.isLoggedIn) {
+    if (this.timeout === 0 || !this.isLoggedIn) {
       return;
     }
     const now = Date.now();
@@ -59,6 +59,9 @@ export class AutoLogoutService {
   }
 
   init() {
+    this.store.select(AuthStore.selectUserProfile).subscribe((d) => {
+      this.timeout = d.userProfile?.idleTimeout ?? 5;
+    });
     this.reset();
     this.initListener();
     this.initInterval();
