@@ -99,24 +99,23 @@ export class AuthEffects {
     );
   });
 
-  logout$ = createEffect(
-    () =>
-      this.#actions.pipe(
-        ofType(AuthAction.logoutAction),
-        tap(() => {
-          this.#storage.clear('account');
-          this.#storage.clear('permissions');
-          this.#storage.clear('user_profile');
-          this.#router.navigateByUrl('/login');
-        }),
-        exhaustMap(() =>
-          this.#authService.logout$().pipe(
-            catchError((err) => {
-              return EMPTY;
-            })
-          )
+  logout$ = createEffect(() =>
+    this.#actions.pipe(
+      ofType(AuthAction.logoutAction),
+      tap(() => {
+        this.#storage.clear('account');
+        this.#storage.clear('permissions');
+        this.#storage.clear('user_profile');
+        this.#router.navigateByUrl('/login');
+      }),
+      exhaustMap(() =>
+        this.#authService.logout$().pipe(
+          map(() => AuthAction.resetAuthState()),
+          catchError((err) => {
+            return EMPTY;
+          })
         )
-      ),
-    { dispatch: false }
+      )
+    )
   );
 }
