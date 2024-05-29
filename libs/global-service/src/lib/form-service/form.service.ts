@@ -22,4 +22,13 @@ export class FormService {
       return this.passwordHiddenMap[passwordField];
     }
   }
+
+  restrictToNumbers(event: KeyboardEvent, maxLength = 10): void {
+    const pattern = /[0-9]/;
+    const inputChar = event.key;
+    const inputElement = event.target as HTMLInputElement;
+    if (!pattern.test(inputChar) || inputElement.value.length >= maxLength) {
+      event.preventDefault();
+    }
+  }
 }

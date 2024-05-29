@@ -1,12 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  inject,
+  viewChild
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormService, UserService } from '@neo-edge-web/global-service';
+import { FormService, UserService, ValidatorsService } from '@neo-edge-web/global-service';
 import { IGetUserProfileResp } from '@neo-edge-web/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import QRCode from 'qrcode';
@@ -22,14 +31,18 @@ import { RecommendMfaAppComponent } from '../recommend-mfa-app/recommend-mfa-app
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddMfaDialogComponent implements OnInit {
+  @Output() handleSubmitMfaCodeSuccess: EventEmitter<IGetUserProfileResp> = new EventEmitter<IGetUserProfileResp>();
   data = inject<{ userInfo: IGetUserProfileResp }>(MAT_DIALOG_DATA);
   #fb = inject(FormBuilder);
   #snackBar = inject(MatSnackBar);
   #bottomSheet = inject(MatBottomSheet);
   formService = inject(FormService);
+  validatorsService = inject(ValidatorsService);
   userService = inject(UserService);
   form: UntypedFormGroup;
-  canvas = viewChild.required<ElementRef>('canvas');
+  // @ViewChild('inputRef') inputRef: ElementRef;
+  canvasRef = viewChild.required<ElementRef>('canvas');
+  inputRef = viewChild.required<ElementRef>('code');
 
   get codeCtrl() {
     return this.form.get('code') as UntypedFormControl;
@@ -43,23 +56,15 @@ export class AddMfaDialogComponent implements OnInit {
     // TODO 串接 MFA secret key API
     const otpauthURI = `otpauth://totp/ExampleApp:${this.data.userInfo?.account}?secret=JBSWY3DPEHPK3PXP&issuer=ExampleApp`;
 
-    if (!this.canvas()) {
+    if (!this.canvasRef()) {
       return;
     }
 
-    QRCode.toCanvas(this.canvas()?.nativeElement, otpauthURI, (err) => {
+    QRCode.toCanvas(this.canvasRef()?.nativeElement, otpauthURI, (err) => {
       if (err) {
         console.error('Error generating QR code', err);
       }
     });
-  }
-
-  onKeypress(event: KeyboardEvent): void {
-    const pattern = /[0-9]/;
-    const inputElement = event.target as HTMLInputElement;
-    if (!pattern.test(event.key) || inputElement.value.length >= 6) {
-      event.preventDefault();
-    }
   }
 
   addMfa = () => {
@@ -80,6 +85,9 @@ export class AddMfaDialogComponent implements OnInit {
     //     })
     //   )
     //   .subscribe();
+
+    // 成功後執行
+    this.handleSubmitMfaCodeSuccess.emit(this.data.userInfo);
   };
 
   onSubmit = () => {
@@ -91,8 +99,9 @@ export class AddMfaDialogComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.#fb.group({
-      code: [null, [Validators.required]]
+      code: [null, [Validators.required, this.validatorsService.minLengthValidator(6)]]
     });
     this.generateQRCode();
+    this.inputRef()?.nativeElement.focus();
   }
 }

@@ -23,14 +23,30 @@
           <div class="item">
             <div class="label">Multi-factor authentication (MFA)</div>
             <div class="value">
-              <button type="button"
-                      mat-stroked-button
-                      color="primary"
-                      class="btn"
-                      (click)="onAddMfa()"
-                      id="user-info-set-mfa">
-                Setting
-              </button>
+              <div class="mfa-info">
+                @if (!!userInfo() && !!userInfo()?.isMfaEnable) {
+                <mat-icon svgIcon="icon:ok_primary"></mat-icon>
+                <span>Active</span>
+                <button type="button"
+                        mat-stroked-button
+                        color="warn"
+                        class="btn"
+                        id="user-info-mfa-disalbe"
+                        (click)="onDisableMfa()">
+                  Disable
+                </button>
+                }
+                @if (!!userInfo() && !userInfo()?.isMfaEnable) {
+                <button type="button"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn"
+                        (click)="onAddMfa()"
+                        id="user-info-mfa-set">
+                  Setting
+                </button>
+                }
+              </div>
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { UserInfoComponent } from '../../components';
 import { AddMfaDialogComponent } from '../../components/add-mfa-dialog/add-mfa-dialog.component';
+import { AuthenticationCodeComponent } from '../../components/authentication-code/authentication-code.component';
 import { EditPasswordDialogComponent } from '../../components/edit-password-dialog/edit-password-dialog.component';
 
 @UntilDestroy()
@@ -23,7 +24,8 @@ import { EditPasswordDialogComponent } from '../../components/edit-password-dial
         [userInfo]="vm?.userProfile"
         (handleEditUserInfo)="onEditUserProfile($event)"
         (handleEditPassword)="onEditPassword($event)"
-        (handleAddMfa)="onAddMfa()"
+        (handleAddMfa)="onAddMfa($event)"
+        (handleDisableMfa)="onDisableMfa($event)"
       ></ne-user-info>
     </div>
   `,
@@ -38,10 +40,9 @@ export class UserProfileComponent {
   userInfo$ = this.#globalStore.select(AuthStore.selectUserProfile);
   isLoading = signal<USER_INFO_LOADING>(USER_INFO_LOADING.NONE);
 
-  onEditUserProfile = (event: IUserProfile) => {
-    this.isLoading.set(USER_INFO_LOADING.EDIT_PROFILE);
+  updateUserProfile = (userInfo: IUserProfile) => {
     this.userService
-      .editUserProfile$(event)
+      .editUserProfile$(userInfo)
       .pipe(
         untilDestroyed(this),
         map(() => {
@@ -50,6 +51,11 @@ export class UserProfileComponent {
         })
       )
       .subscribe();
+  };
+
+  onEditUserProfile = (event: IUserProfile) => {
+    this.isLoading.set(USER_INFO_LOADING.EDIT_PROFILE);
+    this.updateUserProfile(event);
   };
 
   onEditPassword = (userInfo: IGetUserProfileResp) => {
@@ -82,11 +88,42 @@ export class UserProfileComponent {
       }
     });
 
+    addMfaDialogRef?.componentInstance.handleSubmitMfaCodeSuccess.pipe(untilDestroyed(this)).subscribe((data) => {
+      const payload = { ...data, isMfaEnable: 1 };
+      this.updateUserProfile(payload);
+      addMfaDialogRef.close();
+    });
+
     addMfaDialogRef
       .afterClosed()
       .pipe(untilDestroyed(this))
       .subscribe(() => {
         addMfaDialogRef = undefined;
+      });
+  };
+
+  onDisableMfa = (userInfo: IGetUserProfileResp) => {
+    let confirmMfaDialogRef = this.#dialog.open(AuthenticationCodeComponent, {
+      panelClass: 'med-dialog',
+      disableClose: false,
+      autoFocus: true,
+      restoreFocus: false,
+      data: {
+        userInfo
+      }
+    });
+
+    confirmMfaDialogRef?.componentInstance.handleValidMfaCode.pipe(untilDestroyed(this)).subscribe((data) => {
+      const payload = { ...data, isMfaEnable: 0 };
+      this.updateUserProfile(payload);
+      confirmMfaDialogRef.close();
+    });
+
+    confirmMfaDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        confirmMfaDialogRef = undefined;
       });
   };
 }

@@ -59,4 +59,26 @@ export class ValidatorsService {
       return isValid ? null : { invalidPassword: true };
     };
   }
+
+  minLengthValidator(minLength: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+
+      if (!value) {
+        return null;
+      }
+
+      let valueLength: number;
+
+      if (typeof value === 'string') {
+        valueLength = value.length;
+      } else if (typeof value === 'number') {
+        valueLength = value.toString().length;
+      } else {
+        return { invalidType: true };
+      }
+
+      return valueLength >= minLength ? null : { invalidMinLength: true };
+    };
+  }
 }

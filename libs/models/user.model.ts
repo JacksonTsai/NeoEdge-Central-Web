@@ -16,3 +16,8 @@ export enum USER_INFO_LOADING {
   GET_PROFILE,
   REFRESH
 }
+
+export enum AUTHENTICATION_CODE_LOADING {
+  NONE,
+  SEND_CODE
+}

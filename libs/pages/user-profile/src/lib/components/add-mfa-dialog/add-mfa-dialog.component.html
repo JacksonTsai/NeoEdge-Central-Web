@@ -20,14 +20,19 @@
         <p>Enter a code from your virtual app below</p>
         <mat-form-field appearance="outline"
                         floatLabel="always">
-          <mat-label>Code</mat-label>
+          <mat-label>MFA Code</mat-label>
           <input matInput
                  formControlName="code"
                  type="number"
-                 (keypress)="onKeypress($event)"
-                 id="add-mfa-code" />
+                 autocomplete="off"
+                 (keypress)="formService.restrictToNumbers($event, 6)"
+                 (keydown.enter)="onSubmit()"
+                 id="add-mfa-code"
+                 #code />
           @if (codeCtrl.hasError('required')) {
           <mat-error>Required.</mat-error>
+          } @else if (codeCtrl.hasError('invalidMinLength')) {
+          <mat-error>Invalid format. Please enter a 6-digit code.</mat-error>
           }
         </mat-form-field>
       </li>

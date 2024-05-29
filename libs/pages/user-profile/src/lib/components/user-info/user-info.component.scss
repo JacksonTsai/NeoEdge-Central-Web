@@ -72,6 +72,12 @@ fieldset {
   margin-top: 18px;
 }
 
+.mfa-info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .user-info-action {
   margin-top: 16px;
   display: flex;

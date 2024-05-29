@@ -50,6 +50,7 @@ export class UserInfoComponent implements OnInit {
   @Output() handleEditUserInfo = new EventEmitter<IUserProfile>();
   @Output() handleEditPassword = new EventEmitter<IGetUserProfileResp>();
   @Output() handleAddMfa = new EventEmitter<IGetUserProfileResp>();
+  @Output() handleDisableMfa = new EventEmitter<IGetUserProfileResp>();
   #fb = inject(FormBuilder);
   userService = inject(UserService);
   isLoading = input<USER_INFO_LOADING>();
@@ -167,6 +168,10 @@ export class UserInfoComponent implements OnInit {
 
   onAddMfa = () => {
     this.handleAddMfa.emit(this.userInfo());
+  };
+
+  onDisableMfa = () => {
+    this.handleDisableMfa.emit(this.userInfo());
   };
 
   ngOnInit(): void {
