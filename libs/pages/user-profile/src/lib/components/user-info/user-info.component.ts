@@ -19,15 +19,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { UserService } from '@neo-edge-web/global-service';
 import {
   DATE_FORMAT,
-  IGetProjectsResp,
   IGetUserProfileResp,
   IProjectByIdResp,
   IUserProfile,
   LANG,
   USER_INFO_LOADING
 } from '@neo-edge-web/models';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { map } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 @UntilDestroy()
 @Component({
@@ -55,6 +53,7 @@ export class UserInfoComponent implements OnInit {
   userService = inject(UserService);
   isLoading = input<USER_INFO_LOADING>();
   userInfo = input<IGetUserProfileResp>();
+  projectsOpts = input<IProjectByIdResp[]>([]);
   isEditMode = signal(false);
 
   form: UntypedFormGroup;
@@ -68,7 +67,6 @@ export class UserInfoComponent implements OnInit {
     { value: 30, label: '30 minutes' },
     { value: 60, label: '60 minutes' }
   ];
-  projectsOpts = signal<IProjectByIdResp[]>([]);
 
   get dateTimeFormatCtrl() {
     return this.form.get('dateTimeFormat') as UntypedFormControl;
@@ -183,15 +181,5 @@ export class UserInfoComponent implements OnInit {
       language: [{ value: this.userInfo()?.language ?? '', disabled: true }, [Validators.required]],
       name: [{ value: this.userInfo()?.name ?? '', disabled: true }, [Validators.required]]
     });
-
-    this.userService
-      .userProjects$()
-      .pipe(
-        untilDestroyed(this),
-        map((userProjects: IGetProjectsResp) => {
-          this.projectsOpts.set(userProjects?.projects);
-        })
-      )
-      .subscribe();
   }
 }

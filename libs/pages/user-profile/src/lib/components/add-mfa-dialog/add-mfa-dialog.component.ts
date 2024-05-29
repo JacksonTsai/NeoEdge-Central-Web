@@ -40,7 +40,6 @@ export class AddMfaDialogComponent implements OnInit {
   validatorsService = inject(ValidatorsService);
   userService = inject(UserService);
   form: UntypedFormGroup;
-  // @ViewChild('inputRef') inputRef: ElementRef;
   canvasRef = viewChild.required<ElementRef>('canvas');
   inputRef = viewChild.required<ElementRef>('code');
 

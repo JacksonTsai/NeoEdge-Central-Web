@@ -21,11 +21,11 @@ export class ValidatorsService {
   }
 
   /**
-   * A validator function that checks if the values of two form controls are equal.
+   * Validator function that checks if the values of two form controls are equal.
    *
    * @param {string} selected - The name of the form control whose value will be compared.
    * @param {string} compare - The name of the form control to compare with.
-   * @returns A validation function that returns an error object with `{ isNotMatch: true }` if the values do not match, otherwise `null`.
+   * @returns {ValidatorFn} A validation function that returns an error object with `{ isNotMatch: true }` if the values do not match, otherwise `null`.
    */
   match2Field(selected: string, compare: string): ValidatorFn {
     return (formGroup: FormGroup) => {
@@ -60,6 +60,16 @@ export class ValidatorsService {
     };
   }
 
+  /**
+   * Validator function to check if the value meets the minimum length requirement.
+   *
+   * If the input type is a number, neither the minLength attribute nor Angular's Validator.minLength function works. Therefore, using this custom validator can resolve this issue.
+   *
+   * @param {number} minLength The minimum length value, requiring the input value to have a length greater than or equal to this value.
+   * @returns {ValidatorFn} Returns a validation function that takes a control and returns a validation error or null.
+   * If the length of the value is greater than or equal to the specified minimum length, it returns null; otherwise, it returns an object containing the invalidMinLength error.
+   * If the type of the value is not a string or number, it returns an object containing the invalidType error.
+   */
   minLengthValidator(minLength: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;

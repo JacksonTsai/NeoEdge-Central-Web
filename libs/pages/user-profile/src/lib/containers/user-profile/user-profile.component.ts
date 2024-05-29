@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as AuthStore from '@neo-edge-web/auth-store';
 import { UserService } from '@neo-edge-web/global-service';
-import { IGetUserProfileResp, IUserProfile, USER_INFO_LOADING } from '@neo-edge-web/models';
+import {
+  IGetProjectsResp,
+  IGetUserProfileResp,
+  IProjectByIdResp,
+  IUserProfile,
+  USER_INFO_LOADING
+} from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { Store } from '@ngrx/store';
 import { map } from 'rxjs';
@@ -22,6 +28,7 @@ import { EditPasswordDialogComponent } from '../../components/edit-password-dial
       <ne-user-info
         [isLoading]="isLoading()"
         [userInfo]="vm?.userProfile"
+        [projectsOpts]="projectsOpts()"
         (handleEditUserInfo)="onEditUserProfile($event)"
         (handleEditPassword)="onEditPassword($event)"
         (handleAddMfa)="onAddMfa($event)"
@@ -33,11 +40,12 @@ import { EditPasswordDialogComponent } from '../../components/edit-password-dial
   providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserProfileComponent {
+export class UserProfileComponent implements OnInit {
   #dialog = inject(MatDialog);
   #globalStore = inject(Store);
   userService = inject(UserService);
   userInfo$ = this.#globalStore.select(AuthStore.selectUserProfile);
+  projectsOpts = signal<IProjectByIdResp[]>([]);
   isLoading = signal<USER_INFO_LOADING>(USER_INFO_LOADING.NONE);
 
   updateUserProfile = (userInfo: IUserProfile) => {
@@ -126,4 +134,16 @@ export class UserProfileComponent {
         confirmMfaDialogRef = undefined;
       });
   };
+
+  ngOnInit(): void {
+    this.userService
+      .userProjects$()
+      .pipe(
+        untilDestroyed(this),
+        map((userProjects: IGetProjectsResp) => {
+          this.projectsOpts.set(userProjects?.projects);
+        })
+      )
+      .subscribe();
+  }
 }
