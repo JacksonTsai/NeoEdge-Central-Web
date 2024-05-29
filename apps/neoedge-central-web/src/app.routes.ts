@@ -57,6 +57,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'user/profile',
+        loadChildren: () => import('@neo-edge-web/user-profile').then((m) => m.userProfileRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: '',
         redirectTo: '/login',
         pathMatch: 'full'

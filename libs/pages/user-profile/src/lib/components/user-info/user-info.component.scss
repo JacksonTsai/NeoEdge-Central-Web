@@ -1,0 +1,98 @@
+@use 'colors' as *;
+
+fieldset {
+  border: 0 none;
+  padding: 0;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.d-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.col-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.user-info-card {
+  height: calc(100% - 48px);
+  overflow: auto;
+}
+
+.user-info-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__left {
+    flex: 3 1 0;
+    padding: 32px;
+    width: 100%;
+  }
+
+  &__right {
+    flex: 7 1 0;
+    padding: 32px;
+
+    &__section {
+      &:not(:last-child) {
+        margin-bottom: 64px;
+      }
+    }
+
+    &__subtitle {
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    mat-form-field {
+      width: 100%;
+
+      &.ng-invalid {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
+
+
+.item {
+  &__first {
+    margin-top: 32px;
+  }
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 4px;
+  }
+  margin-top: 18px;
+}
+
+.mfa-info {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.user-info-action {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0 8px;
+
+  button + button {
+    margin-left: 8px;
+  }
+}
+
+.save-btn {
+  margin-left: auto;
+}
+
+.file-input {
+  display: none;
+}

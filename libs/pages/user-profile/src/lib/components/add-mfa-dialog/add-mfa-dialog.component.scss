@@ -1,0 +1,42 @@
+:host {
+  --mat-dialog-actions-padding: 0 24px 24px;
+  display: block;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1em;
+}
+
+.item {
+  &:not(:last-child) {
+    margin-bottom: 24px;
+  }
+
+  p {
+    margin-bottom: 16px;
+  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+// Hide arrow
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.mfa-qrcode {
+  display: block;
+  margin: 0 auto;
+  transform: translateX(-0.5em);
+}

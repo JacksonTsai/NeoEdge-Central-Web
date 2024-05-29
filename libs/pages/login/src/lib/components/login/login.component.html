@@ -21,12 +21,12 @@
         <input
           matInput
           formControlName="password"
-          [type]="isTogglePwd() ? 'password' : 'text'"
+          [type]="formService.getPasswordVisibility('password')() ? 'password' : 'text'"
           maxlength="128"
           id="login-password"
         />
-        <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="togglePwd()">
-          @if (isTogglePwd()) {
+        <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="formService.togglePasswordVisibility('password')">
+          @if (formService.getPasswordVisibility('password')()) {
           <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
           } @else {
           <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
