@@ -1,0 +1,236 @@
+<fieldset>
+  <legend>Meta Data</legend>
+  @if (this.metaData().name) {
+    <div class="gw-meta-data-wrapper">
+      <form [formGroup]="form">
+        <div class="gw-profile-setting">
+          <div class="gw-image-label">
+            <div class="circle-img">
+              @if (isEditMode()) {
+                <div class="change-img" (click)="inputFile.click()">
+                  <mat-icon svgIcon="icon:camera_white" matTooltip="Change gateway logo."></mat-icon>
+                </div>
+              }
+              <img width="100%" height="100%" [src]="logo()" />
+              <input
+                #inputFile
+                type="file"
+                class="file-input"
+                (click)="inputFile.value = null"
+                accept="image/gif,image/jpeg,image/jpg,image/png"
+              />
+            </div>
+            <div class="gw-labels">
+              <h3 class="subtitle">Labels</h3>
+              @if (!isEditMode() && isSelectedLabelEmpty) {
+                <span>-</span>
+              }
+              <mat-chip-listbox multiple [disabled]="!isEditMode()">
+                @for (label of labelsArr.controls; let i = $index; track label.value.id) {
+                  @if (isEditMode()) {
+                    <mat-chip-option
+                      [selected]="gwLabelSelectedCtrl(i).value"
+                      [style.background-color]="gwLabelColorCodeCtrl(i).value"
+                      (click)="selectLabel(i, !gwLabelSelectedCtrl(i).value)"
+                    >
+                      {{ gwLabelNameCtrl(i).value }}
+                    </mat-chip-option>
+                  } @else {
+                    @if (gwLabelSelectedCtrl(i).value) {
+                      <mat-chip-option
+                        [selected]="gwLabelSelectedCtrl(i).value"
+                        [style.background-color]="gwLabelColorCodeCtrl(i).value"
+                        (click)="selectLabel(i, !gwLabelSelectedCtrl(i).value)"
+                      >
+                        {{ gwLabelNameCtrl(i).value }}
+                      </mat-chip-option>
+                    }
+                  }
+                }
+              </mat-chip-listbox>
+            </div>
+          </div>
+          <div class="gw-info">
+            <div class="gw-info__field">
+              <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" type="text" maxlength="64" />
+                @if (nameCtrl.hasError('required')) {
+                  <mat-error>Required.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Vendor</mat-label>
+                <input matInput formControlName="ipcVendorName" type="text" maxlength="64" />
+                @if (ipcVendorNameCtrl.hasError('required')) {
+                  <mat-error>Required.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>Model</mat-label>
+                <input matInput formControlName="ipcModelName" type="text" maxlength="64" />
+                @if (ipcModelNameCtrl.hasError('required')) {
+                  <mat-error>Required.</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="gw-custom-field">
+              <h3 class="subtitle">Serial Port</h3>
+              <div class="content" #serialPortContent>
+                @if (!isEditMode() && ipcSerialPortsArr?.length === 0) {
+                  <span>-</span>
+                }
+                @for (serialPortFg of ipcSerialPortsArr.controls; let i = $index; track serialPortFg.value.name) {
+                  <div class="gw-custom-field__item">
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Name</mat-label>
+                      <input matInput type="text" maxlength="128" [formControl]="serialPortNameCtrl(i)" />
+                      @if (serialPortNameCtrl(i).hasError('required')) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+                    <mat-icon class="colon" svgIcon="icon:colon_gary"></mat-icon>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Path</mat-label>
+                      <input matInput type="text" maxlength="128" [formControl]="serialPortPathCtrl(i)" />
+                      @if (serialPortPathCtrl(i).hasError('required')) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+
+                    @if (isEditMode()) {
+                      <button type="button" mat-icon-button (click)="removeSerialPort(i)">
+                        <mat-icon class="delete-icon" svgIcon="icon:delete_red"></mat-icon>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+              @if (isEditMode()) {
+                <button
+                  id="projects-edit-project-dialog-add-project-field"
+                  type="button"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="setNewSerialPort()"
+                  [disabled]="ipcSerialPortsArr?.length >= MAX_CUSTOMIZE_FIELD"
+                >
+                  @if (ipcSerialPortsArr?.length < 10) {
+                    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+                  }
+                  Add Serial Port ({{ ipcSerialPortsArr?.length }} / {{ MAX_CUSTOMIZE_FIELD }})
+                </button>
+              }
+            </div>
+          </div>
+          <div>
+            <div class="gw-map">
+              <div class="gw-map__field">
+                <mat-form-field appearance="outline" floatLabel="always">
+                  <mat-label> Longitude</mat-label>
+                  <input matInput formControlName="longitude" type="number" maxlength="64" />
+                  @if (longitudeCtrl.hasError('required')) {
+                    <mat-error>Required.</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" floatLabel="always">
+                  <mat-label> Latitude</mat-label>
+                  <input matInput formControlName="latitude" type="number" maxlength="64" />
+                  @if (latitudeCtrl.hasError('required')) {
+                    <mat-error>Required.</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="map">
+                <ne-map
+                  [coordinate]="{ lat: latitudeCtrl.value, lng: longitudeCtrl.value }"
+                  [isEdit]="isEditMode()"
+                  [popMsg]="nameCtrl.value"
+                  (handelCoordinate)="onCoordinate($event)"
+                >
+                </ne-map>
+              </div>
+            </div>
+
+            <div class="gw-custom-field">
+              <h3 class="subtitle">Custom Field</h3>
+              <div class="content" #customFieldContent>
+                @if (!isEditMode() && customFieldArr?.length === 0) {
+                  <span>-</span>
+                }
+                @for (customFieldFg of customFieldArr.controls; let i = $index; track i) {
+                  <div class="gw-custom-field__item">
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Name</mat-label>
+                      <input matInput type="text" maxlength="128" [formControl]="customFieldNameCtrl(i)" />
+                      @if (customFieldNameCtrl(i).hasError('required')) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-icon class="colon" svgIcon="icon:colon_gary"></mat-icon>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>value</mat-label>
+                      <input matInput type="text" maxlength="128" [formControl]="customFieldValueCtrl(i)" />
+                      @if (customFieldValueCtrl(i).hasError('required')) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+
+                    @if (isEditMode()) {
+                      <button type="button" mat-icon-button (click)="removeCustomField(i)">
+                        <mat-icon class="delete-icon" svgIcon="icon:delete_red"></mat-icon>
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+              @if (isEditMode()) {
+                <button
+                  id="projects-edit-project-dialog-add-project-field"
+                  type="button"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="setNewCustomField()"
+                  [disabled]="customFieldArr?.length >= MAX_CUSTOMIZE_FIELD"
+                >
+                  @if (customFieldArr?.length < 10) {
+                    <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+                  }
+                  Add Custom Field ({{ customFieldArr?.length }} / {{ MAX_CUSTOMIZE_FIELD }})
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="gw-profile-action">
+        <div class="edit-btn" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
+          @if (!isEditMode()) {
+            <button type="button" mat-stroked-button color="primary" (click)="onEdit()">
+              <mat-icon svgIcon="icon:edit_primary"></mat-icon>
+              Edit
+            </button>
+          }
+        </div>
+        @if (isEditMode()) {
+          <div class="save-btn">
+            <button type="button" mat-stroked-button color="primary" (click)="onCancelEdit()">Cancel</button>
+            <button
+              type="button"
+              mat-flat-button
+              color="primary"
+              (click)="onSave()"
+              [disabled]="form.invalid || form.pristine || !form.dirty"
+            >
+              Save
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</fieldset>

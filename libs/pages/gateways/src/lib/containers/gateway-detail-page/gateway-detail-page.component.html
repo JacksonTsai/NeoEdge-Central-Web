@@ -1,0 +1,86 @@
+<h1 class="page-title">Gateway View - Profile</h1>
+<mat-card class="gateway-detail-wrapper">
+  <div class="gateway-detail-wrapper">
+    <div class="gateway-detail-wrapper__left">
+      @if (gatewayStatusInfo()) {
+        <ne-gateway-status-info
+          [gatewayStatusInfo]="gatewayStatusInfo()"
+          [isDetachMode]="isDetachMode"
+          [isWaitingOnBoard]="isWaitingOnBoard"
+          [isConnected]="isConnected"
+          (handelFetchGwHwInfo)="onFetchGwHwInfo()"
+          (handleSwitchRunningMode)="onSwitchRunningMode($event)"
+          (handleDetachMode)="onDetachMode()"
+          (handleDeleteGateway)="onDeleteGateway()"
+        ></ne-gateway-status-info>
+      }
+    </div>
+    <div class="gateway-detail-wrapper__right">
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Gateway Profile">
+          <div class="gw-tab">
+            @if (gwDetailStore.gatewayDetail()) {
+              <ne-gateway-profile
+                [isLoading]="isLoading()"
+                [gwDetail]="gwDetailStore.gatewayDetail()"
+                [definedLabels]="gwDetailStore.labels()"
+                (handleSaveProfile)="onSaveProfile($event)"
+              ></ne-gateway-profile>
+            }
+          </div>
+        </mat-tab>
+        <mat-tab label="Gateway Operation">
+          <div class="gw-tab">
+            <fieldset>
+              <legend>Hardware Information</legend>
+              @if (this.gwDetailStore?.gatewayDetail()?.gatewaySystemInfo) {
+                <ne-gateway-hw-info
+                  [gwHwInfo]="gwDetailStore.gatewayDetail().gatewaySystemInfo"
+                  [connectionStatus]="gwDetailStore.gatewayDetail().connectionStatus"
+                  [currentMode]="gwDetailStore.gatewayDetail().currentMode"
+                  [profileUpdatedTime]="gwDetailStore.gatewayDetail().gatewaySystemInfoUpdateAt"
+                  [isConnected]="isConnected"
+                  (handelFetchGwHwInfo)="onFetchGwHwInfo()"
+                >
+                </ne-gateway-hw-info>
+              }
+            </fieldset>
+
+            <fieldset>
+              <legend>Agent</legend>
+              <ne-gateway-neoedgx
+                [neoedgexInfo]="neoedgexInfo()"
+                [isDetachMode]="isDetachMode"
+                [isWaitingOnBoard]="isWaitingOnBoard"
+                [isConnected]="isConnected"
+                (handleUpgradeNeoEdgeX)="onUpgradeNeoEdgeX()"
+                (handleSwitchRunningMode)="onSwitchRunningMode($event)"
+                (handleDetachMode)="onDetachMode()"
+              ></ne-gateway-neoedgx>
+            </fieldset>
+
+            <fieldset>
+              <legend>Application</legend>
+              <ne-gateway-applications (click)="onUpgradeNeoEdgeX()"></ne-gateway-applications>
+            </fieldset>
+
+            <fieldset>
+              <legend>Remote Access</legend>
+              <ne-gateway-remote-access></ne-gateway-remote-access>
+            </fieldset>
+          </div>
+        </mat-tab>
+        <mat-tab label="NeoFlow">
+          <div class="gw-tab">
+            <ne-gateway-neoflow></ne-gateway-neoflow>
+          </div>
+        </mat-tab>
+        <mat-tab label="Log And Alert">
+          <div class="gw-tab">
+            <ne-gateway-log></ne-gateway-log>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</mat-card>

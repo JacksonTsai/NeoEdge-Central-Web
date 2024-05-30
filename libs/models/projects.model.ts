@@ -54,6 +54,16 @@ export interface IDeleteProjectReq {
   name: string;
 }
 
+export interface IProjectLabelsReqResp {
+  labels: IProjectLabel[];
+}
+
+export interface IProjectLabel {
+  colorCode: string;
+  name: string;
+  id?: number;
+}
+
 export type TableQueryForProjects = ITableQuery & { name?: string };
 
 export enum PROJECTS_LOADING {

@@ -1,0 +1,66 @@
+@use 'colors' as *;
+
+.gw-status-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  .gateway-img {
+    margin-bottom: 32px;
+    align-self: center;
+    max-width: 110px;
+    max-height: 110px;
+  }
+  .gw-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 32px;
+    &__name {
+      width: 100%;
+      overflow: auto;
+    }
+    .security-icon {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  .partner-logo {
+    width: 130px;
+    height: 30px;
+    .certified-partner {
+      color: $primary;
+      letter-spacing: 1px;
+    }
+    margin-bottom: 16px;
+  }
+  .gw-action {
+    margin-top: 32px;
+  }
+}
+.item {
+  margin-top: 16px;
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 4px;
+  }
+}
+
+@media screen and (max-width: 1721px) {
+  .gw-status-info-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    .gw-info {
+      margin: 0;
+    }
+    .gw-action {
+      margin: 0;
+    }
+    .item {
+      margin: 0;
+    }
+  }
+}

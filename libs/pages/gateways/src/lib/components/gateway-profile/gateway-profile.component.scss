@@ -1,0 +1,80 @@
+@use 'colors' as *;
+@use 'variables' as *;
+
+.gw-meta-data-wrapper {
+  position: relative;
+  .gw-profile-setting {
+    display: flex;
+    gap: 24px;
+    .gw-image-label {
+      width: 150px;
+    }
+    .gw-info {
+      &__field {
+        mat-form-field {
+          display: block;
+          width: 440px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .gw-map {
+      &__field {
+        mat-form-field {
+          width: 210px;
+        }
+        display: flex;
+        gap: 16px;
+      }
+      .map {
+        overflow: hidden;
+        border-radius: $border-radius;
+        width: 435px;
+        height: 153px;
+      }
+      margin-bottom: 32px;
+    }
+  }
+}
+
+.gw-custom-field {
+  .content {
+    padding: 8px 16px;
+    overflow: auto;
+    max-height: 300px;
+  }
+  .subtitle {
+    margin-bottom: 8px;
+  }
+  &__item {
+    display: flex;
+    align-items: center;
+    mat-form-field {
+      width: 120px;
+      flex: 8;
+    }
+    mat-icon {
+      flex: 1;
+    }
+    .colon {
+      position: relative;
+      bottom: 10px;
+    }
+    button {
+      flex: 1;
+      position: relative;
+      bottom: 10px;
+    }
+  }
+}
+
+.gw-profile-action {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  .save-btn {
+    button + button {
+      margin-left: 8px;
+    }
+  }
+}
