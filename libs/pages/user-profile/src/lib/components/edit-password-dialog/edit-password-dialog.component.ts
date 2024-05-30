@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormService, UserService, ValidatorsService } from '@neo-edge-web/global-service';
 import { IEditPasswordReq, IGetUserProfileResp } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, tap } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -29,7 +29,8 @@ import { catchError, EMPTY } from 'rxjs';
   styleUrl: './edit-password-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditPasswordDialogComponent implements OnInit {
+export class EditPasswordDialogComponent implements OnInit, OnDestroy {
+  dialog = inject(MatDialog);
   data = inject<{ userInfo: IGetUserProfileResp }>(MAT_DIALOG_DATA);
   #fb = inject(FormBuilder);
   #snackBar = inject(MatSnackBar);
@@ -60,14 +61,8 @@ export class EditPasswordDialogComponent implements OnInit {
       .editPassword$({ ...payload })
       .pipe(
         untilDestroyed(this),
-        catchError((err) => {
-          this.#snackBar.open('Reset password failed.', 'X', {
-            horizontalPosition: 'end',
-            verticalPosition: 'bottom',
-            duration: 5000
-          });
-          return EMPTY;
-        })
+        tap(() => this.dialog.closeAll()),
+        catchError(() => EMPTY)
       )
       .subscribe();
   };
@@ -88,5 +83,9 @@ export class EditPasswordDialogComponent implements OnInit {
       },
       { validator: [this.validatorsService.match2Field('newPassword', 'confirmPassword')] }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.formService.clearPasswordHiddenMap();
   }
 }

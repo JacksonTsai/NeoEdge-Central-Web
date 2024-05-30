@@ -91,6 +91,9 @@
                   @for (project of projectsOpts(); track project.id) {
                   <mat-option [value]="project.id">{{ project.name }}</mat-option>
                   }
+                  @if (!projectsOpts()?.length) {
+                  <mat-option [disabled]="true">No option.</mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
             </div>

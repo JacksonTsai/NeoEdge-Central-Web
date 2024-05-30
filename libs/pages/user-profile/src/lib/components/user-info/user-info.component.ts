@@ -111,7 +111,7 @@ export class UserInfoComponent implements OnInit {
     this.form.setValue({
       dateTimeFormat: userInfo?.dateTimeFormat ?? '',
       defaultProjectId: userInfo?.defaultProjectId ?? '',
-      idleTimeout: userInfo?.idleTimeout ?? 0,
+      idleTimeout: userInfo?.idleTimeout ?? 5,
       isMfaEnable: userInfo?.isMfaEnable ?? 0,
       language: userInfo?.language ?? '',
       name: userInfo?.name ?? ''
@@ -176,7 +176,7 @@ export class UserInfoComponent implements OnInit {
     this.form = this.#fb.group({
       dateTimeFormat: [{ value: this.userInfo()?.dateTimeFormat ?? '', disabled: true }, [Validators.required]],
       defaultProjectId: [{ value: this.userInfo()?.defaultProjectId ?? '', disabled: true }, [Validators.required]],
-      idleTimeout: [{ value: this.userInfo()?.idleTimeout ?? '', disabled: true }, [Validators.required]],
+      idleTimeout: [{ value: this.userInfo()?.idleTimeout ?? 5, disabled: true }, [Validators.required]],
       isMfaEnable: [{ value: this.userInfo()?.isMfaEnable ?? 0, disabled: true }, [Validators.required]],
       language: [{ value: this.userInfo()?.language ?? '', disabled: true }, [Validators.required]],
       name: [{ value: this.userInfo()?.name ?? '', disabled: true }, [Validators.required]]

@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { Subscription, fromEvent, interval, merge } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 
-const DEFAULT_TIMEOUT = 5; // Minutes
+const DEFAULT_TIMEOUT = 5; // Minute
 const CHECK_INTERVAL = 5000; // ms
 
 @Injectable()
