@@ -10,6 +10,10 @@ interface IPasswordHiddenMap {
 export class FormService {
   private passwordHiddenMap: IPasswordHiddenMap = {};
 
+  clearPasswordHiddenMap() {
+    this.passwordHiddenMap = {};
+  }
+
   togglePasswordVisibility(passwordField: string) {
     this.passwordHiddenMap[passwordField].update((value) => !value);
   }
