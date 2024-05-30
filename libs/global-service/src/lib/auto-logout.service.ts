@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { Subscription, fromEvent, interval, merge } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 
-const DEFAULT_TIMEOUT = 5 * 60; // Second
+const DEFAULT_TIMEOUT = 5; // Minute
 const CHECK_INTERVAL = 5000; // ms
 
 @Injectable()
@@ -46,7 +46,7 @@ export class AutoLogoutService {
       return;
     }
     const now = Date.now();
-    const lastTime = this.lastOperationTime() + this.timeout * 1000;
+    const lastTime = this.lastOperationTime() + this.timeout * 60 * 1000;
     const diff = lastTime - now;
     const isTimeout = diff < 0;
 
@@ -60,7 +60,7 @@ export class AutoLogoutService {
 
   init() {
     this.store.select(AuthStore.selectUserProfile).subscribe((d) => {
-      this.timeout = d.userProfile?.idleTimeout ?? 5 * 60;
+      this.timeout = d.userProfile?.idleTimeout ?? 5;
     });
     this.reset();
     this.initListener();
