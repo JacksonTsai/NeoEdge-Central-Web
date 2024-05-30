@@ -1,9 +1,10 @@
 .gateway-detail-wrapper {
-  padding: 16px;
   height: calc(100% - 48px);
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  padding: 16px;
+  padding-bottom: 0;
   gap: 32px;
   overflow: auto;
   &__left {
@@ -12,7 +13,20 @@
   &__right {
     flex: 9 1 0;
     .gw-tab {
+      min-width: 1000px;
       padding: 16px;
     }
+  }
+  fieldset {
+    padding: 16px;
+  }
+  fieldset + fieldset {
+    margin-top: 16px;
+  }
+}
+
+@media screen and (max-width: 1721px) {
+  .gateway-detail-wrapper {
+    display: block;
   }
 }

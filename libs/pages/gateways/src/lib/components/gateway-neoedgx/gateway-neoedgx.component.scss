@@ -1,3 +1,26 @@
-:host {
-  display: block;
+.gw-neoedgex-wrapper {
+  .gw-neoedgex-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .gw-neoedgex-mode {
+    margin-top: 32px;
+    display: flex;
+    gap: 32px;
+  }
+  .neoedgex-actions {
+    margin-top: 32px;
+    button + button {
+      margin-left: 8px;
+    }
+  }
+}
+.item {
+  .label {
+    font-weight: 600;
+  }
+  .value {
+    margin-top: 4px;
+  }
 }

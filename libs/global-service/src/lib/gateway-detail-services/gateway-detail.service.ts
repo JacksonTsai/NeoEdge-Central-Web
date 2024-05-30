@@ -1,7 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IEditGatewayProfileReq, IGetGatewaysDetailResp, IGetInstallCommandResp } from '@neo-edge-web/models';
+import {
+  GW_RUNNING_MODE,
+  IEditGatewayProfileReq,
+  IGetGatewaysDetailResp,
+  IGetInstallCommandResp
+} from '@neo-edge-web/models';
 import { obj2FormData } from '@neo-edge-web/utils';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
@@ -63,6 +68,25 @@ export class GatewayDetailService {
   syncGatewayProfile$ = (gatewayId: number) =>
     this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/command/system-info`, {}).pipe(
       tap(() => {
+        this.#snackBar.open('Fetch success.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Fetch failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+
+  getInstallCommand$ = (gatewayId: number): Observable<IGetInstallCommandResp> =>
+    this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/install-command`, {}).pipe(
+      tap(() => {
         this.#snackBar.open('Setting success.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
@@ -79,8 +103,8 @@ export class GatewayDetailService {
       })
     );
 
-  getInstallCommand$ = (gatewayId: number): Observable<IGetInstallCommandResp> =>
-    this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/install-command`, {}).pipe(
+  switchRunningMode$ = (gatewayId: number, mode: GW_RUNNING_MODE, name?: string): Observable<IGetInstallCommandResp> =>
+    this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/command/running-mode`, { mode, name }).pipe(
       tap(() => {
         this.#snackBar.open('Setting success.', 'X', {
           horizontalPosition: 'end',

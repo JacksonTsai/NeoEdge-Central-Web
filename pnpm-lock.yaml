@@ -36,7 +36,7 @@ dependencies:
     specifier: 17.3.0
     version: 17.3.0(@angular/common@17.3.0)(@angular/core@17.3.0)(@angular/platform-browser@17.3.0)(rxjs@7.8.0)
   '@asymmetrik/ngx-leaflet':
-    specifier: ^17.0.0
+    specifier: 17.0.0
     version: 17.0.0(@angular/common@17.3.0)(@angular/core@17.3.0)(leaflet@1.9.4)
   '@ngneat/until-destroy':
     specifier: 10.0.0
@@ -78,7 +78,7 @@ dependencies:
     specifier: ^0.0.0
     version: 0.0.0
   ngx-permissions:
-    specifier: ^17.1.0
+    specifier: 17.1.0
     version: 17.1.0(@angular/core@17.3.0)(@angular/router@17.3.0)(rxjs@7.8.0)
   ngx-webstorage:
     specifier: 13.0.1

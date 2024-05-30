@@ -1,11 +1,12 @@
-.gw-hw-info-wrapper {
-  display: flex;
-  gap: 32px;
-  .fetch-info {
+.gw-neoedgex-wrapper {
+  .gw-neoedgex-info {
+    display: flex;
+    gap: 32px;
+  }
+  .upgrade-neoedgex {
     margin-top: 32px;
   }
 }
-
 .item {
   .label {
     font-weight: 600;
@@ -13,8 +14,4 @@
   .value {
     margin-top: 4px;
   }
-}
-
-.item + .item {
-  margin-top: 16px;
 }

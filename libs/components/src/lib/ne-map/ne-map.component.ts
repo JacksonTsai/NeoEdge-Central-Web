@@ -83,7 +83,7 @@ export class NeMapComponent {
 
   initMap() {
     if (this.animation) {
-      this.map.flyTo([this.coordinate().lat, this.coordinate().lng], 6, {
+      this.map.flyTo([this.coordinate()?.lat ?? 0, this.coordinate()?.lng ?? 0], 6, {
         animate: true,
         duration: 1.5
       });

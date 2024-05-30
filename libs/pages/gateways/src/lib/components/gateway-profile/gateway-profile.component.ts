@@ -241,11 +241,25 @@ export class GatewayProfileComponent implements OnInit {
   };
 
   setDeviceImagePath = (data: TMetaData) => {
-    const { ipcVendorName, ipcModelSeriesName, gatewayIconPath } = data;
+    const { ipcVendorName, ipcModelSeriesName, gatewayIconPath, isPartnerIpc } = data;
+
+    if (gatewayIconPath) {
+      this.logo.set(`${gatewayIconPath}?timestamp=${Date.now()}`);
+      return;
+    }
+
     if (!ipcVendorName || !ipcModelSeriesName) {
+      this.logo.set(`/assets/images/default_gateway.png?timestamp=${Date.now()}`);
+      return;
+    }
+
+    if (isPartnerIpc === BOOLEAN_STATUS.TRUE) {
+      this.logo.set(
+        `/assets/images/default_${ipcVendorName.toLowerCase()}-${ipcModelSeriesName}.png?timestamp=${Date.now()}`
+      );
+    } else {
       this.logo.set('/assets/images/default_gateway.png');
     }
-    this.logo.set(gatewayIconPath || `/assets/images/default_${ipcVendorName.toLowerCase()}-${ipcModelSeriesName}.png`);
   };
 
   changeEditMode = (isEdit: boolean) => {

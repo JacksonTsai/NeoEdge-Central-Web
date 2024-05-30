@@ -1,11 +1,7 @@
 <div class="gw-status-info-wrapper">
   @if (gatewayStatusInfo()) {
     <div class="gateway-img">
-      @if (gatewayStatusInfo().isPartnerIpc) {
-        <img width="100%" height="100%" [src]="logo() | safe: 'resourceUrl'" />
-      } @else {
-        <img width="100%" height="100%" src="/assets/images/default_gateway.png" />
-      }
+      <img width="100%" height="100%" [src]="logo() | safe: 'resourceUrl'" />
     </div>
 
     @if (gatewayStatusInfo().isPartnerIpc === booleanStatus.TRUE) {
@@ -51,41 +47,42 @@
       <div class="value">{{ gatewayProfileUpdateTime() }}</div>
     </div>
 
-    <div class="gw-action">
+    <div class="gw-action" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
       <button mat-stroked-button color="primary" [matMenuTriggerFor]="gwAction">
         Action
         <mat-icon svgIcon="icon:down_primary"></mat-icon>
       </button>
       <mat-menu #gwAction="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item [disabled]="!isConnected || isWaitingOnBoard">
           <span>Reboot Gateway</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="onDeleteGateway()">
           <span>Delete Gateway</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="onDetach()" [disabled]="isDetachMode() || isWaitingOnBoard()">
           <span>Detach Gateway</span>
         </button>
-        <button mat-menu-item>
-          <span>Switch Gateway To Action Mode</span>
+
+        <button
+          type="button"
+          mat-menu-item
+          (click)="onSwitchRunMode(switchRunningMode)"
+          [disabled]="isDetachMode() || isWaitingOnBoard()"
+        >
+          Switch Gateway to {{ switchRunningMode }} Mode
         </button>
-        <button mat-menu-item>
-          <span>Switch Gateway To Passive Mode</span>
-        </button>
-        <button mat-menu-item>
+
+        <button mat-menu-item [disabled]="!isWaitingOnBoard()">
           <span>Get Install Command</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item [disabled]="!isConnected()">
           <span>Upgrade NeoEdge X Agent</span>
         </button>
-        <button mat-menu-item>
-          <span>Enable Remote Access</span>
+        <button mat-menu-item [disabled]="!isConnected()">
+          <span>Enable/Disable Remote Access</span>
         </button>
-        <button mat-menu-item>
-          <span>Disable Remote Access</span>
-        </button>
-        <button mat-menu-item>
-          <span>Fetch Gateway Hardware Information</span>
+        <button mat-menu-item [disabled]="!isConnected()">
+          <span> Fetch Gateway Hardware Information </span>
         </button>
       </mat-menu>
     </div>

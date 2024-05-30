@@ -15,7 +15,7 @@ export interface IGetGatewaysDetailResp {
   customField: IGatewayCustomField[];
   desiredMode: number;
   gatewayIconPath: string;
-  gatewaySystemInfo: GatewaySystemInfo;
+  gatewaySystemInfo: IGatewaySystemInfo;
   gatewaySystemInfoUpdateAt: number;
   ipcModelName: string;
   ipcSerialPorts: IIpcSerialPort[];
@@ -36,9 +36,17 @@ export interface IGetGatewaysDetailResp {
   tpmEnabled: number;
   isPartnerIpc: number;
   ipcModelSeriesName: string;
+  neoedgeXName: string;
+  neoedgeXOsName: string;
+  neoedgeXOsVersion: string;
+  latestNeoedgeXVersion: string;
+  latestNeoedgeXReleaseNote: string;
+  latestNeoedgeXReleaseDate: number;
+  desiredModeUpdatedAt: number;
+  connectionStatusUpdatedAt: number;
 }
 
-export interface GatewaySystemInfo {
+export interface IGatewaySystemInfo {
   os: string;
   ram: number;
   hasTPM: boolean;
@@ -107,17 +115,38 @@ export type TGatewayStatusInfo = Pick<
   | 'ipcModelSeriesName'
 >;
 
+export type TNeoEdgeXInfo = Pick<
+  IGetGatewaysDetailResp,
+  | 'connectionStatus'
+  | 'currentMode'
+  | 'customField'
+  | 'desiredMode'
+  | 'neoedgeXArch'
+  | 'neoedgeXVersion'
+  | 'neoedgeXName'
+  | 'neoedgeXOsName'
+  | 'neoedgeXOsVersion'
+  | 'latestNeoedgeXVersion'
+  | 'latestNeoedgeXReleaseNote'
+  | 'latestNeoedgeXReleaseDate'
+>;
+
 export enum GATEWAY_LOADING {
   NONE,
-  REFRESH_METADATA,
+  REFRESH_GATEWAY_DETAIL,
   EDIT_METADATA,
   GET_DETAIL,
   DELETE_GW,
-  DETACH_GW,
   GET_INSTALL_COMMAND,
   CUSTOM_FIELD,
   SYNC_GW_PROFILE,
   UPGRADE_EDGE_X_AGENT,
   SWITCH_RUNNING_MODE,
   SSH_CONTROL
+}
+
+export enum GW_RUNNING_MODE {
+  Active = 0,
+  Passive = 1,
+  Detach = 2
 }

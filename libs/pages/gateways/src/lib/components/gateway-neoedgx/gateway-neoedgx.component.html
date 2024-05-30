@@ -1,1 +1,67 @@
-<p>gateway-neoedgx works!</p>
+<div class="gw-neoedgex-wrapper">
+  <div class="gw-neoedgex-info">
+    <div class="item">
+      <div class="label">OS</div>
+      <div class="value">
+        {{ neoedgexInfo()?.neoedgeXOsName ? neoedgexInfo().neoedgeXOsName : '-' }}
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">Version</div>
+      <div class="value">
+        {{ neoedgexInfo()?.neoedgeXOsVersion ? neoedgexInfo().neoedgeXOsVersion : '-' }}
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">URL Link</div>
+      <div class="value">https://www.neoedgecentral.com/neoEdge-X</div>
+    </div>
+  </div>
+  <div class="gw-neoedgex-mode">
+    <div class="item">
+      <div class="label">Running mode on Gateway</div>
+      <div class="value">
+        {{ gwRunningMode[neoedgexInfo()?.currentMode] ? gwRunningMode[neoedgexInfo().currentMode] : '-' }}
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">Desired mode on Cloud</div>
+      <div class="value">
+        {{ gwRunningMode[neoedgexInfo()?.desiredMode] ? gwRunningMode[neoedgexInfo().desiredMode] : '-' }}
+      </div>
+    </div>
+  </div>
+  <div class="neoedgex-actions">
+    <button type="button" mat-stroked-button color="primary" (click)="onUpgradeNeoedgex()" [disabled]="!isConnected()">
+      Upgrade NeoEdge X
+    </button>
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onSwitchRunMode()"
+      [disabled]="isDetachMode() || isWaitingOnBoard()"
+    >
+      @if (!isDetachMode) {
+        <mat-icon svgIcon="icon:switch_primary"></mat-icon>
+      }
+      Switch Gateway to {{ switchRunningMode }} Mode
+    </button>
+
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onDetachMode()"
+      [disabled]="isDetachMode() || isWaitingOnBoard()"
+    >
+      @if (!isDetachMode() && !isWaitingOnBoard()) {
+        <mat-icon svgIcon="icon:detach_primary"></mat-icon>
+      }
+      Detach Gateway
+    </button>
+  </div>
+</div>

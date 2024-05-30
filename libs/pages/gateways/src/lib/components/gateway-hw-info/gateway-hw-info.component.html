@@ -1,1 +1,65 @@
-<p>gateway-hw-info works!</p>
+<div class="gw-hw-info-wrapper">
+  <div class="gw-hw-info">
+    <div class="item">
+      <div class="label">CPU</div>
+      <div class="value">
+        {{ gwHwInfo()?.cpuModel ? gwHwInfo().cpuModel : '-' }}
+      </div>
+    </div>
+    <div class="item">
+      <div class="label">Core</div>
+      <div class="value">
+        {{ gwHwInfo()?.cpuCount ? gwHwInfo().cpuCount : '-' }}
+      </div>
+    </div>
+    <div class="item">
+      <div class="label">OS</div>
+      <div class="value">
+        {{ gwHwInfo()?.os ? gwHwInfo().os : '-' }}
+      </div>
+    </div>
+    <div class="item">
+      <div class="label">IP</div>
+      <div class="value">
+        {{ gwHwInfo()?.ipAddress ? gwHwInfo().ipAddress : '-' }}
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="fetch-info"
+      mat-stroked-button
+      color="primary"
+      [disabled]="!isConnected()"
+      (click)="onFetchGwHwInfo()"
+    >
+      @if (isConnected()) {
+        <mat-icon svgIcon="icon:sync_primary"></mat-icon>
+      }
+      Fetch Gateway Hardware Information
+    </button>
+  </div>
+
+  <div class="gw-hw-info">
+    <div class="item">
+      <div class="label">RAM</div>
+      <div class="value">
+        {{ gwHwInfo()?.ram ? gwHwInfo().ram : '-' }}
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">Time Zone</div>
+      <div class="value">
+        {{ gwHwInfo()?.timeZone ? gwHwInfo().timeZone : '-' }}
+      </div>
+    </div>
+
+    <div class="item">
+      <div class="label">Profile Updated Time</div>
+      <div class="value">
+        {{ profileUpdatedTime() ? handleDatetimeFormat(profileUpdatedTime()) : '-' }}
+      </div>
+    </div>
+  </div>
+</div>

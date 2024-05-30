@@ -3,7 +3,16 @@
   <div class="gateway-detail-wrapper">
     <div class="gateway-detail-wrapper__left">
       @if (gatewayStatusInfo()) {
-        <ne-gateway-status-info [gatewayStatusInfo]="gatewayStatusInfo()"></ne-gateway-status-info>
+        <ne-gateway-status-info
+          [gatewayStatusInfo]="gatewayStatusInfo()"
+          [isDetachMode]="isDetachMode"
+          [isWaitingOnBoard]="isWaitingOnBoard"
+          [isConnected]="isConnected"
+          (handelFetchGwHwInfo)="onFetchGwHwInfo()"
+          (handleSwitchRunningMode)="onSwitchRunningMode($event)"
+          (handleDetachMode)="onDetachMode()"
+          (handleDeleteGateway)="onDeleteGateway()"
+        ></ne-gateway-status-info>
       }
     </div>
     <div class="gateway-detail-wrapper__right">
@@ -22,7 +31,43 @@
         </mat-tab>
         <mat-tab label="Gateway Operation">
           <div class="gw-tab">
-            <ne-gateway-operation></ne-gateway-operation>
+            <fieldset>
+              <legend>Hardware Information</legend>
+              @if (this.gwDetailStore?.gatewayDetail()?.gatewaySystemInfo) {
+                <ne-gateway-hw-info
+                  [gwHwInfo]="gwDetailStore.gatewayDetail().gatewaySystemInfo"
+                  [connectionStatus]="gwDetailStore.gatewayDetail().connectionStatus"
+                  [currentMode]="gwDetailStore.gatewayDetail().currentMode"
+                  [profileUpdatedTime]="gwDetailStore.gatewayDetail().gatewaySystemInfoUpdateAt"
+                  [isConnected]="isConnected"
+                  (handelFetchGwHwInfo)="onFetchGwHwInfo()"
+                >
+                </ne-gateway-hw-info>
+              }
+            </fieldset>
+
+            <fieldset>
+              <legend>Agent</legend>
+              <ne-gateway-neoedgx
+                [neoedgexInfo]="neoedgexInfo()"
+                [isDetachMode]="isDetachMode"
+                [isWaitingOnBoard]="isWaitingOnBoard"
+                [isConnected]="isConnected"
+                (handleUpgradeNeoEdgeX)="onUpgradeNeoEdgeX()"
+                (handleSwitchRunningMode)="onSwitchRunningMode($event)"
+                (handleDetachMode)="onDetachMode()"
+              ></ne-gateway-neoedgx>
+            </fieldset>
+
+            <fieldset>
+              <legend>Application</legend>
+              <ne-gateway-applications (click)="onUpgradeNeoEdgeX()"></ne-gateway-applications>
+            </fieldset>
+
+            <fieldset>
+              <legend>Remote Access</legend>
+              <ne-gateway-remote-access></ne-gateway-remote-access>
+            </fieldset>
           </div>
         </mat-tab>
         <mat-tab label="NeoFlow">

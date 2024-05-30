@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DeleteGatewayConfirmComponent } from './delete-gateway-confirm.component';
+import { DeleteGatewayConfirmDialogComponent } from './delete-gateway-confirm-dialog.component';
 
 describe('DeleteGatewayConfirmComponent', () => {
-  let component: DeleteGatewayConfirmComponent;
-  let fixture: ComponentFixture<DeleteGatewayConfirmComponent>;
+  let component: DeleteGatewayConfirmDialogComponent;
+  let fixture: ComponentFixture<DeleteGatewayConfirmDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeleteGatewayConfirmComponent]
+      imports: [DeleteGatewayConfirmDialogComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DeleteGatewayConfirmComponent);
+    fixture = TestBed.createComponent(DeleteGatewayConfirmDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
