@@ -50,14 +50,10 @@ fieldset {
 
     mat-form-field {
       width: 100%;
-
-      &.ng-invalid {
-        margin-bottom: 16px;
-      }
+      margin-bottom: 16px;
     }
   }
 }
-
 
 .item {
   &__first {
