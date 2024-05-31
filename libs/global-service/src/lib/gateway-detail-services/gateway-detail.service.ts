@@ -86,8 +86,9 @@ export class GatewayDetailService {
 
   getInstallCommand$ = (gatewayId: number): Observable<IGetInstallCommandResp> =>
     this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/install-command`, {}).pipe(
+      map((resp) => resp),
       tap(() => {
-        this.#snackBar.open('Setting success.', 'X', {
+        this.#snackBar.open('Copied Command.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

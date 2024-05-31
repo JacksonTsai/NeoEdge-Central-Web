@@ -43,6 +43,7 @@ export class GatewaysPageComponent {
   queryKey = this.gatewaysStore.queryKey;
   isLoading = this.gatewaysStore.isLoading;
   gwLabels = this.gatewaysStore.labels;
+
   constructor() {
     effect(
       () => {

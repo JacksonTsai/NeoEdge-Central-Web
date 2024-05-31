@@ -30,6 +30,7 @@ export class GatewayStatusInfoComponent {
   @Output() handleSwitchRunningMode = new EventEmitter<{ mode: GW_RUNNING_MODE }>();
   @Output() handleDetachMode = new EventEmitter();
   @Output() handleDeleteGateway = new EventEmitter();
+  @Output() handleGetInstallCommand = new EventEmitter();
 
   gatewayStatusInfo = input<TGatewayStatusInfo | null>(null);
   isDetachMode = input(false);
@@ -61,7 +62,7 @@ export class GatewayStatusInfoComponent {
     }
 
     if (this.gatewayStatusInfo().isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}-${this.gatewayStatusInfo().ipcModelSeriesName}.png?timestamp=${Date.now()}`;
+      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelSeriesName}.png?timestamp=${Date.now()}`;
     } else {
       return '/assets/images/default_gateway.png';
     }
@@ -98,5 +99,9 @@ export class GatewayStatusInfoComponent {
 
   onSwitchRunMode = (mode: string) => {
     this.handleSwitchRunningMode.emit({ mode: GW_RUNNING_MODE[mode] });
+  };
+
+  onGetInstallCommand = () => {
+    this.handleGetInstallCommand.emit();
   };
 }

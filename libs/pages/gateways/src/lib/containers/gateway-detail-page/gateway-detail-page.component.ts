@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject } 
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
+import { GatewayDetailService } from '@neo-edge-web/global-service';
 import {
   GATEWAY_LOADING,
   GATEWAY_STATUE,
@@ -52,6 +53,7 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
 export class GatewayDetailPageComponent {
   #dialog = inject(MatDialog);
   gwDetailStore = inject(GatewayDetailStore);
+  gwDetailService = inject(GatewayDetailService);
   definedLabel = this.gwDetailStore.labels;
   isLoading = this.gwDetailStore.isLoading;
 
@@ -206,5 +208,13 @@ export class GatewayDetailPageComponent {
 
   onSaveProfile = ({ gatewayProfile, gatewayIcon }: { gatewayProfile: IEditGatewayProfileReq; gatewayIcon: File }) => {
     this.gwDetailStore.editGatewayProfile({ gatewayProfile, gatewayIcon });
+  };
+
+  onGetInstallCommand = () => {
+    this.gwDetailService.getInstallCommand$(this.gwDetailStore.gatewayId()).subscribe((enrollCommand) => {
+      if (enrollCommand?.command) {
+        navigator.clipboard.writeText(enrollCommand.command);
+      }
+    });
   };
 }

@@ -43,6 +43,7 @@ export class AddGatewayDialogComponent implements OnInit {
   gatewayType = GATEWAYS_TYPE;
   partnerIpcNameOpts = this.data.gwStore.partnersIpc().map((d) => d.name);
   isPartnerIpcCtrl = new UntypedFormControl(GATEWAYS_TYPE.PARTNER);
+  tableSize = this.data.gwStore.size;
   enrollCommand = signal(null);
 
   get ipcVendorNameCtrl() {
@@ -138,6 +139,7 @@ export class AddGatewayDialogComponent implements OnInit {
         untilDestroyed(this),
         take(1),
         tap((resp) => {
+          this.data.gwStore.queryGatewayTableByPage({ size: this.tableSize() });
           this.enrollCommand.set({ ...resp, ...payload });
         })
       )
@@ -153,7 +155,7 @@ export class AddGatewayDialogComponent implements OnInit {
       projectId: [this.data.gwStore.projectId()]
     });
 
-    this.isPartnerIpcCtrl.valueChanges.subscribe((d) => {
+    this.isPartnerIpcCtrl.valueChanges.subscribe(() => {
       this.form.reset();
     });
   }

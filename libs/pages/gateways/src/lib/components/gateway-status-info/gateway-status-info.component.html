@@ -72,7 +72,7 @@
           Switch Gateway to {{ switchRunningMode }} Mode
         </button>
 
-        <button mat-menu-item [disabled]="!isWaitingOnBoard()">
+        <button mat-menu-item [disabled]="!isWaitingOnBoard()" (click)="onGetInstallCommand()">
           <span>Get Install Command</span>
         </button>
         <button mat-menu-item [disabled]="!isConnected()">

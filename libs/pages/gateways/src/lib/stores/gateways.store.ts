@@ -73,7 +73,9 @@ export const GatewaysStore = signalStore(
           tap(() => patchState(store, { isLoading: GATEWAYS_LOADING.ADD_GATEWAY })),
           switchMap((payload) =>
             gwService.addGateway$(payload).pipe(
-              tap(() => patchState(store, { isLoading: GATEWAYS_LOADING.REFRESH_TABLE })),
+              tap(() => {
+                patchState(store, { isLoading: GATEWAYS_LOADING.REFRESH_TABLE });
+              }),
               catchError(() => EMPTY)
             )
           )
