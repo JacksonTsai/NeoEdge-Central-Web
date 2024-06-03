@@ -131,6 +131,7 @@ export type TNeoEdgeXInfo = Pick<
   | 'latestNeoedgeXVersion'
   | 'latestNeoedgeXReleaseNote'
   | 'latestNeoedgeXReleaseDate'
+  | 'gatewaySystemInfo'
 >;
 
 export enum GATEWAY_LOADING {

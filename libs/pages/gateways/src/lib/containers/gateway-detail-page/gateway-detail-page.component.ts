@@ -102,7 +102,8 @@ export class GatewayDetailPageComponent {
       neoedgeXOsVersion,
       latestNeoedgeXVersion,
       latestNeoedgeXReleaseNote,
-      latestNeoedgeXReleaseDate
+      latestNeoedgeXReleaseDate,
+      gatewaySystemInfo
     } = this.gwDetailStore.gatewayDetail();
 
     return {
@@ -117,7 +118,8 @@ export class GatewayDetailPageComponent {
       neoedgeXOsVersion,
       latestNeoedgeXVersion,
       latestNeoedgeXReleaseNote,
-      latestNeoedgeXReleaseDate
+      latestNeoedgeXReleaseDate,
+      gatewaySystemInfo
     };
   });
 
