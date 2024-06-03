@@ -13,6 +13,7 @@ export interface GatewaysState {
   labels: IGatewayLabels[];
   partnersIpc: IPartnerIpc[];
   customOs: ICustomOss[];
+  wsRoomName: string;
 }
 
 export interface IGetGatewaysResp {
@@ -89,4 +90,9 @@ export enum GATEWAYS_TYPE {
 export enum NEED_SYNC_GATEWAYS {
   NO = 0,
   YES = 1
+}
+
+export enum GATEWAYS_WS_TYPE {
+  'connection-info' = 'connectionInfo',
+  'running-mode' = 'runningMode'
 }

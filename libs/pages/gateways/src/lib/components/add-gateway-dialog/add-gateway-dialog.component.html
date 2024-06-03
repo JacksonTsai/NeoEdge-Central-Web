@@ -1,5 +1,5 @@
 <h1 mat-dialog-title class="gl-h6">Add Gateway</h1>
-<mat-dialog-content>
+<mat-dialog-content class="add-gateway-wrapper">
   <form [formGroup]="form">
     @if (!enrollCommand()) {
       <h4>Gateway type</h4>
@@ -8,6 +8,11 @@
           <mat-radio-button [value]="gatewayType.PARTNER">Certified IPC</mat-radio-button>
           <mat-radio-button [value]="gatewayType.OTHER">Others</mat-radio-button>
         </mat-radio-group>
+        <div class="gateway-logo">
+          @if (gatewayLogo) {
+            <img width="100%" height="100%" [src]="gatewayLogo" alt="gateway-logo" />
+          }
+        </div>
       </div>
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>
@@ -65,6 +70,11 @@
       </mat-form-field>
     } @else {
       <div class="enroll-gw">
+        <div class="gateway-logo enroll-gateway-logo">
+          @if (gatewayLogo) {
+            <img width="100%" height="100%" [src]="gatewayLogo" alt="gateway-logo" />
+          }
+        </div>
         <div class="item">
           <div class="label">Vendor</div>
           <div class="value">

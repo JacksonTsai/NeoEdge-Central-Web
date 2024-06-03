@@ -16,3 +16,4 @@ export * from './table-query.model';
 export * from './user.model';
 export * from './users.model';
 export * from './utils.model';
+export * from './websocket.model';

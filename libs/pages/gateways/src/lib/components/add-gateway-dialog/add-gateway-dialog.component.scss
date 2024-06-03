@@ -1,34 +1,53 @@
 @use 'colors' as *;
-
-mat-form-field {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.select-ipc-type {
-  margin-bottom: 16px;
-}
-
-.item {
-  .label {
-    font-weight: 600;
-  }
-  .value {
-    margin-top: 8px;
-  }
-  & + .item {
-    margin-top: 20px;
-  }
-}
-
-.enroll-command {
-  display: flex;
-  align-items: center;
+.add-gateway-wrapper {
   mat-form-field {
-    width: 90%;
+    display: block;
+    margin-bottom: 8px;
   }
-  button {
+  .select-ipc-type {
+    margin-bottom: 16px;
+  }
+  .item {
+    .label {
+      font-weight: 600;
+    }
+    .value {
+      margin-top: 8px;
+    }
+    & + .item {
+      margin-top: 20px;
+    }
+  }
+  .gateway-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 130px;
+    max-height: 150px;
+    img {
+      margin: 16px 0;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+
+  .enroll-gw {
     position: relative;
-    bottom: 16px;
+    .enroll-gateway-logo {
+      position: absolute;
+      top: 0;
+      right: 16px;
+    }
+    .enroll-command {
+      display: flex;
+      align-items: center;
+      mat-form-field {
+        width: 90%;
+      }
+      button {
+        position: relative;
+        bottom: 16px;
+      }
+    }
   }
 }

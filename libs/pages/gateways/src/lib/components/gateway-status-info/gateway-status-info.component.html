@@ -26,26 +26,39 @@
       <div class="label">Status</div>
       <div class="value">
         @if (gwCurrentMode.PASSIVE === gatewayStatusInfo().currentMode) {
-          <span color="accent">Passive</span>
+          <div class="gateway-status gateway-status--passive" matTooltip="Passive" matTooltipPosition="below"></div>
         }
         @if (gwCurrentMode.DETACH === gatewayStatusInfo().currentMode) {
-          <span color="danger">Detach</span>
+          <div class="gateway-status gateway-status--detach" matTooltip="Detach" matTooltipPosition="below"></div>
         }
         @if (gwCurrentMode.ACTIVE === gatewayStatusInfo().currentMode) {
           @if (gwStatus.Waiting === gatewayStatusInfo().connectionStatus) {
-            <span color="accent">Waiting</span>
+            <div class="gateway-status gateway-status--waiting" matTooltip="Waiting" matTooltipPosition="below"></div>
           } @else if (gwStatus.Connected === gatewayStatusInfo().connectionStatus) {
-            <span color="primary">Connected</span>
+            <div
+              class="gateway-status gateway-status--connected"
+              matTooltip="Connected"
+              matTooltipPosition="below"
+            ></div>
           } @else if (gwStatus.Disconnected === gatewayStatusInfo().connectionStatus) {
-            <span color="gary">Disconnected</span>
+            <div
+              class="gateway-status gateway-status--disconnected"
+              matTooltip="Disconnected"
+              matTooltipPosition="below"
+            ></div>
           }
         }
       </div>
     </div>
-    <div class="item">
-      <div class="label">Update time</div>
-      <div class="value">{{ gatewayProfileUpdateTime() }}</div>
-    </div>
+    @if (
+      gwStatus.Connected === gatewayStatusInfo().connectionStatus ||
+      gwStatus.Disconnected === gatewayStatusInfo().connectionStatus
+    ) {
+      <div class="item">
+        <div class="label">Update time</div>
+        <div class="value">{{ gatewayProfileUpdateTime() }}</div>
+      </div>
+    }
 
     <div class="gw-action" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
       <button mat-stroked-button color="primary" [matMenuTriggerFor]="gwAction">

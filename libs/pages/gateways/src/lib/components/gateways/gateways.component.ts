@@ -12,6 +12,7 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -21,6 +22,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SafePipe } from '@neo-edge-web/directives';
 import {
+  BOOLEAN_STATUS,
   GATEWAYS_LOADING,
   GATEWAY_SSH_MODE,
   GATEWAY_STATUE,
@@ -51,7 +53,8 @@ import { combineLatest, debounceTime, map, startWith, tap } from 'rxjs';
     MatButtonModule,
     MatTooltipModule,
     MatSelectModule,
-    SafePipe
+    SafePipe,
+    MatChipsModule
   ],
   templateUrl: './gateways.component.html',
   styleUrl: './gateways.component.scss',
@@ -115,6 +118,26 @@ export class GatewaysComponent implements AfterViewInit {
       return '/assets/images/default_gateway.png';
     }
     return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelSeriesName}.png `;
+  };
+
+  logo = (element) => {
+    if (!element) {
+      return '';
+    }
+
+    if (element.gatewayIconPath) {
+      return `${element.gatewayIconPath}?timestamp=${Date.now()}`;
+    }
+
+    if (!element.ipcVendorName || !element.ipcModelSeriesName) {
+      return '/assets/images/default_gateway.png';
+    }
+
+    if (element.isPartnerIpc === BOOLEAN_STATUS.TRUE) {
+      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelSeriesName}.png?timestamp=${Date.now()}`;
+    } else {
+      return '/assets/images/default_gateway.png';
+    }
   };
 
   ngAfterViewInit() {

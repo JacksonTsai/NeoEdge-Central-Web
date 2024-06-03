@@ -52,7 +52,8 @@ export const appConfig: ApplicationConfig = {
       provide: REST_CONFIG,
       useValue: {
         basePath: environment.basePath,
-        authPath: environment.authPath
+        authPath: environment.authPath,
+        wsPath: environment.wsPath
       }
     },
     {

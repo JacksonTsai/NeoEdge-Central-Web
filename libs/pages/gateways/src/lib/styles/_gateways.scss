@@ -1,0 +1,25 @@
+.gateway-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  &--waiting {
+    background-color: #fdd16a;
+    color: #fdd16a;
+  }
+  &--connected {
+    background-color: #3077cb;
+    color: #3077cb;
+  }
+  &--disconnected {
+    background-color: #96b0c6;
+    color: #96b0c6;
+  }
+  &--passive {
+    background-color: #0fadb7;
+    color: #0fadb7;
+  }
+  &--detach {
+    background-color: #f87a7a;
+    color: #f87a7a;
+  }
+}

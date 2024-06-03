@@ -1,9 +1,16 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { selectCurrentProject } from '@neo-edge-web/auth-store';
-import { GatewaysService, IpcsService, ProjectsService } from '@neo-edge-web/global-service';
+import { selectCurrentProject, selectLoginState } from '@neo-edge-web/auth-store';
+import {
+  GatewaysService,
+  IpcsService,
+  ProjectsService,
+  REST_CONFIG,
+  WebSocketService
+} from '@neo-edge-web/global-service';
 import {
   GATEWAYS_LOADING,
+  GATEWAYS_WS_TYPE,
   GatewaysState,
   IAddGatewayReq,
   IProjectLabelsReqResp,
@@ -12,7 +19,7 @@ import {
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { EMPTY, catchError, combineLatest, map, pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, combineLatest, map, pipe, switchMap, take, tap } from 'rxjs';
 
 const INIT_TABLE_PAGE = 1;
 const INIT_TABLE_SIZE = 10;
@@ -27,7 +34,8 @@ const initialState: GatewaysState = {
   labels: [],
   gatewaysLength: 0,
   partnersIpc: [],
-  customOs: []
+  customOs: [],
+  wsRoomName: ''
 };
 
 export type GatewaysStore = InstanceType<typeof GatewaysStore>;
@@ -117,16 +125,63 @@ export const GatewaysStore = signalStore(
       )
     })
   ),
-  withHooks((store, globalStore = inject(Store)) => {
-    return {
-      onInit() {
-        globalStore.select(selectCurrentProject).subscribe(({ currentProjectId }) => {
-          patchState(store, { projectId: currentProjectId });
-          store.queryGatewayTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
-          store.getProjectLabels();
-          store.ipcOs();
-        });
-      }
-    };
-  })
+  withHooks(
+    (store, globalStore = inject(Store), wsService = inject(WebSocketService), restConfig = inject(REST_CONFIG)) => {
+      const dispatchWsData = {
+        connectionInfo: (gatewayId: number, data: { connectionStatus: number }) =>
+          patchState(store, {
+            gatewayTable: [
+              ...store.gatewayTable().map((d) => {
+                return gatewayId === d.id ? { ...d, connectionStatus: data.connectionStatus } : d;
+              })
+            ]
+          }),
+        runningMode: (gatewayId: number, data: { currentMode: number }) =>
+          patchState(store, {
+            gatewayTable: [
+              ...store.gatewayTable().map((d) => {
+                return gatewayId === d.id ? { ...d, currentMode: data.currentMode } : d;
+              })
+            ]
+          })
+      };
+      return {
+        onInit() {
+          combineLatest([globalStore.select(selectCurrentProject), globalStore.select(selectLoginState)])
+            .pipe(
+              take(1),
+              tap(([currentProjectId, loginState]) => {
+                patchState(store, {
+                  projectId: currentProjectId.currentProjectId,
+                  wsRoomName: `${loginState.jwt.fqdn}-pj-${currentProjectId.currentProjectId}`
+                });
+                store.queryGatewayTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
+                store.getProjectLabels();
+                store.ipcOs();
+              })
+            )
+            .subscribe();
+
+          wsService
+            .connect({ room: store.wsRoomName(), url: restConfig.wsPath })
+            .pipe(
+              map((wsAction) => {
+                wsAction.data.messages.map((wsMsg) => {
+                  dispatchWsData[GATEWAYS_WS_TYPE[wsMsg.type]](
+                    wsMsg['gatewayId'] ?? 0,
+                    wsMsg.data,
+                    wsAction.data.timestamp
+                  );
+                });
+              })
+            )
+            .subscribe();
+        },
+
+        onDestroy() {
+          wsService.disconnect({ room: store.wsRoomName() });
+        }
+      };
+    }
+  )
 );

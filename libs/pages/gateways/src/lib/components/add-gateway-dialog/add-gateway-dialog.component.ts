@@ -46,6 +46,18 @@ export class AddGatewayDialogComponent implements OnInit {
   tableSize = this.data.gwStore.size;
   enrollCommand = signal(null);
 
+  get gatewayLogo() {
+    if (!this.ipcVendorNameCtrl.value || !this.ipcModelNameCtrl.value || !this.isPartnerIpcCtrl.value) {
+      return '/assets/images/default_gateway.png';
+    }
+
+    if (this.ipcVendorNameCtrl.value && this.ipcModelNameCtrl.value) {
+      return `/assets/images/default_${this.ipcVendorNameCtrl.value.toLowerCase()}_${this.ipcModelNameCtrl.value.seriesName}.png?timestamp=${Date.now()}`;
+    }
+
+    return '/assets/images/default_gateway.png';
+  }
+
   get ipcVendorNameCtrl() {
     return this.form.get('ipcVendorName') as UntypedFormControl;
   }
@@ -157,6 +169,10 @@ export class AddGatewayDialogComponent implements OnInit {
 
     this.isPartnerIpcCtrl.valueChanges.subscribe(() => {
       this.form.reset();
+    });
+
+    this.ipcVendorNameCtrl.valueChanges.subscribe(() => {
+      this.ipcModelNameCtrl.reset();
     });
   }
 }

@@ -102,7 +102,8 @@ export class GatewayDetailPageComponent {
       neoedgeXOsVersion,
       latestNeoedgeXVersion,
       latestNeoedgeXReleaseNote,
-      latestNeoedgeXReleaseDate
+      latestNeoedgeXReleaseDate,
+      gatewaySystemInfo
     } = this.gwDetailStore.gatewayDetail();
 
     return {
@@ -117,7 +118,8 @@ export class GatewayDetailPageComponent {
       neoedgeXOsVersion,
       latestNeoedgeXVersion,
       latestNeoedgeXReleaseNote,
-      latestNeoedgeXReleaseDate
+      latestNeoedgeXReleaseDate,
+      gatewaySystemInfo
     };
   });
 
@@ -136,7 +138,8 @@ export class GatewayDetailPageComponent {
       gatewaySystemInfoUpdateAt,
       ipcModelName,
       isPartnerIpc,
-      ipcModelSeriesName
+      ipcModelSeriesName,
+      connectionStatusUpdatedAt
     } = this.gwDetailStore.gatewayDetail();
     return {
       name,
@@ -149,7 +152,8 @@ export class GatewayDetailPageComponent {
       tpmEnabled,
       gatewaySystemInfoUpdateAt,
       isPartnerIpc,
-      ipcModelSeriesName
+      ipcModelSeriesName,
+      connectionStatusUpdatedAt
     };
   });
 
