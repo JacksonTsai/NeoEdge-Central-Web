@@ -1,138 +1,148 @@
 @if (currentPlan()) {
-<div class="subscription">
-  <div class="subscription__plan">
-    <mat-card class="subscription__plan-card">
-      <div class="card-title">
-        <div class="card-title">Current Plan</div>
-        <div class="plan-level-icon">
-          @if (subscriptionPlan.premium === currentPlan().planId) {
-          <img width="100" src="assets/images/premium-plan.png" alt="" />
-          } @else if(subscriptionPlan.standard === currentPlan().planId) {
-          <img width="100" src="assets/images/standard-plan.png" alt="" />
-          }@else {
-          <img width="100" src="assets/images/trial-plan.png" alt="" />
-          }
-        </div>
-      </div>
-      <div class="plan-level">{{ subscriptionPlan[currentPlan().planId] }}</div>
-      <div class="plan-duration">
-        {{ getFormatDate(currentPlan().agreementBegin) }}
-        ~
-        {{ getFormatDate(currentPlan().agreementEnd) }}
-      </div>
-    </mat-card>
-    <div class="subscription__plan-detail current-plan">
-      <div class="item agreement-no">
-        <div class="label">Agreement No</div>
-        <h3 class="value">{{ currentPlan()?.agreementNo ? currentPlan()?.agreementNo : '-' }}</h3>
-      </div>
-
-      <div class="item customer-service">
-        <div class="label">Customer Service Channel</div>
-        <div class="value">{{ 'NeoEdge_Service@ecloudvalley.com' }}</div>
-      </div>
-
-      <div class="item eula">
-        <div class="label">NeoEdge Central EULA</div>
-        <div class="value">Link</div>
-      </div>
-
-      <div class="current-plan__fee">
-        <div class="item">
-          <div class="label">Basic Fee</div>
-          <div class="value">{{ currentPlan().baseFee }} /{{ currentPlan().currency }}</div>
-        </div>
-        <div class="divider"></div>
-        <div class="item">
-          <div class="label">Usage Fee</div>
-          <div class="value">{{ currentPlan().hourlyRate }} /{{ currentPlan().currency }}</div>
-        </div>
-        <div class="divider"></div>
-        <div class="item">
-          <div class="label">Extra Service Fee</div>
-          <div class="value">{{ currentPlan().extraFee }} /{{ currentPlan().currency }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  @if (subscriptionPlan.premium !== currentPlan().planId) {
-  <div class="subscription__plan">
-    <mat-card class="subscription__plan-card">
-      <div class="card-title">
-        <div class="card-title">Upgrade to</div>
-        <div class="plan-level-icon">
-          @if (subscriptionPlan.premium === currentPlan().planId+1) {
-          <img width="100" src="assets/images/premium-plan.png" alt="" />
-          }@else if(subscriptionPlan.standard === currentPlan().planId+1) {
-          <img width="100" src="assets/images/standard-plan.png" alt="" />
-          }@else {
-          <img width="100" src="assets/images/trial-plan.png" alt="" />
-          }
-        </div>
-      </div>
-      <div class="plan-level">{{ subscriptionPlan[currentPlan().planId + 1] }}</div>
-      <div class="plans-comparation" (click)="plansComparation()">Plans Comparation</div>
-    </mat-card>
-    <div class="subscription__plan-detail">
-      @if (subscriptionLoading.SEND_SUCCESS !== isLoading()) {
-      <div class="upgrade-send-email">
-        <div class="upgrade-send-email__item">
-          <div class="upgrade-send-email__item__name">Sender</div>
-          <div class="upgrade-send-email__item__value">: {{ 'neoedge_service@ecloudvalley.com' }}</div>
-        </div>
-        <div class="upgrade-send-email__item">
-          <div class="upgrade-send-email__item__name">To</div>
-          <div class="upgrade-send-email__item__value">: {{ 'ECV_Info@ecloudvalley.com' }}</div>
-        </div>
-
-        <div class="upgrade-send-email__item">
-          <div class="upgrade-send-email__item__name">CC</div>
-          <div class="upgrade-send-email__item__value">
-            :
-            {{ userProfile().account }}
+  <div class="subscription">
+    <div class="subscription__plan">
+      <mat-card class="subscription__plan-card">
+        <div class="card-title">
+          <div class="card-title">Current Plan</div>
+          <div class="plan-level-icon">
+            @if (subscriptionPlan.premium === currentPlan().planId) {
+              <img width="100" src="assets/images/premium-plan.png" alt="" />
+            } @else if (subscriptionPlan.standard === currentPlan().planId) {
+              <img width="100" src="assets/images/standard-plan.png" alt="" />
+            } @else {
+              <img width="100" src="assets/images/trial-plan.png" alt="" />
+            }
           </div>
         </div>
-
-        <div class="upgrade-send-email__item">
-          <div class="upgrade-send-email__item__name">Subject</div>
-          <div class="upgrade-send-email__item__value">: Upgrade NeoEdge Central to Premium Plan</div>
+        <div class="plan-level">{{ subscriptionPlan[currentPlan().planId] }}</div>
+        <div class="plan-duration">
+          {{ getFormatDate(currentPlan().agreementBegin) }}
+          ~
+          {{ getFormatDate(currentPlan().agreementEnd) }}
         </div>
-        <div class="upgrade-send-email__content">
-          <mat-form-field tpOneError appearance="outline" floatLabel="always">
-            <textarea matInput rows="6" [formControl]="emailContentCtrl" maxlength="1024"></textarea>
-            @if (emailContentCtrl.hasError('required')) {
-            <mat-error>Required.</mat-error>
-            } @if (emailContentCtrl.hasError('masLength')) {
-            <mat-error></mat-error>
-            }
-          </mat-form-field>
+      </mat-card>
+      <div class="subscription__plan-detail current-plan">
+        <div class="item agreement-no">
+          <div class="label">Agreement No</div>
+          <h3 class="value">{{ currentPlan()?.agreementNo ? currentPlan()?.agreementNo : '-' }}</h3>
         </div>
 
-        <div class="send-btn">
-          <button
-            type="button"
-            mat-flat-button
-            color="primary"
-            (click)="sendEmail()"
-            [disabled]="emailContentCtrl.invalid"
-          >
-            Send
-          </button>
+        <div class="item customer-service">
+          <div class="label">Customer Service Channel</div>
+          <div class="value">{{ 'NeoEdge_Service@ecloudvalley.com' }}</div>
+        </div>
+
+        <div class="item eula">
+          <div class="label">NeoEdge Central EULA</div>
+          <div class="value">Link</div>
+        </div>
+
+        <div class="current-plan__fee">
+          <div class="item">
+            <div class="label">Basic Fee</div>
+            <div class="value">{{ currentPlan().baseFee }} /{{ currentPlan().currency }}</div>
+          </div>
+          <div class="divider"></div>
+          <div class="item">
+            <div class="label">Usage Fee</div>
+            <div class="value">{{ currentPlan().hourlyRate }} /{{ currentPlan().currency }}</div>
+          </div>
+          <div class="divider"></div>
+          <div class="item">
+            <div class="label">Extra Service Fee</div>
+            <div class="value">{{ currentPlan().extraFee }} /{{ currentPlan().currency }}</div>
+          </div>
         </div>
       </div>
-      }@else {
-      <div class="send-email-success">
-        <h3>Your request has been sent to the NeoEdge team.</h3>
-        <h3>We will contact you soon.</h3>
-        @if (subscriptionLoading.SEND_SUCCESS===isLoading() && subscriptionPlan.standard===this.currentPlan().planId+1)
-        {
-        <h3>In the meantime, you can download and review the NeoEdge Central Agreement.</h3>
-        <a href="">NeoEdge Central Agreement</a>
-        }
-      </div>
-      }
     </div>
+    @if (subscriptionPlan.premium !== currentPlan().planId) {
+      <div class="subscription__plan">
+        <mat-card class="subscription__plan-card">
+          <div class="card-title">
+            <div class="card-title">Upgrade to</div>
+            <div class="plan-level-icon">
+              @if (subscriptionPlan.premium === currentPlan().planId + 1) {
+                <img width="100" src="assets/images/premium-plan.png" alt="" />
+              } @else if (subscriptionPlan.standard === currentPlan().planId + 1) {
+                <img width="100" src="assets/images/standard-plan.png" alt="" />
+              } @else {
+                <img width="100" src="assets/images/trial-plan.png" alt="" />
+              }
+            </div>
+          </div>
+          <div class="plan-level">{{ subscriptionPlan[currentPlan().planId + 1] }}</div>
+          <div class="plans-comparation" (click)="plansComparation()">Plans Comparation</div>
+        </mat-card>
+        <div class="subscription__plan-detail">
+          @if (subscriptionLoading.SEND_SUCCESS !== isLoading()) {
+            <div class="upgrade-send-email">
+              <div class="upgrade-send-email__item">
+                <div class="upgrade-send-email__item__name">Sender</div>
+                <div class="upgrade-send-email__item__value">: {{ 'neoedge_service@ecloudvalley.com' }}</div>
+              </div>
+              <div class="upgrade-send-email__item">
+                <div class="upgrade-send-email__item__name">To</div>
+                <div class="upgrade-send-email__item__value">: {{ 'ECV_Info@ecloudvalley.com' }}</div>
+              </div>
+
+              <div class="upgrade-send-email__item">
+                <div class="upgrade-send-email__item__name">CC</div>
+                <div class="upgrade-send-email__item__value">
+                  :
+                  {{ userProfile().account }}
+                </div>
+              </div>
+
+              <div class="upgrade-send-email__item">
+                <div class="upgrade-send-email__item__name">Subject</div>
+                <div class="upgrade-send-email__item__value">: Upgrade NeoEdge Central to Premium Plan</div>
+              </div>
+              <div class="upgrade-send-email__content">
+                <mat-form-field appearance="outline" floatLabel="always">
+                  <textarea
+                    id="subscription-plan-email-content"
+                    matInput
+                    rows="3"
+                    [formControl]="emailContentCtrl"
+                    maxlength="1024"
+                  ></textarea>
+                  @if (emailContentCtrl.hasError('required')) {
+                    <mat-error>Required.</mat-error>
+                  }
+                  @if (emailContentCtrl.hasError('masLength')) {
+                    <mat-error> The input length limit is 1024 characters. </mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="send-btn">
+                <button
+                  id="subscription-plan-send-email-btn"
+                  type="button"
+                  mat-flat-button
+                  color="primary"
+                  (click)="sendEmail()"
+                  [disabled]="emailContentCtrl.invalid"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="send-email-success">
+              <h3>Your request has been sent to the NeoEdge team.</h3>
+              <h3>We will contact you soon.</h3>
+              @if (
+                subscriptionLoading.SEND_SUCCESS === isLoading() &&
+                subscriptionPlan.standard === this.currentPlan().planId + 1
+              ) {
+                <h3>In the meantime, you can download and review the NeoEdge Central Agreement.</h3>
+                <a href="">NeoEdge Central Agreement</a>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
   </div>
-  }
-</div>
 }
