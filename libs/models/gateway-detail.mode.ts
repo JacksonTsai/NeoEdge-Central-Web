@@ -6,6 +6,7 @@ export interface GatewayDetailState {
   gatewayDetail: IGetGatewaysDetailResp | null;
   isLoading: GATEWAY_LOADING;
   labels: IGatewayLabels[];
+  wsRoomName: string;
 }
 
 export interface IGetGatewaysDetailResp {
@@ -113,6 +114,7 @@ export type TGatewayStatusInfo = Pick<
   | 'gatewaySystemInfoUpdateAt'
   | 'isPartnerIpc'
   | 'ipcModelSeriesName'
+  | 'connectionStatusUpdatedAt'
 >;
 
 export type TNeoEdgeXInfo = Pick<
@@ -149,4 +151,10 @@ export enum GW_RUNNING_MODE {
   Active = 0,
   Passive = 1,
   Detach = 2
+}
+
+export enum GW_WS_TYPE {
+  'connection-info' = 'connectionInfo',
+  'running-mode' = 'runningMode',
+  'system-info' = 'systemInfo'
 }

@@ -1,20 +1,28 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { GatewayDetailService, ProjectsService } from '@neo-edge-web/global-service';
-import { RouterStoreService, selectCurrentProject } from '@neo-edge-web/global-store';
-import { GATEWAY_LOADING, GW_RUNNING_MODE, GatewayDetailState, IEditGatewayProfileReq } from '@neo-edge-web/models';
+import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } from '@neo-edge-web/global-service';
+import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-store';
+import {
+  GATEWAY_LOADING,
+  GW_RUNNING_MODE,
+  GW_WS_TYPE,
+  GatewayDetailState,
+  IEditGatewayProfileReq,
+  IGatewaySystemInfo
+} from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { EMPTY, catchError, combineLatest, map, pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, combineLatest, map, pipe, switchMap, take, tap } from 'rxjs';
 
 const initialState: GatewayDetailState = {
   projectId: 0,
   gatewayId: 0,
   gatewayDetail: null,
   isLoading: GATEWAY_LOADING.NONE,
-  labels: []
+  labels: [],
+  wsRoomName: ''
 };
 
 export type GatewayDetailStore = InstanceType<typeof GatewayDetailStore>;
@@ -124,19 +132,65 @@ export const GatewayDetailStore = signalStore(
       )
     })
   ),
-  withHooks((store, globalStore = inject(Store), routerStoreService = inject(RouterStoreService)) => {
-    return {
-      onInit() {
-        combineLatest([routerStoreService.getParams$, globalStore.select(selectCurrentProject)])
-          .pipe(
-            map(([urlParm, curProject]) => {
-              patchState(store, { gatewayId: parseInt(urlParm['id']), projectId: curProject.currentProjectId });
-              store.getGatewayDetail();
-              store.getProjectLabels();
-            })
-          )
-          .subscribe();
-      }
-    };
-  })
+  withHooks(
+    (
+      store,
+      globalStore = inject(Store),
+      routerStoreService = inject(RouterStoreService),
+      wsService = inject(WebSocketService),
+      restConfig = inject(REST_CONFIG)
+    ) => {
+      const dispatchWsData = {
+        connectionInfo: (data: { connectionStatus: number }) =>
+          patchState(store, { gatewayDetail: { ...store.gatewayDetail(), connectionStatus: data.connectionStatus } }),
+        runningMode: (data: { currentMode: number }) =>
+          patchState(store, { gatewayDetail: { ...store.gatewayDetail(), currentMode: data.currentMode } }),
+        systemInfo: (data: IGatewaySystemInfo, updateTime: number) =>
+          patchState(store, {
+            gatewayDetail: {
+              ...store.gatewayDetail(),
+              gatewaySystemInfo: { ...data },
+              gatewaySystemInfoUpdateAt: updateTime
+            }
+          })
+      };
+
+      return {
+        onInit() {
+          combineLatest([
+            routerStoreService.getParams$,
+            globalStore.select(selectCurrentProject),
+            globalStore.select(selectLoginState)
+          ])
+            .pipe(
+              take(1),
+              map(([urlParm, curProject, loginState]) => {
+                patchState(store, {
+                  gatewayId: parseInt(urlParm['id']),
+                  projectId: curProject.currentProjectId,
+                  wsRoomName: `${loginState.jwt.fqdn}-gw-${parseInt(urlParm['id'])}`
+                });
+                store.getGatewayDetail();
+                store.getProjectLabels();
+              })
+            )
+            .subscribe();
+
+          wsService
+            .connect({ room: store.wsRoomName(), url: restConfig.wsPath })
+            .pipe(
+              map((wsAction) => {
+                wsAction.data.messages.map((wsMsg) => {
+                  dispatchWsData[GW_WS_TYPE[wsMsg.type]](wsMsg.data, wsAction.data.timestamp);
+                });
+              })
+            )
+            .subscribe();
+        },
+        onDestroy() {
+          wsService.disconnect({ room: store.wsRoomName() });
+        }
+      };
+    }
+  )
 );

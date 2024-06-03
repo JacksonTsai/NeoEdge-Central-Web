@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   basePath: '/api/v1',
   authPath: '/api',
+  wsPath: 'wss://api.neoedgecentral.com/ws',
   eulaVersion: '1.0',
   socket: {
     host: location.host

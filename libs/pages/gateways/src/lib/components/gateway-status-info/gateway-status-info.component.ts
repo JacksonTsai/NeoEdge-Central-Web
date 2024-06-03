@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, inp
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SafePipe } from '@neo-edge-web/directives';
 import {
   BOOLEAN_STATUS,
@@ -19,8 +20,15 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 @Component({
   selector: 'ne-gateway-status-info',
   standalone: true,
-  imports: [CommonModule, MatIconModule, SafePipe, MatMenuModule, MatButtonModule, NgxPermissionsModule],
-
+  imports: [
+    CommonModule,
+    MatIconModule,
+    SafePipe,
+    MatMenuModule,
+    MatButtonModule,
+    NgxPermissionsModule,
+    MatTooltipModule
+  ],
   templateUrl: './gateway-status-info.component.html',
   styleUrl: './gateway-status-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -69,8 +77,8 @@ export class GatewayStatusInfoComponent {
   });
 
   gatewayProfileUpdateTime = computed(() => {
-    return this.gatewayStatusInfo().gatewaySystemInfoUpdateAt > 0
-      ? this.getDatetimeFormat(this.gatewayStatusInfo().gatewaySystemInfoUpdateAt)
+    return this.gatewayStatusInfo().connectionStatusUpdatedAt > 0
+      ? this.getDatetimeFormat(this.gatewayStatusInfo().connectionStatusUpdatedAt)
       : '-';
   });
 

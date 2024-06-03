@@ -1,3 +1,5 @@
+@import '../../styles/gateways';
+
 .gateway-top-action {
   display: flex;
   justify-content: space-between;
@@ -20,4 +22,10 @@
 
 .mat-column-labels {
   width: 150px;
+  .label {
+    color: white;
+  }
+  mat-chip {
+    margin: 4px;
+  }
 }

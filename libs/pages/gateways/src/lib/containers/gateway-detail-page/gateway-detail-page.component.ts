@@ -136,7 +136,8 @@ export class GatewayDetailPageComponent {
       gatewaySystemInfoUpdateAt,
       ipcModelName,
       isPartnerIpc,
-      ipcModelSeriesName
+      ipcModelSeriesName,
+      connectionStatusUpdatedAt
     } = this.gwDetailStore.gatewayDetail();
     return {
       name,
@@ -149,7 +150,8 @@ export class GatewayDetailPageComponent {
       tpmEnabled,
       gatewaySystemInfoUpdateAt,
       isPartnerIpc,
-      ipcModelSeriesName
+      ipcModelSeriesName,
+      connectionStatusUpdatedAt
     };
   });
 
