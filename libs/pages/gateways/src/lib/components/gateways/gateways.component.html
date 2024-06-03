@@ -16,22 +16,22 @@
 
     <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
       <mat-label>Search Label</mat-label>
-      <mat-select [formControl]="searchLabelCtrl">
-        <mat-option [value]="'all'"> All </mat-option>
+      <mat-select id="gateways-search-label" [formControl]="searchLabelCtrl">
+        <mat-option id="gateways-search-label-opetion-0" [value]="'all'"> All </mat-option>
         @for (label of gwLabels(); track label.id) {
-          <mat-option [value]="label"> {{ label.name }} </mat-option>
+          <mat-option id="gateways-search-label-opetion-{{ label.id }}" [value]="label"> {{ label.name }} </mat-option>
         }
       </mat-select>
     </mat-form-field>
   </div>
 
   <div class="gateway-top-action__right">
-    <button id="gateways-manage-label" type="button" mat-stroked-button color="primary" (click)="onMangeLabel()">
+    <button id="gateways-manage-label-btn" type="button" mat-stroked-button color="primary" (click)="onMangeLabel()">
       <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
       Manage Label
     </button>
 
-    <button id="gateways-add-gateway" type="button" mat-stroked-button color="primary" (click)="addGateway()">
+    <button id="gateways-add-gateway-btn" type="button" mat-stroked-button color="primary" (click)="addGateway()">
       <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
       Add Gateway
     </button>
@@ -139,7 +139,7 @@
       <td mat-cell *matCellDef="let element">
         <div class="table-action">
           <button
-            id="gateways-detail-{{ element.id }}"
+            id="gateways-detail-btn-{{ element.id }}"
             type="button"
             mat-stroked-button
             color="primary"

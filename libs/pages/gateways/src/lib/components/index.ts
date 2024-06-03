@@ -4,7 +4,6 @@ export * from './detach-gateway-confirm-dialog/detach-gateway-confirm-dialog.com
 export * from './gateway-applications/gateway-applications.component';
 export * from './gateway-hw-info/gateway-hw-info.component';
 export * from './gateway-log/gateway-log.component';
-export * from './gateway-meta-data/gateway-meta-data.component';
 export * from './gateway-neoedgx/gateway-neoedgx.component';
 export * from './gateway-neoflow/gateway-neoflow.component';
 export * from './gateway-profile/gateway-profile.component';

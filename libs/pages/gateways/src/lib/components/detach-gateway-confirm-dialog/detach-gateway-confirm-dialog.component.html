@@ -23,8 +23,15 @@
 </mat-dialog-content>
 <mat-dialog-actions class="dialog__action">
   <div class="gl-fill-remaining-space"></div>
-  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
-  <button type="button" mat-raised-button color="warn" [disabled]="gatewayNameCtrl.invalid" (click)="onDetach()">
+  <button id="gw-detach-confirm-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button
+    id="gw-detach-confirm-dialog-detach-btn"
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="gatewayNameCtrl.invalid"
+    (click)="onDetach()"
+  >
     Detach
   </button>
 </mat-dialog-actions>

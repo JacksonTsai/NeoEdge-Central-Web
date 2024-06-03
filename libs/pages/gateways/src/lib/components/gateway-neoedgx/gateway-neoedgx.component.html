@@ -35,10 +35,18 @@
     </div>
   </div>
   <div class="neoedgex-actions">
-    <button type="button" mat-stroked-button color="primary" (click)="onUpgradeNeoedgex()" [disabled]="!isConnected()">
+    <button
+      id="gw-neoedgex-upgrade-neoedgex-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onUpgradeNeoedgex()"
+      [disabled]="!isConnected()"
+    >
       Upgrade NeoEdge X
     </button>
     <button
+      id="gw-neoedgex-switch-mode-btn"
       type="button"
       mat-stroked-button
       color="primary"
@@ -52,6 +60,7 @@
     </button>
 
     <button
+      id="gw-neoedgex-detach-mode-btn"
       type="button"
       mat-stroked-button
       color="primary"

@@ -46,7 +46,6 @@ import {
 import { img2Base64 } from '@neo-edge-web/utils';
 import { LatLng } from 'leaflet';
 import { NgxPermissionsModule } from 'ngx-permissions';
-import { GatewayMetaDataComponent } from '../gateway-meta-data/gateway-meta-data.component';
 @Component({
   selector: 'ne-gateway-profile',
   standalone: true,
@@ -54,7 +53,6 @@ import { GatewayMetaDataComponent } from '../gateway-meta-data/gateway-meta-data
     NeMapComponent,
     CommonModule,
     MatCardModule,
-    GatewayMetaDataComponent,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,

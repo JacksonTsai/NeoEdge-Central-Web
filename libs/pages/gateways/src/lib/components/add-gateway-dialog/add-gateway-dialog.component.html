@@ -5,8 +5,10 @@
       <h4>Gateway type</h4>
       <div class="select-ipc-type">
         <mat-radio-group color="primary" aria-label="Select IPC option" [formControl]="isPartnerIpcCtrl">
-          <mat-radio-button [value]="gatewayType.PARTNER">Certified IPC</mat-radio-button>
-          <mat-radio-button [value]="gatewayType.OTHER">Others</mat-radio-button>
+          <mat-radio-button id="add-gateway-dialog-certified-ipc" [value]="gatewayType.PARTNER">
+            Certified IPC
+          </mat-radio-button>
+          <mat-radio-button id="add-gateway-dialog-others" [value]="gatewayType.OTHER">Others</mat-radio-button>
         </mat-radio-group>
         <div class="gateway-logo">
           @if (gatewayLogo) {
@@ -23,13 +25,21 @@
           }
         </mat-label>
         @if (isPartner) {
-          <mat-select formControlName="ipcVendorName">
+          <mat-select id="add-gateway-dialog-select-vendor-name" formControlName="ipcVendorName">
             @for (partnerName of partnerIpcOpt; track partnerName) {
-              <mat-option [value]="partnerName"> {{ partnerName }} </mat-option>
+              <mat-option id="add-gateway-dialog-select-vendor-option-{{ partnerName }}" [value]="partnerName">
+                {{ partnerName }}
+              </mat-option>
             }
           </mat-select>
         } @else {
-          <input matInput formControlName="ipcVendorName" type="text" maxlength="64" />
+          <input
+            id="add-gateway-dialog-vendor-name-input"
+            matInput
+            formControlName="ipcVendorName"
+            type="text"
+            maxlength="64"
+          />
         }
         @if (isPartnerIpcCtrl.hasError('required')) {
           <mat-error>Required.</mat-error>
@@ -39,13 +49,24 @@
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label> Model </mat-label>
         @if (isPartner) {
-          <mat-select formControlName="ipcModelName">
+          <mat-select id="add-gateway-dialog-select-model-name" formControlName="ipcModelName">
             @for (partnerModel of partnerModelByIpcOpts; track partnerModel.seriesName) {
-              <mat-option [value]="partnerModel"> {{ partnerModel.model }} </mat-option>
+              <mat-option
+                id="add-gateway-dialog-select-model-option-{{ partnerModel.seriesName }}"
+                [value]="partnerModel"
+              >
+                {{ partnerModel.model }}
+              </mat-option>
             }
           </mat-select>
         } @else {
-          <input matInput formControlName="ipcModelName" type="text" maxlength="64" />
+          <input
+            id="add-gateway-dialog-model-name-input"
+            matInput
+            formControlName="ipcModelName"
+            type="text"
+            maxlength="64"
+          />
         }
         @if (ipcVendorNameCtrl.hasError('required')) {
           <mat-error>Required.</mat-error>
@@ -54,7 +75,7 @@
 
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Name</mat-label>
-        <input matInput formControlName="name" type="text" maxlength="128" />
+        <input id="add-gateway-dialog-gw-name-input" matInput formControlName="name" type="text" maxlength="128" />
         @if (nameCtrl.hasError('required')) {
           <mat-error>Required.</mat-error>
         }
@@ -62,9 +83,9 @@
 
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>OS Version</mat-label>
-        <mat-select formControlName="os">
+        <mat-select id="add-gateway-dialog-select-os" formControlName="os">
           @for (os of osOpts; track os.id) {
-            <mat-option [value]="os"> {{ os.name }} </mat-option>
+            <mat-option id="add-gateway-dialog-option-os-{{ os.id }}" [value]="os"> {{ os.name }} </mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -108,9 +129,22 @@
           <div class="value enroll-command">
             <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
               <mat-label>command</mat-label>
-              <input matInput type="text" maxlength="128" [value]="enrollCommand()?.command" disabled="true" />
+              <input
+                id="add-gateway-dialog-enrollment-command-input"
+                matInput
+                type="text"
+                maxlength="128"
+                [value]="enrollCommand()?.command"
+                disabled="true"
+              />
             </mat-form-field>
-            <button type="button" mat-icon-button color="primary" (click)="copyCommand()">
+            <button
+              id="add-gateway-dialog-enrollment-command-copy-btn"
+              type="button"
+              mat-icon-button
+              color="primary"
+              (click)="copyCommand()"
+            >
               <mat-icon svgIcon="icon:copy_gary"></mat-icon>
             </button>
           </div>
@@ -128,11 +162,18 @@
 
 <mat-dialog-actions class="dialog__action">
   @if (!enrollCommand()) {
-    <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
-    <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="form.invalid">
+    <button id="add-gateway-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+    <button
+      id="add-gateway-dialog-submit-btn"
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="form.invalid"
+    >
       Submit
     </button>
   } @else {
-    <button type="button" mat-stroked-button mat-dialog-close>Close</button>
+    <button id="add-gateway-dialog-close-btn" type="button" mat-stroked-button mat-dialog-close>Close</button>
   }
 </mat-dialog-actions>

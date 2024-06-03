@@ -7,7 +7,7 @@
           <div class="gw-image-label">
             <div class="circle-img">
               @if (isEditMode()) {
-                <div class="change-img" (click)="inputFile.click()">
+                <div class="change-img" id="gw-profile-change-img" (click)="inputFile.click()">
                   <mat-icon svgIcon="icon:camera_white" matTooltip="Change gateway logo."></mat-icon>
                 </div>
               }
@@ -29,6 +29,7 @@
                 @for (label of labelsArr.controls; let i = $index; track label.value.id) {
                   @if (isEditMode()) {
                     <mat-chip-option
+                      id="gw-profile-chip-{{ i }}"
                       [selected]="gwLabelSelectedCtrl(i).value"
                       [style.background-color]="gwLabelColorCodeCtrl(i).value"
                       (click)="selectLabel(i, !gwLabelSelectedCtrl(i).value)"
@@ -38,6 +39,7 @@
                   } @else {
                     @if (gwLabelSelectedCtrl(i).value) {
                       <mat-chip-option
+                        id="gw-profile-chip-{{ i }}"
                         [selected]="gwLabelSelectedCtrl(i).value"
                         [style.background-color]="gwLabelColorCodeCtrl(i).value"
                         (click)="selectLabel(i, !gwLabelSelectedCtrl(i).value)"
@@ -54,7 +56,7 @@
             <div class="gw-info__field">
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Name</mat-label>
-                <input matInput formControlName="name" type="text" maxlength="64" />
+                <input id="gw-profile-name" matInput formControlName="name" type="text" maxlength="64" />
                 @if (nameCtrl.hasError('required')) {
                   <mat-error>Required.</mat-error>
                 }
@@ -62,7 +64,13 @@
 
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Vendor</mat-label>
-                <input matInput formControlName="ipcVendorName" type="text" maxlength="64" />
+                <input
+                  id="gw-profile-vendor-name"
+                  matInput
+                  formControlName="ipcVendorName"
+                  type="text"
+                  maxlength="64"
+                />
                 @if (ipcVendorNameCtrl.hasError('required')) {
                   <mat-error>Required.</mat-error>
                 }
@@ -70,7 +78,7 @@
 
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Model</mat-label>
-                <input matInput formControlName="ipcModelName" type="text" maxlength="64" />
+                <input id="gw-profile-model-name" matInput formControlName="ipcModelName" type="text" maxlength="64" />
                 @if (ipcModelNameCtrl.hasError('required')) {
                   <mat-error>Required.</mat-error>
                 }
@@ -86,7 +94,13 @@
                   <div class="gw-custom-field__item">
                     <mat-form-field appearance="outline" floatLabel="always">
                       <mat-label>Name</mat-label>
-                      <input matInput type="text" maxlength="128" [formControl]="serialPortNameCtrl(i)" />
+                      <input
+                        id="gw-profile-serial-port-name-{{ i }}"
+                        matInput
+                        type="text"
+                        maxlength="128"
+                        [formControl]="serialPortNameCtrl(i)"
+                      />
                       @if (serialPortNameCtrl(i).hasError('required')) {
                         <mat-error>Required.</mat-error>
                       }
@@ -94,14 +108,25 @@
                     <mat-icon class="colon" svgIcon="icon:colon_gary"></mat-icon>
                     <mat-form-field appearance="outline" floatLabel="always">
                       <mat-label>Path</mat-label>
-                      <input matInput type="text" maxlength="128" [formControl]="serialPortPathCtrl(i)" />
+                      <input
+                        id="gw-profile-serial-port-path-{{ i }}"
+                        matInput
+                        type="text"
+                        maxlength="128"
+                        [formControl]="serialPortPathCtrl(i)"
+                      />
                       @if (serialPortPathCtrl(i).hasError('required')) {
                         <mat-error>Required.</mat-error>
                       }
                     </mat-form-field>
 
                     @if (isEditMode()) {
-                      <button type="button" mat-icon-button (click)="removeSerialPort(i)">
+                      <button
+                        id="gw-profile-serial-port-delete-btn-{{ i }}"
+                        type="button"
+                        mat-icon-button
+                        (click)="removeSerialPort(i)"
+                      >
                         <mat-icon class="delete-icon" svgIcon="icon:delete_red"></mat-icon>
                       </button>
                     }
@@ -110,7 +135,7 @@
               </div>
               @if (isEditMode()) {
                 <button
-                  id="projects-edit-project-dialog-add-project-field"
+                  id="gw-profile-serial-port-add-btn"
                   type="button"
                   mat-stroked-button
                   color="primary"
@@ -130,7 +155,7 @@
               <div class="gw-map__field">
                 <mat-form-field appearance="outline" floatLabel="always">
                   <mat-label> Longitude</mat-label>
-                  <input matInput formControlName="longitude" type="number" maxlength="64" />
+                  <input id="gw-profile-longitude" matInput formControlName="longitude" type="number" maxlength="64" />
                   @if (longitudeCtrl.hasError('required')) {
                     <mat-error>Required.</mat-error>
                   }
@@ -138,7 +163,7 @@
 
                 <mat-form-field appearance="outline" floatLabel="always">
                   <mat-label> Latitude</mat-label>
-                  <input matInput formControlName="latitude" type="number" maxlength="64" />
+                  <input id="gw-profile-latitude" matInput formControlName="latitude" type="number" maxlength="64" />
                   @if (latitudeCtrl.hasError('required')) {
                     <mat-error>Required.</mat-error>
                   }
@@ -146,6 +171,7 @@
               </div>
               <div class="map">
                 <ne-map
+                  id="gw-profile-map"
                   [coordinate]="{ lat: latitudeCtrl.value, lng: longitudeCtrl.value }"
                   [isEdit]="isEditMode()"
                   [popMsg]="nameCtrl.value"
@@ -165,7 +191,13 @@
                   <div class="gw-custom-field__item">
                     <mat-form-field appearance="outline" floatLabel="always">
                       <mat-label>Name</mat-label>
-                      <input matInput type="text" maxlength="128" [formControl]="customFieldNameCtrl(i)" />
+                      <input
+                        id="gw-profile-custom-field-name-{{ i }}"
+                        matInput
+                        type="text"
+                        maxlength="128"
+                        [formControl]="customFieldNameCtrl(i)"
+                      />
                       @if (customFieldNameCtrl(i).hasError('required')) {
                         <mat-error>Required.</mat-error>
                       }
@@ -174,14 +206,25 @@
                     <mat-icon class="colon" svgIcon="icon:colon_gary"></mat-icon>
                     <mat-form-field appearance="outline" floatLabel="always">
                       <mat-label>value</mat-label>
-                      <input matInput type="text" maxlength="128" [formControl]="customFieldValueCtrl(i)" />
+                      <input
+                        id="gw-profile-custom-field-value-{{ i }}"
+                        matInput
+                        type="text"
+                        maxlength="128"
+                        [formControl]="customFieldValueCtrl(i)"
+                      />
                       @if (customFieldValueCtrl(i).hasError('required')) {
                         <mat-error>Required.</mat-error>
                       }
                     </mat-form-field>
 
                     @if (isEditMode()) {
-                      <button type="button" mat-icon-button (click)="removeCustomField(i)">
+                      <button
+                        id="gw-profile-custom-field-delete-btn-{{ i }}"
+                        type="button"
+                        mat-icon-button
+                        (click)="removeCustomField(i)"
+                      >
                         <mat-icon class="delete-icon" svgIcon="icon:delete_red"></mat-icon>
                       </button>
                     }
@@ -190,7 +233,7 @@
               </div>
               @if (isEditMode()) {
                 <button
-                  id="projects-edit-project-dialog-add-project-field"
+                  id="gw-profile-custom-field-add-btn"
                   type="button"
                   mat-stroked-button
                   color="primary"
@@ -210,7 +253,7 @@
       <div class="gw-profile-action">
         <div class="edit-btn" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
           @if (!isEditMode()) {
-            <button type="button" mat-stroked-button color="primary" (click)="onEdit()">
+            <button id="gw-profile-edit-btn" type="button" mat-stroked-button color="primary" (click)="onEdit()">
               <mat-icon svgIcon="icon:edit_primary"></mat-icon>
               Edit
             </button>
@@ -218,8 +261,17 @@
         </div>
         @if (isEditMode()) {
           <div class="save-btn">
-            <button type="button" mat-stroked-button color="primary" (click)="onCancelEdit()">Cancel</button>
             <button
+              id="gw-profile-cancel-btn"
+              type="button"
+              mat-stroked-button
+              color="primary"
+              (click)="onCancelEdit()"
+            >
+              Cancel
+            </button>
+            <button
+              id="gw-profile-save-btn"
               type="button"
               mat-flat-button
               color="primary"
