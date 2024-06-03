@@ -1,16 +1,16 @@
 {
-  "name": "global-service",
+  "name": "directives",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/global-service/src",
+  "sourceRoot": "libs/directives/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["type:lib", "scope:service"],
+  "tags": ["type:lib", "scope:directives"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/global-service/jest.config.ts"
+        "jestConfig": "libs/directives/jest.config.ts"
       }
     },
     "lint": {

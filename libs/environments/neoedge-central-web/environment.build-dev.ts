@@ -2,10 +2,8 @@ export const environment = {
   production: true,
   basePath: 'https://api.neoedge-dev.net/api/v2',
   authPath: 'https://api.neoedge-dev.net/api',
+  wsPath: 'wss://api.neoedge-dev.net/ws',
   eulaVersion: '1.0',
-  socket: {
-    host: location.host
-  },
   permissionOptions: [
     {
       permissionName: 'Company Account',
@@ -29,3 +27,4 @@ export const environment = {
     }
   ]
 };
+//fqdn: ecv.neoedge-dev.net

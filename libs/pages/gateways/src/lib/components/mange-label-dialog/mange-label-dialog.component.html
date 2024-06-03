@@ -1,0 +1,42 @@
+<h1 mat-dialog-title class="gl-h6">Manage Label</h1>
+<mat-dialog-content #content>
+  <div>
+    @for (labelFg of formArr.controls; let i = $index ; track i) {
+    <form [formGroup]="labelFg">
+      <div class="label-item">
+        <mat-form-field class="label-item__field" appearance="outline" floatLabel="always">
+          <mat-label>Label Name</mat-label>
+          <input matInput formControlName="name" type="text" maxlength="10" />
+          @if (labelNameCtrl(i).hasError('required')) {
+          <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
+        <div class="color-box" [style.background-color]="labelColorCodeCtrl(i).value"></div>
+        <button type="button" mat-icon-button class="" color="primary" (click)="removeLabel(i)">
+          <mat-icon svgIcon="icon:delete_red"></mat-icon>
+        </button>
+      </div>
+    </form>
+    }
+
+    <button
+      id="gateways-add-label"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="setNewLabel()"
+      [disabled]="formArr.length >= MAX_LABEL_COUNT"
+    >
+      @if (formArr.length < 10) {
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      } Add Label ({{ formArr.length }} / {{ MAX_LABEL_COUNT }})
+    </button>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button type="button" mat-raised-button color="primary" [disabled]="this.formArr.invalid" (click)="onSubmit()">
+    Submit
+  </button>
+</mat-dialog-actions>

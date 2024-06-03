@@ -92,7 +92,7 @@ export class ProjectsPageComponent {
   };
 
   onSwitchProject = (event) => {
-    // todo: add switch project function
+    // TODO: add switch project function
   };
 
   onPageChange = (event: TableQueryForProjects) => {

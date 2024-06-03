@@ -23,9 +23,14 @@
             "glob": "icons-sprite.svg",
             "input": "./icons",
             "output": "assets/"
+          },
+          {
+            "glob": "**/*",
+            "input": "./node_modules/leaflet/dist/images",
+            "output": "assets/"
           }
         ],
-        "styles": ["apps/neoedge-central-web/src/styles.scss"],
+        "styles": ["apps/neoedge-central-web/src/styles.scss", "./node_modules/leaflet/dist/leaflet.css"],
         "stylePreprocessorOptions": {
           "includePaths": ["libs/styles/"]
         },

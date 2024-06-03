@@ -22,8 +22,9 @@ export class AppInitService {
     if (loginResp && userProfile) {
       this.#globalStore.dispatch(AuthAction.loginSuccess({ loginResp, fromUserLogin: false }));
     }
-
-    return resolve();
+    setTimeout(() => {
+      return resolve();
+    }, 300);
   }
 
   #registryIcons() {

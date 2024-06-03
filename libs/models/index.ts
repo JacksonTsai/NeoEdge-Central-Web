@@ -1,6 +1,9 @@
 export * from './auth.model';
 export * from './company.model';
 export * from './dateFormat.model';
+export * from './gateway-detail.mode';
+export * from './gateways.model';
+export * from './ipcs.model';
 export * from './language.model';
 export * from './ne-menu.model';
 export * from './permissions.model';
@@ -10,5 +13,7 @@ export * from './roles.model';
 export * from './router-state.model';
 export * from './subscription-plan.model';
 export * from './table-query.model';
+export * from './user.model';
 export * from './users.model';
 export * from './utils.model';
+export * from './websocket.model';

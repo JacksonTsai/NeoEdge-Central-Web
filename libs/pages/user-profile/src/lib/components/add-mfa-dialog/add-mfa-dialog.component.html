@@ -1,0 +1,54 @@
+<h1 mat-dialog-title>
+  Assign MFA device
+</h1>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <ol class="list">
+      <li class="item">
+        <p>Install a compatible application such as Google Authenticator, Microsoft Authenticator, Duo Mobile, or Authy app on your mobile device or computer.</p>
+        <button mat-stroked-button
+                type="button"
+                id="add-mfa-btn-recommend-app"
+                (click)="openRecommandApp()">See a list of compatible applications </button>
+      </li>
+      <li class="item">
+        <p>Open your authenticator app, then use the app to scan the code. Alternatively, you can type a secret key.</p>
+        <canvas class="mfa-qrcode"
+                #canvas></canvas>
+      </li>
+      <li class="item">
+        <p>Enter a code from your virtual app below</p>
+        <mat-form-field appearance="outline"
+                        floatLabel="always">
+          <mat-label>MFA Code</mat-label>
+          <input matInput
+                 formControlName="code"
+                 type="number"
+                 autocomplete="off"
+                 (keypress)="formService.restrictToNumbers($event, 6)"
+                 (keydown.enter)="onSubmit()"
+                 id="add-mfa-code"
+                 #code />
+          @if (codeCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+          } @else if (codeCtrl.hasError('invalidMinLength')) {
+          <mat-error>Invalid format. Please enter a 6-digit code.</mat-error>
+          }
+        </mat-form-field>
+      </li>
+    </ol>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button type="button"
+          mat-stroked-button
+          mat-dialog-close
+          color="primary"
+          id="add-mfa-btn-cancel">Cancel</button>
+  <button type="button"
+          mat-flat-button
+          color="primary"
+          [disabled]="form.invalid || form.pristine"
+          id="add-mfa-btn-submit"
+          (click)="onSubmit()">Submit</button>
+</mat-dialog-actions>
