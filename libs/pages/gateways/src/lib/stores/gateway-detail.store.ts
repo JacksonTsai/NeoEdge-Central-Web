@@ -141,16 +141,22 @@ export const GatewayDetailStore = signalStore(
       restConfig = inject(REST_CONFIG)
     ) => {
       const dispatchWsData = {
-        connectionInfo: (data: { connectionStatus: number }) =>
-          patchState(store, { gatewayDetail: { ...store.gatewayDetail(), connectionStatus: data.connectionStatus } }),
-        runningMode: (data: { currentMode: number }) =>
-          patchState(store, { gatewayDetail: { ...store.gatewayDetail(), currentMode: data.currentMode } }),
-        systemInfo: (data: IGatewaySystemInfo, updateTime: number) =>
+        connectionInfo: (data: { connectionStatus: number; connectionStatusUpdatedAt: number }) =>
           patchState(store, {
             gatewayDetail: {
               ...store.gatewayDetail(),
-              gatewaySystemInfo: { ...data },
-              gatewaySystemInfoUpdateAt: updateTime
+              connectionStatus: data.connectionStatus,
+              connectionStatusUpdatedAt: data.connectionStatusUpdatedAt
+            }
+          }),
+        runningMode: (data: { currentMode: number }) =>
+          patchState(store, { gatewayDetail: { ...store.gatewayDetail(), currentMode: data.currentMode } }),
+        systemInfo: (data: { gatewaySystemInfo: IGatewaySystemInfo; gatewaySystemInfoUpdateAt: number }) =>
+          patchState(store, {
+            gatewayDetail: {
+              ...store.gatewayDetail(),
+              gatewaySystemInfo: { ...data.gatewaySystemInfo },
+              gatewaySystemInfoUpdateAt: data.gatewaySystemInfoUpdateAt
             }
           })
       };
@@ -181,7 +187,7 @@ export const GatewayDetailStore = signalStore(
             .pipe(
               map((wsAction) => {
                 wsAction.data.messages.map((wsMsg) => {
-                  dispatchWsData[GW_WS_TYPE[wsMsg.type]](wsMsg.data, wsAction.data.timestamp);
+                  dispatchWsData[GW_WS_TYPE[wsMsg.type]](wsMsg.data);
                 });
               })
             )
