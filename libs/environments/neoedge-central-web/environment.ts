@@ -2,10 +2,8 @@ export const environment = {
   production: false,
   basePath: '/api/v2',
   authPath: '/api',
+  wsPath: 'wss://api.neoedge-dev.net/ws',
   eulaVersion: '1.0',
-  socket: {
-    host: location.host
-  },
   permissionOptions: [
     {
       permissionName: 'Company Account',

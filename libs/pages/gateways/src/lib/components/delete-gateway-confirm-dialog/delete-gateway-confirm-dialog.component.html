@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Delete Gateway</h1>
+<mat-dialog-content>
+  <div class="delete-desc">
+    This operation will delete Gateway
+    <span color="danger">{{ gatewayName }}</span>
+    and associated data on both NeoEdge Central and Gateway. Please enter Gateway Name to confirm.
+  </div>
+
+  <div class="delete-desc">
+    Performing the 'Delete Gateway' action is irreversible and cannot be recovered. All data, configurations, and
+    messages associated with the Gateway on both NeoEdge Central and the Gateway itself will be permanently deleted.
+  </div>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Gateway Name</mat-label>
+    <input
+      id="gw-delete-confirm-dialog-name-input"
+      matInput
+      [formControl]="gatewayNameCtrl"
+      type="text"
+      maxlength="128"
+    />
+    @if (gatewayNameCtrl.hasError('required')) {
+      <mat-error>Required.</mat-error>
+    } @else if (gatewayNameCtrl.hasError('incorrectName')) {
+      <mat-error>The input verification content is incorrect.</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <button id="gw-delete-confirm-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button
+    id="gw-delete-confirm-dialog-delete-btn"
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="gatewayNameCtrl.invalid"
+    (click)="onDeleteGateway()"
+  >
+    Delete
+  </button>
+</mat-dialog-actions>

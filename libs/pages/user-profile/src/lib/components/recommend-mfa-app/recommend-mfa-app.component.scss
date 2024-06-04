@@ -1,0 +1,19 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.sec {
+  max-width: 550px;
+}
+
+.title,
+p {
+  margin-bottom: 16px;
+}
+
+.link {
+  color: $primary;
+}

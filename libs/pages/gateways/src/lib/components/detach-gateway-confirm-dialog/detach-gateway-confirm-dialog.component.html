@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Detach Gateway</h1>
+<mat-dialog-content>
+  <div class="detach-desc">
+    Detaching the Gateway disrupts all communication and connections between the Gateway and NeoEdge Central. During
+    this period, you will temporarily lose the ability to manage the Gateway from NeoEdge Central until the Gateway is
+    reattached.
+  </div>
+  <div class="detach-desc">
+    This operation will detach Gateway (
+    <span color="danger">{{ gatewayName }}</span>
+    ) from NeoEdge Central. Please enter Gateway Name to confirm.
+  </div>
+
+  <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+    <mat-label>Gateway Name</mat-label>
+    <input
+      id="gw-detach-confirm-dialog-name-input"
+      matInput
+      [formControl]="gatewayNameCtrl"
+      type="text"
+      maxlength="128"
+    />
+    @if (gatewayNameCtrl.hasError('required')) {
+      <mat-error>Required.</mat-error>
+    } @else if (gatewayNameCtrl.hasError('incorrectName')) {
+      <mat-error>The input verification content is incorrect.</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <button id="gw-detach-confirm-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button
+    id="gw-detach-confirm-dialog-detach-btn"
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="gatewayNameCtrl.invalid"
+    (click)="onDetach()"
+  >
+    Detach
+  </button>
+</mat-dialog-actions>

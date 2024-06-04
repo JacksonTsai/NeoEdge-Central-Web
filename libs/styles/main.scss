@@ -5,6 +5,8 @@
 @import 'badges';
 @import 'letters';
 @import 'tip';
+@import 'circle-img';
+@import 'fieldset';
 @import 'material-override';
 
 *,
@@ -59,4 +61,8 @@ html .mat-drawer-container {
 
 *[color='primary'] {
   color: $primary;
+}
+
+*[color='gary'] {
+  color: $black-gary;
 }

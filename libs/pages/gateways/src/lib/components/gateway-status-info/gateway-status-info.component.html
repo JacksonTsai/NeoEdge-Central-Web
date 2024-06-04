@@ -1,0 +1,114 @@
+<div class="gw-status-info-wrapper">
+  @if (gatewayStatusInfo()) {
+    <div class="gateway-img">
+      <img width="100%" height="100%" [src]="logo() | safe: 'resourceUrl'" />
+    </div>
+
+    @if (gatewayStatusInfo().isPartnerIpc === booleanStatus.TRUE) {
+      <div class="partner-logo">
+        <img width="100%" height="100%" src="assets/images/neoedge_logo_blue.png" />
+        <h5 class="certified-partner">Certified Partner</h5>
+      </div>
+    }
+    <div class="gw-info">
+      <div class="gw-info__name">
+        <h3>{{ gatewayStatusInfo().name }}</h3>
+        <h5>{{ gatewayStatusInfo().ipcModelName }}</h5>
+      </div>
+
+      <div>
+        @if (isSecurity()) {
+          <mat-icon class="security-icon" svgIcon="icon:security_danger"></mat-icon>
+        }
+      </div>
+    </div>
+    <div class="item item__first">
+      <div class="label">Status</div>
+      <div class="value">
+        @if (gwCurrentMode.PASSIVE === gatewayStatusInfo().currentMode) {
+          <div class="gateway-status gateway-status--passive" matTooltip="Passive" matTooltipPosition="below"></div>
+        }
+        @if (gwCurrentMode.DETACH === gatewayStatusInfo().currentMode) {
+          <div class="gateway-status gateway-status--detach" matTooltip="Detach" matTooltipPosition="below"></div>
+        }
+        @if (gwCurrentMode.ACTIVE === gatewayStatusInfo().currentMode) {
+          @if (gwStatus.Waiting === gatewayStatusInfo().connectionStatus) {
+            <div class="gateway-status gateway-status--waiting" matTooltip="Waiting" matTooltipPosition="below"></div>
+          } @else if (gwStatus.Connected === gatewayStatusInfo().connectionStatus) {
+            <div
+              class="gateway-status gateway-status--connected"
+              matTooltip="Connected"
+              matTooltipPosition="below"
+            ></div>
+          } @else if (gwStatus.Disconnected === gatewayStatusInfo().connectionStatus) {
+            <div
+              class="gateway-status gateway-status--disconnected"
+              matTooltip="Disconnected"
+              matTooltipPosition="below"
+            ></div>
+          }
+        }
+      </div>
+    </div>
+    @if (
+      gwStatus.Connected === gatewayStatusInfo().connectionStatus ||
+      gwStatus.Disconnected === gatewayStatusInfo().connectionStatus
+    ) {
+      <div class="item">
+        <div class="label">Update time</div>
+        <div class="value">{{ gatewayProfileUpdateTime() }}</div>
+      </div>
+    }
+
+    <div class="gw-action" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
+      <button id="gw-status-info-action-btn" mat-stroked-button color="primary" [matMenuTriggerFor]="gwAction">
+        Action
+        <mat-icon svgIcon="icon:down_primary"></mat-icon>
+      </button>
+      <mat-menu #gwAction="matMenu">
+        <button id="gw-status-info-action-rebooot" mat-menu-item [disabled]="!isConnected || isWaitingOnBoard">
+          <span>Reboot Gateway</span>
+        </button>
+        <button id="gw-status-info-action-delete" mat-menu-item (click)="onDeleteGateway()">
+          <span>Delete Gateway</span>
+        </button>
+        <button
+          id="gw-status-info-action-Detach"
+          mat-menu-item
+          (click)="onDetach()"
+          [disabled]="isDetachMode() || isWaitingOnBoard()"
+        >
+          <span>Detach Gateway</span>
+        </button>
+
+        <button
+          id="gw-status-info-action-switch-mode"
+          type="button"
+          mat-menu-item
+          (click)="onSwitchRunMode(switchRunningMode)"
+          [disabled]="isDetachMode() || isWaitingOnBoard()"
+        >
+          Switch Gateway to {{ switchRunningMode }} Mode
+        </button>
+
+        <button
+          id="gw-status-info-action-install-command"
+          mat-menu-item
+          [disabled]="!isWaitingOnBoard()"
+          (click)="onGetInstallCommand()"
+        >
+          <span>Get Install Command</span>
+        </button>
+        <button id="gw-status-info-action-upgarde-neoedgex" mat-menu-item mat-menu-item [disabled]="!isConnected()">
+          <span>Upgrade NeoEdge X Agent</span>
+        </button>
+        <button id="gw-status-info-action-enable-remote-access" mat-menu-item [disabled]="!isConnected()">
+          <span>Enable/Disable Remote Access</span>
+        </button>
+        <button id="gw-status-info-action-fetch-gateway-hw" mat-menu-item [disabled]="!isConnected()">
+          <span> Fetch Gateway Hardware Information </span>
+        </button>
+      </mat-menu>
+    </div>
+  }
+</div>

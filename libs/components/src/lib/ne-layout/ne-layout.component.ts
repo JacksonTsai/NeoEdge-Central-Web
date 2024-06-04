@@ -9,7 +9,6 @@ import { MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NavigationEnd, Router } from '@angular/router';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 const SMALL_VIEW = 'screen and (max-width: 770px)';
 const MEDIUM_VIEW = 'screen and (min-width: 770px) and (max-width: 1280px)';
@@ -40,7 +39,6 @@ export class NeLayoutComponent {
   userName = input<string>('');
 
   @ViewChild('mainContent', { static: true }) mainContent!: MatSidenavContent;
-  #globalStore = inject(Store);
   #router = inject(Router);
   #breakpointObserver = inject(BreakpointObserver);
 

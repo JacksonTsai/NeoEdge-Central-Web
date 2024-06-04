@@ -1,3 +1,5 @@
+import { DATE_FORMAT } from './dateFormat.model';
+
 export interface IAuthState {
   isLoginSuccess: boolean | null;
   tryLoginCount: number;
@@ -63,14 +65,18 @@ export interface ISetPasswordReq {
   verifyToken: string;
 }
 
-export interface IGetUserProfileResp {
-  account: string;
-  isMfaEnable: number;
-  name: string;
-  timeZone: string;
-  language: string;
-  idleTimeout: number;
+export interface IUserProfile {
+  dateTimeFormat: DATE_FORMAT;
   defaultProjectId: number;
+  idleTimeout: number;
+  isMfaEnable: number;
+  language: string;
+  name: string;
+}
+
+export interface IGetUserProfileResp extends IUserProfile {
+  account: string;
+  timeZone: string;
   defaultProjectName: string;
   role: IUserRole;
 }

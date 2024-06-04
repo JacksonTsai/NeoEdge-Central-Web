@@ -1,0 +1,16 @@
+@use 'variables' as *;
+
+.color-box {
+  width: 55px;
+  height: 55px;
+  border-radius: $border-radius;
+}
+
+.label-item {
+  display: flex;
+  gap: 16px;
+  margin: 8px 0;
+  &__field {
+    width: 360px;
+  }
+}

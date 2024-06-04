@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 export interface RestConfig {
   basePath: string;
   authPath: string;
+  wsPath: string;
 }
 
 export const REST_CONFIG = new InjectionToken<RestConfig>('REST_CONFIG');
