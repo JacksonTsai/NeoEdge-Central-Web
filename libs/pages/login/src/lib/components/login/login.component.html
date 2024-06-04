@@ -11,9 +11,10 @@
         <mat-label>Email</mat-label>
         <input matInput formControlName="account" type="text" maxlength="128" id="login-email" />
         @if (accountCtrl.hasError('required')) {
-        <mat-error>Required.</mat-error>
-        } @if (accountCtrl.hasError('email')) {
-        <mat-error> Please enter a valid email address </mat-error>
+          <mat-error>Required.</mat-error>
+        }
+        @if (accountCtrl.hasError('email')) {
+          <mat-error> Please enter a valid email address </mat-error>
         }
       </mat-form-field>
       <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
@@ -25,15 +26,21 @@
           maxlength="128"
           id="login-password"
         />
-        <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="formService.togglePasswordVisibility('password')">
+        <button
+          id="login-password-toggle"
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="formService.togglePasswordVisibility('password')"
+        >
           @if (formService.getPasswordVisibility('password')()) {
-          <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
+            <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
           } @else {
-          <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
+            <mat-icon class="visibility-icon" svgIcon="icon:visibility"></mat-icon>
           }
         </button>
         @if (passwordCtrl.hasError('required')) {
-        <mat-error>Required.</mat-error>
+          <mat-error>Required.</mat-error>
         }
       </mat-form-field>
 
@@ -51,13 +58,13 @@
         Sign In
       </button>
 
-      <div class="or-container">
+      <!-- TODO: This part will be implemented in a later sprint. -->
+      <!-- <div class="or-container">
         <div class="divider"></div>
         <div class="or-label">or</div>
         <div class="divider"></div>
-      </div>
-
-      <button
+      </div> -->
+      <!-- <button
         type="button"
         class="login-card__btn"
         mat-stroked-button
@@ -65,7 +72,7 @@
         id="login-password-sign-azure"
       >
         Sign in with Azure AD
-      </button>
+      </button> -->
 
       <span class="forgot-password" id="login-password-forgot">
         <a [routerLink]="'/request-new-password'"> Forgot password ? </a>
