@@ -148,7 +148,7 @@
             <mat-label>Date-Time Format</mat-label>
             <mat-select id="company-dateformat-select" formControlName="datetimeFormat">
               @for (format of dateFormatOpts | keyvalue; track format.key) {
-                <mat-option id="company-dateformat-option-{{ region.key }}" [value]="format.value">
+                <mat-option id="company-dateformat-option-{{ format.key }}" [value]="format.value">
                   {{ format.value }}
                 </mat-option>
               }
