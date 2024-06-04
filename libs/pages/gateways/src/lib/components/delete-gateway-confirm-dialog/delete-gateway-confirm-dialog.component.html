@@ -11,9 +11,15 @@
     messages associated with the Gateway on both NeoEdge Central and the Gateway itself will be permanently deleted.
   </div>
 
-  <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+  <mat-form-field appearance="outline" floatLabel="always">
     <mat-label>Gateway Name</mat-label>
-    <input matInput [formControl]="gatewayNameCtrl" type="text" maxlength="128" />
+    <input
+      id="gw-delete-confirm-dialog-name-input"
+      matInput
+      [formControl]="gatewayNameCtrl"
+      type="text"
+      maxlength="128"
+    />
     @if (gatewayNameCtrl.hasError('required')) {
       <mat-error>Required.</mat-error>
     } @else if (gatewayNameCtrl.hasError('incorrectName')) {
@@ -22,9 +28,15 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog__action">
-  <div class="gl-fill-remaining-space"></div>
-  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
-  <button type="button" mat-raised-button color="warn" [disabled]="gatewayNameCtrl.invalid" (click)="onDeleteGateway()">
+  <button id="gw-delete-confirm-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button
+    id="gw-delete-confirm-dialog-delete-btn"
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="gatewayNameCtrl.invalid"
+    (click)="onDeleteGateway()"
+  >
     Delete
   </button>
 </mat-dialog-actions>

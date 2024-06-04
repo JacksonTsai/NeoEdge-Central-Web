@@ -18,7 +18,7 @@
     </div>
     <div class="gateway-detail-wrapper__right">
       <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
-        <mat-tab label="Gateway Profile">
+        <mat-tab label="Gateway Profile" id="gateway-detail-gateway-profile-tab">
           <div class="gw-tab">
             @if (gwDetailStore.gatewayDetail()) {
               <ne-gateway-profile
@@ -30,7 +30,7 @@
             }
           </div>
         </mat-tab>
-        <mat-tab label="Gateway Operation">
+        <mat-tab label="Gateway Operation" id="gateway-detail-gateway-operation-tab">
           <div class="gw-tab">
             <fieldset>
               <legend>Hardware Information</legend>
@@ -71,12 +71,12 @@
             </fieldset>
           </div>
         </mat-tab>
-        <mat-tab label="NeoFlow">
+        <mat-tab label="NeoFlow" id="gateway-detail-gateway-neoflow-tab">
           <div class="gw-tab">
             <ne-gateway-neoflow></ne-gateway-neoflow>
           </div>
         </mat-tab>
-        <mat-tab label="Log And Alert">
+        <mat-tab label="Log And Alert" id="gateway-detail-gateway-log-tab">
           <div class="gw-tab">
             <ne-gateway-log></ne-gateway-log>
           </div>
