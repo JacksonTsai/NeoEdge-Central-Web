@@ -4,7 +4,7 @@
     <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
       <mat-label>Search Gateway Name</mat-label>
       <input
-        id="gateways-search-name"
+        id="gateways-search-name-input"
         matInput
         placeholder="Search gateway"
         [formControl]="searchGatewayCtrl"
@@ -139,7 +139,7 @@
       <td mat-cell *matCellDef="let element">
         <div class="table-action">
           <button
-            id="gateways-detail-btn-{{ element.id }}"
+            id="gateways-detail-{{ element.id }}-btn"
             type="button"
             mat-stroked-button
             color="primary"

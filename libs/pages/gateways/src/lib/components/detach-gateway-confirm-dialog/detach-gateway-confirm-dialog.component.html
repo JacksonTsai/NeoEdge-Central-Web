@@ -13,7 +13,13 @@
 
   <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
     <mat-label>Gateway Name</mat-label>
-    <input matInput [formControl]="gatewayNameCtrl" type="text" maxlength="128" />
+    <input
+      id="gw-detach-confirm-dialog-name-input"
+      matInput
+      [formControl]="gatewayNameCtrl"
+      type="text"
+      maxlength="128"
+    />
     @if (gatewayNameCtrl.hasError('required')) {
       <mat-error>Required.</mat-error>
     } @else if (gatewayNameCtrl.hasError('incorrectName')) {
@@ -22,7 +28,6 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog__action">
-  <div class="gl-fill-remaining-space"></div>
   <button id="gw-detach-confirm-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
   <button
     id="gw-detach-confirm-dialog-detach-btn"
