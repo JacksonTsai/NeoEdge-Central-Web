@@ -37,7 +37,6 @@ import { EditPasswordDialogComponent } from '../../components/edit-password-dial
     </div>
   `,
   styleUrl: './user-profile.component.scss',
-  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserProfileComponent implements OnInit {
