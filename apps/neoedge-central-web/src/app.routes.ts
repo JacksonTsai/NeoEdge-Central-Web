@@ -108,6 +108,13 @@ export const appRoutes: Route[] = [
     }
   },
   {
+    path: 'icons',
+    loadChildren: () => import('@neo-edge-web/icons').then((m) => m.iconsRoutes),
+    data: {
+      preload: true
+    }
+  },
+  {
     path: '**',
     redirectTo: '/company-account/company-info'
   }
