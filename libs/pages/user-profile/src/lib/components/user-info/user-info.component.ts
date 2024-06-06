@@ -16,7 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { UserService } from '@neo-edge-web/global-service';
+import { UserService } from '@neo-edge-web/global-services';
 import {
   DATE_FORMAT,
   IGetUserProfileResp,

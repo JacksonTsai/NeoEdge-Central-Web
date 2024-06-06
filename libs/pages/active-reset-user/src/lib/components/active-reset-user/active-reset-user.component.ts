@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService, FormService, ValidatorsService } from '@neo-edge-web/global-service';
+import { AuthService, FormService, ValidatorsService } from '@neo-edge-web/global-services';
 import { RouterStoreService } from '@neo-edge-web/global-store';
 import { ISetPasswordReq } from '@neo-edge-web/models';
 import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';

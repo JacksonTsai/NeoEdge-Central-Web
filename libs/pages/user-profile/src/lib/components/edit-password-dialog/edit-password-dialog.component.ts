@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormService, UserService, ValidatorsService } from '@neo-edge-web/global-service';
+import { FormService, UserService, ValidatorsService } from '@neo-edge-web/global-services';
 import { IEditPasswordReq, IGetUserProfileResp } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { catchError, EMPTY, tap } from 'rxjs';

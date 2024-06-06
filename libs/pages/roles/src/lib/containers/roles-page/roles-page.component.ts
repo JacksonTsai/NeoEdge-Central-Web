@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { PERMISSION_OPTIONS, RolesService } from '@neo-edge-web/global-service';
+import { PERMISSION_OPTIONS, RolesService } from '@neo-edge-web/global-services';
 import { IRole, ROLES_LOADING, TableQueryForRoles } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map } from 'rxjs';

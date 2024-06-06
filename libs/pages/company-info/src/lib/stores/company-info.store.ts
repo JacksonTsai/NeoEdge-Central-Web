@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { CompanyInfoService } from '@neo-edge-web/global-service';
+import { CompanyInfoService } from '@neo-edge-web/global-services';
 import { COMP_INFO_LOADING, ICompanyProfileState, IEditCompanyProfileReq } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';

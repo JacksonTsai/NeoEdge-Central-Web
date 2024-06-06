@@ -7,7 +7,7 @@ import {
   ProjectsService,
   REST_CONFIG,
   WebSocketService
-} from '@neo-edge-web/global-service';
+} from '@neo-edge-web/global-services';
 import {
   GATEWAYS_LOADING,
   GATEWAYS_WS_TYPE,

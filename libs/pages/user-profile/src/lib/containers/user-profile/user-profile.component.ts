@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as AuthStore from '@neo-edge-web/auth-store';
-import { UserService } from '@neo-edge-web/global-service';
+import { UserService } from '@neo-edge-web/global-services';
 import {
   IGetProjectsResp,
   IGetUserProfileResp,

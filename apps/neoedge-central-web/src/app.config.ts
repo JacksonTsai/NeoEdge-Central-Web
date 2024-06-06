@@ -4,7 +4,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withEnabledBlockingInitialNavigation } from '@angular/router';
-import { AuthInterceptor, PERMISSION_OPTIONS, REST_CONFIG } from '@neo-edge-web/global-service';
+import { AuthInterceptor, PERMISSION_OPTIONS, REST_CONFIG } from '@neo-edge-web/global-services';
 import { AuthEffects, CustomRouterStateSerializer, authReducer, menuReducer } from '@neo-edge-web/global-store';
 import { ENV_VARIABLE, environment } from '@neo-edge-web/neoedge-central-web/environment';
 import packageJson from '@neo-edge-web/package-json';

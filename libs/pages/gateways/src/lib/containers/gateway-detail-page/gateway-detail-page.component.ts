@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject } 
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
-import { GatewayDetailService } from '@neo-edge-web/global-service';
+import { GatewayDetailService } from '@neo-edge-web/global-services';
 import {
   GATEWAY_LOADING,
   GATEWAY_STATUE,

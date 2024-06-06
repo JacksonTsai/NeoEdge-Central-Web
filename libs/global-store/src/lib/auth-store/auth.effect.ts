@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, UserService } from '@neo-edge-web/global-service';
+import { AuthService, UserService } from '@neo-edge-web/global-services';
 import { IGetUserProfileResp, ILoginResp, PERMISSION } from '@neo-edge-web/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { NgxPermissionsService } from 'ngx-permissions';
