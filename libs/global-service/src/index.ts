@@ -1,6 +1,7 @@
 export * from './lib/auth-service';
-export * from './lib/auto-logout.service';
 export * from './lib/company-services';
+export * from './lib/core-services/auto-logout.service';
+export * from './lib/core-services/websocket.service';
 export * from './lib/form-service';
 export * from './lib/gateway-detail-services';
 export * from './lib/gateways-services';
@@ -12,4 +13,3 @@ export * from './lib/roles-services/roles.service';
 export * from './lib/subscription-services';
 export * from './lib/user-services';
 export * from './lib/users-services';
-export * from './lib/websocket.service';
