@@ -31,6 +31,7 @@
       "@neo-edge-web/models": ["libs/models/index.ts"],
       "@neo-edge-web/neoedge-central": ["libs/environments/neoedge-central/src/index.ts"],
       "@neo-edge-web/neoedge-central-web/environment": ["libs/environments/neoedge-central-web/index.ts"],
+      "@neo-edge-web/ot-devices-profile": ["libs/pages/ot-devices-profile/src/index.ts"],
       "@neo-edge-web/package-json": ["./package.json"],
       "@neo-edge-web/projects": ["libs/pages/projects/src/index.ts"],
       "@neo-edge-web/request-new-password": ["libs/pages/request-new-password/src/index.ts"],
