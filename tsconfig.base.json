@@ -17,7 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@neo-edge-web/active-reset-user": ["libs/pages/active-reset-user/src/index.ts"],
-      "@neo-edge-web/auth-store": ["libs/global-store/src/lib/auth-store/index.ts"],
+      "@neo-edge-web/auth-store": ["libs/global-stores/src/lib/auth-store/index.ts"],
       "@neo-edge-web/company-info": ["libs/pages/company-info/src/index.ts"],
       "@neo-edge-web/components": ["libs/components/src/index.ts"],
       "@neo-edge-web/dashboard": ["libs/pages/dashboard/src/index.ts"],
@@ -26,7 +26,7 @@
       "@neo-edge-web/global-config": ["libs/global-config/src/index.ts"],
       "@neo-edge-web/global-guards": ["libs/global-guards/src/index.ts"],
       "@neo-edge-web/global-services": ["libs/global-services/src/index.ts"],
-      "@neo-edge-web/global-store": ["libs/global-store/src/index.ts"],
+      "@neo-edge-web/global-stores": ["libs/global-stores/src/index.ts"],
       "@neo-edge-web/icons": ["libs/pages/icons/src/index.ts"],
       "@neo-edge-web/login": ["libs/pages/login/src/index.ts"],
       "@neo-edge-web/models": ["libs/models/index.ts"],

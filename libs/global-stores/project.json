@@ -1,5 +1,5 @@
 {
-  "name": "global-store",
+  "name": "global-stores",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/global-store/global-store/src",
   "prefix": "lib",

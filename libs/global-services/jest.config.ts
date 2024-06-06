@@ -3,7 +3,7 @@ export default {
   displayName: 'global-service',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/global-service',
+  coverageDirectory: '../../coverage/libs/global-services',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

@@ -10,7 +10,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
 import { FormService } from '@neo-edge-web/global-services';
-import * as AuthStore from '@neo-edge-web/global-store';
+import * as AuthStore from '@neo-edge-web/global-stores';
 import { Store } from '@ngrx/store';
 @Component({
   selector: 'ne-login',

@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } from '@neo-edge-web/global-services';
-import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-store';
+import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-stores';
 import {
   GATEWAY_LOADING,
   GW_RUNNING_MODE,

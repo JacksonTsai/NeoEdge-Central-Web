@@ -1,5 +1,5 @@
 import { Injectable, NgZone, inject, signal } from '@angular/core';
-import * as AuthStore from '@neo-edge-web/global-store';
+import * as AuthStore from '@neo-edge-web/global-stores';
 import { Store, select } from '@ngrx/store';
 import { Subscription, fromEvent, interval, merge } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';

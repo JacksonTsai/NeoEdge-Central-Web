@@ -10,7 +10,7 @@ import { Router, RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/auth-store';
 import { NeLayoutComponent, NeMenuComponent } from '@neo-edge-web/components';
 import { AutoLogoutService } from '@neo-edge-web/global-services';
-import { RouterStoreService, selectMenuTree, selectUserProfile, updateMenu } from '@neo-edge-web/global-store';
+import { RouterStoreService, selectMenuTree, selectUserProfile, updateMenu } from '@neo-edge-web/global-stores';
 import { MenuItem, PERMISSION } from '@neo-edge-web/models';
 import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
