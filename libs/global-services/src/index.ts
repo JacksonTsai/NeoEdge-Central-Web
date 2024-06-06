@@ -1,5 +1,6 @@
 export * from './lib/auth-service';
 export * from './lib/company-services';
+export * from './lib/core-services';
 export * from './lib/core-services/auto-logout.service';
 export * from './lib/core-services/websocket.service';
 export * from './lib/form-service';
