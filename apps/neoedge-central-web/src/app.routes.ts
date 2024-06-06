@@ -71,6 +71,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'neoflow/ot-device-profile',
+        loadChildren: () => import('@neo-edge-web/ot-devices-profile').then((m) => m.otDeviceProfileRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: '',
         redirectTo: '/login',
         pathMatch: 'full'

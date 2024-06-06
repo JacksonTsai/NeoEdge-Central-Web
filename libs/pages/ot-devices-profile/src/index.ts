@@ -1,3 +1,3 @@
-export * from './lib/lib.routes';
-
-export * from './lib/ot-device-profile/ot-device-profile.component';
+export * from './lib/components';
+export * from './lib/containers';
+export * from './lib/ot-devices.routes';
