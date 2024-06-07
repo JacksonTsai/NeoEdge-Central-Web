@@ -78,6 +78,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'neoflow/it-service-profile',
+        loadChildren: () => import('@neo-edge-web/it-service-profile').then((m) => m.itServiceProfileRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: '',
         redirectTo: '/login',
         pathMatch: 'full'
