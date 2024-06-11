@@ -7,11 +7,11 @@ export const itServiceProfileRoutes: Route[] = [
     component: ItServicePageComponent
   },
   {
-    path: ':id',
-    component: ItServiceDetailPageComponent
-  },
-  {
     path: 'create',
     component: CreateItServicePageComponent
+  },
+  {
+    path: ':id',
+    component: ItServiceDetailPageComponent
   }
 ];

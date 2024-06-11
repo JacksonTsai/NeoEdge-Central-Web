@@ -1,3 +1,4 @@
+import { ISupportApps } from './support-apps.model';
 import { ITableQuery } from './table-query.model';
 
 export interface IItServiceState {
@@ -6,6 +7,7 @@ export interface IItServiceState {
   page: number;
   size: number;
   dataLength: number;
+  supportApps: ISupportApps[];
   isLoading: IT_SERVICE_LOADING;
 }
 
@@ -44,7 +46,9 @@ export enum IT_SERVICE_LOADING {
   TABLE,
   REFRESH_TABLE,
   CREATE,
-  DELETE
+  DELETE,
+  GET_APPS,
+  REFRESH_APPS
 }
 
 export enum IT_SERVICE_APP {
