@@ -6,6 +6,7 @@ export * from './gateways.model';
 export * from './ipcs.model';
 export * from './language.model';
 export * from './ne-menu.model';
+export * from './ot-devices.model';
 export * from './permissions.model';
 export * from './projects.model';
 export * from './region.model';

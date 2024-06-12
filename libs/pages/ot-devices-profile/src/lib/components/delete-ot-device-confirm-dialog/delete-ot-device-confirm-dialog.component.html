@@ -1,1 +1,28 @@
-<p>delete-ot-device-confirm-dialog works!</p>
+<h1 mat-dialog-title>Delete OT Device</h1>
+<mat-dialog-content>
+  <div>
+    This operation will delete the OT Device (
+    <span color="danger">
+      {{ data.device.name }}
+    </span>
+    ) and associated message flows on NeoEdge Central.
+  </div>
+  <div>Please enter the OT Device name to confirm.</div>
+
+  <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+    <mat-label>Name</mat-label>
+    <input matInput [formControl]="nameCtrl" type="text" maxlength="128" />
+    @if (nameCtrl.hasError('required')) {
+      <mat-error>Required.</mat-error>
+    } @else if (nameCtrl.hasError('incorrectDeviceName')) {
+      <mat-error>The input verification content is incorrect.</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button type="button" mat-raised-button color="warn" [disabled]="nameCtrl.invalid" (click)="onDelete()">
+    Delete
+  </button>
+</mat-dialog-actions>
