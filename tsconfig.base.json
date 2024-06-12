@@ -40,7 +40,8 @@
       "@neo-edge-web/subscription-plan": ["libs/pages/subscription-plan/src/index.ts"],
       "@neo-edge-web/user-profile": ["libs/pages/user-profile/src/index.ts"],
       "@neo-edge-web/users": ["libs/pages/users/src/index.ts"],
-      "@neo-edge-web/utils": ["libs/utils/src/index.ts"]
+      "@neo-edge-web/utils": ["libs/utils/src/index.ts"],
+      "@neo-edge-web/validators": ["libs/validators/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
