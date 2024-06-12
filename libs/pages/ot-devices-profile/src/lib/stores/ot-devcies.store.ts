@@ -1,143 +1,83 @@
+import { Dialog } from '@angular/cdk/dialog';
 import { inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { ProjectsService, UserService, UsersService } from '@neo-edge-web/global-services';
-import { RouterStoreService, selectCurrentProject } from '@neo-edge-web/global-stores';
-import { IEditProjectReq, IProjectsState, PROJECTS_LOADING, TableQueryForProjects } from '@neo-edge-web/models';
+import { OtDevicesService } from '@neo-edge-web/global-services';
+import { selectCurrentProject } from '@neo-edge-web/global-stores';
+import { IOtDevicesState, OT_DEVICES_LOADING, TTableQueryForOtDevices } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { EMPTY, catchError, combineLatest, map, pipe, switchMap, take, tap } from 'rxjs';
+import { EMPTY, catchError, map, pipe, switchMap, tap } from 'rxjs';
 
 const INIT_TABLE_PAGE = 1;
 const INIT_TABLE_SIZE = 10;
 
-const initialState: IProjectsState = {
-  projects: [],
-  users: [],
+const initialState: IOtDevicesState = {
+  otDevices: [],
   page: INIT_TABLE_PAGE,
   size: INIT_TABLE_SIZE,
-  projectsLength: 0,
   queryKey: '',
-  isLoading: PROJECTS_LOADING.NONE,
-  isSwitchProject: false,
-  currentProject: 0
+  isLoading: OT_DEVICES_LOADING.NONE,
+  otDevicesLength: 0,
+  projectId: 0
 };
 
-export type ProjectsStore = InstanceType<typeof ProjectsStore>;
+export type OtDevicesStore = InstanceType<typeof OtDevicesStore>;
 
-export const ProjectsStore = signalStore(
+export const OtDevicesStore = signalStore(
   withState(initialState),
-  withMethods(
-    (
-      store,
-      dialog = inject(MatDialog),
-      projectsService = inject(ProjectsService),
-      usersService = inject(UsersService),
-      userService = inject(UserService)
-    ) => ({
-      queryProjectsTableByPage: rxMethod<TableQueryForProjects>(
-        pipe(
-          tap(() => patchState(store, { isLoading: PROJECTS_LOADING.TABLE })),
-          switchMap(({ page, size, name }) =>
-            combineLatest([
-              !store.isSwitchProject()
-                ? projectsService.projectTable$({ page: page ?? INIT_TABLE_PAGE, size: size ?? INIT_TABLE_SIZE, name })
-                : userService.userProjects$({ page: page ?? INIT_TABLE_PAGE, size: size ?? INIT_TABLE_SIZE, name }),
-              usersService.users$()
-            ]).pipe(
-              map(([projects, users]) => {
+  withMethods((store, otDevicesService = inject(OtDevicesService), dialog = inject(Dialog)) => ({
+    queryOtDevicesTableByPage: rxMethod<TTableQueryForOtDevices>(
+      pipe(
+        tap(() => patchState(store, { isLoading: OT_DEVICES_LOADING.TABLE })),
+        switchMap(({ page, size, names }) => {
+          return otDevicesService
+            .otDevices$(store.projectId(), {
+              page: page ?? INIT_TABLE_PAGE,
+              size: size ?? INIT_TABLE_SIZE,
+              names: names ?? ''
+            })
+            .pipe(
+              map((d) => {
                 patchState(store, {
-                  projects:
-                    projects?.projects?.map((project) => ({
-                      ...project,
-                      users: [...project.users.map((userId) => users.users.find((user) => user.id === userId))]
-                    })) ?? [],
-                  users: [...users.users],
+                  otDevices: d.devices,
                   page,
                   size,
-                  isLoading: PROJECTS_LOADING.NONE,
-                  projectsLength: projects?.total ?? 0
+                  isLoading: OT_DEVICES_LOADING.NONE,
+                  otDevicesLength: d?.total ?? 0
                 });
-              })
-            )
-          )
-        )
-      ),
-      getAllUsers: rxMethod<void>(
-        pipe(
-          tap(() => patchState(store, { isLoading: PROJECTS_LOADING.GET_USERS })),
-          switchMap(() =>
-            usersService.users$().pipe(
-              tap((d) => patchState(store, { users: d.users, isLoading: PROJECTS_LOADING.NONE })),
-              catchError(() => EMPTY)
-            )
-          )
-        )
-      ),
-      createProject: rxMethod<IEditProjectReq>(
-        pipe(
-          tap(() => patchState(store, { isLoading: PROJECTS_LOADING.CREATE })),
-          switchMap((payload) =>
-            projectsService.addProject$(payload).pipe(
-              tap(() => patchState(store, { isLoading: PROJECTS_LOADING.REFRESH_TABLE })),
-              tap(() => dialog.closeAll()),
-              catchError(() => EMPTY)
-            )
-          )
-        )
-      ),
-      editProject: rxMethod<{ projectId: number; payload: IEditProjectReq }>(
-        pipe(
-          tap(() => patchState(store, { isLoading: PROJECTS_LOADING.EDIT })),
-          switchMap(({ projectId, payload }) =>
-            projectsService.editProject$(projectId, payload).pipe(
-              tap(() => patchState(store, { isLoading: PROJECTS_LOADING.REFRESH_TABLE })),
-              tap(() => dialog.closeAll()),
-              catchError(() => EMPTY)
-            )
-          )
-        )
-      ),
-      deleteProject: rxMethod<{ projectId: number; projectName: string }>(
-        pipe(
-          tap(() => patchState(store, { isLoading: PROJECTS_LOADING.DELETE })),
-          switchMap(({ projectId, projectName }) =>
-            projectsService.deleteProject$(projectId, projectName).pipe(
-              tap(() => {
-                patchState(store, { isLoading: PROJECTS_LOADING.REFRESH_TABLE });
               }),
-              tap(() => dialog.closeAll()),
               catchError(() => EMPTY)
-            )
+            );
+        })
+      )
+    ),
+    deleteOtDevice: rxMethod<{ profileId: number; name: string }>(
+      pipe(
+        tap(() => patchState(store, { isLoading: OT_DEVICES_LOADING.DELETE })),
+        switchMap(({ profileId, name }) =>
+          otDevicesService.deleteOtDevice$(profileId, name).pipe(
+            tap(() => {
+              patchState(store, { isLoading: OT_DEVICES_LOADING.REFRESH_TABLE });
+            }),
+            tap(() => dialog.closeAll()),
+            catchError(() => EMPTY)
           )
         )
       )
-    })
-  ),
-  withHooks((store, routerStoreService = inject(RouterStoreService), globalStore = inject(Store)) => {
+    )
+  })),
+  withHooks((store, globalStore = inject(Store)) => {
     return {
       onInit() {
-        routerStoreService.getUrl$
-          .pipe(
-            take(1),
-            tap((url) => {
-              url.includes('switch-project')
-                ? patchState(store, { isSwitchProject: true })
-                : patchState(store, { isSwitchProject: false });
-            })
-          )
-          .subscribe();
-
         globalStore
           .select(selectCurrentProject)
           .pipe(
-            tap((d) => {
-              patchState(store, { currentProject: d.currentProjectId });
+            tap(({ currentProjectId }) => {
+              patchState(store, { projectId: currentProjectId });
+              store.queryOtDevicesTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
             })
           )
           .subscribe();
-
-        store.queryProjectsTableByPage({});
       }
     };
   })
