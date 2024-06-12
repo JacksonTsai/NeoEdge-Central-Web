@@ -1,3 +1,4 @@
+export * from './lib/copy-profile-dialog/copy-profile-dialog.component';
 export * from './lib/ne-layout/ne-layout.component';
 export * from './lib/ne-map/ne-map.component';
 export * from './lib/ne-menu';
