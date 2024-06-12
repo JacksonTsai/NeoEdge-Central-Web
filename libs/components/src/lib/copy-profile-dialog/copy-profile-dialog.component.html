@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>
+  @if (data.type === 'ot') {
+    <span> Create OT Device From Copy </span>
+  } @else {
+    <span> Create IT App From Copy </span>
+  }
+</h1>
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>
+        @if (data.type === 'ot') {
+          Device Name
+        } @else {
+          App Service Name
+        }
+      </mat-label>
+      <input matInput formControlName="name" type="text" maxlength="128" />
+      @if (nameCtrl.hasError('required')) {
+        <mat-error>Required.</mat-error>
+      } @else if (nameCtrl.hasError('whitespace')) {
+        <mat-error>The value not allow whitespace.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="copyFrom">
+        @for (opt of data.fromCopyOpts; track opt.id) {
+          <mat-option [value]="opt"> {{ opt.displayName }} </mat-option>
+        }
+      </mat-select>
+      @if (copyFromCtrl.hasError('required')) {
+        <mat-error>Required.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button type="button" mat-raised-button color="primary" [disabled]="form.invalid" (click)="onCopy()">Copy</button>
+</mat-dialog-actions>
