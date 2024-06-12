@@ -1,5 +1,9 @@
 @use 'colors' as *;
 
+:host {
+  display: block;
+}
+
 .comp-info-card {
   height: calc(100% - 48px);
   overflow: auto;

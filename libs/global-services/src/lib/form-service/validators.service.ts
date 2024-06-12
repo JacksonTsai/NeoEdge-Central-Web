@@ -36,6 +36,12 @@ export class ValidatorsService {
     };
   }
 
+  matchStr(str: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value === str ? null : { isNotMatch: true };
+    };
+  }
+
   /**
    * Validator function to check if the control value matches the required password pattern.
    *

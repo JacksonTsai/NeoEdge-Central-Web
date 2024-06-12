@@ -1,0 +1,22 @@
+:root {
+  --mat-stepper-container-color: transparent;
+}
+
+.mat-horizontal-stepper-header{
+  pointer-events: none !important;
+}
+
+.mat-horizontal-stepper-wrapper {
+  .mat-horizontal-stepper-header {
+    padding: 0;
+  }
+
+  .mat-horizontal-content-container {
+    margin-left: -24px;
+    margin-right: -24px;
+  }
+
+  mat-card-content {
+    padding: 24px;
+  }
+}
