@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, input } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input } from '@angular/core';
+import { ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, UntypedFormControl, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,15 @@ import {
   ISupportAppsWithVersion,
   IT_SERVICE_DETAIL_MODE
 } from '@neo-edge-web/models';
+
+interface IItServiceAwsForm {
+  name: string;
+  host: string;
+  connection: number;
+  keepAlive: number;
+  qoS: number;
+  caCertFile: null;
+}
 
 @Component({
   selector: 'ne-it-service-aws',
@@ -28,17 +37,27 @@ import {
   ],
   templateUrl: './it-service-aws.component.html',
   styleUrl: './it-service-aws.component.scss',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ItServiceAwsComponent),
+      multi: true
+    }
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ItServiceAwsComponent implements OnInit {
+export class ItServiceAwsComponent implements  OnInit, ControlValueAccessor {
   mode = input<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.CREATE);
   appSettings = input<ISupportAppsWithVersion>();
   itServiceDetailService = inject(ItServiceDetailService);
   #fb = inject(FormBuilder);
-  form: UntypedFormGroup;
+  form: FormGroup;
 
   connectionOpts: IItServiceConnectionOption[];
   qoSOps: IItServiceQoSOption[] = [{ value: 0 }, { value: 1, selected: true }];
+
+  onChange: any = () => {};
+  onTouched: any = () => {};
 
   get nameCtrl() {
     return this.form.get('name') as UntypedFormControl;
@@ -64,27 +83,13 @@ export class ItServiceAwsComponent implements OnInit {
     return this.form.get('caCertFile') as UntypedFormControl;
   }
 
-  setFormValue = (): void => {
-    this.form.setValue({
-      name: null,
-      host: null,
-      connection: null,
-      keepAlive: 60,
-      qoS: 1,
-      caCertFile: null
-    });
-  };
-
   getQoSTooltipText = (): string => {
     return this.itServiceDetailService.getQoSTooltipText([0, 1]);
   };
 
-  onChange(): void {
-    console.log('onChange');
-  }
-
   ngOnInit(): void {
     this.connectionOpts = this.itServiceDetailService.getConnection(this.appSettings()?.key);
+
     const defaultConnection = this.connectionOpts.find((conn) => conn.default);
 
     this.form = this.#fb.group({
@@ -95,5 +100,28 @@ export class ItServiceAwsComponent implements OnInit {
       qoS: [1, [Validators.required]],
       caCertFile: [null]
     });
+
+    this.form.valueChanges.subscribe(value => {
+      this.onChange(value);
+      this.onTouched();
+    });
+  }
+
+  writeValue(value: any): void {
+    if (value) {
+      this.form.setValue(value);
+    }
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.form.disable() : this.form.enable();
   }
 }

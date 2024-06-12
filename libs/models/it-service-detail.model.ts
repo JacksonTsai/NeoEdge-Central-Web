@@ -1,4 +1,3 @@
-import { Type } from '@angular/core';
 
 export interface IGetItServiceDetailResp {
   appVersionId: number;
@@ -14,15 +13,6 @@ export interface IEditItServiceDetailReq {
 export interface IDeleteItServiceDetailReq {
   profileId: number;
   name: string;
-}
-
-export interface ISupportAppConfig {
-  component: Type<any>;
-  inputs?: Record<string, unknown>;
-}
-
-export interface ISupportAppConfigs {
-  [key: string]: ISupportAppConfig;
 }
 
 export interface IItServiceConnectionOption {

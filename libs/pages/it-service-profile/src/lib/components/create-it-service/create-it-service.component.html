@@ -33,14 +33,31 @@
     <mat-card class="card">
       <mat-card-content>
         <h2 class="card__title">Settings</h2>
-        @if (currentApp().component) {
-          <ng-container *ngComponentOutlet="currentApp().component; inputs: currentApp()?.inputs" />
+        @if (!!currentApp().key) {
+          <form [formGroup]="form">
+            <!-- <ng-container
+              *ngComponentOutlet="currentApp().component; inputs: currentApp()?.inputs"
+              formControlName="itServiceForm"
+            /> -->
+            @switch (currentApp().key) {
+              @case ('AWS') {
+                <ne-it-service-aws formControlName="itServiceForm" [appSettings]="currentApp()"></ne-it-service-aws>
+              }
+              @case ('AZURE') {
+                <ne-it-service-azure></ne-it-service-azure>
+              }
+              @case ('MQTT') {
+                <ne-it-service-mqtt></ne-it-service-mqtt>
+              }
+            }
+          </form>
         }
+        <pre>{{form.value | json}}</pre>
       </mat-card-content>
     </mat-card>
     <mat-card-actions>
       <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
-      <button mat-flat-button color="primary">Submit</button>
+      <button mat-flat-button color="primary" [disabled]="form.invalid || form.pristine">Submit</button>
     </mat-card-actions>
   </mat-step>
 </mat-stepper>

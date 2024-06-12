@@ -1,11 +1,12 @@
-import { CommonModule, NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewChild, computed, input, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ViewChild, computed, inject, input, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { NeSupportAppsComponent } from '@neo-edge-web/components';
-import { ISupportAppConfig, ISupportAppConfigs, ISupportApps, ISupportAppsWithVersion } from '@neo-edge-web/models';
+import { ISupportApps, ISupportAppsWithVersion } from '@neo-edge-web/models';
 import { ItServiceAwsComponent } from '../it-service-aws/it-service-aws.component';
 import { ItServiceAzureComponent } from '../it-service-azure/it-service-azure.component';
 import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.component';
@@ -15,12 +16,15 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
   standalone: true,
   imports: [
     CommonModule,
-    NgComponentOutlet,
+    ReactiveFormsModule,
     MatIconModule,
     MatButtonModule,
     MatStepperModule,
     MatCardModule,
-    NeSupportAppsComponent
+    NeSupportAppsComponent,
+    ItServiceAwsComponent,
+    ItServiceAzureComponent,
+    ItServiceMqttComponent,
   ],
   templateUrl: './create-it-service.component.html',
   styleUrl: './create-it-service.component.scss',
@@ -28,8 +32,10 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
 })
 export class CreateItServiceComponent {
   @ViewChild('stepper') private stepper: MatStepper;
+  #fb = inject(FormBuilder);
+  form: UntypedFormGroup;
   supportApps = input<ISupportApps[]>();
-  currentApp = signal<ISupportAppConfig>({ component: null });
+  currentApp = signal<{key: string}>({ key: '' });
 
   supportAppsAvailable = computed(() => {
     return this.supportApps()?.filter((v) => v.isAvailable);
@@ -39,26 +45,14 @@ export class CreateItServiceComponent {
     return this.supportApps()?.filter((v) => !v.isAvailable);
   });
 
+  constructor() {
+    this.form = this.#fb.group({
+      itServiceForm: null
+    })
+  }
+
   onAppClick = (payload: ISupportAppsWithVersion): void => {
     this.stepper.next();
-    const currentAppSettings = this.getApps()[payload.key];
-    currentAppSettings.inputs = {
-      appSettings: payload
-    };
-    this.currentApp.set(currentAppSettings);
+    this.currentApp.set(payload);
   };
-
-  getApps(): ISupportAppConfigs {
-    return {
-      AWS: {
-        component: ItServiceAwsComponent
-      },
-      AZURE: {
-        component: ItServiceAzureComponent
-      },
-      MQTT: {
-        component: ItServiceMqttComponent
-      }
-    };
-  }
 }
