@@ -1,5 +1,6 @@
 <h1 class="page-title">Create IT Service</h1>
 <mat-stepper [linear]="true"
+             animationDuration="0"
              #stepper>
   <mat-step label="Select Server Type">
     <mat-card class="card">
@@ -29,6 +30,12 @@
     <mat-card class="card">
       <mat-card-content>
         <h2 class="card__title">IT Service Profile</h2>
+        @if (currentApp().component) {
+        <ng-container *ngComponentOutlet="
+            currentApp().component;
+            inputs: currentApp()?.inputs;
+          " />
+        }
       </mat-card-content>
       <mat-card-actions>
         <button mat-button

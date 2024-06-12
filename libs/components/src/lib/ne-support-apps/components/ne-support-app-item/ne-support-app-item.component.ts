@@ -31,7 +31,11 @@ export class NeSupportAppItemComponent implements AfterViewInit {
   }
 
   onClick = (): void => {
-    this.handlerClick.emit({ version: this.versionData(), ...this.appData() });
+    this.handlerClick.emit({
+      key: this.appSettings().key,
+      version: this.versionData(),
+      ...this.appData()
+    });
   };
 
   ngAfterViewInit(): void {

@@ -1,3 +1,5 @@
+import { Type } from '@angular/core';
+
 export interface IGetItServiceDetailResp {
   appVersionId: number;
   name: string;
@@ -12,6 +14,15 @@ export interface IEditItServiceDetailReq {
 export interface IDeleteItServiceDetailReq {
   profileId: number;
   name: string;
+}
+
+export interface ISupportAppConfig {
+  component: Type<any>;
+  inputs?: Record<string, unknown>;
+}
+
+export interface ISupportAppConfigs {
+  [key: string]: ISupportAppConfig;
 }
 
 export enum IT_SERVICE_DETAIL_LOADING {

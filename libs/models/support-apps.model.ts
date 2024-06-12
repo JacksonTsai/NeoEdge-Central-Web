@@ -23,6 +23,7 @@ export interface ISupportAppsUI {
 }
 
 export interface ISupportAppsWithVersion extends ISupportApps {
+  key: string;
   version: IAppVersion;
 }
 

@@ -76,12 +76,9 @@ export const ItServiceStore = signalStore(
           tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.GET_APPS })),
           switchMap((payload) =>
             supportAppsService.getApps$(payload.flowGroups).pipe(
-              tap(() => {
-                patchState(store, { isLoading: IT_SERVICE_LOADING.REFRESH_APPS });
-              }),
               map((d) => {
                 patchState(store, {
-                  isLoading: IT_SERVICE_LOADING.REFRESH_APPS,
+                  isLoading: IT_SERVICE_LOADING.NONE,
                   supportApps: d.apps
                 });
               }),
