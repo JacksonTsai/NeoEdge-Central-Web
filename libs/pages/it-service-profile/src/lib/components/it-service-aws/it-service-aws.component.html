@@ -1,7 +1,69 @@
-<p>it-service-aws works!</p>
-<form>
-  <mat-form-field>
-    <input type="text"
-           matInput />
-  </mat-form-field>
+<form [formGroup]="form" class="neoflow-form">
+  <section class="card__sec">
+    <h3 class="card__sub-title">IT Service Profile</h3>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>IT Service Name</mat-label>
+        <input matInput formControlName="name" type="text" maxlength="64" id="it-service-aws-name" />
+        @if (nameCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Host</mat-label>
+        <input
+          matInput
+          formControlName="host"
+          type="text"
+          maxlength="128"
+          placeholder="iot-tech.ecvot.com"
+          id="it-service-aws-host"
+        />
+        @if (hostCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Connection</mat-label>
+        <mat-select formControlName="connection" id="it-service-aws-connection">
+          @for (item of connectionOpts; track item?.key) {
+            <mat-option [value]="item?.value">{{ item?.label }}</mat-option>
+          }
+        </mat-select>
+        @if (connectionCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Keep Alive (sec)</mat-label>
+        <input matInput formControlName="keepAlive" type="number" id="it-service-aws-keep-alive" />
+        @if (keepAliveCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label> Message QoS </mat-label>
+        <mat-select formControlName="qoS" id="it-service-aws-qo-s">
+          @for (item of qoSOps; track item.value) {
+            <mat-option [value]="item.value">{{ item.value }}</mat-option>
+          }
+        </mat-select>
+        @if (qoSCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+      <mat-icon
+        svgIcon="icon:info_gary"
+        class="explain-icon"
+        [matTooltip]="getQoSTooltipText()"
+        matTooltipClass="tooltip-break-line"
+      ></mat-icon>
+    </div>
+  </section>
 </form>

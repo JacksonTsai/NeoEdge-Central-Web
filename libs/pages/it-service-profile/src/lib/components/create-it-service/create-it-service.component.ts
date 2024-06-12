@@ -2,6 +2,7 @@ import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewChild, computed, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { NeSupportAppsComponent } from '@neo-edge-web/components';
 import { ISupportAppConfig, ISupportAppConfigs, ISupportApps, ISupportAppsWithVersion } from '@neo-edge-web/models';
@@ -12,7 +13,15 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
 @Component({
   selector: 'ne-create-it-service',
   standalone: true,
-  imports: [CommonModule, NgComponentOutlet, MatButtonModule, MatStepperModule, MatCardModule, NeSupportAppsComponent],
+  imports: [
+    CommonModule,
+    NgComponentOutlet,
+    MatIconModule,
+    MatButtonModule,
+    MatStepperModule,
+    MatCardModule,
+    NeSupportAppsComponent
+  ],
   templateUrl: './create-it-service.component.html',
   styleUrl: './create-it-service.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -32,22 +41,23 @@ export class CreateItServiceComponent {
 
   onAppClick = (payload: ISupportAppsWithVersion): void => {
     this.stepper.next();
-    this.currentApp.set(this.getApps()[payload.key]);
+    const currentAppSettings = this.getApps()[payload.key];
+    currentAppSettings.inputs = {
+      appSettings: payload
+    };
+    this.currentApp.set(currentAppSettings);
   };
 
   getApps(): ISupportAppConfigs {
     return {
       AWS: {
         component: ItServiceAwsComponent
-        // inputs: {},
       },
       AZURE: {
         component: ItServiceAzureComponent
-        // inputs: {},
       },
       MQTT: {
         component: ItServiceMqttComponent
-        // inputs: {},
       }
     };
   }

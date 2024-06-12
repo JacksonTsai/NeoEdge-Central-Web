@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ISupportAppsWithVersion } from '@neo-edge-web/models';
 
 @Component({
   selector: 'ne-it-service-mqtt',
@@ -9,4 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './it-service-mqtt.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ItServiceMqttComponent {}
+export class ItServiceMqttComponent {
+  appSettings = input<ISupportAppsWithVersion>();
+}
