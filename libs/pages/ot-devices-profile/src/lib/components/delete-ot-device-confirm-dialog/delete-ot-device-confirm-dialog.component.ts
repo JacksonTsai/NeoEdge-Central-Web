@@ -6,7 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { IOtDevice } from '@neo-edge-web/models';
-import { OtDevicesStore } from '../../stores/ot-devcies.store';
+import { OtDevicesStore } from '../../stores/ot-devices.store';
 
 @Component({
   selector: 'ne-delete-ot-device-confirm-dialog',

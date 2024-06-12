@@ -5,7 +5,7 @@ import { CopyProfileDialogComponent } from '@neo-edge-web/components';
 import { IOtDevice, OT_DEVICES_LOADING, TTableQueryForOtDevices } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DeleteOtDeviceConfirmDialogComponent, OtDevicesComponent } from '../../components';
-import { OtDevicesStore } from '../../stores/ot-devcies.store';
+import { OtDevicesStore } from '../../stores/ot-devices.store';
 
 @UntilDestroy()
 @Component({
