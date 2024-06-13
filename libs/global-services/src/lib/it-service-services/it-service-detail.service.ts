@@ -1,45 +1,18 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { IDeleteItServiceDetailReq, IItServiceConnectionOption } from '@neo-edge-web/models';
-import { Observable, catchError, map, throwError } from 'rxjs';
-import { HttpService } from '../http-service';
+import { Injectable } from '@angular/core';
+import {
+  IItServiceConnectionData,
+  IItServiceConnectionOption,
+  IItServiceDetailSelectedAppData,
+  IItServiceQoSData,
+  IItServiceQoSOption,
+  ISupportAppsWithVersion,
+  TSupportAppsItService
+} from '@neo-edge-web/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItServiceDetailService {
-  #http = inject(HttpService);
-  #snackBar = inject(MatSnackBar);
-
-  private IT_SERVICE_PATH = '/it-service-profiles';
-
-  private handleError(err: HttpErrorResponse): Observable<never> {
-    return throwError(() => err);
-  }
-
-  deleteItService$ = (payload: IDeleteItServiceDetailReq): Observable<any> => {
-    return this.#http.delete(`${this.IT_SERVICE_PATH}/${payload.profileId}`, { name: payload.name }).pipe(
-      map((resp) => {
-        this.#snackBar.open('Delete It service successfully.', 'X', {
-          horizontalPosition: 'end',
-          verticalPosition: 'bottom',
-          duration: 5000
-        });
-
-        return resp;
-      }),
-      catchError((err) => {
-        this.#snackBar.open('Delete It service failure.', 'X', {
-          horizontalPosition: 'end',
-          verticalPosition: 'bottom',
-          duration: 5000
-        });
-        return this.handleError(err);
-      })
-    );
-  };
-
   private itServiceConnection: IItServiceConnectionOption[] = [
     {
       key: 'mqtt-8883',
@@ -78,7 +51,7 @@ export class ItServiceDetailService {
     }
   ];
 
-  getConnection = (type: string): IItServiceConnectionOption[] => {
+  getConnection = (type: TSupportAppsItService): IItServiceConnectionOption[] => {
     switch (type) {
       case 'AWS':
         return this.itServiceConnection
@@ -101,20 +74,62 @@ export class ItServiceDetailService {
     }
   };
 
-  private qoSTooltip = {
-    0: 'QoS 0: At most once.',
-    1: 'QoS 1: At least once.',
-    2: 'QoS 2: Exactly once.'
+  private itServiceQos: IItServiceQoSOption[] = [
+    {
+      value: 0,
+      tip: 'QoS 0: At most once.'
+    },
+    {
+      value: 1,
+      tip: 'QoS 1: At least once.'
+    },
+    {
+      value: 2,
+      tip: 'QoS 2: Exactly once.'
+    }
+  ];
+
+  getQoS = (type: TSupportAppsItService): IItServiceQoSOption[] => {
+    switch (type) {
+      case 'AWS':
+        return this.itServiceQos
+          .filter((qoS) => [0, 1].includes(qoS.value))
+          .map((qoS) => (qoS.value === 1 ? { ...qoS, default: true } : qoS));
+      case 'MQTT':
+        return this.itServiceQos.map((qoS) => (qoS.value === 2 ? { ...qoS, default: true } : qoS));
+      default:
+        return [];
+    }
   };
 
-  getQoSTooltipText = (array: number[] | null): string => {
-    if (array === null) {
-      return Object.values(this.qoSTooltip).join('\n');
-    } else {
-      return array
-        .map((level) => this.qoSTooltip[level])
-        .filter(Boolean)
-        .join('\n');
-    }
+  getQoSTooltipText = (qosArray: IItServiceQoSOption[]): string => {
+    return qosArray.map((item) => item.tip).join('\n');
+  };
+
+  getSelectedAppSetting = (appData: ISupportAppsWithVersion): IItServiceDetailSelectedAppData => {
+    const key = appData.key as TSupportAppsItService;
+
+    // 1. Get Connection Options & default connection
+    const connectionData: IItServiceConnectionData = {
+      options: this.getConnection(key),
+      default: null
+    };
+    connectionData.default = connectionData.options.find((conn) => conn.default);
+
+    // 2. Get QoS Options & tip
+    const qoSData: IItServiceQoSData = {
+      options: this.getQoS(key),
+      default: null,
+      tip: ''
+    };
+    qoSData.default = qoSData.options.find((qoS) => qoS.default);
+    qoSData.tip = this.getQoSTooltipText(qoSData.options);
+
+    return {
+      key,
+      app: appData,
+      connectionData,
+      qoSData
+    };
   };
 }

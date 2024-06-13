@@ -4,4 +4,8 @@
 
 .tooltip-break-line {
   white-space: pre-line;
+
+  .mdc-tooltip__surface {
+    text-align: left;
+  }
 }

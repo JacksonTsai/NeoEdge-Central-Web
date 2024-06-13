@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   ICreateItServiceReq,
   ICreateItServiceResp,
+  IDeleteItServiceDetailReq,
   IGetItServiceResp,
   TableQueryForItService
 } from '@neo-edge-web/models';
@@ -62,6 +63,28 @@ export class ItServiceService {
       }),
       catchError((err) => {
         this.#snackBar.open('Create It service failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  deleteItService$ = (payload: IDeleteItServiceDetailReq): Observable<any> => {
+    return this.#http.delete(`${this.IT_SERVICE_PATH}/${payload.profileId}`, { name: payload.name }).pipe(
+      map((resp) => {
+        this.#snackBar.open('Delete IT service successfully.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+
+        return resp;
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Delete IT service failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

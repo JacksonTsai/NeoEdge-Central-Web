@@ -1,5 +1,5 @@
 <h1 class="page-title">Create IT Service</h1>
-<mat-stepper [linear]="true" animationDuration="0" #stepper>
+<mat-stepper [linear]="true" animationDuration="0" (selectionChange)="onSelectionChange($event)" #stepper>
   <mat-step label="Select Server Type">
     <ng-template matStepperIcon="edit">
       <mat-icon svgIcon="icon:ok"></mat-icon>
@@ -33,15 +33,19 @@
     <mat-card class="card">
       <mat-card-content>
         <h2 class="card__title">Settings</h2>
-        @if (!!currentApp().key) {
+        @if (selectedApp()) {
           <form [formGroup]="form">
             <!-- <ng-container
-              *ngComponentOutlet="currentApp().component; inputs: currentApp()?.inputs"
+              *ngComponentOutlet="selectedApp().component; inputs: selectedApp()?.inputs"
               formControlName="itServiceForm"
             /> -->
-            @switch (currentApp().key) {
+            @switch (selectedApp()?.key) {
               @case ('AWS') {
-                <ne-it-service-aws formControlName="itServiceForm" [appSettings]="currentApp()"></ne-it-service-aws>
+                <ne-it-service-aws
+                  formControlName="itServiceForm"
+                  [projectId]="projectId()"
+                  [appData]="selectedApp()"
+                ></ne-it-service-aws>
               }
               @case ('AZURE') {
                 <ne-it-service-azure></ne-it-service-azure>
@@ -52,12 +56,19 @@
             }
           </form>
         }
-        <pre>{{form.value | json}}</pre>
       </mat-card-content>
     </mat-card>
     <mat-card-actions>
-      <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
-      <button mat-flat-button color="primary" [disabled]="form.invalid || form.pristine">Submit</button>
+      <button type="button" color="primary" mat-stroked-button matStepperPrevious>Back</button>
+      <button
+        type="button"
+        color="primary"
+        mat-flat-button
+        [disabled]="form.invalid || form.pristine"
+        (click)="onSubmit()"
+      >
+        Submit
+      </button>
     </mat-card-actions>
   </mat-step>
 </mat-stepper>

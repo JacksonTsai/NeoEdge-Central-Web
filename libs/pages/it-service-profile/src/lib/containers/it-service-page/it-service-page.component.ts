@@ -6,7 +6,6 @@ import { IItService, IT_SERVICE_LOADING, TableQueryForItService } from '@neo-edg
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ItServicesComponent } from '../../components';
 import { DeleteItServiceDialogComponent } from '../../components/delete-it-service-dialog/delete-it-service-dialog.component';
-import { ItServiceDetailStore } from '../../stores/it-service-detail.store';
 import { ItServiceStore } from '../../stores/it-service.store';
 
 @UntilDestroy()
@@ -27,25 +26,24 @@ import { ItServiceStore } from '../../stores/it-service.store';
     ></ne-it-services>
   `,
   styleUrl: './it-service-page.component.scss',
-  providers: [ItServiceStore, ItServiceDetailStore],
+  providers: [ItServiceStore],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItServicePageComponent {
   #router = inject(Router);
   #dialog = inject(MatDialog);
-  itServiceStore = inject(ItServiceStore);
-  itServiceDetailStore = inject(ItServiceDetailStore);
-  dataTable = this.itServiceStore.dataTable;
-  dataLength = this.itServiceStore.dataLength;
-  tablePage = this.itServiceStore.page;
-  tableSize = this.itServiceStore.size;
-  isLoading = this.itServiceStore.isLoading;
+  #itServiceStore = inject(ItServiceStore);
+  dataTable = this.#itServiceStore.dataTable;
+  dataLength = this.#itServiceStore.dataLength;
+  tablePage = this.#itServiceStore.page;
+  tableSize = this.#itServiceStore.size;
+  isLoading = this.#itServiceStore.isLoading;
 
   constructor() {
     effect(
       () => {
         if (this.isLoading() === IT_SERVICE_LOADING.REFRESH_TABLE) {
-          this.itServiceStore.queryDataTableByPage({ size: this.tableSize() });
+          this.#itServiceStore.queryDataTableByPage({ size: this.tableSize() });
         }
       },
       { allowSignalWrites: true }
@@ -66,7 +64,7 @@ export class ItServicePageComponent {
       disableClose: true,
       autoFocus: false,
       restoreFocus: false,
-      data: { itService: event, itServiceDetailStore: this.itServiceDetailStore }
+      data: { itService: event, itServiceStore: this.#itServiceStore }
     });
 
     deleteDialogRef
@@ -78,6 +76,6 @@ export class ItServicePageComponent {
   };
 
   onPageChange = (event: TableQueryForItService): void => {
-    this.itServiceStore.queryDataTableByPage(event);
+    this.#itServiceStore.queryDataTableByPage(event);
   };
 }

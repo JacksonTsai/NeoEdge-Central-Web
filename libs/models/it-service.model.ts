@@ -1,4 +1,4 @@
-import { ISupportApps } from './support-apps.model';
+import { ISupportApps, TSupportAppsItService } from './support-apps.model';
 import { ITableQuery } from './table-query.model';
 
 export interface IItServiceState {
@@ -12,8 +12,6 @@ export interface IItServiceState {
 }
 
 export interface IItService {
-  // type: number;
-  // connection: string;
   appClass: string;
   appVersionId: number;
   createdAt: number;
@@ -41,6 +39,54 @@ export interface ICreateItServiceResp {
   id: number;
 }
 
+export interface IGetItServiceDetailResp {
+  appVersionId: number;
+  name: string;
+  setting: any;
+}
+
+export interface IEditItServiceDetailReq {
+  name: string;
+  setting: any;
+}
+
+export interface IDeleteItServiceDetailReq {
+  profileId: number;
+  name: string;
+}
+
+export interface IItServiceDetailSelectedAppData {
+  key: TSupportAppsItService;
+  app: ISupportApps;
+  connectionData: IItServiceConnectionData;
+  qoSData: IItServiceQoSData;
+}
+
+export interface IItServiceConnectionData {
+  options: IItServiceConnectionOption[];
+  default: IItServiceConnectionOption;
+}
+
+export interface IItServiceConnectionOption {
+  key: string;
+  value: number;
+  label: string;
+  default?: boolean;
+}
+
+export interface IItServiceQoSData {
+  options: IItServiceQoSOption[];
+  default: IItServiceQoSOption;
+  tip: string;
+}
+
+export interface IItServiceQoSOption {
+  value: number;
+  tip: string;
+  default?: boolean;
+  selected?: boolean;
+}
+
 export enum IT_SERVICE_LOADING {
   NONE,
   TABLE,
@@ -49,6 +95,19 @@ export enum IT_SERVICE_LOADING {
   DELETE,
   GET_APPS,
   REFRESH_APPS
+}
+
+export enum IT_SERVICE_DETAIL_LOADING {
+  NONE,
+  TABLE,
+  REFRESH,
+  DELETE
+}
+
+export enum IT_SERVICE_DETAIL_MODE {
+  CREATE,
+  EDIT,
+  VEIW
 }
 
 export enum IT_SERVICE_APP {

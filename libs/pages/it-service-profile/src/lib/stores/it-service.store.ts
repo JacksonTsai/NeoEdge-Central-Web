@@ -1,8 +1,10 @@
 import { inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { selectCurrentProject } from '@neo-edge-web/auth-store';
 import { ItServiceService, SupportAppsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
+  IDeleteItServiceDetailReq,
   IGetSupportAppsReq,
   IItServiceState,
   IT_SERVICE_LOADING,
@@ -32,7 +34,12 @@ export type ItServiceStore = InstanceType<typeof ItServiceStore>;
 export const ItServiceStore = signalStore(
   withState(initialState),
   withMethods(
-    (store, supportAppsService = inject(SupportAppsService), itServiceService = inject(ItServiceService)) => ({
+    (
+      store,
+      dialog = inject(MatDialog),
+      supportAppsService = inject(SupportAppsService),
+      itServiceService = inject(ItServiceService)
+    ) => ({
       queryDataTableByPage: rxMethod<TableQueryForItService>(
         pipe(
           tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.TABLE })),
@@ -66,6 +73,20 @@ export const ItServiceStore = signalStore(
               tap(() => {
                 patchState(store, { isLoading: IT_SERVICE_LOADING.REFRESH_TABLE });
               }),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      deleteItService: rxMethod<IDeleteItServiceDetailReq>(
+        pipe(
+          tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.DELETE })),
+          switchMap((payload) =>
+            itServiceService.deleteItService$(payload).pipe(
+              tap(() => {
+                patchState(store, { isLoading: IT_SERVICE_LOADING.REFRESH_TABLE });
+              }),
+              tap(() => dialog.closeAll()),
               catchError(() => EMPTY)
             )
           )

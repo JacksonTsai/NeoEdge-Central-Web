@@ -44,6 +44,8 @@ export enum SUPPORT_APPS_CATEGORIES {
   'Advanced App' = 2
 }
 
+export type TSupportAppsItService = 'AWS' | 'MQTT' | 'AZURE' | 'HTTP';
+
 export enum SUPPORT_APPS_IT_SERVICE {
   AWS = 'AWS IoT Core',
   MQTT = 'MQTT Broker',
