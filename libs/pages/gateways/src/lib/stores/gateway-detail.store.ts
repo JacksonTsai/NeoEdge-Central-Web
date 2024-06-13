@@ -174,7 +174,7 @@ export const GatewayDetailStore = signalStore(
                 patchState(store, {
                   gatewayId: parseInt(urlParm['id']),
                   projectId: curProject.currentProjectId,
-                  wsRoomName: `${loginState.jwt.fqdn}-gw-${parseInt(urlParm['id'])}`
+                  wsRoomName: `${loginState.jwt.fqdn}:gw:${parseInt(urlParm['id'])}`
                 });
                 store.getGatewayDetail();
                 store.getProjectLabels();

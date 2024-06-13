@@ -153,7 +153,7 @@ export const GatewaysStore = signalStore(
               tap(([currentProjectId, loginState]) => {
                 patchState(store, {
                   projectId: currentProjectId.currentProjectId,
-                  wsRoomName: `${loginState.jwt.fqdn}-pj-${currentProjectId.currentProjectId}`
+                  wsRoomName: `${loginState.jwt.fqdn}:pj:${currentProjectId.currentProjectId}`
                 });
                 store.queryGatewayTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
                 store.getProjectLabels();
