@@ -28,8 +28,8 @@ export class AuthService {
   AUTH_BASE_PATH = this.#restConfig.authPath;
 
   FORGET_PASSWORD_PATH = '/forget-password';
-  INIT_PATH = '/init';
-  VERIFY_INIT_TOKEN_PATH = '/verify-init-token';
+  ACTIVE_ACCOUNT_PATH = '/activate-account';
+  VERIFY_ACTIVE_TOKEN_PATH = '/verify-activation-token';
   LOGIN_PATH = '/login';
   LOGOUT_PATH = '/logout';
   REFRESH_TOKEN_PATH = '/refresh';
@@ -52,7 +52,7 @@ export class AuthService {
     );
 
   setPassword$ = (payload: ISetPasswordReq) =>
-    this.#http.post(this.INIT_PATH, payload, { basePath: this.AUTH_BASE_PATH }).pipe(
+    this.#http.post(this.ACTIVE_ACCOUNT_PATH, payload, { basePath: this.AUTH_BASE_PATH }).pipe(
       catchError((err) => {
         this.#snackBar.open('Settings failed.', 'X', {
           horizontalPosition: 'end',
@@ -65,7 +65,7 @@ export class AuthService {
 
   verifyInitToken$ = (payload: IVerifyInitTokenReq): Observable<IVerifyInitTokenResp> =>
     this.#http
-      .post(`${this.VERIFY_INIT_TOKEN_PATH}`, { verifyToken: payload.verifyToken }, { basePath: this.AUTH_BASE_PATH })
+      .post(`${this.VERIFY_ACTIVE_TOKEN_PATH}`, { verifyToken: payload.verifyToken }, { basePath: this.AUTH_BASE_PATH })
       .pipe(
         catchError((err) => {
           this.#snackBar.open('Verify failed.', 'X', {

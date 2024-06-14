@@ -14,7 +14,7 @@ export class UsersService {
 
   USERS_PATH = '/users';
   EDIT_USERS_PATH = (userID) => `${this.USERS_PATH}/${userID}`;
-  SEND_EMAIL_PATH = (id: number) => `/users/${id}/activation-mail`;
+  SEND_EMAIL_PATH = (id: number) => `/users/${id}/send-activation-mail`;
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);

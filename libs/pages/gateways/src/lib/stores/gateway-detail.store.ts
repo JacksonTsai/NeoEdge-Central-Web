@@ -140,7 +140,7 @@ export const GatewayDetailStore = signalStore(
       getProjectLabels: rxMethod<void>(
         pipe(
           switchMap(() =>
-            projectsService.getProjectLabels$(store.projectId()).pipe(
+            projectsService.getProjectLabels$().pipe(
               tap((d) => {
                 patchState(store, { labels: d.labels });
               }),

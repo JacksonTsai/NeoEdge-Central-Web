@@ -34,3 +34,11 @@ export const refreshAccessTokenAction = createAction(
 export const updateAccessTokenAction = createAction('[Auth] Update Access Token', props<IRefreshTokenResp>());
 
 export const permissionActionAction = createAction('[Auth] Permission', props<{ loginReq: ILoginReq }>());
+
+export const changeCurrentProjectIdAction = createAction(
+  '[Auth] Change Project Id',
+  props<{
+    currentProjectId: number;
+    currentProjectName: string;
+  }>()
+);

@@ -31,7 +31,7 @@ export const OtDevicesStore = signalStore(
         tap(() => patchState(store, { isLoading: OT_DEVICES_LOADING.TABLE })),
         switchMap(({ page, size, names }) => {
           return otDevicesService
-            .otDevices$(store.projectId(), {
+            .otDevices$({
               page: page ?? INIT_TABLE_PAGE,
               size: size ?? INIT_TABLE_SIZE,
               names: names ?? ''

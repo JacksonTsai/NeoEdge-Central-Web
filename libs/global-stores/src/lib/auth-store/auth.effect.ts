@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, UserService } from '@neo-edge-web/global-services';
+import { AuthService, ProjectsService, UserService } from '@neo-edge-web/global-services';
 import { IGetUserProfileResp, ILoginResp, PERMISSION } from '@neo-edge-web/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { NgxPermissionsService } from 'ngx-permissions';
@@ -16,6 +16,7 @@ export class AuthEffects {
   #router = inject(Router);
   #storage = inject(SessionStorageService);
   #permissionsService = inject(NgxPermissionsService);
+  #projectsService = inject(ProjectsService);
 
   login$ = createEffect(() =>
     this.#actions.pipe(
@@ -40,7 +41,12 @@ export class AuthEffects {
           map((userProfile: IGetUserProfileResp) => {
             this.#storage.store('user_profile', userProfile);
             this.#permissionsService.loadPermissions([...userProfile.role.permissions.map((d) => PERMISSION[d])]);
-            return AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin });
+            return { fromUserLogin, userProfile };
+          }),
+          switchMap(({ fromUserLogin, userProfile }) => {
+            return this.#projectsService
+              .switchProject$(userProfile.defaultProjectId)
+              .pipe(map(() => AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin })));
           }),
           catchError(() => of(AuthAction.loginFail))
         );
@@ -98,6 +104,22 @@ export class AuthEffects {
       )
     );
   });
+
+  changeCurrentProjectIdAction$ = createEffect(
+    () => {
+      return this.#actions.pipe(
+        ofType(AuthAction.changeCurrentProjectIdAction),
+        switchMap(({ currentProjectId }) =>
+          this.#projectsService.switchProject$(currentProjectId).pipe(
+            tap(() => {
+              this.#router.navigateByUrl('/project/dashboard');
+            })
+          )
+        )
+      );
+    },
+    { dispatch: false }
+  );
 
   logout$ = createEffect(() =>
     this.#actions.pipe(
