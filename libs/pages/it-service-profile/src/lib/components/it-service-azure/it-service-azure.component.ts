@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ISupportAppsWithVersion } from '@neo-edge-web/models';
 
 @Component({
   selector: 'ne-it-service-azure',
@@ -9,4 +10,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './it-service-azure.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ItServiceAzureComponent {}
+export class ItServiceAzureComponent {
+  appSettings = input<ISupportAppsWithVersion>();
+}

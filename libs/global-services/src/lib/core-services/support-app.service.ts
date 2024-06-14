@@ -1,7 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IGetSupportAppsResp, SUPPORT_APPS_CATEGORIES, SUPPORT_APPS_FLOW_GROUPS } from '@neo-edge-web/models';
+import { itServiceSupportApps, neoflowSupportApps, otDeviceSupportApps } from '@neo-edge-web/configs';
+import {
+  IGetSupportAppsResp,
+  ISupportApps,
+  ISupportAppsUI,
+  SUPPORT_APPS_CATEGORIES,
+  SUPPORT_APPS_FLOW_GROUPS,
+  TSupportAppVersionData
+} from '@neo-edge-web/models';
 import { Observable, catchError, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
 
@@ -37,5 +45,36 @@ export class SupportAppsService {
         return this.handleError(err);
       })
     );
+  };
+
+  getAppConfig(flowGroup: number): ISupportAppsUI[] {
+    switch (flowGroup) {
+      case 0:
+        return otDeviceSupportApps;
+      case 1:
+        return itServiceSupportApps;
+      case 2:
+        return neoflowSupportApps;
+      default:
+        return [];
+    }
+  }
+
+  getAppVersionData = (appversionId: number, supportApps: ISupportApps[]): TSupportAppVersionData | null => {
+    for (const app of supportApps) {
+      const version = app.appVersions.find((v) => v.id === appversionId);
+      if (version) {
+        const supportAppsConfig = this.getAppConfig(app.flowGroup);
+        const supportApp = supportAppsConfig.find((sa) => app.name.toUpperCase().includes(sa.key));
+
+        return {
+          version,
+          ...supportApp,
+          ...app
+        };
+      }
+    }
+
+    return null;
   };
 }

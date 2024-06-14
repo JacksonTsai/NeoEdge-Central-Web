@@ -7,15 +7,3 @@
     gap: 8px;
   }
 }
-
-.table-action {
-  display: flex;
-  align-items: center;
-  width: 100%;
-
-  button {
-    &:not(:last-child) {
-      margin-right: 8px;
-    }
-  }
-}

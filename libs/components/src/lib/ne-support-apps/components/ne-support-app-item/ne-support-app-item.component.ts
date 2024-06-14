@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { itServiceSupportApps, neoflowSupportApps, otDeviceSupportApps } from '@neo-edge-web/configs';
 import {
   IAppVersion,
   ISupportApps,
@@ -9,7 +10,6 @@ import {
   ISupportAppsWithVersion,
   SUPPORT_APPS_CATEGORIES
 } from '@neo-edge-web/models';
-import { itServiceSupportApps, neoflowSupportApps, otDeviceSupportApps } from '../../configs';
 
 @Component({
   selector: 'ne-support-app-item',
@@ -32,8 +32,8 @@ export class NeSupportAppItemComponent implements AfterViewInit {
 
   onClick = (): void => {
     this.handlerClick.emit({
-      key: this.appSettings().key,
       version: this.versionData(),
+      ...this.appSettings(),
       ...this.appData()
     });
   };

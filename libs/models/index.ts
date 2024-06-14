@@ -4,7 +4,7 @@ export * from './dateFormat.model';
 export * from './gateway-detail.mode';
 export * from './gateways.model';
 export * from './ipcs.model';
-export * from './it-service-detail.model';
+export * from './it-service-setting.model';
 export * from './it-service.model';
 export * from './language.model';
 export * from './ne-menu.model';

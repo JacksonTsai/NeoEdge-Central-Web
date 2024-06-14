@@ -9,15 +9,6 @@ fieldset {
   cursor: pointer;
 }
 
-.d-grid {
-  display: grid;
-  gap: 20px;
-}
-
-.col-2 {
-  grid-template-columns: 1fr 1fr;
-}
-
 .user-info-card {
   height: calc(100% - 48px);
   overflow: auto;

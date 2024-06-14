@@ -97,4 +97,46 @@ export class ValidatorsService {
       return valueLength >= minLength ? null : { invalidMinLength: true };
     };
   }
+
+  /**
+   * Validator function to check if the value matches the B-Type pattern.
+   *
+   * The B-Type pattern allows alphanumeric characters (A-Z, a-z, 0-9), hyphens (-), and underscores (_).
+   *
+   * @returns {ValidatorFn} A validator function that returns an error map with the `format` property,
+   *                        if the value does not match the pattern, otherwise null.
+   */
+  bTypeValidator(): ValidatorFn {
+    const pattern = /^[a-zA-Z0-9\-_]+$/;
+
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+
+      if (!value || typeof value !== 'string') {
+        return null;
+      }
+
+      return pattern.test(value) ? null : { format: true };
+    };
+  }
+
+  /**
+   * Validator function to check if the value matches the Fully Qualified Domain Name (FQDN) format.
+   *
+   * This validator checks if the input string adheres to the FQDN format, which typically consists of alphanumeric characters and hyphens, separated by periods. The domain name must end with at least two letters (e.g., ".com").
+   *
+   * @returns {ValidatorFn} A validator function that returns an error map with the `format` property,
+   *                        if the value does not match the pattern, otherwise null.
+   */
+  fqdnValidator(): ValidatorFn {
+    return (contorl: AbstractControl): ValidationErrors | null => {
+      const pattern = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+      const value = contorl.value;
+
+      if (!value || typeof value !== 'string') {
+        return null;
+      }
+      return pattern.test(value) ? null : { format: true };
+    };
+  }
 }

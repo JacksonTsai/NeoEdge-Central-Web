@@ -27,6 +27,11 @@ export interface ISupportAppsWithVersion extends ISupportApps {
   version: IAppVersion;
 }
 
+export type TSupportAppVersionData = ISupportApps &
+  ISupportAppsUI & {
+    version: IAppVersion;
+  };
+
 export interface IGetSupportAppsReq {
   flowGroups: number;
   categories?: number;
@@ -43,6 +48,8 @@ export enum SUPPORT_APPS_CATEGORIES {
   'Standard App' = 1,
   'Advanced App' = 2
 }
+
+export type TSupportAppsItService = 'AWS' | 'MQTT' | 'AZURE' | 'HTTP';
 
 export enum SUPPORT_APPS_IT_SERVICE {
   AWS = 'AWS IoT Core',

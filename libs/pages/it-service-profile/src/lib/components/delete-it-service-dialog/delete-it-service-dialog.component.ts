@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ValidatorsService } from '@neo-edge-web/global-services';
 import { IItService } from '@neo-edge-web/models';
-import { ItServiceDetailStore } from '../../stores/it-service-detail.store';
+import { ItServiceStore } from '../../stores/it-service.store';
 
 @Component({
   selector: 'ne-delete-it-service-dialog',
@@ -18,7 +18,7 @@ import { ItServiceDetailStore } from '../../stores/it-service-detail.store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DeleteItServiceDialogComponent {
-  data = inject<{ itService: IItService; itServiceDetailStore: ItServiceDetailStore }>(MAT_DIALOG_DATA);
+  data = inject<{ itService: IItService; itServiceStore: ItServiceStore }>(MAT_DIALOG_DATA);
   validatorsService = inject(ValidatorsService);
 
   nameCtrl = new UntypedFormControl('', [
@@ -28,7 +28,7 @@ export class DeleteItServiceDialogComponent {
 
   onDelete = (): void => {
     if (this.nameCtrl.valid) {
-      this.data.itServiceDetailStore.deleteItService({
+      this.data.itServiceStore.deleteItService({
         profileId: this.data.itService.id,
         name: this.data.itService.name
       });

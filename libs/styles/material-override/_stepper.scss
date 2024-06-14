@@ -2,7 +2,7 @@
   --mat-stepper-container-color: transparent;
 }
 
-.mat-horizontal-stepper-header{
+.mat-horizontal-stepper-header {
   pointer-events: none !important;
 }
 
@@ -12,11 +12,25 @@
   }
 
   .mat-horizontal-content-container {
+    margin-top: -24px;
     margin-left: -24px;
     margin-right: -24px;
+    padding-top: 24px;
   }
 
   mat-card-content {
     padding: 24px;
+  }
+
+  mat-card-actions {
+    padding-top: 24px;
+    padding-bottom: 0;
+    padding-left: 0;
+
+    button {
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
+    }
   }
 }
