@@ -35,6 +35,7 @@
       "@neo-edge-web/neoedge-central-web/environment": ["libs/environments/neoedge-central-web/index.ts"],
       "@neo-edge-web/ot-devices-profile": ["libs/pages/ot-devices-profile/src/index.ts"],
       "@neo-edge-web/package-json": ["./package.json"],
+      "@neo-edge-web/pipes": ["libs/pipes/index.ts"],
       "@neo-edge-web/projects": ["libs/pages/projects/src/index.ts"],
       "@neo-edge-web/request-new-password": ["libs/pages/request-new-password/src/index.ts"],
       "@neo-edge-web/roles": ["libs/pages/roles/src/index.ts"],
@@ -42,8 +43,7 @@
       "@neo-edge-web/user-profile": ["libs/pages/user-profile/src/index.ts"],
       "@neo-edge-web/users": ["libs/pages/users/src/index.ts"],
       "@neo-edge-web/utils": ["libs/utils/src/index.ts"],
-      "@neo-edge-web/validators": ["libs/validators/index.ts"],
-      "@neo-edge-web/pipes": ["libs/pipes/index.ts"]
+      "@neo-edge-web/validators": ["libs/validators/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

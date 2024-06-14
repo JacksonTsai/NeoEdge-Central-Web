@@ -5,7 +5,8 @@ import {
   GW_RUNNING_MODE,
   IEditGatewayProfileReq,
   IGetGatewaysDetailResp,
-  IGetInstallCommandResp
+  IGetInstallCommandResp,
+  IRebootReq
 } from '@neo-edge-web/models';
 import { obj2FormData } from '@neo-edge-web/utils';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
@@ -22,7 +23,7 @@ export class GatewayDetailService {
     return throwError(() => err);
   }
 
-  private GATEWAYS_PATH = `/gateways`;
+  private GATEWAYS_PATH = `/project/gateways`;
 
   gatewayDetail$ = (gatewayId: number): Observable<IGetGatewaysDetailResp> =>
     this.#http.get(`${this.GATEWAYS_PATH}/${gatewayId}`).pipe(
@@ -134,6 +135,26 @@ export class GatewayDetailService {
       }),
       catchError((err) => {
         this.#snackBar.open('Delete failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  rebootSchedule$ = (gatewayId: number, rebootSchedule: IRebootReq) => {
+    return this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/command/reboot`, rebootSchedule).pipe(
+      tap(() => {
+        this.#snackBar.open('Setting success.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Setting failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

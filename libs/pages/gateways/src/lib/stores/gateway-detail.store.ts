@@ -9,7 +9,8 @@ import {
   GW_WS_TYPE,
   GatewayDetailState,
   IEditGatewayProfileReq,
-  IGatewaySystemInfo
+  IGatewaySystemInfo,
+  IRebootReq
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -111,6 +112,24 @@ export const GatewayDetailStore = signalStore(
               tap(() => {
                 patchState(store, { isLoading: GATEWAY_LOADING.NONE });
                 router.navigate(['project/gateways']);
+                dialog.closeAll();
+              }),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      rebootSchedule: rxMethod<{ rebootSchedule: IRebootReq }>(
+        pipe(
+          switchMap((d: { rebootSchedule }) =>
+            gwDetailService.rebootSchedule$(store.gatewayId(), d.rebootSchedule).pipe(
+              tap(() => {
+                patchState(store, {
+                  gatewayDetail: {
+                    ...store.gatewayDetail(),
+                    rebootSchedule: { ...d.rebootSchedule.rebootSchedule }
+                  }
+                });
                 dialog.closeAll();
               }),
               catchError(() => EMPTY)
