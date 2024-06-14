@@ -16,7 +16,7 @@ import { ENV_VARIABLE } from '@neo-edge-web/neoedge-central-web/environment';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LetDirective } from '@ngrx/component';
 import { Store } from '@ngrx/store';
-import { map, take } from 'rxjs';
+import { combineLatest, map, take } from 'rxjs';
 import { MENU_TREE } from '../../configs/nec-menu.config';
 
 const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
@@ -173,11 +173,13 @@ export class ShellComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.#globalStore
-      .select(AuthStore.selectUserProfile)
+    combineLatest([
+      this.#globalStore.select(AuthStore.selectUserProfile),
+      this.#globalStore.select(AuthStore.selectCurrentProject)
+    ])
       .pipe(
         untilDestroyed(this),
-        map(({ userProfile }) => {
+        map(([{ userProfile }, { currentProjectName }]) => {
           if (!userProfile) {
             return;
           }
@@ -185,15 +187,14 @@ export class ShellComponent implements OnInit, OnDestroy {
           if (userPermission.length > 0) {
             let newMenu = this.defaultMenuTree?.filter((menu) => {
               const hasCurrentProject =
-                menu.permissions.includes(PERMISSION[PERMISSION.CURRENT_PROJECT]) &&
-                userProfile.defaultProjectName !== '';
+                menu.permissions.includes(PERMISSION[PERMISSION.CURRENT_PROJECT]) && currentProjectName !== '';
               const hasUserPermission = menu.permissions.some((menuPermission) =>
                 userPermission.includes(PERMISSION[menuPermission])
               );
               return hasCurrentProject || hasUserPermission;
             });
             newMenu = newMenu.map((d) =>
-              d.displayName === '{USER_PROJECT_NAME}' ? { ...d, displayName: userProfile.defaultProjectName } : d
+              d.displayName === '{USER_PROJECT_NAME}' ? { ...d, displayName: currentProjectName } : d
             );
             this.#globalStore.dispatch(updateMenu({ menuTree: newMenu }));
           }

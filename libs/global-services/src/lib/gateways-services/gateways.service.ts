@@ -16,11 +16,10 @@ export class GatewaysService {
     return throwError(() => err);
   }
 
-  private GATEWAYS_PATH = '/gateways';
+  private GATEWAYS_PATH = '/project/gateways';
 
   gatewaysByProjectId$ = (projectId: number, queryStr?: TableQueryForGateways): Observable<IGetGatewaysResp> => {
     const params = new URLSearchParams();
-    params.set('projectIds', projectId.toString());
     if (queryStr) {
       if (queryStr?.page) {
         params.set('page', queryStr.page.toString());

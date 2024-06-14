@@ -16,11 +16,10 @@ export class OtDevicesService {
     return throwError(() => err);
   }
 
-  private OT_DEVICE_PROFILES_PATH = '/ot-device-profiles';
+  private OT_DEVICE_PROFILES_PATH = '/project/ot-device-profiles';
 
-  otDevices$ = (projectId: number, queryStr?: TTableQueryForOtDevices): Observable<IGetOtDevicesResp> => {
+  otDevices$ = (queryStr?: TTableQueryForOtDevices): Observable<IGetOtDevicesResp> => {
     const params = new URLSearchParams();
-    params.set('projectIds', projectId.toString());
     if (queryStr) {
       if (queryStr?.page) {
         params.set('page', queryStr.page.toString());

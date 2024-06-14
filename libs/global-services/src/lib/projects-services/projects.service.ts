@@ -19,7 +19,8 @@ export class ProjectsService {
   #snackBar = inject(MatSnackBar);
 
   private PROJECTS_PATH = '/projects';
-  private LABEL_BY_PROJECT_ID_PATH = (projectId: number) => `${this.PROJECTS_PATH}/${projectId}/labels`;
+  private SWITCH_PROJECT_PATH = (projectId: number) => `/project/${projectId}`;
+  private LABEL_BY_PROJECT_ID_PATH = '/project/labels';
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);
@@ -116,8 +117,8 @@ export class ProjectsService {
     );
   };
 
-  getProjectLabels$ = (projectId: number): Observable<IProjectLabelsReqResp> => {
-    return this.#http.get(this.LABEL_BY_PROJECT_ID_PATH(projectId)).pipe(
+  getProjectLabels$ = (): Observable<IProjectLabelsReqResp> => {
+    return this.#http.get(this.LABEL_BY_PROJECT_ID_PATH).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project labels failure.', 'X', {
           horizontalPosition: 'end',
@@ -129,8 +130,8 @@ export class ProjectsService {
     );
   };
 
-  editProjectLabels$ = (projectId: number, payload: IProjectLabelsReqResp) =>
-    this.#http.put(this.LABEL_BY_PROJECT_ID_PATH(projectId), payload).pipe(
+  editProjectLabels$ = (payload: IProjectLabelsReqResp) =>
+    this.#http.put(this.LABEL_BY_PROJECT_ID_PATH, payload).pipe(
       tap(() => {
         this.#snackBar.open('Edit successfully.', 'X', {
           horizontalPosition: 'end',
@@ -140,6 +141,18 @@ export class ProjectsService {
       }),
       catchError((err) => {
         this.#snackBar.open('Get project labels failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+
+  switchProject$ = (projectId: number) =>
+    this.#http.put(this.SWITCH_PROJECT_PATH(projectId)).pipe(
+      catchError((err) => {
+        this.#snackBar.open('switch project failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

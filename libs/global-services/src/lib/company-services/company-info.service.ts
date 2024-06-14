@@ -18,7 +18,7 @@ export class CompanyInfoService {
     return throwError(() => err);
   }
 
-  private COMPANY_PROFILE_PATH = '/company/profile';
+  private COMPANY_PROFILE_PATH = '/company';
 
   companyProfile$: Observable<ICompanyProfileResp> = this.#http.get(this.COMPANY_PROFILE_PATH).pipe(
     catchError((err) => {

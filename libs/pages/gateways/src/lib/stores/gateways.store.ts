@@ -92,7 +92,7 @@ export const GatewaysStore = signalStore(
       getProjectLabels: rxMethod<void>(
         pipe(
           switchMap(() =>
-            projectsService.getProjectLabels$(store.projectId()).pipe(
+            projectsService.getProjectLabels$().pipe(
               tap((d) => {
                 patchState(store, { labels: d.labels });
               }),
@@ -104,7 +104,7 @@ export const GatewaysStore = signalStore(
       editProjectLabels: rxMethod<{ payload: IProjectLabelsReqResp }>(
         pipe(
           switchMap(({ payload }) =>
-            projectsService.editProjectLabels$(store.projectId(), payload).pipe(
+            projectsService.editProjectLabels$(payload).pipe(
               tap(() => patchState(store, { isLoading: GATEWAYS_LOADING.REFRESH_LABEL })),
               tap(() => dialog.closeAll()),
               catchError(() => EMPTY)
