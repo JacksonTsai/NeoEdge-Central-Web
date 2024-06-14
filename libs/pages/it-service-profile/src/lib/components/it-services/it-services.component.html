@@ -82,7 +82,12 @@
           </button>
 
           <mat-menu #menu="matMenu">
-            <button mat-menu-item id="it-service-detail-copy-{{ element.id }}-btn" type="button">
+            <button
+              mat-menu-item
+              id="it-service-detail-copy-{{ element.id }}-btn"
+              type="button"
+              (click)="onCopy(element)"
+            >
               <mat-icon svgIcon="icon:copy_gary"></mat-icon>
               <span> Duplicate </span>
             </button>
