@@ -25,6 +25,12 @@ export interface IItService {
   connectionLabel?: string;
 }
 
+export interface IItServiceDetail {
+  appVersionId: number;
+  name: string;
+  setting: any;
+}
+
 export type TableQueryForItService = ITableQuery & { names?: string };
 
 export interface IGetItServiceResp {

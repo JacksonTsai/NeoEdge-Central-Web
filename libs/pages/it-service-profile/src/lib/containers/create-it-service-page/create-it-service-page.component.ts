@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ICreateItServiceReq } from '@neo-edge-web/models';
-import { CreateItServiceComponent } from '../../components/create-it-service/create-it-service.component';
+import { CreateItServiceComponent } from '../../components';
 import { ItServiceStore } from '../../stores/it-service.store';
 
 @Component({
