@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { CopyProfileDialogComponent } from '@neo-edge-web/components';
 import { IItService, IT_SERVICE_LOADING, TableQueryForItService } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { ItServicesComponent } from '../../components';
@@ -21,6 +22,7 @@ import { ItServiceStore } from '../../stores/it-service.store';
       [size]="tableSize()"
       (pageChange)="onPageChange($event)"
       (handleCreate)="onCreate()"
+      (handleCopy)="onCopy($event)"
       (handleDelete)="onDelete($event)"
     ></ne-it-services>
   `,
@@ -51,6 +53,27 @@ export class ItServicePageComponent {
 
   onCreate = (): void => {
     this.#router.navigate([`neoflow/it-service-profile/create`]);
+  };
+
+  onCopy = (event: IItService): void => {
+    let copyDialogRef = this.#dialog.open(CopyProfileDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false,
+      data: {
+        type: 'it',
+        fromCopyOpts: [...this.#itServiceStore.dataTable().map((d) => ({ displayName: d.name, id: d.id }))],
+        deleteFn: this.#itServiceStore.deleteItService
+      }
+    });
+
+    copyDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        copyDialogRef = undefined;
+      });
   };
 
   onDelete = (event: IItService): void => {

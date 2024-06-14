@@ -50,6 +50,7 @@ export class ItServicesComponent implements AfterViewInit {
   @Output() pageChange = new EventEmitter<TableQueryForItService>();
   @Output() handleCreate = new EventEmitter();
   @Output() handleDelete = new EventEmitter<IItService>();
+  @Output() handleCopy = new EventEmitter<IItService>();
 
   dataTable = input<IItService[]>();
   dataLength = input<number>(0);
@@ -75,6 +76,10 @@ export class ItServicesComponent implements AfterViewInit {
 
   onDelete = (row: IItService): void => {
     this.handleDelete.emit(row);
+  };
+
+  onCopy = (row: IItService): void => {
+    this.handleCopy.emit(row);
   };
 
   ngAfterViewInit(): void {
