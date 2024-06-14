@@ -23,3 +23,16 @@
     margin-bottom: 16px;
   }
 }
+
+// type on table list
+.type-info-s {
+  display: flex;
+  align-items: center;
+
+  &__img {
+    margin-right: 8px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+}

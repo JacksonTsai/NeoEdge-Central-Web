@@ -21,7 +21,6 @@ import { ItServiceStore } from '../../stores/it-service.store';
       [size]="tableSize()"
       (pageChange)="onPageChange($event)"
       (handleCreate)="onCreate()"
-      (handleDetail)="onDetail($event)"
       (handleDelete)="onDelete($event)"
     ></ne-it-services>
   `,
@@ -52,10 +51,6 @@ export class ItServicePageComponent {
 
   onCreate = (): void => {
     this.#router.navigate([`neoflow/it-service-profile/create`]);
-  };
-
-  onDetail = (event: IItService): void => {
-    this.#router.navigate([`neoflow/it-service-profile/${event.id}`]);
   };
 
   onDelete = (event: IItService): void => {

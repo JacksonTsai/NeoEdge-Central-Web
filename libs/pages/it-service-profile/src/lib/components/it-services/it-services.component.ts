@@ -15,9 +15,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { RouterModule } from '@angular/router';
 import { IItService, IT_SERVICE_LOADING, TableQueryForItService } from '@neo-edge-web/models';
+import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, tap } from 'rxjs';
 
@@ -27,6 +30,7 @@ import { debounceTime, tap } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatCardModule,
@@ -34,7 +38,9 @@ import { debounceTime, tap } from 'rxjs';
     MatIconModule,
     MatInputModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatMenuModule,
+    dateTimeFormatPipe
   ],
   templateUrl: './it-services.component.html',
   styleUrl: './it-services.component.scss',
@@ -43,7 +49,6 @@ import { debounceTime, tap } from 'rxjs';
 export class ItServicesComponent implements AfterViewInit {
   @Output() pageChange = new EventEmitter<TableQueryForItService>();
   @Output() handleCreate = new EventEmitter();
-  @Output() handleDetail = new EventEmitter<IItService>();
   @Output() handleDelete = new EventEmitter<IItService>();
 
   dataTable = input<IItService[]>();
@@ -64,12 +69,8 @@ export class ItServicesComponent implements AfterViewInit {
     });
   }
 
-  create = (): void => {
+  onCreate = (): void => {
     this.handleCreate.emit();
-  };
-
-  onDetail = (row: IItService): void => {
-    this.handleDetail.emit(row);
   };
 
   onDelete = (row: IItService): void => {

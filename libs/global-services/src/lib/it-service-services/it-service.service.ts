@@ -18,7 +18,7 @@ export class ItServiceService {
   #http = inject(HttpService);
   #snackBar = inject(MatSnackBar);
 
-  private IT_SERVICE_PATH = '/it-service-profiles';
+  private IT_SERVICE_PATH = '/project/it-service-profiles';
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);

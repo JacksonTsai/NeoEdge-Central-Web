@@ -20,6 +20,7 @@
       "@neo-edge-web/auth-store": ["libs/global-stores/src/lib/auth-store/index.ts"],
       "@neo-edge-web/company-info": ["libs/pages/company-info/src/index.ts"],
       "@neo-edge-web/components": ["libs/components/src/index.ts"],
+      "@neo-edge-web/configs": ["libs/configs/index.ts"],
       "@neo-edge-web/dashboard": ["libs/pages/dashboard/src/index.ts"],
       "@neo-edge-web/directives": ["libs/directives/src/index.ts"],
       "@neo-edge-web/gateways": ["libs/pages/gateways/src/index.ts"],

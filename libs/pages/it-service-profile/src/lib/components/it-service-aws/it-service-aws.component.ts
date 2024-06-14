@@ -24,18 +24,9 @@ import {
   IItService,
   IItServiceDetailSelectedAppData,
   IItServiceSettingCredentials,
-  IT_SERVICE_DETAIL_MODE
+  IT_SERVICE_DETAIL_MODE,
+  TItServiceAwsField
 } from '@neo-edge-web/models';
-
-interface IItServiceAwsField {
-  name: string;
-  host: string;
-  connection: number;
-  keepAlive: number;
-  qoS: number;
-  caCertFileName: string;
-  caCertFileContent: string;
-}
 
 const IT_SERVICE_AWS_SCHEMA = 'tls';
 
@@ -116,7 +107,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
     });
   };
 
-  buildSetting = (fieldData: IItServiceAwsField): any => {
+  buildSetting = (fieldData: TItServiceAwsField): any => {
     let Credentials: IItServiceSettingCredentials | null = null;
     if (fieldData.caCertFileContent) {
       Credentials = {
@@ -144,7 +135,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
     };
   };
 
-  transformFieldDataToApi(fieldData: IItServiceAwsField): ICreateItServiceReq {
+  transformFieldDataToApi(fieldData: TItServiceAwsField): ICreateItServiceReq {
     const result = {
       appVersionId: this.appData().app.id,
       name: fieldData.name,
@@ -184,7 +175,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
 
     this.setFormValue();
 
-    this.form.valueChanges.subscribe((fieldData: IItServiceAwsField) => {
+    this.form.valueChanges.subscribe((fieldData: TItServiceAwsField) => {
       const value = this.transformFieldDataToApi(fieldData);
       this.onChange(value);
       this.onTouched();

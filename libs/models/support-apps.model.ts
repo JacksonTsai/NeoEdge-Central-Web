@@ -27,6 +27,11 @@ export interface ISupportAppsWithVersion extends ISupportApps {
   version: IAppVersion;
 }
 
+export type TSupportAppVersionData = ISupportApps &
+  ISupportAppsUI & {
+    version: IAppVersion;
+  };
+
 export interface IGetSupportAppsReq {
   flowGroups: number;
   categories?: number;

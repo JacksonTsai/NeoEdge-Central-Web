@@ -1,6 +1,7 @@
-import { ISupportApps, TSupportAppsItService } from './support-apps.model';
+import { ISupportApps, TSupportAppVersionData, TSupportAppsItService } from './support-apps.model';
 import { ITableQuery } from './table-query.model';
 
+export type TItServiceAzureProtocol = 'MQTT' | 'AMQP' | 'MQTT_WS' | 'AMQP_WS';
 export interface IItServiceState {
   projectId: number;
   dataTable: IItService[];
@@ -8,6 +9,7 @@ export interface IItServiceState {
   size: number;
   dataLength: number;
   supportApps: ISupportApps[];
+  connections: IItServiceConnectionOption[];
   isLoading: IT_SERVICE_LOADING;
 }
 
@@ -19,6 +21,8 @@ export interface IItService {
   id: number;
   name: string;
   setting: any;
+  type?: TSupportAppVersionData;
+  connectionLabel?: string;
 }
 
 export type TableQueryForItService = ITableQuery & { names?: string };
@@ -66,10 +70,9 @@ export interface IItServiceConnectionData {
   options: IItServiceConnectionOption[];
   default: IItServiceConnectionOption;
 }
-
 export interface IItServiceConnectionOption {
   key: string;
-  value: number;
+  value: number | TItServiceAzureProtocol;
   label: string;
   default?: boolean;
 }
@@ -86,6 +89,19 @@ export interface IItServiceQoSOption {
   default?: boolean;
   selected?: boolean;
 }
+
+export interface IItServiceField {
+  name: string;
+  host: string;
+  connection: number | TItServiceAzureProtocol;
+  keepAlive?: number;
+  qoS?: number;
+  caCertFileName?: string;
+  caCertFileContent?: string;
+  skipCertVerify?: boolean;
+}
+
+export type TItServiceAwsField = IItServiceField;
 
 export enum IT_SERVICE_LOADING {
   NONE,

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
+  IItService,
   IItServiceConnectionData,
   IItServiceConnectionOption,
   IItServiceDetailSelectedAppData,
+  IItServiceField,
   IItServiceQoSData,
   IItServiceQoSOption,
   ISupportAppsWithVersion,
@@ -25,18 +27,23 @@ export class ItServiceDetailService {
       label: 'MQTT (1883)'
     },
     {
+      key: 'mqtt-str',
+      value: 'MQTT', // use on Azure
+      label: 'MQTT (8883)'
+    },
+    {
       key: 'amqp-5671',
-      value: 5671,
+      value: 'AMQP',
       label: 'AMQP (5671)'
     },
     {
       key: 'mqtt-443',
-      value: 443,
+      value: 'MQTT_WS',
       label: 'MQTT over WS (443)'
     },
     {
       key: 'amqp-443',
-      value: 443,
+      value: 'AMQP_WS',
       label: 'AMQP over WS (443)'
     },
     {
@@ -51,7 +58,11 @@ export class ItServiceDetailService {
     }
   ];
 
-  getConnection = (type: TSupportAppsItService): IItServiceConnectionOption[] => {
+  getConnection = (type?: TSupportAppsItService): IItServiceConnectionOption[] => {
+    if (!type) {
+      return this.itServiceConnection;
+    }
+
     switch (type) {
       case 'AWS':
         return this.itServiceConnection
@@ -63,8 +74,8 @@ export class ItServiceDetailService {
           .map((conn) => (conn.key === 'mqtt-1883' ? { ...conn, default: true } : conn));
       case 'AZURE':
         return this.itServiceConnection
-          .filter((conn) => ['mqtt-8883', 'amqp-5671', 'mqtt-443', 'amqp-443'].includes(conn.key))
-          .map((conn) => (conn.key === 'mqtt-8883' ? { ...conn, default: true } : conn));
+          .filter((conn) => ['mqtt-str', 'amqp-5671', 'mqtt-443', 'amqp-443'].includes(conn.key))
+          .map((conn) => (conn.key === 'mqtt-str' ? { ...conn, default: true } : conn));
       case 'HTTP':
         return this.itServiceConnection
           .filter((conn) => ['http-443', 'custom'].includes(conn.key))
@@ -89,7 +100,11 @@ export class ItServiceDetailService {
     }
   ];
 
-  getQoS = (type: TSupportAppsItService): IItServiceQoSOption[] => {
+  getQoS = (type?: TSupportAppsItService): IItServiceQoSOption[] => {
+    if (!type) {
+      return this.itServiceQos;
+    }
+
     switch (type) {
       case 'AWS':
         return this.itServiceQos
@@ -132,4 +147,39 @@ export class ItServiceDetailService {
       qoSData
     };
   };
+
+  apiToFieldData(api: IItService): IItServiceField {
+    const instance = api.setting.Instances['0'];
+    const parameters = instance.Process.Parameters;
+    let host: string;
+    let connection: number | null = null;
+
+    if (parameters.Host.startsWith('tls://')) {
+      const hostParts = parameters.Host.replace('tls://', '').split(':');
+      host = hostParts[0];
+      connection = hostParts.length > 1 ? parseInt(hostParts[1], 10) : null;
+    } else if (parameters.Host.startsWith('tcp:')) {
+      const hostParts = parameters.Host.replace('tcp:', '').split('//:');
+      host = hostParts[0];
+      connection = hostParts.length > 1 ? parseInt(hostParts[1], 10) : null;
+    } else {
+      host = parameters.Host;
+    }
+
+    // Azure
+    if (parameters.Protocol) {
+      connection = parameters.Protocol;
+    }
+
+    return {
+      name: api.name,
+      host: host,
+      connection: connection,
+      keepAlive: parameters?.KeepAlive,
+      qoS: parameters?.QoS,
+      caCertFileName: parameters.Credentials?.CaCert?.Name,
+      caCertFileContent: parameters.Credentials?.CaCert?.Content,
+      skipCertVerify: parameters.Credentials?.SkipCertVerify
+    };
+  }
 }
