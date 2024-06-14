@@ -4,7 +4,6 @@ import { selectCurrentProject } from '@neo-edge-web/auth-store';
 import { ItServiceDetailService, ItServiceService, SupportAppsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
-  IDeleteItServiceDetailReq,
   IGetSupportAppsReq,
   IItServiceState,
   IT_SERVICE_LOADING,
@@ -97,11 +96,11 @@ export const ItServiceStore = signalStore(
           )
         )
       ),
-      deleteItService: rxMethod<IDeleteItServiceDetailReq>(
+      deleteItService: rxMethod<{ profileId: number; name: string }>(
         pipe(
           tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.DELETE })),
-          switchMap((payload) =>
-            itServiceService.deleteItService$(payload).pipe(
+          switchMap(({ profileId, ...payload }) =>
+            itServiceService.deleteItServiceDetail$(profileId, payload).pipe(
               tap(() => {
                 patchState(store, { isLoading: IT_SERVICE_LOADING.REFRESH_TABLE });
               }),

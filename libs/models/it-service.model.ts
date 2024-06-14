@@ -49,14 +49,21 @@ export interface IGetItServiceDetailResp {
   setting: any;
 }
 
-export interface IEditItServiceDetailReq {
+export interface IUpdateItServiceDetailReq {
   name: string;
   setting: any;
 }
 
 export interface IDeleteItServiceDetailReq {
-  profileId: number;
   name: string;
+}
+
+export interface ICopyItServiceDetailReq {
+  name: string;
+}
+
+export interface ICopyItServiceDetailResp {
+  id: number;
 }
 
 export interface IItServiceDetailSelectedAppData {
