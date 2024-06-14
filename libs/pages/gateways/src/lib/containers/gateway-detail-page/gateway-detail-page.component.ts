@@ -24,6 +24,7 @@ import {
 } from '../../components';
 import { GatewayLogComponent } from '../../components/gateway-log/gateway-log.component';
 import { GatewayNeoflowComponent } from '../../components/gateway-neoflow/gateway-neoflow.component';
+import { GatewayRebootDialogComponent } from '../../components/gateway-reboot-dialog/gateway-reboot-dialog.component';
 import { GatewayStatusInfoComponent } from '../../components/gateway-status-info/gateway-status-info.component';
 import { GatewayDetailStore } from '../../stores/gateway-detail.store';
 
@@ -220,5 +221,22 @@ export class GatewayDetailPageComponent {
         navigator.clipboard.writeText(enrollCommand.command);
       }
     });
+  };
+
+  onRebootGw = () => {
+    let rebootDialogRef = this.#dialog.open(GatewayRebootDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false,
+      data: { gwDetailStore: this.gwDetailStore }
+    });
+
+    rebootDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        rebootDialogRef = undefined;
+      });
   };
 }

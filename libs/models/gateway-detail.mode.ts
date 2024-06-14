@@ -45,6 +45,7 @@ export interface IGetGatewaysDetailResp {
   latestNeoedgeXReleaseDate: number;
   desiredModeUpdatedAt: number;
   connectionStatusUpdatedAt: number;
+  rebootSchedule: IGWRebootSchedule;
 }
 
 export interface IGatewaySystemInfo {
@@ -69,6 +70,11 @@ export interface IEditGatewayProfileReq {
   selectedLabel: number[];
   customField: IGatewayCustomField[];
   serialPorts: IIpcSerialPort[];
+}
+
+export interface IRebootReq {
+  rebootSchedule: IGWRebootSchedule;
+  rebootNow: number;
 }
 
 export interface IGetInstallCommandResp {
@@ -158,4 +164,20 @@ export enum GW_WS_TYPE {
   'connection-info' = 'connectionInfo',
   'running-mode' = 'runningMode',
   'system-info' = 'systemInfo'
+}
+
+export interface IGWRebootSchedule {
+  min: number;
+  hour: number;
+  days: IGWRebootDays;
+}
+
+export interface IGWRebootDays {
+  sun: number;
+  mon: number;
+  tue: number;
+  wed: number;
+  thu: number;
+  fri: number;
+  sat: number;
 }
