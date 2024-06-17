@@ -1,7 +1,9 @@
 <div
   class="support-app-item"
   [ngClass]="{ 'is-disabled': !appData()?.isAvailable, 'is-unclickable': !clickable(), 'is-single': single() }"
+  tabindex="0"
   (click)="onClick()"
+  [id]="'support-app-' + appData()?.id"
 >
   <div class="support-app-item__img">
     <img [src]="appSettings()?.img" [alt]="appData()?.name" />
