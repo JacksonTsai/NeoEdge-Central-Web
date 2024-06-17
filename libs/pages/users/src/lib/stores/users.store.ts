@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { selectUserProfile } from '@neo-edge-web/auth-store';
-import { RolesService, UsersService } from '@neo-edge-web/global-service';
+import { RolesService, UsersService } from '@neo-edge-web/global-services';
 import {
   IEditUserStatusReq,
   IInviteUserReq,

@@ -7,7 +7,7 @@ import {
   ProjectsService,
   REST_CONFIG,
   WebSocketService
-} from '@neo-edge-web/global-service';
+} from '@neo-edge-web/global-services';
 import {
   GATEWAYS_LOADING,
   GATEWAYS_WS_TYPE,
@@ -92,7 +92,7 @@ export const GatewaysStore = signalStore(
       getProjectLabels: rxMethod<void>(
         pipe(
           switchMap(() =>
-            projectsService.getProjectLabels$(store.projectId()).pipe(
+            projectsService.getProjectLabels$().pipe(
               tap((d) => {
                 patchState(store, { labels: d.labels });
               }),
@@ -104,7 +104,7 @@ export const GatewaysStore = signalStore(
       editProjectLabels: rxMethod<{ payload: IProjectLabelsReqResp }>(
         pipe(
           switchMap(({ payload }) =>
-            projectsService.editProjectLabels$(store.projectId(), payload).pipe(
+            projectsService.editProjectLabels$(payload).pipe(
               tap(() => patchState(store, { isLoading: GATEWAYS_LOADING.REFRESH_LABEL })),
               tap(() => dialog.closeAll()),
               catchError(() => EMPTY)
@@ -153,7 +153,7 @@ export const GatewaysStore = signalStore(
               tap(([currentProjectId, loginState]) => {
                 patchState(store, {
                   projectId: currentProjectId.currentProjectId,
-                  wsRoomName: `${loginState.jwt.fqdn}-pj-${currentProjectId.currentProjectId}`
+                  wsRoomName: `${loginState.jwt.fqdn}:pj:${currentProjectId.currentProjectId}`
                 });
                 store.queryGatewayTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
                 store.getProjectLabels();

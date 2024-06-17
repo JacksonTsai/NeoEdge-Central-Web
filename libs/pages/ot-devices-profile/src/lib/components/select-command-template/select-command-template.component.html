@@ -1,0 +1,17 @@
+<div class="command-template-wrapper">
+  <section class="card__sec">
+    <h3 class="card__sub-title">Select Modbus Command Template</h3>
+
+    <mat-radio-group [formControl]="createTypeCtrl">
+      <mat-radio-button id="command-template-create-from-scratch" [value]="'create'" color="primary">
+        Create From Scratch
+      </mat-radio-button>
+      <mat-radio-button id="command-template-improt-from-csv" [value]="'import'" color="primary">
+        Import Tags From csv
+      </mat-radio-button>
+    </mat-radio-group>
+  </section>
+  @if ('import' === createTypeCtrl.value) {
+    <!-- TODO: import csv -->
+  }
+</div>

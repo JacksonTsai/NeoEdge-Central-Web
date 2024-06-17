@@ -1,15 +1,16 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } from '@neo-edge-web/global-service';
-import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-store';
+import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } from '@neo-edge-web/global-services';
+import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-stores';
 import {
   GATEWAY_LOADING,
   GW_RUNNING_MODE,
   GW_WS_TYPE,
   GatewayDetailState,
   IEditGatewayProfileReq,
-  IGatewaySystemInfo
+  IGatewaySystemInfo,
+  IRebootReq
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -118,10 +119,28 @@ export const GatewayDetailStore = signalStore(
           )
         )
       ),
+      rebootSchedule: rxMethod<{ rebootSchedule: IRebootReq }>(
+        pipe(
+          switchMap((d: { rebootSchedule }) =>
+            gwDetailService.rebootSchedule$(store.gatewayId(), d.rebootSchedule).pipe(
+              tap(() => {
+                patchState(store, {
+                  gatewayDetail: {
+                    ...store.gatewayDetail(),
+                    rebootSchedule: { ...d.rebootSchedule.rebootSchedule }
+                  }
+                });
+                dialog.closeAll();
+              }),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
       getProjectLabels: rxMethod<void>(
         pipe(
           switchMap(() =>
-            projectsService.getProjectLabels$(store.projectId()).pipe(
+            projectsService.getProjectLabels$().pipe(
               tap((d) => {
                 patchState(store, { labels: d.labels });
               }),
@@ -174,7 +193,7 @@ export const GatewayDetailStore = signalStore(
                 patchState(store, {
                   gatewayId: parseInt(urlParm['id']),
                   projectId: curProject.currentProjectId,
-                  wsRoomName: `${loginState.jwt.fqdn}-gw-${parseInt(urlParm['id'])}`
+                  wsRoomName: `${loginState.jwt.fqdn}:gw:${parseInt(urlParm['id'])}`
                 });
                 store.getGatewayDetail();
                 store.getProjectLabels();

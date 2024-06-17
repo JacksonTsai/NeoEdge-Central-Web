@@ -1,0 +1,52 @@
+<h1 mat-dialog-title class="gl-h6">Reboot Gateway</h1>
+<mat-dialog-content>
+  <div class="reboot-schedule-wrapper">
+    <h3>Now</h3>
+    <div class="reboot-now">
+      <mat-checkbox color="primary" [formControl]="rebootNowCtrl">Reboot Now</mat-checkbox>
+    </div>
+
+    <h3>Scheduled at</h3>
+    <form [formGroup]="daysForm">
+      <div class="reboot-schedule">
+        <mat-checkbox color="primary" formControlName="sun"> Sunday </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="mon"> Monday </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="tue"> Tuesday </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="wed"> Wednesday </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="thu"> Thursday </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="fri"> Friday </mat-checkbox>
+        <mat-checkbox color="primary" formControlName="sat"> Saturday </mat-checkbox>
+      </div>
+    </form>
+
+    <form class="time-form" [formGroup]="timeForm">
+      <mat-form-field class="" appearance="outline" floatLabel="always">
+        <mat-label>Hours</mat-label>
+        <mat-select formControlName="hour">
+          @for (hour of hourlyOpts; track hour) {
+            <mat-option [value]="hour"> {{ hour }} </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="" appearance="outline" floatLabel="always">
+        <mat-label>minutes</mat-label>
+        <mat-select formControlName="min">
+          @for (min of minOpts; track min) {
+            <mat-option [value]="min"> {{ min }} </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div class="tip tip--primary">
+    <div>Time Zone: {{ timeZone }}</div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button type="button" mat-raised-button color="primary" [disabled]="timeForm.invalid" (click)="onSubmit()">
+    Submit
+  </button>
+</mat-dialog-actions>

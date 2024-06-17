@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { GatewaysService } from '@neo-edge-web/global-service';
+import { GatewaysService } from '@neo-edge-web/global-services';
 import { GATEWAYS_LOADING, Gateway, TableQueryForGateways } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { AddGatewayDialogComponent, GatewaysComponent, MangeLabelDialogComponent } from '../../components';

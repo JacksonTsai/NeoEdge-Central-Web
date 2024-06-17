@@ -1,0 +1,142 @@
+<h1 class="page-title">OT Device</h1>
+<div class="ot-devices-top-action">
+  <div class="ot-devices-top-action__left">
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Search</mat-label>
+      <input
+        id="ot-devices-search"
+        matInput
+        placeholder="Search name"
+        [formControl]="searchCtrl"
+        maxlength="128"
+        type="text"
+      />
+      <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+    </mat-form-field>
+  </div>
+  <div class="ot-devices-top-action__right">
+    <button id="ot-devcies-copy-device-btn" type="button" mat-stroked-button color="primary" (click)="onCopyDevice()">
+      Copy
+    </button>
+    <button
+      id="ot-devcies-create-device-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onCreateDevice()"
+    >
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Create OT Device
+    </button>
+  </div>
+</div>
+<mat-card class="ot-device-card">
+  <table [fixedLayout]="false" mat-table [dataSource]="dataSource" class="ot-device-card__table">
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.name ? element.name : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="iconPath">
+      <th mat-header-cell *matHeaderCellDef>Icon</th>
+      <td mat-cell *matCellDef="let element">
+        @if (element.iconPath) {
+          <img [src]="element.iconPath" alt="" />
+        } @else {
+          <mat-icon color="primary" svgIcon="icon:default_ot_device"></mat-icon>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.appClass ? element.appClass : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="connection">
+      <th mat-header-cell *matHeaderCellDef>Connection</th>
+      <td mat-cell *matCellDef="let element">
+        <div>SlaveId: {{ otDeviceConnectionInfo(element).slaveId }}</div>
+        @if (otDeviceConnectionInfo(element)?.ip) {
+          <div>IP: {{ otDeviceConnectionInfo(element).ip }}</div>
+        }
+        @if (otDeviceConnectionInfo(element)?.port) {
+          <div>Port: {{ otDeviceConnectionInfo(element).port }}</div>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tag">
+      <th mat-header-cell *matHeaderCellDef>Tag#</th>
+      <td mat-cell *matCellDef="let element">
+        {{ calcTag(element) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdBy">
+      <th mat-header-cell *matHeaderCellDef>Creator</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.createdBy ? element?.createdBy : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Create Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.createdAt ? getFormatDate(element?.createdAt) : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="table-action">
+          <button
+            id="ot-devices-detail-{{ element.id }}-btn"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onDetailDevice(element)"
+          >
+            Detail
+          </button>
+
+          <button id="ot-devices-more-{{ element.id }}-btn" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              id="ot-devices-detail-delete-{{ element.id }}-btn"
+              type="button"
+              (click)="onDeleteDevice(element)"
+            >
+              <mat-icon svgIcon="icon:delete_red"></mat-icon>
+              <span color="danger"> Delete </span>
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    id="ot-devices-pagination"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [length]="devicesLength()"
+    showFirstLastButtons
+    aria-label="Select page of ot devices"
+  ></mat-paginator>
+</mat-card>

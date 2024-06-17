@@ -1,0 +1,36 @@
+.ot-tags-wrapper {
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+  form {
+    height: calc(100vh - 375px);
+    overflow: auto;
+    table {
+      mat-form-field {
+        margin-top: 16px;
+      }
+      .tag-name-field {
+        width: 105px;
+      }
+      .enable-field {
+        width: 105px;
+      }
+      .tag-type-field {
+        width: 120px;
+      }
+      .start-address-field {
+        width: 80px;
+      }
+      .quantity-field {
+        width: 100px;
+      }
+      .trigger-field {
+        width: 120px;
+      }
+      .interval-field {
+        width: 100px;
+      }
+    }
+  }
+}

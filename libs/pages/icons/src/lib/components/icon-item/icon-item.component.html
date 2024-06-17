@@ -1,0 +1,10 @@
+<div class="glyphs-list__item">
+  <mat-icon [svgIcon]="'icon:' + id"></mat-icon>
+  <h4>{{id}}</h4>
+  <div class="input-item">
+    <input type="text"
+           [value]="value()">
+    <button class="btn-copy"
+            (click)="onCopy()">Copy</button>
+  </div>
+</div>

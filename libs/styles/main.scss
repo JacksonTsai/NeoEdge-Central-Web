@@ -8,6 +8,10 @@
 @import 'circle-img';
 @import 'fieldset';
 @import 'material-override';
+@import 'display';
+
+@import 'data-table';
+@import 'neoflow';
 
 *,
 :before,
@@ -40,6 +44,17 @@ body {
   }
   .page-title {
     margin: 0 0 32px 0;
+  }
+}
+
+.page-title-box {
+  display: flex;
+  align-items: center;
+  margin-top: -12px;
+  margin-bottom: 8px;
+
+  .page-title {
+    margin-bottom: 0;
   }
 }
 

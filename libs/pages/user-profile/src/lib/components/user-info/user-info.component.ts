@@ -16,7 +16,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { UserService } from '@neo-edge-web/global-service';
+import { UserService } from '@neo-edge-web/global-services';
 import {
   DATE_FORMAT,
   IGetUserProfileResp,
@@ -179,7 +179,7 @@ export class UserInfoComponent implements OnInit {
       idleTimeout: [{ value: this.userInfo()?.idleTimeout ?? 5, disabled: true }, [Validators.required]],
       isMfaEnable: [{ value: this.userInfo()?.isMfaEnable ?? 0, disabled: true }, [Validators.required]],
       language: [{ value: this.userInfo()?.language ?? '', disabled: true }, [Validators.required]],
-      name: [{ value: this.userInfo()?.name ?? '', disabled: true }, [Validators.required]]
+      name: [{ value: this.userInfo()?.name ?? '' }, [Validators.required]]
     });
   }
 }

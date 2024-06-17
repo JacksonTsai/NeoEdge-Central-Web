@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,8 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RouterModule } from '@angular/router';
-import { FormService } from '@neo-edge-web/global-service';
-import * as AuthStore from '@neo-edge-web/global-store';
+import { FormService } from '@neo-edge-web/global-services';
+import * as AuthStore from '@neo-edge-web/global-stores';
 import { Store } from '@ngrx/store';
 @Component({
   selector: 'ne-login',

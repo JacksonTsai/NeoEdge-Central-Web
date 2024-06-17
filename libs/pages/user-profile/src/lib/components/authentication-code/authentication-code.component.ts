@@ -6,7 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField, MatInputModule } from '@angular/material/input';
-import { FormService, ValidatorsService } from '@neo-edge-web/global-service';
+import { FormService, ValidatorsService } from '@neo-edge-web/global-services';
 import { AUTHENTICATION_CODE_LOADING, IGetUserProfileResp } from '@neo-edge-web/models';
 
 @Component({

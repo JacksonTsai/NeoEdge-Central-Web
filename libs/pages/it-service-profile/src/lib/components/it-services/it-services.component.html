@@ -1,0 +1,119 @@
+<h1 class="page-title">IT Service Profile</h1>
+<div class="top-action">
+  <div class="top-action__left">
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Search</mat-label>
+      <input
+        id="it-service-search-name-input"
+        matInput
+        placeholder="Search name"
+        [formControl]="searchCtrl"
+        maxlength="128"
+        type="text"
+      />
+      <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+    </mat-form-field>
+  </div>
+
+  <div class="top-action__right">
+    <button id="it-service-create-btn" type="button" mat-stroked-button color="primary" (click)="onCreate()">
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Create IT Service
+    </button>
+  </div>
+</div>
+<mat-card class="card">
+  <table mat-table [dataSource]="dataSource" [fixedLayout]="false">
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        <a [routerLink]="['/neoflow/it-service-profile/' + element.id]">
+          {{ element.name }}
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Type</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="type-info-s">
+          <img class="type-info-s__img" [src]="element.type?.img" [alt]="element.type?.name" width="24" height="24" />
+          <span class="type-info-s__text">{{ element.type?.name }}</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="connection">
+      <th mat-header-cell *matHeaderCellDef>Connection</th>
+      <td mat-cell *matCellDef="let element">{{ element.connectionLabel }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdBy">
+      <th mat-header-cell *matHeaderCellDef>Create By</th>
+      <td mat-cell *matCellDef="let element">{{ element?.createdBy ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Create Date</th>
+      <td mat-cell *matCellDef="let element">{{ (element?.createdAt | dateTimeFormat) ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="table-action">
+          <a
+            id="it-service-detail-{{ element.id }}-btn"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            [routerLink]="['/neoflow/it-service-profile/' + element.id]"
+          >
+            Detail
+          </a>
+
+          <button id="it-service-more-btn-{{ element.id }}" mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              id="it-service-detail-copy-{{ element.id }}-btn"
+              type="button"
+              (click)="onCopy(element)"
+            >
+              <mat-icon svgIcon="icon:copy_gary"></mat-icon>
+              <span> Duplicate </span>
+            </button>
+
+            <button
+              mat-menu-item
+              id="it-service-detail-delete-{{ element.id }}-btn"
+              type="button"
+              (click)="onDelete(element)"
+            >
+              <mat-icon svgIcon="icon:delete_red"></mat-icon>
+              <span color="danger"> Delete </span>
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    id="it-service-pagination"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [length]="dataLength()"
+    showFirstLastButtons
+    aria-label="Select page of it service profile"
+  ></mat-paginator>
+</mat-card>

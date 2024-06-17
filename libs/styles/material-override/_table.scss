@@ -1,6 +1,33 @@
+@use 'colors' as *;
+
 .mat-mdc-table {
   table-layout: fixed !important;
+
   .mat-column-no {
     width: 70px !important;
+  }
+
+  .table-action {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    button {
+      &:not(:first-child) {
+        margin-left: 8px;
+      }
+    }
+  }
+
+  a {
+    &:not(.mdc-button) {
+      color: $primary;
+      text-decoration: none;
+
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
   }
 }
