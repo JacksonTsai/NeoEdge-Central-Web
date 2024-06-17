@@ -1,0 +1,29 @@
+<input
+  #fileInput
+  hidden="true"
+  type="file"
+  onclick="this.value=null"
+  [accept]="accept()"
+  (change)="fileInputChange($event)"
+/>
+@if (!selectedFile()) {
+  <button mat-stroked-button color="primary" (click)="fileInput.click()">Upload File</button>
+}
+@if (selectedFile()) {
+  <button mat-stroked-button (click)="fileInput.click()" class="upload-file--uploaded">
+    <mat-icon svgIcon="icon:description"></mat-icon>
+    {{ selectedFile()?.name }}
+  </button>
+}
+@if (showTip()) {
+  <ul class="upload-file__tip">
+    @if (accept()) {
+      <li>{{ acceptText() }} files are allowed</li>
+    }
+    @if (sizeMax()) {
+      <li>Maximum size: {{ sizeMax() }}</li>
+    }
+  </ul>
+}
+
+{{ fileConent() }}

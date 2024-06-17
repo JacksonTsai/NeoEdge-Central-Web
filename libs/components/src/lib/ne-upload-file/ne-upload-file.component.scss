@@ -1,0 +1,17 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+}
+
+.upload-file {
+  &--uploaded {
+    width: calc(33.33% - 10px);
+    justify-content: flex-start;
+  }
+
+  &__tip {
+    font-size: 14px;
+    color: rgba($color: $black, $alpha: 0.5);
+  }
+}

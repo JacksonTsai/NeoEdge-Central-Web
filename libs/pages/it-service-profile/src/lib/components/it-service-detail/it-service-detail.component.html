@@ -47,7 +47,12 @@
               ></ne-it-service-azure>
             }
             @case ('MQTT') {
-              <ne-it-service-mqtt></ne-it-service-mqtt>
+              <ne-it-service-mqtt
+                formControlName="itServiceForm"
+                [mode]="mode()"
+                [appData]="selectedApp()"
+                [itServiceDetail]="itServiceDetail()"
+              ></ne-it-service-mqtt>
             }
           }
         </form>
