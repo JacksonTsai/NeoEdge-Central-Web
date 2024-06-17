@@ -51,7 +51,6 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
 export class ItServiceDetailComponent {
   @Output() handleSubmitItService = new EventEmitter<IUpdateItServiceDetailReq>();
   itServiceDetailService = inject(ItServiceDetailService);
-  projectId = input<number>(0);
   itServiceDetail = input<IItServiceDetail>();
   appData = input<ISupportAppsWithVersion>();
   isLoading = input<IT_SERVICE_DETAIL_LOADING>();

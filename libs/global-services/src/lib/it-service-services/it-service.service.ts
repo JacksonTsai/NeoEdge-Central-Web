@@ -28,9 +28,8 @@ export class ItServiceService {
     return throwError(() => err);
   }
 
-  getItService$ = (projectId: number, queryStr?: TableQueryForItService): Observable<IGetItServiceResp> => {
+  getItService$ = (queryStr?: TableQueryForItService): Observable<IGetItServiceResp> => {
     const params = new URLSearchParams();
-    params.set('projectIds', projectId.toString());
     if (queryStr) {
       if (queryStr?.page) {
         params.set('page', queryStr.page.toString());

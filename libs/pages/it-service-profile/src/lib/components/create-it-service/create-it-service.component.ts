@@ -50,7 +50,6 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
 export class CreateItServiceComponent {
   @Output() handleSubmitItService = new EventEmitter<ICreateItServiceReq>();
   @ViewChild('stepper') private stepper: MatStepper;
-  projectId = input<number>(0);
   supportApps = input<ISupportApps[]>();
   itServiceDetailService = inject(ItServiceDetailService);
   #fb = inject(FormBuilder);

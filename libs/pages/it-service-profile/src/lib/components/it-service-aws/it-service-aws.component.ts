@@ -62,7 +62,6 @@ const IT_SERVICE_AWS_SCHEMA = 'tls';
 })
 export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Validator {
   mode = input<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.CREATE);
-  projectId = input<number>(0);
   appData = input<IItServiceDetailSelectedAppData>();
   itServiceDetail = input<IItServiceDetail>();
   formService = inject(FormService);
@@ -161,7 +160,6 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
     const result = {
       appVersionId: this.appData()?.app?.id ?? 0,
       name: fieldData?.name?.trim(),
-      projectId: this.projectId(),
       setting: this.buildSetting(fieldData)
     };
 

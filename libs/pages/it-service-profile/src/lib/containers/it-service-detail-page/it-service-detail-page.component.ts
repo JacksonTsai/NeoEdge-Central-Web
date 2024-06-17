@@ -29,7 +29,6 @@ export class ItServiceDetailPageComponent {
   itServiceDetail = this.#itServiceDetailStore.itServiceDetail;
   isLoading = this.#itServiceDetailStore.isLoading;
   supportApps = this.#ItServiceStore.supportApps;
-  projectId = this.#ItServiceStore.projectId;
 
   appData = computed(() => {
     if (!this.itServiceDetail()) return null;

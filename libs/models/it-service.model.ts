@@ -3,7 +3,6 @@ import { ITableQuery } from './table-query.model';
 
 export type TItServiceAzureProtocol = 'MQTT' | 'AMQP' | 'MQTT_WS' | 'AMQP_WS';
 export interface IItServiceState {
-  projectId: number;
   dataTable: IItService[];
   page: number;
   size: number;
@@ -14,7 +13,6 @@ export interface IItServiceState {
 }
 
 export interface IItServiceDetailState {
-  projectId: number;
   itServiceId: number;
   itServiceDetail: IItServiceDetail;
   isLoading: IT_SERVICE_DETAIL_LOADING;
@@ -48,7 +46,6 @@ export interface IGetItServiceResp {
 export interface ICreateItServiceReq {
   appVersionId: number;
   name: string;
-  projectId: number;
   setting: any;
 }
 

@@ -41,11 +41,7 @@
             /> -->
             @switch (selectedApp()?.key) {
               @case ('AWS') {
-                <ne-it-service-aws
-                  formControlName="itServiceForm"
-                  [projectId]="projectId()"
-                  [appData]="selectedApp()"
-                ></ne-it-service-aws>
+                <ne-it-service-aws formControlName="itServiceForm" [appData]="selectedApp()"></ne-it-service-aws>
               }
               @case ('AZURE') {
                 <ne-it-service-azure></ne-it-service-azure>

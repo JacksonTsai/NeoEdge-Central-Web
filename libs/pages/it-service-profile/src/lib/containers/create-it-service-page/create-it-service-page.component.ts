@@ -12,7 +12,6 @@ import { ItServiceStore } from '../../stores/it-service.store';
   template: `
     <ne-create-it-service
       [supportApps]="supportApps()"
-      [projectId]="projectId()"
       (handleSubmitItService)="onSubmit($event)"
     ></ne-create-it-service>
   `,
@@ -25,7 +24,6 @@ export class CreateItServicePageComponent {
   #itServiceStore = inject(ItServiceStore);
 
   supportApps = this.#itServiceStore.supportApps;
-  projectId = this.#itServiceStore.projectId;
 
   onSubmit = (event: ICreateItServiceReq) => {
     this.#itServiceStore.createItService(event);

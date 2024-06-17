@@ -1,15 +1,12 @@
 import { inject } from '@angular/core';
-import { selectCurrentProject } from '@neo-edge-web/auth-store';
 import { ItServiceService } from '@neo-edge-web/global-services';
 import { RouterStoreService } from '@neo-edge-web/global-stores';
 import { IItServiceDetailState, IT_SERVICE_DETAIL_LOADING, IUpdateItServiceDetailReq } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { Store } from '@ngrx/store';
 import { EMPTY, catchError, combineLatest, map, pipe, switchMap, take, tap } from 'rxjs';
 
 const initialState: IItServiceDetailState = {
-  projectId: 0,
   itServiceId: 0,
   itServiceDetail: null,
   isLoading: IT_SERVICE_DETAIL_LOADING.NONE
@@ -53,16 +50,15 @@ export const ItServiceDetailStore = signalStore(
       )
     )
   })),
-  withHooks((store, globalStore = inject(Store), routerStoreService = inject(RouterStoreService)) => {
+  withHooks((store, routerStoreService = inject(RouterStoreService)) => {
     return {
       onInit() {
-        combineLatest([routerStoreService.getParams$, globalStore.select(selectCurrentProject)])
+        combineLatest([routerStoreService.getParams$])
           .pipe(
             take(1),
-            map(([urlParm, curProject]) => {
+            map(([urlParm]) => {
               patchState(store, {
-                itServiceId: parseInt(urlParm['id']),
-                projectId: curProject.currentProjectId
+                itServiceId: parseInt(urlParm['id'])
               });
               store.getItServiceDetail();
             })
