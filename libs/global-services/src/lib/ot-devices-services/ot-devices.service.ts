@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IEditOtDeviceReq, IGetOtDevicesResp, TOtProfileById, TTableQueryForOtDevices } from '@neo-edge-web/models';
+import { obj2FormData } from '@neo-edge-web/utils';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
 
@@ -59,9 +60,16 @@ export class OtDevicesService {
     );
   };
 
-  createOtDevice$ = <T>(payload: IEditOtDeviceReq<T>) =>
-    // payload  formdata
-    this.#http.post(this.OT_DEVICE_PROFILES_PATH, payload).pipe(
+  createOtDevice$ = ({ profile, deviceIcon }: { profile: any; deviceIcon?: File }) => {
+    const payloadStringify = {
+      profile: JSON.stringify(profile)
+    };
+
+    if (deviceIcon) {
+      payloadStringify['deviceIcon'] = deviceIcon;
+    }
+    const formData = obj2FormData(payloadStringify);
+    return this.#http.post(this.OT_DEVICE_PROFILES_PATH, formData).pipe(
       map((resp) => {
         this.#snackBar.open('Create ot device successfully.', 'X', {
           horizontalPosition: 'end',
@@ -80,7 +88,7 @@ export class OtDevicesService {
         return this.handleError(err);
       })
     );
-
+  };
   editOtDevice$ = <T>(payload: IEditOtDeviceReq<T>) =>
     // payload  formdata
     this.#http.put(this.OT_DEVICE_PROFILES_PATH, payload).pipe(

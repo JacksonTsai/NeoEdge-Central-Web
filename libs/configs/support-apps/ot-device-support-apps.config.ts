@@ -11,6 +11,6 @@ export const otDeviceSupportApps: ISupportAppsUI[] = [
   },
   {
     key: 'TEXOL',
-    img: '/assets/images/app_default.png'
+    img: '/assets/images/texol_213mm2-r1.png'
   }
 ];

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CreateOtDeviceComponent } from './create-ot-device.component';
+import { SelectDeviceProtocolComponent } from './select-device-protocol.component';
 
 describe('CreateOtDeviceComponent', () => {
-  let component: CreateOtDeviceComponent;
-  let fixture: ComponentFixture<CreateOtDeviceComponent>;
+  let component: SelectDeviceProtocolComponent;
+  let fixture: ComponentFixture<SelectDeviceProtocolComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateOtDeviceComponent]
+      imports: [SelectDeviceProtocolComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CreateOtDeviceComponent);
+    fixture = TestBed.createComponent(SelectDeviceProtocolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

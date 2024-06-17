@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { CopyProfileDialogComponent } from '@neo-edge-web/components';
 import { IOtDevice, OT_DEVICES_LOADING, TTableQueryForOtDevices } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -33,6 +34,7 @@ import { OtDevicesStore } from '../../stores/ot-devices.store';
 export class OtDevicesPageComponent {
   #otDevicesStore = inject(OtDevicesStore);
   #dialog = inject(MatDialog);
+  #router = inject(Router);
   otDevices = this.#otDevicesStore.otDevices;
   tablePage = this.#otDevicesStore.page;
   tableSize = this.#otDevicesStore.size;
@@ -87,7 +89,9 @@ export class OtDevicesPageComponent {
       });
   };
 
-  onCreateDevice = () => {};
+  onCreateDevice = () => {
+    this.#router.navigate([`neoflow/ot-device-profile/create`]);
+  };
 
   onPageChange = (event: TTableQueryForOtDevices) => {
     this.#otDevicesStore.queryOtDevicesTableByPage(event);

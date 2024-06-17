@@ -4,11 +4,11 @@ import { CreateOtDevicePageComponent, OtDeviceDetailPageComponent, OtDevicesPage
 export const otDeviceProfileRoutes: Route[] = [
   { path: '', component: OtDevicesPageComponent },
   {
-    path: ':id',
-    component: OtDeviceDetailPageComponent
-  },
-  {
     path: 'create',
     component: CreateOtDevicePageComponent
+  },
+  {
+    path: ':id',
+    component: OtDeviceDetailPageComponent
   }
 ];

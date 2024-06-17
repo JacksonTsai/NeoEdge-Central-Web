@@ -1,0 +1,17 @@
+<h2 class="card__title">Select Device Protocol</h2>
+<section class="card__sec">
+  <h3 class="card__sub-title">Available</h3>
+  @if (supportAppsAvailable?.length) {
+    <ne-support-apps [supportApps]="supportAppsAvailable" (handlerClick)="onSelectedDevice($event)"></ne-support-apps>
+  } @else {
+    <p class="text-gray">No items</p>
+  }
+</section>
+<section class="card__sec">
+  <h3 class="card__sub-title">Unavailable</h3>
+  @if (supportAppsUnavailable?.length) {
+    <ne-support-apps [supportApps]="supportAppsUnavailable"></ne-support-apps>
+  } @else {
+    <p class="text-gray">No items</p>
+  }
+</section>
