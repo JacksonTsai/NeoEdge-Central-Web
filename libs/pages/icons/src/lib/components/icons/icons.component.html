@@ -1,0 +1,57 @@
+<div class="wrapper">
+  <header class="header">
+    <div class="container">
+      <div class="hd-center">
+        <h1 class="title">SVG Icon<small class="text-tip"> - glyphs list</small></h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main">
+    <nav class="list-type-wrapper"
+         [ngClass]="{ 'is-fixed': isFixed }"
+         #scrollFix>
+      <div data-fixed-panel>
+        <div class="list-type-wrapper__cont">
+          <div class="amount">Total <span class="num">{{!!total() ? total() : '(ﾟ∀ﾟ)'}}</span></div>
+          <div class="list-type">
+            @if (isNotDefault()) {
+            <div class="list-type__item">
+              <button (click)="reset()">Reset</button>
+            </div>
+            }
+            @if (isUseHTML()) {
+            <mat-slide-toggle labelPosition="before"
+                              [(ngModel)]="useAriaHidden"
+                              style="margin-left: 10px;">
+              Use aria-hidden
+            </mat-slide-toggle>
+            }
+            <div class="list-type__item text-tip">|</div>
+            <div class="list-type__item">
+              Show
+              <mat-radio-group [(ngModel)]="showType">
+                @for (item of iconService.selectOptions; track $index) {
+                <mat-radio-button [value]="item.name">{{item.text}}</mat-radio-button>
+                }
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="glyphs-list">
+      @for (item of svgList(); track item.id) {
+      <ne-icon-item [data]="item"
+                    [showType]="showType"
+                    [useAriaHidden]="useAriaHidden"
+                    [settings]="settings"></ne-icon-item>
+      }
+    </section>
+  </main>
+
+  <footer class="footer">
+    © {{year}} <a href="https://www.ecloudvalley.com/" target="_blank">伊雲谷數位科技股份有限公司</a> ALL RIGHTS RESERVED
+  </footer>
+</div>

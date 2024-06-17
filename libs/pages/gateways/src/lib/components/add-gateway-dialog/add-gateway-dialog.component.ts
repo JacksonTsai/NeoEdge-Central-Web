@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { GatewaysService } from '@neo-edge-web/global-service';
+import { GatewaysService } from '@neo-edge-web/global-services';
 import { GATEWAYS_TYPE, IAddGatewayReq } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take, tap } from 'rxjs';

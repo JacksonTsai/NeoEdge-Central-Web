@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import * as AuthStore from '@neo-edge-web/auth-store';
 import { IProjectsForUI, PROJECTS_LOADING, TableQueryForProjects } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { LetDirective } from '@ngrx/component';
+import { Store } from '@ngrx/store';
 import { DeleteProjectConfirmDialogComponent, EditProjectDialogComponent, ProjectsComponent } from '../../components';
 import { ProjectsStore } from '../../stores/projects.store';
-
 @UntilDestroy()
 @Component({
   selector: 'ne-projects-page',
@@ -35,6 +36,7 @@ import { ProjectsStore } from '../../stores/projects.store';
 })
 export class ProjectsPageComponent {
   readonly #projectStore = inject(ProjectsStore);
+  globalStore = inject(Store);
   projects = this.#projectStore.projects;
   isLoading = this.#projectStore.isLoading;
   tableSize = this.#projectStore.size;
@@ -92,7 +94,12 @@ export class ProjectsPageComponent {
   };
 
   onSwitchProject = (event) => {
-    // TODO: add switch project function
+    this.globalStore.dispatch(
+      AuthStore.changeCurrentProjectIdAction({
+        currentProjectId: event.id,
+        currentProjectName: event.name
+      })
+    );
   };
 
   onPageChange = (event: TableQueryForProjects) => {

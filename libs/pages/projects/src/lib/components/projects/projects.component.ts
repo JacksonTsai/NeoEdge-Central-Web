@@ -106,8 +106,7 @@ export class ProjectsComponent implements AfterViewInit {
           } else {
             this.handlePageChange.emit({ page: 1, size: this.size() });
           }
-        }),
-        untilDestroyed(this)
+        })
       )
       .subscribe();
   }

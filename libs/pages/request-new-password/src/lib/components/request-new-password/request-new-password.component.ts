@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '@neo-edge-web/global-service';
+import { AuthService } from '@neo-edge-web/global-services';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { EMPTY, catchError, tap } from 'rxjs';
 import {

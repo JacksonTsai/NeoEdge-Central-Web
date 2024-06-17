@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ProjectsService, UserService, UsersService } from '@neo-edge-web/global-service';
-import { RouterStoreService, selectCurrentProject } from '@neo-edge-web/global-store';
+import { ProjectsService, UserService, UsersService } from '@neo-edge-web/global-services';
+import { RouterStoreService, selectCurrentProject } from '@neo-edge-web/global-stores';
 import { IEditProjectReq, IProjectsState, PROJECTS_LOADING, TableQueryForProjects } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';

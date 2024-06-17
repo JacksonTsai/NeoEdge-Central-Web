@@ -1,0 +1,70 @@
+<h1 class="page-title">Create IT Service</h1>
+<mat-stepper [linear]="true" animationDuration="0" (selectionChange)="onSelectionChange($event)" #stepper>
+  <mat-step label="Select Server Type">
+    <ng-template matStepperIcon="edit">
+      <mat-icon svgIcon="icon:ok"></mat-icon>
+    </ng-template>
+    <mat-card class="card">
+      <mat-card-content>
+        <h2 class="card__title">Select Server Type</h2>
+        <section class="card__sec">
+          <h3 class="card__sub-title">Available</h3>
+          @if (supportAppsAvailable().length) {
+            <ne-support-apps
+              [supportApps]="supportAppsAvailable()"
+              (handlerClick)="onAppClick($event)"
+            ></ne-support-apps>
+          } @else {
+            <p class="text-gray">No items</p>
+          }
+        </section>
+        <section class="card__sec">
+          <h3 class="card__sub-title">Unavailable</h3>
+          @if (supportAppsUnavailable().length) {
+            <ne-support-apps [supportApps]="supportAppsUnavailable()"></ne-support-apps>
+          } @else {
+            <p class="text-gray">No items</p>
+          }
+        </section>
+      </mat-card-content>
+    </mat-card>
+  </mat-step>
+  <mat-step label="Settings">
+    <mat-card class="card">
+      <mat-card-content>
+        <h2 class="card__title">Settings</h2>
+        @if (selectedApp()) {
+          <form [formGroup]="form">
+            <!-- <ng-container
+              *ngComponentOutlet="selectedApp().component; inputs: selectedApp()?.inputs"
+              formControlName="itServiceForm"
+            /> -->
+            @switch (selectedApp()?.key) {
+              @case ('AWS') {
+                <ne-it-service-aws formControlName="itServiceForm" [appData]="selectedApp()"></ne-it-service-aws>
+              }
+              @case ('AZURE') {
+                <ne-it-service-azure></ne-it-service-azure>
+              }
+              @case ('MQTT') {
+                <ne-it-service-mqtt></ne-it-service-mqtt>
+              }
+            }
+          </form>
+        }
+      </mat-card-content>
+    </mat-card>
+    <mat-card-actions class="profile-action">
+      <button type="button" color="primary" mat-stroked-button matStepperPrevious>Back</button>
+      <button
+        type="button"
+        color="primary"
+        mat-flat-button
+        [disabled]="form.invalid || form.pristine"
+        (click)="onSubmit()"
+      >
+        Submit
+      </button>
+    </mat-card-actions>
+  </mat-step>
+</mat-stepper>

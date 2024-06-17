@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormField, MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormService, UserService, ValidatorsService } from '@neo-edge-web/global-service';
+import { FormService, UserService, ValidatorsService } from '@neo-edge-web/global-services';
 import { IGetUserProfileResp } from '@neo-edge-web/models';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import QRCode from 'qrcode';

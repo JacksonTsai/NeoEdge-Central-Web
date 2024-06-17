@@ -1,6 +1,7 @@
 @use 'colors' as *;
 
 mat-dialog-content {
+
 }
 
 h1[mat-dialog-title] {
@@ -32,7 +33,23 @@ h1[mat-dialog-title] {
     display: flex;
     gap: 8px;
     justify-content: flex-end;
-    margin: 0px 8px;
+    margin: 0px 16px;
     margin-bottom: 10px;
+  }
+}
+
+.full-fields {
+  mat-form-field {
+    display: block;
+    width: 100%;
+  }
+}
+
+.dialog-desc {
+  line-height: 1.5;
+  margin-bottom: 16px;
+
+  p {
+    margin-bottom: 8px;
   }
 }

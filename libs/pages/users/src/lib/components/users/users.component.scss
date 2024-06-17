@@ -7,11 +7,6 @@
   &__table {
     width: 100%;
   }
-  .table-action {
-    display: flex;
-    align-items: center;
-    width: 100%;
-  }
   .mat-column-no {
     width: 58px;
   }
@@ -22,7 +17,7 @@
     width: 100px;
   }
   .mat-column-action {
-    width: 350px;
+    width: 360px;
   }
 
   .mat-column-accountStatus {
@@ -33,10 +28,5 @@
     font-size: 14px;
     cursor: pointer;
     text-decoration: underline;
-  }
-  td {
-    button + button {
-      margin-left: 8px;
-    }
   }
 }

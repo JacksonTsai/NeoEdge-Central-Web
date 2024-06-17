@@ -39,6 +39,7 @@ export class GatewayStatusInfoComponent {
   @Output() handleDetachMode = new EventEmitter();
   @Output() handleDeleteGateway = new EventEmitter();
   @Output() handleGetInstallCommand = new EventEmitter();
+  @Output() handleRebootGw = new EventEmitter();
 
   gatewayStatusInfo = input<TGatewayStatusInfo | null>(null);
   isDetachMode = input(false);
@@ -111,5 +112,9 @@ export class GatewayStatusInfoComponent {
 
   onGetInstallCommand = () => {
     this.handleGetInstallCommand.emit();
+  };
+
+  onReboot = () => {
+    this.handleRebootGw.emit();
   };
 }

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SubscriptionPlanService } from '@neo-edge-web/global-service';
+import { SubscriptionPlanService } from '@neo-edge-web/global-services';
 import { IUpgradePlanReq, SUBSCRIPTION_LOADING, SubscriptionPlanState } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';

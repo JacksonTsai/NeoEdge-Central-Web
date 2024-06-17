@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { RolesService } from '@neo-edge-web/global-service';
+import { RolesService } from '@neo-edge-web/global-services';
 import { IEditRoleReq, ROLES_LOADING, RolesState, TableQueryForRoles } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';

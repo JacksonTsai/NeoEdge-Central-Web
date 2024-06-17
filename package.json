@@ -11,7 +11,7 @@
     "build-test": "run-p \"build:nx {1} --configuration build-test\" --",
     "build-prod": "run-p \"build:nx {1} --configuration production\" --",
     "build:nx": "nx build",
-    "icon-sprite:generate": "rm -f icons/icons.svg && pnpm dlx svg2sprite-cli icons icons/icons-sprite.svg"
+    "icon-sprite:generate": "rm -f icons/icons-sprite.svg && pnpm dlx svg2sprite-cli icons icons/icons-sprite.svg --ignore=icons/icons-sprite.svg"
   },
   "private": true,
   "dependencies": {

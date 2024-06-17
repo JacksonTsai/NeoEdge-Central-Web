@@ -71,6 +71,20 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'neoflow/ot-device-profile',
+        loadChildren: () => import('@neo-edge-web/ot-devices-profile').then((m) => m.otDeviceProfileRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
+        path: 'neoflow/it-service-profile',
+        loadChildren: () => import('@neo-edge-web/it-service-profile').then((m) => m.itServiceProfileRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: '',
         redirectTo: '/login',
         pathMatch: 'full'
@@ -103,6 +117,13 @@ export const appRoutes: Route[] = [
   {
     path: 'login',
     loadChildren: () => import('@neo-edge-web/login').then((m) => m.loginRoutes),
+    data: {
+      preload: true
+    }
+  },
+  {
+    path: 'icons',
+    loadChildren: () => import('@neo-edge-web/icons').then((m) => m.iconsRoutes),
     data: {
       preload: true
     }
