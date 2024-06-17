@@ -107,6 +107,20 @@ export const ItServiceStore = signalStore(
           )
         )
       ),
+      copyItService: rxMethod<any>(
+        pipe(
+          tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.COPY })),
+          switchMap((payload) => {
+            return itServiceService.copyItServiceDetail$(payload.copyFrom.id, { name: payload.name }).pipe(
+              tap(() => {
+                patchState(store, { isLoading: IT_SERVICE_LOADING.REFRESH_TABLE });
+              }),
+              tap(() => dialog.closeAll()),
+              catchError(() => EMPTY)
+            );
+          })
+        )
+      ),
       getSupportApps: rxMethod<IGetSupportAppsReq>(
         pipe(
           tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.GET_APPS })),

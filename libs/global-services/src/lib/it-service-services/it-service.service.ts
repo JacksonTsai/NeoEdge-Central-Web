@@ -136,7 +136,7 @@ export class ItServiceService {
     profileId: number,
     payload: ICopyItServiceDetailReq
   ): Observable<ICopyItServiceDetailResp> => {
-    return this.#http.post(`${this.IT_SERVICE_PATH}/${profileId}`, payload).pipe(
+    return this.#http.post(`${this.IT_SERVICE_PATH}/${profileId}/copy`, payload).pipe(
       map((resp) => {
         this.#snackBar.open('Copy IT service successfully.', 'X', {
           horizontalPosition: 'end',

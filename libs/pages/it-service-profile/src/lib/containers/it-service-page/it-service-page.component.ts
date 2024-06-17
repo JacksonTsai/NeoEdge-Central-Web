@@ -63,7 +63,7 @@ export class ItServicePageComponent {
       data: {
         type: 'it',
         fromCopyOpts: [...this.#itServiceStore.dataTable().map((d) => ({ displayName: d.name, id: d.id }))],
-        deleteFn: this.#itServiceStore.deleteItService
+        deleteFn: this.#itServiceStore.copyItService
       }
     });
 
