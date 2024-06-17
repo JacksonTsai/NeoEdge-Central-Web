@@ -1,1 +1,45 @@
-<p>it-service-azure works!</p>
+<form [formGroup]="form" class="neoflow-form">
+  <section class="card__sec">
+    <h3 class="card__sub-title">IT Service Profile</h3>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>IT Service Name</mat-label>
+        <input matInput formControlName="name" type="text" maxlength="64" id="it-service-azure-name" />
+        @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        } @else if (nameCtrl.hasError('format')) {
+          <mat-error>Only allow input of A-Z, a-z, 0-9, -, _</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Host</mat-label>
+        <input
+          matInput
+          formControlName="host"
+          type="text"
+          maxlength="128"
+          placeholder="example.azure-devices.net"
+          id="it-service-azure-host"
+        />
+        @if (hostCtrl.hasError('required') || hostCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        } @else if (hostCtrl.hasError('format')) {
+          <mat-error>Please enter the correct host.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Connection</mat-label>
+        <mat-select formControlName="connection" id="it-service-azure-connection">
+          @for (item of appData()?.connectionData?.options; track item?.key) {
+            <mat-option [value]="item?.value">{{ item?.label }}</mat-option>
+          }
+        </mat-select>
+        @if (connectionCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </section>
+</form>

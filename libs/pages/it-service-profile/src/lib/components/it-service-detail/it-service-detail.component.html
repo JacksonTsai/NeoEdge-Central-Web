@@ -32,14 +32,19 @@
           @switch (appData()?.key) {
             @case ('AWS') {
               <ne-it-service-aws
-                [mode]="mode()"
                 formControlName="itServiceForm"
+                [mode]="mode()"
                 [appData]="selectedApp()"
                 [itServiceDetail]="itServiceDetail()"
               ></ne-it-service-aws>
             }
             @case ('AZURE') {
-              <ne-it-service-azure></ne-it-service-azure>
+              <ne-it-service-azure
+                formControlName="itServiceForm"
+                [mode]="mode()"
+                [appData]="selectedApp()"
+                [itServiceDetail]="itServiceDetail()"
+              ></ne-it-service-azure>
             }
             @case ('MQTT') {
               <ne-it-service-mqtt></ne-it-service-mqtt>

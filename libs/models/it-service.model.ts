@@ -120,6 +120,8 @@ export interface IItServiceField {
 
 export type TItServiceAwsField = IItServiceField;
 
+export type TItServiceAzureField = Pick<IItServiceField, 'name' | 'host' | 'connection'>;
+
 export enum IT_SERVICE_LOADING {
   NONE,
   TABLE,
