@@ -1,1 +1,77 @@
-<p>create-ot-device-page works!</p>
+<mat-stepper animationDuration="0" [linear]="true" #stepper>
+  <form [formGroup]="form">
+    <ng-template matStepperIcon="edit">
+      <mat-icon svgIcon="icon:ok"></mat-icon>
+    </ng-template>
+    <mat-step>
+      <ng-template matStepLabel>Select Device Protocol</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-select-device-protocol
+            [supportDevices]="supportDevices()"
+            formControlName="selectDeviceProtocol"
+          ></ne-select-device-protocol>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Device Profile</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-ot-device-profile
+            [selectedDeviceProtocol]="selectDeviceProtocolCtrl.value"
+            formControlName="deviceProfile"
+          ></ne-ot-device-profile>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Select Command Template</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-select-command-template
+            [selectedDeviceProtocol]="selectDeviceProtocolCtrl.value"
+            formControlName="selectCommandTemplate"
+          >
+          </ne-select-command-template>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Tags</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-ot-tags formControlName="otTags"></ne-ot-tags>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+  </form>
+</mat-stepper>
+
+<div class="stepper-footer__action">
+  @if (currentStepperId > 0) {
+    <button id="create-ot-device-steper-back-btn" mat-stroked-button (click)="onBackStep()">Back</button>
+    @if (currentStepperId < 3) {
+      <button
+        id="create-ot-device-steper-next-btn"
+        mat-stroked-button
+        (click)="onNextStep()"
+        [disabled]="nextBtnDisabled"
+      >
+        Next
+      </button>
+    } @else {
+      <button
+        id="create-ot-device-steper-create-btn"
+        mat-flat-button
+        color="primary"
+        (click)="onCreateDevice()"
+        [disabled]="createDisabled"
+      >
+        Create
+      </button>
+    }
+  }
+</div>

@@ -1,5 +1,6 @@
 export * from './auth.model';
 export * from './company.model';
+export * from './create-ot-devices.model';
 export * from './dateFormat.model';
 export * from './gateway-detail.mode';
 export * from './gateways.model';
@@ -9,6 +10,8 @@ export * from './it-service.model';
 export * from './language.model';
 export * from './ne-menu.model';
 export * from './ot-devices.model';
+export * from './ot-profile.model';
+export * from './ot-tags.model';
 export * from './permissions.model';
 export * from './projects.model';
 export * from './region.model';

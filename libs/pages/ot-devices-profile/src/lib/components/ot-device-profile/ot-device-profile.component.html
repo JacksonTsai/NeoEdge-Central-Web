@@ -1,0 +1,25 @@
+<div class="ot-device-profile-wrapper">
+  <form [formGroup]="form">
+    @if (selectedDeviceProtocol()) {
+      <div class="device-icon">
+        <ne-upload-preview-image [isEditMode]="true" formControlName="deviceIcon"></ne-upload-preview-image>
+      </div>
+      @if (otDeviceType.MODBUS_RTU === selectedDeviceProtocol().name) {
+        <ne-modbus-rtu-profile
+          formControlName="rtuProfile"
+          [selectedDeviceProtocol]="selectedDeviceProtocol()"
+        ></ne-modbus-rtu-profile>
+      } @else if (otDeviceType.TEXOL === selectedDeviceProtocol().name) {
+        <ne-modbus-rtu-profile
+          [selectedDeviceProtocol]="selectedDeviceProtocol()"
+          formControlName="texolProfile"
+        ></ne-modbus-rtu-profile>
+      } @else if (otDeviceType.MODBUS_TCP === selectedDeviceProtocol().name) {
+        <ne-modbus-tcp-profile
+          [selectedDeviceProtocol]="selectedDeviceProtocol()"
+          formControlName="tcpProfile"
+        ></ne-modbus-tcp-profile>
+      }
+    }
+  </form>
+</div>

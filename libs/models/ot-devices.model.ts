@@ -32,8 +32,8 @@ export interface IInstances<T> {
 
 export interface IInstancesRtu {
   RTU: {
-    0: {
-      Devices: { 0: IDevices };
+    [key: string]: {
+      Devices: { [key: string]: IDevices };
       Properties: IRtuProperties;
     };
   };
@@ -41,8 +41,8 @@ export interface IInstancesRtu {
 
 export interface IInstancesTcp {
   TCP: {
-    0: {
-      Devices: { 0: IDevices };
+    [key: string]: {
+      Devices: { [key: string]: IDevices };
       Properties: ITcpProperties;
     };
   };
@@ -51,7 +51,9 @@ export interface IInstancesTcp {
 export interface IDevices {
   Name: string;
   SlaveID: number;
-  Commands: { 0: IDevicesCommands };
+  Commands: {
+    [key: string]: IDevicesCommands;
+  };
 }
 
 export interface IDevicesCommands {
@@ -99,7 +101,7 @@ export interface IEditOtDeviceReq<T> {
   deviceIcon: File;
 }
 
-export type TEditOtProfile<T> = Pick<IOtProfile<T>, 'description' | 'name' | 'setting' | 'appVersionId' | 'projectId'>;
+export type TEditOtProfile<T> = Pick<IOtProfile<T>, 'description' | 'name' | 'setting' | 'appVersionId'>;
 
 export type TOtProfileById<T> = Pick<IOtProfile<T>, 'description' | 'name' | 'setting' | 'appClass' | 'iconPath'>;
 
@@ -108,7 +110,6 @@ interface IOtProfile<T> {
   name: string;
   setting: IInstances<T>;
   appVersionId?: number;
-  projectId: number;
   appClass: string;
   iconPath: string;
 }
@@ -129,4 +130,11 @@ export enum OT_DEVICES_LOADING {
   DELETE,
   DETAIL,
   REFRESH_TABLE
+}
+
+export enum CREATE_OT_STEP {
+  selectDeviceProtocol,
+  deviceProfile,
+  selectCommandTemplate,
+  otTags
 }

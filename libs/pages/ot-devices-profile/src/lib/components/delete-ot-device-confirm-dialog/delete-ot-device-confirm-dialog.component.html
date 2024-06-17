@@ -11,7 +11,7 @@
 
   <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
     <mat-label>Name</mat-label>
-    <input matInput [formControl]="nameCtrl" type="text" maxlength="128" />
+    <input id="delete-ot-devcie-dialog-name-input" matInput [formControl]="nameCtrl" type="text" maxlength="128" />
     @if (nameCtrl.hasError('required')) {
       <mat-error>Required.</mat-error>
     } @else if (nameCtrl.hasError('incorrectDeviceName')) {
@@ -20,9 +20,15 @@
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog__action">
-  <div class="gl-fill-remaining-space"></div>
-  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
-  <button type="button" mat-raised-button color="warn" [disabled]="nameCtrl.invalid" (click)="onDelete()">
+  <button id="delete-ot-devcie-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button
+    id="delete-ot-devcie-dialog-delete-btn"
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="nameCtrl.invalid"
+    (click)="onDelete()"
+  >
     Delete
   </button>
 </mat-dialog-actions>

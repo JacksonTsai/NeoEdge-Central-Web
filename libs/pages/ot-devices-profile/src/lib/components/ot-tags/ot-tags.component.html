@@ -1,0 +1,181 @@
+<div class="ot-tags-wrapper">
+  <div class="ot-tags-wrapper__top">
+    <h2 class="card__title">Tags</h2>
+    <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Add Tag
+    </button>
+  </div>
+  <form [formGroup]="form">
+    <table mat-table [dataSource]="dataSource" formArrayName="tags">
+      <ng-container matColumnDef="no">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          {{ i + 1 }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tagName">
+        <th mat-header-cell *matHeaderCellDef>Tag Name</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="tag-name-field" appearance="outline" floatLabel="always">
+            <input
+              id="ot-tags-tag-name-input-{{ i }}"
+              matInput
+              [formControl]="tagNameCtrl(i)"
+              type="text"
+              maxlength="64"
+            />
+            @if (tagNameCtrl(i).hasError('required')) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="enable">
+        <th mat-header-cell *matHeaderCellDef>Enable</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="enable-field" appearance="outline" floatLabel="always">
+            <mat-select id="ot-tags-tag-enable-select-{{ i }}" [formControl]="enableCtrl(i)">
+              <mat-option id="ot-tags-tag-enable-opetion-true-{{ i }}" [value]="true"> True </mat-option>
+              <mat-option id="ot-tags-tag-enable-opetion-false-{{ i }}" [value]="false"> False </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tagType">
+        <th mat-header-cell *matHeaderCellDef>Tag Type</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="tag-type-field" appearance="outline" floatLabel="always">
+            <mat-select
+              id="ot-tags-tag-type-select-{{ i }}"
+              [formControl]="tagTypeCtrl(i)"
+              (selectionChange)="tagTypeChange(i)"
+            >
+              @for (tagType of tagOptions.tagTypeOpts; track tagType.value) {
+                <mat-option id="ot-tags-tag-type-option-{{ tagType.value }}-{{ i }}" [value]="tagType">
+                  {{ tagType.displayName }}</mat-option
+                >
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="function">
+        <th mat-header-cell *matHeaderCellDef>Function</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="function-field" appearance="outline" floatLabel="always">
+            <mat-select
+              id="ot-tags-tag-function-select-{{ i }}"
+              [formControl]="functionCtrl(i)"
+              (selectionChange)="tagFunctionChange(i)"
+            >
+              @for (tagFunction of tagOptions.tagFunctionOpts; track tagFunction.value) {
+                <mat-option
+                  id="ot-tags-tag-function-option-{{ tagFunction.value }}-{{ i }}"
+                  [value]="tagFunction"
+                  [disabled]="!functionEnable(tagFunction, i)"
+                >
+                  {{ tagFunction.displayName }}</mat-option
+                >
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="startAddress">
+        <th mat-header-cell *matHeaderCellDef>Starting Address</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="start-address-field" appearance="outline" floatLabel="always">
+            <input
+              id="ot-tags-tag-function-start-address-input-{{ i }}"
+              matInput
+              [formControl]="startAddressCtrl(i)"
+              type="number"
+              maxlength="5"
+            />
+            @if (startAddressCtrl(i).hasError('required')) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="quantity-field" appearance="outline" floatLabel="always">
+            <input
+              id="ot-tags-tag-function-quantity-input-{{ i }}"
+              matInput
+              [formControl]="quantityCtrl(i)"
+              type="number"
+              maxlength="5"
+            />
+            @if (quantityCtrl(i).hasError('required')) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="trigger">
+        <th mat-header-cell *matHeaderCellDef>Trigger</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="trigger-field" appearance="outline" floatLabel="always">
+            <mat-select id="ot-tags-tag-trigger-select-{{ i }}" [formControl]="triggerCtrl(i)">
+              @for (tagTrigger of tagOptions.tagTrigger; track tagTrigger.value) {
+                <mat-option
+                  id="ot-tags-tag-trigger-option-{{ tagTrigger.value }}-{{ i }}"
+                  [value]="tagTrigger"
+                  [disabled]="!triggerEnable(tagTrigger, i)"
+                >
+                  {{ tagTrigger.displayName }}</mat-option
+                >
+              }
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="interval">
+        <th mat-header-cell *matHeaderCellDef>Cyclic Poll Interval(ms)</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <mat-form-field class="interval-field" appearance="outline" floatLabel="always">
+            <input
+              id="ot-tags-tag-interval-nput-{{ i }}"
+              matInput
+              [formControl]="intervalCtrl(i)"
+              type="number"
+              maxlength="8"
+            />
+            @if (intervalCtrl(i).hasError('required')) {
+              <mat-error>Required.</mat-error>
+            }
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <button
+            id="ot-tags-tag-remove-btn-{{ i }}"
+            type="button"
+            mat-icon-button
+            color="warn"
+            (click)="onRemoveTag(i)"
+          >
+            <mat-icon svgIcon="icon:delete_red"></mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </form>
+</div>

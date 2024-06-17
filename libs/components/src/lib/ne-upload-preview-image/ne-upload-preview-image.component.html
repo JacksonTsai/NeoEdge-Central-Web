@@ -1,0 +1,19 @@
+<div class="circle-img">
+  @if (isEditMode()) {
+    <div class="change-img" id="change-image" (click)="inputFile.click()">
+      <mat-icon svgIcon="icon:camera_white" matTooltip="Change image."></mat-icon>
+      <input
+        #inputFile
+        type="file"
+        class="file-input"
+        (click)="inputFile.value = null"
+        accept="image/gif,image/jpeg,image/jpg,image/png"
+      />
+    </div>
+  }
+  @if (isSvgIcon) {
+    <mat-icon [svgIcon]="imagePreview()"></mat-icon>
+  } @else {
+    <img width="100%" height="100%" [src]="imagePreview()" />
+  }
+</div>
