@@ -23,6 +23,8 @@ export class NeSupportAppItemComponent implements AfterViewInit {
   @Output() handlerClick = new EventEmitter<ISupportAppsWithVersion>();
   appData = input<ISupportApps>();
   versionData = input<IAppVersion>();
+  clickable = input(true);
+  single = input(false);
   appSettings = signal<ISupportAppsUI>({ key: '', img: '' });
   appCategory = signal<string>(SUPPORT_APPS_CATEGORIES[1]);
 
@@ -31,6 +33,8 @@ export class NeSupportAppItemComponent implements AfterViewInit {
   }
 
   onClick = (): void => {
+    if (!this.clickable()) return;
+
     this.handlerClick.emit({
       version: this.versionData(),
       ...this.appSettings(),

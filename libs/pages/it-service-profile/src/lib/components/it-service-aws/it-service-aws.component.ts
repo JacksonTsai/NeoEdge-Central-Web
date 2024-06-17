@@ -101,21 +101,24 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
   constructor() {
     effect(() => {
       this.changeEditMode(false);
+      if (this.mode() === IT_SERVICE_DETAIL_MODE.CANCEL) {
+        this.onCancelEdit();
+      }
     });
   }
 
-  setFormValue = (): void => {
+  setFormValue = (itServiceDetail: IItServiceField | null): void => {
     this.form.setValue({
-      name: this.currentFieldData()?.name ?? '',
-      host: this.currentFieldData()?.host ?? '',
-      connection: this.currentFieldData()?.connection ?? this.appData()?.connectionData?.default?.value ?? '',
-      keepAlive: this.currentFieldData()?.keepAlive ?? 60,
-      qoS: this.currentFieldData()?.qoS ?? 1
+      name: itServiceDetail?.name ?? '',
+      host: itServiceDetail?.host ?? '',
+      connection: itServiceDetail?.connection ?? this.appData()?.connectionData?.default?.value ?? '',
+      keepAlive: itServiceDetail?.keepAlive ?? 60,
+      qoS: itServiceDetail?.qoS ?? 1
     });
   };
 
   changeEditMode = (isEdit: boolean): void => {
-    if (this.mode() === IT_SERVICE_DETAIL_MODE.VEIW) {
+    if (this.mode() === IT_SERVICE_DETAIL_MODE.VEIW || this.mode() === IT_SERVICE_DETAIL_MODE.CANCEL) {
       this.nameCtrl.disable();
       this.hostCtrl.disable();
       this.connectionCtrl.disable();
@@ -128,6 +131,11 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
       this.keepAliveCtrl.enable();
       this.qoSCtrl.enable();
     }
+  };
+
+  onCancelEdit = (): void => {
+    this.changeEditMode(false);
+    this.setFormValue(this.currentFieldData());
   };
 
   buildSetting = (fieldData: TItServiceAwsField): any => {
@@ -182,7 +190,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
       qoS: [{ value: 1, disabled: true }, [Validators.required]]
     });
 
-    this.setFormValue();
+    this.setFormValue(this.currentFieldData() ?? null);
 
     this.form.valueChanges.subscribe((fieldData: TItServiceAwsField) => {
       const value = this.transformFieldDataToApi(fieldData);

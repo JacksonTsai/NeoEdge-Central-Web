@@ -1,9 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+  computed,
+  effect,
+  inject,
+  input,
+  signal
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 import { NeSupportAppItemComponent } from '@neo-edge-web/components';
 import { ItServiceDetailService } from '@neo-edge-web/global-services';
 import {
@@ -11,7 +22,8 @@ import {
   IItServiceDetailSelectedAppData,
   ISupportAppsWithVersion,
   IT_SERVICE_DETAIL_LOADING,
-  IT_SERVICE_DETAIL_MODE
+  IT_SERVICE_DETAIL_MODE,
+  IUpdateItServiceDetailReq
 } from '@neo-edge-web/models';
 import { ItServiceAwsComponent } from '../it-service-aws/it-service-aws.component';
 import { ItServiceAzureComponent } from '../it-service-azure/it-service-azure.component';
@@ -22,6 +34,7 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
@@ -36,6 +49,7 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItServiceDetailComponent {
+  @Output() handleSubmitItService = new EventEmitter<IUpdateItServiceDetailReq>();
   itServiceDetailService = inject(ItServiceDetailService);
   projectId = input<number>(0);
   itServiceDetail = input<IItServiceDetail>();
@@ -44,7 +58,7 @@ export class ItServiceDetailComponent {
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
 
-  mode = signal<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.EDIT);
+  mode = signal<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.VEIW);
   isEditMode = computed<boolean>(() => this.mode() === IT_SERVICE_DETAIL_MODE.EDIT);
   selectedApp = signal<IItServiceDetailSelectedAppData | null>(null);
 
@@ -63,15 +77,20 @@ export class ItServiceDetailComponent {
     );
   }
 
+  onEdit = (): void => {
+    this.mode.set(IT_SERVICE_DETAIL_MODE.EDIT);
+  };
+
   onCancelEdit = (): void => {
-    this.mode.set(IT_SERVICE_DETAIL_MODE.VEIW);
+    this.mode.set(IT_SERVICE_DETAIL_MODE.CANCEL);
   };
 
   onSave = (): void => {
     this.mode.set(IT_SERVICE_DETAIL_MODE.VEIW);
-  };
-
-  onEdit = (): void => {
-    this.mode.set(IT_SERVICE_DETAIL_MODE.EDIT);
+    const payload: IUpdateItServiceDetailReq = this.form.get('itServiceForm').value;
+    this.handleSubmitItService.emit({
+      name: payload.name,
+      setting: payload.setting
+    });
   };
 }

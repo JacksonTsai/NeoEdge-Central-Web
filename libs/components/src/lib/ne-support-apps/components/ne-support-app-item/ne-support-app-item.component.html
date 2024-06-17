@@ -1,4 +1,8 @@
-<div class="support-app-item" [ngClass]="{ 'is-disabled': !appData()?.isAvailable }" (click)="onClick()">
+<div
+  class="support-app-item"
+  [ngClass]="{ 'is-disabled': !appData()?.isAvailable, 'is-unclickable': !clickable(), 'is-single': single() }"
+  (click)="onClick()"
+>
   <div class="support-app-item__img">
     <img [src]="appSettings()?.img" [alt]="appData()?.name" />
   </div>

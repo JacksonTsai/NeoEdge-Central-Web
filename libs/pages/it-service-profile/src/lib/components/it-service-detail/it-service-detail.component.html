@@ -1,11 +1,28 @@
-<h1 class="page-title">IT Service Profile - {{ itServiceDetail()?.name }}</h1>
+<div class="page-title-box">
+  <a
+    type="button"
+    mat-icon-button
+    color="primary"
+    class="btn"
+    [routerLink]="['/neoflow/it-service-profile']"
+    id="it-service-detail-back"
+  >
+    <mat-icon svgIcon="icon:arrow_left" color="primary" aria-hidden="false" aria-label="Back to IT service"></mat-icon>
+  </a>
+  <h1 class="page-title">IT Service Profile - {{ itServiceDetail()?.name }}</h1>
+</div>
 <mat-card class="card">
   <mat-card-content>
     <h2 class="card__title">IT Service Profile</h2>
     <section class="card__sec">
       <h3 class="card__sub-title">Server Type</h3>
       @if (appData()) {
-        <ne-support-app-item [appData]="appData()" [versionData]="appData()?.appVersions"></ne-support-app-item>
+        <ne-support-app-item
+          [appData]="appData()"
+          [versionData]="appData()?.appVersions"
+          [clickable]="false"
+          [single]="true"
+        ></ne-support-app-item>
       }
     </section>
     <section class="card__sec">

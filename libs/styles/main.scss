@@ -47,6 +47,16 @@ body {
   }
 }
 
+.page-title-box {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  .page-title {
+    margin-bottom: 0;
+  }
+}
+
 html .mat-drawer-container {
   background-color: $white;
 }

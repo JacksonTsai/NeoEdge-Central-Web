@@ -144,6 +144,7 @@ export enum IT_SERVICE_DETAIL_LOADING {
 export enum IT_SERVICE_DETAIL_MODE {
   CREATE,
   EDIT,
+  CANCEL,
   VEIW
 }
 
