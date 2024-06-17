@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, effect, forwardRef, inject, input } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -22,8 +22,9 @@ import { FormService, ItServiceDetailService, ValidatorsService } from '@neo-edg
 import {
   ICreateItServiceReq,
   IItService,
+  IItServiceDetail,
   IItServiceDetailSelectedAppData,
-  IItServiceSettingCredentials,
+  IItServiceField,
   IT_SERVICE_DETAIL_MODE,
   TItServiceAwsField
 } from '@neo-edge-web/models';
@@ -62,6 +63,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
   mode = input<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.CREATE);
   projectId = input<number>(0);
   appData = input<IItServiceDetailSelectedAppData>();
+  itServiceDetail = input<IItServiceDetail>();
   formService = inject(FormService);
   validatorsService = inject(ValidatorsService);
   itServiceDetailService = inject(ItServiceDetailService);
@@ -70,6 +72,11 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
 
   onChange: any = () => {};
   onTouched: any = () => {};
+
+  currentFieldData = computed<IItServiceField | null>(() => {
+    if (!this.itServiceDetail()) return null;
+    return this.itServiceDetailService.apiToFieldData(this.itServiceDetail());
+  });
 
   get nameCtrl() {
     return this.form.get('name') as UntypedFormControl;
@@ -91,33 +98,39 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
     return this.form.get('qoS') as UntypedFormControl;
   }
 
-  get caCertFileCtrl() {
-    return this.form.get('caCertFile') as UntypedFormControl;
+  constructor() {
+    effect(() => {
+      this.changeEditMode(false);
+    });
   }
 
   setFormValue = (): void => {
     this.form.setValue({
-      name: '',
-      host: '',
-      connection: this.appData()?.connectionData.default.value,
-      keepAlive: 60,
-      qoS: 1,
-      caCertFileName: '',
-      caCertFileContent: ''
+      name: this.currentFieldData()?.name ?? '',
+      host: this.currentFieldData()?.host ?? '',
+      connection: this.currentFieldData()?.connection ?? this.appData()?.connectionData?.default?.value ?? '',
+      keepAlive: this.currentFieldData()?.keepAlive ?? 60,
+      qoS: this.currentFieldData()?.qoS ?? 1
     });
   };
 
-  buildSetting = (fieldData: TItServiceAwsField): any => {
-    let Credentials: IItServiceSettingCredentials | null = null;
-    if (fieldData.caCertFileContent) {
-      Credentials = {
-        CaCert: {
-          Name: fieldData.caCertFileName,
-          Content: fieldData.caCertFileContent
-        }
-      } as IItServiceSettingCredentials;
+  changeEditMode = (isEdit: boolean): void => {
+    if (this.mode() === IT_SERVICE_DETAIL_MODE.VEIW) {
+      this.nameCtrl.disable();
+      this.hostCtrl.disable();
+      this.connectionCtrl.disable();
+      this.keepAliveCtrl.disable();
+      this.qoSCtrl.disable();
+    } else {
+      this.nameCtrl.enable();
+      this.hostCtrl.enable();
+      this.connectionCtrl.enable();
+      this.keepAliveCtrl.enable();
+      this.qoSCtrl.enable();
     }
+  };
 
+  buildSetting = (fieldData: TItServiceAwsField): any => {
     return {
       Instances: {
         '0': {
@@ -127,7 +140,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
               QoS: fieldData.qoS,
               Host: `${IT_SERVICE_AWS_SCHEMA}://${fieldData.host}:${fieldData.connection}`,
               KeepAlive: fieldData.keepAlive,
-              Credentials: Credentials ?? {}
+              Credentials: {}
             }
           }
         }
@@ -137,7 +150,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
 
   transformFieldDataToApi(fieldData: TItServiceAwsField): ICreateItServiceReq {
     const result = {
-      appVersionId: this.appData().app.id,
+      appVersionId: this.appData()?.app?.id ?? 0,
       name: fieldData.name,
       projectId: this.projectId(),
       setting: this.buildSetting(fieldData)
@@ -156,21 +169,17 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
       host: hostParts[0],
       connection: parseInt(hostParts[1], 10),
       keepAlive: parameters.KeepAlive,
-      qoS: parameters.QoS,
-      caCertFileName: parameters.Credentials.CaCert.Name,
-      caCertFileContent: parameters.Credentials.CaCert.Content
+      qoS: parameters.QoS
     };
   }
 
   ngOnInit(): void {
     this.form = this.#fb.group({
-      name: ['', [Validators.required, this.validatorsService.bTypeValidator()]],
-      host: ['', [Validators.required, this.validatorsService.fqdnValidator()]],
-      connection: [null, [Validators.required]],
-      keepAlive: [60, [Validators.required, Validators.min(30), Validators.max(300)]],
-      qoS: [1, [Validators.required]],
-      caCertFileName: [''],
-      caCertFileContent: ['']
+      name: [{ value: '', disabled: true }, [Validators.required, this.validatorsService.bTypeValidator()]],
+      host: [{ value: '', disabled: true }, [Validators.required]],
+      connection: [{ value: null, disabled: true }, [Validators.required]],
+      keepAlive: [{ value: 60, disabled: true }, [Validators.required, Validators.min(30), Validators.max(300)]],
+      qoS: [{ value: 1, disabled: true }, [Validators.required]]
     });
 
     this.setFormValue();
@@ -183,7 +192,6 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
   }
 
   writeValue(value: any): void {
-    console.log('writeValue', value);
     if (value) {
       this.form.setValue(value);
     }

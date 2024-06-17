@@ -40,7 +40,7 @@ export class NeSupportAppItemComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     let supportAppsSetting: ISupportAppsUI[] = [];
-    switch (this.appData().flowGroup) {
+    switch (this.appData()?.flowGroup) {
       case 0:
         supportAppsSetting = otDeviceSupportApps;
         break;
@@ -59,6 +59,6 @@ export class NeSupportAppItemComponent implements AfterViewInit {
       }
     }
 
-    this.appCategory.set(this.getCategoryName(this.appData().category));
+    this.appCategory.set(this.getCategoryName(this.appData()?.category));
   }
 }

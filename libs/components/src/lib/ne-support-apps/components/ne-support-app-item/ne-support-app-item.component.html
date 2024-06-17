@@ -1,20 +1,15 @@
-<div class="support-app-item"
-     [ngClass]="{'is-disabled': !appData().isAvailable}"
-     (click)="onClick()">
+<div class="support-app-item" [ngClass]="{ 'is-disabled': !appData()?.isAvailable }" (click)="onClick()">
   <div class="support-app-item__img">
-    <img [src]="appSettings()?.img"
-         [alt]="appData().name">
+    <img [src]="appSettings()?.img" [alt]="appData()?.name" />
   </div>
   <div class="support-app-item__text">
-    <h4 class="support-app-item__title">{{ appData().name }}</h4>
-    <div class="support-app-item__ver">version: {{ versionData().version }}</div>
+    <h4 class="support-app-item__title">{{ appData()?.name }}</h4>
+    <div class="support-app-item__ver">version: {{ versionData()?.version }}</div>
     <div class="support-app-item__cate">#{{ appCategory() }}</div>
   </div>
   @if (!appData()?.isAvailable) {
-  <div class="upgrade-tip">
-    <button type="button"
-            color="primary"
-            mat-flat-button>Upgrade Plan</button>
-  </div>
+    <div class="upgrade-tip">
+      <button type="button" color="primary" mat-flat-button>Upgrade Plan</button>
+    </div>
   }
 </div>

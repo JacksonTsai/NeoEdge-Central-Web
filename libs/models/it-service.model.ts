@@ -13,6 +13,13 @@ export interface IItServiceState {
   isLoading: IT_SERVICE_LOADING;
 }
 
+export interface IItServiceDetailState {
+  projectId: number;
+  itServiceId: number;
+  itServiceDetail: IItServiceDetail;
+  isLoading: IT_SERVICE_DETAIL_LOADING;
+}
+
 export interface IItService {
   appClass: string;
   appVersionId: number;
@@ -128,7 +135,8 @@ export enum IT_SERVICE_LOADING {
 
 export enum IT_SERVICE_DETAIL_LOADING {
   NONE,
-  TABLE,
+  EDIT_DETAIL,
+  GET_DETAIL,
   REFRESH,
   DELETE
 }

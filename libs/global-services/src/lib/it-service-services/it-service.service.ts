@@ -79,7 +79,7 @@ export class ItServiceService {
   getItServiceDetail$ = (profileId: number): Observable<IGetItServiceDetailResp> => {
     return this.#http.get(`${this.IT_SERVICE_PATH}/${profileId}`).pipe(
       catchError((err) => {
-        this.#snackBar.open('Delete IT service failure.', 'X', {
+        this.#snackBar.open('Get IT service failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
