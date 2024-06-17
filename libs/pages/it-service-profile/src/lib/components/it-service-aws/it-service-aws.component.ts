@@ -28,6 +28,7 @@ import {
   IT_SERVICE_DETAIL_MODE,
   TItServiceAwsField
 } from '@neo-edge-web/models';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 
 const IT_SERVICE_AWS_SCHEMA = 'tls';
 
@@ -142,11 +143,11 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
     return {
       Instances: {
         '0': {
-          Name: fieldData.name,
+          Name: fieldData?.name?.trim(),
           Process: {
             Parameters: {
               QoS: fieldData.qoS,
-              Host: `${IT_SERVICE_AWS_SCHEMA}://${fieldData.host}:${fieldData.connection}`,
+              Host: `${IT_SERVICE_AWS_SCHEMA}://${fieldData?.host?.trim()}:${fieldData.connection}`,
               KeepAlive: fieldData.keepAlive,
               Credentials: {}
             }
@@ -159,7 +160,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
   transformFieldDataToApi(fieldData: TItServiceAwsField): ICreateItServiceReq {
     const result = {
       appVersionId: this.appData()?.app?.id ?? 0,
-      name: fieldData.name,
+      name: fieldData?.name?.trim(),
       projectId: this.projectId(),
       setting: this.buildSetting(fieldData)
     };
@@ -183,8 +184,11 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
 
   ngOnInit(): void {
     this.form = this.#fb.group({
-      name: [{ value: '', disabled: true }, [Validators.required, this.validatorsService.bTypeValidator()]],
-      host: [{ value: '', disabled: true }, [Validators.required]],
+      name: [
+        { value: '', disabled: true },
+        [Validators.required, whitespaceValidator, this.validatorsService.bTypeValidator()]
+      ],
+      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator]],
       connection: [{ value: null, disabled: true }, [Validators.required]],
       keepAlive: [{ value: 60, disabled: true }, [Validators.required, Validators.min(30), Validators.max(300)]],
       qoS: [{ value: 1, disabled: true }, [Validators.required]]
