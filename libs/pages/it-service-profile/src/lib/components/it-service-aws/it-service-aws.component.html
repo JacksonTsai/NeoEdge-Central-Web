@@ -5,7 +5,7 @@
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>IT Service Name</mat-label>
         <input matInput formControlName="name" type="text" maxlength="64" id="it-service-aws-name" />
-        @if (nameCtrl.hasError('required')) {
+        @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
           <mat-error>Required.</mat-error>
         } @else if (nameCtrl.hasError('format')) {
           <mat-error>Only allow input of A-Z, a-z, 0-9, -, _</mat-error>
@@ -23,7 +23,7 @@
           placeholder="example.amazonaws.com"
           id="it-service-aws-host"
         />
-        @if (hostCtrl.hasError('required')) {
+        @if (hostCtrl.hasError('required') || hostCtrl.hasError('whitespace')) {
           <mat-error>Required.</mat-error>
         } @else if (hostCtrl.hasError('format')) {
           <mat-error>Please enter the correct host.</mat-error>
@@ -32,7 +32,7 @@
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Connection</mat-label>
         <mat-select formControlName="connection" id="it-service-aws-connection">
-          @for (item of appData()?.connectionData.options; track item?.key) {
+          @for (item of appData()?.connectionData?.options; track item?.key) {
             <mat-option [value]="item?.value">{{ item?.label }}</mat-option>
           }
         </mat-select>
@@ -65,7 +65,7 @@
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label> Message QoS </mat-label>
         <mat-select formControlName="qoS" id="it-service-aws-qo-s">
-          @for (item of appData()?.qoSData.options; track item.value) {
+          @for (item of appData()?.qoSData?.options; track item.value) {
             <mat-option [value]="item.value">{{ item.value }}</mat-option>
           }
         </mat-select>
@@ -76,7 +76,7 @@
       <mat-icon
         svgIcon="icon:info_gary"
         class="explain-icon"
-        [matTooltip]="appData().qoSData.tip"
+        [matTooltip]="appData().qoSData?.tip"
         matTooltipClass="tooltip-break-line"
       ></mat-icon>
     </div>

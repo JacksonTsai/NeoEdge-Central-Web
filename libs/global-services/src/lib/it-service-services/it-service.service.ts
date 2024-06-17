@@ -28,9 +28,8 @@ export class ItServiceService {
     return throwError(() => err);
   }
 
-  getItService$ = (projectId: number, queryStr?: TableQueryForItService): Observable<IGetItServiceResp> => {
+  getItService$ = (queryStr?: TableQueryForItService): Observable<IGetItServiceResp> => {
     const params = new URLSearchParams();
-    params.set('projectIds', projectId.toString());
     if (queryStr) {
       if (queryStr?.page) {
         params.set('page', queryStr.page.toString());
@@ -79,7 +78,7 @@ export class ItServiceService {
   getItServiceDetail$ = (profileId: number): Observable<IGetItServiceDetailResp> => {
     return this.#http.get(`${this.IT_SERVICE_PATH}/${profileId}`).pipe(
       catchError((err) => {
-        this.#snackBar.open('Delete IT service failure.', 'X', {
+        this.#snackBar.open('Get IT service failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
@@ -137,7 +136,7 @@ export class ItServiceService {
     profileId: number,
     payload: ICopyItServiceDetailReq
   ): Observable<ICopyItServiceDetailResp> => {
-    return this.#http.post(`${this.IT_SERVICE_PATH}/${profileId}`, payload).pipe(
+    return this.#http.post(`${this.IT_SERVICE_PATH}/${profileId}/copy`, payload).pipe(
       map((resp) => {
         this.#snackBar.open('Copy IT service successfully.', 'X', {
           horizontalPosition: 'end',

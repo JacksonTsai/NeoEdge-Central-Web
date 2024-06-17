@@ -3,7 +3,6 @@ import { ITableQuery } from './table-query.model';
 
 export type TItServiceAzureProtocol = 'MQTT' | 'AMQP' | 'MQTT_WS' | 'AMQP_WS';
 export interface IItServiceState {
-  projectId: number;
   dataTable: IItService[];
   page: number;
   size: number;
@@ -11,6 +10,12 @@ export interface IItServiceState {
   supportApps: ISupportApps[];
   connections: IItServiceConnectionOption[];
   isLoading: IT_SERVICE_LOADING;
+}
+
+export interface IItServiceDetailState {
+  itServiceId: number;
+  itServiceDetail: IItServiceDetail;
+  isLoading: IT_SERVICE_DETAIL_LOADING;
 }
 
 export interface IItService {
@@ -25,6 +30,12 @@ export interface IItService {
   connectionLabel?: string;
 }
 
+export interface IItServiceDetail {
+  appVersionId: number;
+  name: string;
+  setting: any;
+}
+
 export type TableQueryForItService = ITableQuery & { names?: string };
 
 export interface IGetItServiceResp {
@@ -35,7 +46,6 @@ export interface IGetItServiceResp {
 export interface ICreateItServiceReq {
   appVersionId: number;
   name: string;
-  projectId: number;
   setting: any;
 }
 
@@ -116,13 +126,15 @@ export enum IT_SERVICE_LOADING {
   REFRESH_TABLE,
   CREATE,
   DELETE,
+  COPY,
   GET_APPS,
   REFRESH_APPS
 }
 
 export enum IT_SERVICE_DETAIL_LOADING {
   NONE,
-  TABLE,
+  EDIT_DETAIL,
+  GET_DETAIL,
   REFRESH,
   DELETE
 }
@@ -130,6 +142,7 @@ export enum IT_SERVICE_DETAIL_LOADING {
 export enum IT_SERVICE_DETAIL_MODE {
   CREATE,
   EDIT,
+  CANCEL,
   VEIW
 }
 

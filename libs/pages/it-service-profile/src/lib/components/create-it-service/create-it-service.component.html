@@ -41,11 +41,7 @@
             /> -->
             @switch (selectedApp()?.key) {
               @case ('AWS') {
-                <ne-it-service-aws
-                  formControlName="itServiceForm"
-                  [projectId]="projectId()"
-                  [appData]="selectedApp()"
-                ></ne-it-service-aws>
+                <ne-it-service-aws formControlName="itServiceForm" [appData]="selectedApp()"></ne-it-service-aws>
               }
               @case ('AZURE') {
                 <ne-it-service-azure></ne-it-service-azure>
@@ -58,7 +54,7 @@
         }
       </mat-card-content>
     </mat-card>
-    <mat-card-actions>
+    <mat-card-actions class="profile-action">
       <button type="button" color="primary" mat-stroked-button matStepperPrevious>Back</button>
       <button
         type="button"

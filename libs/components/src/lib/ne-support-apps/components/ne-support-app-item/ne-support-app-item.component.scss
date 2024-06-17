@@ -12,6 +12,10 @@
   border: 1px solid rgba(#000, 0.12);
   border-radius: var(--radius);
 
+  &.is-single {
+    width: calc(33.33% - 10px);
+  }
+
   &.is-disabled {
     position: relative;
     cursor: not-allowed;
@@ -31,7 +35,7 @@
     }
   }
 
-  &:not(.is-disabled) {
+  &:not(.is-disabled):not(.is-unclickable) {
     cursor: pointer;
 
     &:hover,

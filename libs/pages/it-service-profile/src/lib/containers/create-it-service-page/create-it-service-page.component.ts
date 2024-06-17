@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ICreateItServiceReq } from '@neo-edge-web/models';
-import { CreateItServiceComponent } from '../../components/create-it-service/create-it-service.component';
+import { CreateItServiceComponent } from '../../components';
 import { ItServiceStore } from '../../stores/it-service.store';
 
 @Component({
@@ -12,7 +12,6 @@ import { ItServiceStore } from '../../stores/it-service.store';
   template: `
     <ne-create-it-service
       [supportApps]="supportApps()"
-      [projectId]="projectId()"
       (handleSubmitItService)="onSubmit($event)"
     ></ne-create-it-service>
   `,
@@ -25,7 +24,6 @@ export class CreateItServicePageComponent {
   #itServiceStore = inject(ItServiceStore);
 
   supportApps = this.#itServiceStore.supportApps;
-  projectId = this.#itServiceStore.projectId;
 
   onSubmit = (event: ICreateItServiceReq) => {
     this.#itServiceStore.createItService(event);

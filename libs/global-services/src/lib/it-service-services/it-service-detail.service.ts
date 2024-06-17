@@ -3,6 +3,7 @@ import {
   IItService,
   IItServiceConnectionData,
   IItServiceConnectionOption,
+  IItServiceDetail,
   IItServiceDetailSelectedAppData,
   IItServiceField,
   IItServiceQoSData,
@@ -148,7 +149,7 @@ export class ItServiceDetailService {
     };
   };
 
-  apiToFieldData(api: IItService): IItServiceField {
+  apiToFieldData(api: IItService | IItServiceDetail): IItServiceField {
     const instance = api.setting.Instances['0'];
     const parameters = instance.Process.Parameters;
     let host: string;

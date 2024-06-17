@@ -36,3 +36,15 @@
     border-radius: 4px;
   }
 }
+
+mat-card-actions.profile-action {
+  padding-top: 24px;
+  padding-bottom: 0;
+  padding-left: 0;
+
+  button {
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+}

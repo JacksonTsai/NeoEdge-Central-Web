@@ -5,8 +5,7 @@ import { Router } from '@angular/router';
 import { CopyProfileDialogComponent } from '@neo-edge-web/components';
 import { IItService, IT_SERVICE_LOADING, TableQueryForItService } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { ItServicesComponent } from '../../components';
-import { DeleteItServiceDialogComponent } from '../../components/delete-it-service-dialog/delete-it-service-dialog.component';
+import { DeleteItServiceDialogComponent, ItServicesComponent } from '../../components';
 import { ItServiceStore } from '../../stores/it-service.store';
 
 @UntilDestroy()
@@ -64,7 +63,7 @@ export class ItServicePageComponent {
       data: {
         type: 'it',
         fromCopyOpts: [...this.#itServiceStore.dataTable().map((d) => ({ displayName: d.name, id: d.id }))],
-        deleteFn: this.#itServiceStore.deleteItService
+        deleteFn: this.#itServiceStore.copyItService
       }
     });
 
