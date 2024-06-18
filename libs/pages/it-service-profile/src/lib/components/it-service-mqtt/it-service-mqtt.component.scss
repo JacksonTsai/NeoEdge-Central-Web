@@ -9,3 +9,14 @@
   margin-left: 40px;
   align-items: flex-start;
 }
+
+ne-upload-file {
+  width: calc(33.33% - #{(10px + 84px)});
+  margin-left: 84px;
+
+  ::ng-deep {
+    .upload-file--uploaded {
+      width: 100%;
+    }
+  }
+}

@@ -44,6 +44,9 @@
         <mat-form-field appearance="outline" floatLabel="always">
           <mat-label>Custom Connection</mat-label>
           <input matInput formControlName="connectionCustom" type="number" id="it-service-mqtt-connection-custom" />
+          @if (connectionCustomCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
         </mat-form-field>
       }
     </div>
@@ -101,9 +104,10 @@
           <mat-radio-button value="private">By Private CA</mat-radio-button>
         </mat-radio-group>
         @if (useCaTypeCtrl.value === 'private') {
-          <ne-upload-file accept=".crt,.cer,.pem,.der,.p12,.pfx" sizeMax="1MB"></ne-upload-file>
+          <ne-upload-file accept=".crt,.cer,.pem,.der,.p12,.pfx" sizeMax="1MB" formControlName="file"></ne-upload-file>
         }
       }
     }
   </section>
 </form>
+MQTT: {{ form.value | json }}

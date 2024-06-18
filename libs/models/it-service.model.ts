@@ -111,11 +111,22 @@ export interface IItServiceField {
   name: string;
   host: string;
   connection: number | TItServiceAzureProtocol;
+  connectionCustom?: number;
   keepAlive?: number;
   qoS?: number;
   caCertFileName?: string;
   caCertFileContent?: string;
   skipCertVerify?: boolean;
+  useTls?: boolean;
+  useCert?: boolean;
+  useCaType?: string;
+  file?: IItServiceCaFile | null;
+}
+
+export interface IItServiceCaFile {
+  name: string;
+  content: string | ArrayBuffer | null;
+  file?: File;
 }
 
 export type TItServiceAwsField = IItServiceField;
@@ -152,4 +163,9 @@ export enum IT_SERVICE_APP {
   'AWS IoT Core' = 1,
   'AZURE IoT Hub' = 2,
   'MQTT Broker' = 3
+}
+
+export enum IT_SERVICE_CA_TYPE {
+  PUBLIC,
+  PRIVACY
 }

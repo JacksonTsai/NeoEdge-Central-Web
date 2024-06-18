@@ -21,7 +21,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormService, ItServiceDetailService, ValidatorsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
-  IItService,
   IItServiceDetail,
   IItServiceDetailSelectedAppData,
   IItServiceField,
@@ -146,17 +145,6 @@ export class ItServiceAzureComponent implements OnInit, ControlValueAccessor, Va
     };
 
     return result;
-  }
-
-  transformApiToFieldData(api: IItService) {
-    const instance = api.setting.Instances['0'];
-    const parameters = instance.Process.Parameters;
-
-    return {
-      name: instance.Name,
-      host: parameters.Host,
-      connection: parameters.Protocol
-    };
   }
 
   ngOnInit(): void {

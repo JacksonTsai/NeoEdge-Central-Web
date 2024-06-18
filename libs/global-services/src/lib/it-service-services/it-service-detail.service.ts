@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   IItService,
+  IItServiceCaFile,
   IItServiceConnectionData,
   IItServiceConnectionOption,
   IItServiceDetail,
@@ -152,8 +153,10 @@ export class ItServiceDetailService {
   apiToFieldData(api: IItService | IItServiceDetail): IItServiceField {
     const instance = api.setting?.Instances?.['0'] || null;
     const parameters = instance?.Process?.Parameters || null;
+    const credentials = parameters?.Credentials || null;
     let host: string;
     let connection: number | null = null;
+    let fileData: IItServiceCaFile | null = null;
 
     if (parameters?.Host) {
       const { host: extractedHost, connection: extractedConnection } = this.extractHostAndConnection(parameters.Host);
@@ -166,6 +169,13 @@ export class ItServiceDetailService {
       connection = parameters.Protocol;
     }
 
+    if (credentials?.CaCert) {
+      fileData = {
+        name: credentials?.CaCert.Name,
+        content: credentials?.CaCert.Content
+      };
+    }
+
     return {
       name: api.name,
       host: host,
@@ -174,7 +184,10 @@ export class ItServiceDetailService {
       qoS: parameters?.QoS,
       caCertFileName: parameters?.Credentials?.CaCert?.Name,
       caCertFileContent: parameters?.Credentials?.CaCert?.Content,
-      skipCertVerify: parameters?.Credentials?.SkipCertVerify
+      useTls: parameters?.Host.startsWith('tls://'),
+      useCert: !credentials?.SkipCertVerify,
+      useCaType: credentials?.CaCert?.name ? 'privacy' : 'public',
+      file: fileData
     };
   }
 

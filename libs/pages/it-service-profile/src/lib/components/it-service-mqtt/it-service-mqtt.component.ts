@@ -11,6 +11,7 @@ import {
   UntypedFormControl,
   ValidationErrors,
   Validator,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,12 +25,13 @@ import { NeUploadFileComponent } from '@neo-edge-web/components';
 import { FormService, ItServiceDetailService, ValidatorsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
-  IItService,
   IItServiceDetail,
   IItServiceDetailSelectedAppData,
   IItServiceField,
+  IItServiceSettingCredentials,
   IT_SERVICE_DETAIL_MODE,
-  TItServiceAwsField
+  TItServiceAwsField,
+  TItServiceAzureProtocol
 } from '@neo-edge-web/models';
 import { whitespaceValidator } from '@neo-edge-web/validators';
 
@@ -120,6 +122,10 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
     return this.form.get('useCaType') as UntypedFormControl;
   }
 
+  get fileCtrl() {
+    return this.form.get('file') as UntypedFormControl;
+  }
+
   constructor() {
     effect(() => {
       this.changeEditMode(false);
@@ -130,16 +136,18 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
   }
 
   setFormValue = (itServiceDetail: IItServiceField | null): void => {
+    const isCustom = itServiceDetail?.connection ? this.checkIsCustom(itServiceDetail?.connection) : false;
     this.form.setValue({
       name: itServiceDetail?.name ?? '',
       host: itServiceDetail?.host ?? '',
-      connection: itServiceDetail?.connection ?? this.appData()?.connectionData?.default?.value ?? '',
-      connectionCustom: '',
+      connection: isCustom ? 0 : itServiceDetail?.connection ?? this.appData()?.connectionData?.default?.value ?? '',
+      connectionCustom: isCustom ? itServiceDetail?.connection : '',
       keepAlive: itServiceDetail?.keepAlive ?? 60,
       qoS: itServiceDetail?.qoS ?? 1,
-      useTls: true,
-      useCert: true,
-      useCaType: 'private'
+      useTls: !!itServiceDetail?.useTls,
+      useCert: !!itServiceDetail?.useCert,
+      useCaType: itServiceDetail?.useCaType ?? 'public',
+      file: itServiceDetail?.file ?? null
     });
   };
 
@@ -151,6 +159,10 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
       this.connectionCustomCtrl.disable();
       this.keepAliveCtrl.disable();
       this.qoSCtrl.disable();
+      this.useTlsCtrl.disable();
+      this.useCertCtrl.disable();
+      this.useCaTypeCtrl.disable();
+      this.fileCtrl.disable();
     } else {
       this.nameCtrl.enable();
       this.hostCtrl.enable();
@@ -158,6 +170,10 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
       this.connectionCustomCtrl.enable();
       this.keepAliveCtrl.enable();
       this.qoSCtrl.enable();
+      this.useTlsCtrl.enable();
+      this.useCertCtrl.enable();
+      this.useCaTypeCtrl.enable();
+      this.fileCtrl.enable();
     }
   };
 
@@ -167,16 +183,30 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
   };
 
   buildSetting = (fieldData: TItServiceAwsField): any => {
+    const SCHEMA = fieldData?.useTls ? 'tls' : 'tcp';
+    const connection = this.checkIsCustom(fieldData?.connection) ? fieldData?.connectionCustom : fieldData?.connection;
+    const Credentials: IItServiceSettingCredentials = {};
+
+    if (fieldData?.useTls && fieldData?.useCert !== null) {
+      Credentials.SkipCertVerify = !fieldData?.useCert;
+      if (fieldData.useCaType === 'private' && fieldData.file) {
+        Credentials.CaCert = {
+          Name: fieldData?.file.name,
+          Content: fieldData?.file.content as string
+        };
+      }
+    }
+
     return {
       Instances: {
         '0': {
           Name: fieldData?.name?.trim(),
           Process: {
             Parameters: {
-              QoS: fieldData.qoS,
-              Host: `${IT_SERVICE_AWS_SCHEMA}://${fieldData?.host?.trim()}:${fieldData.connection}`,
-              KeepAlive: fieldData.keepAlive,
-              Credentials: {}
+              QoS: fieldData?.qoS,
+              Host: `${SCHEMA}://${fieldData?.host?.trim()}:${connection}`,
+              KeepAlive: fieldData?.keepAlive,
+              Credentials: Credentials
             }
           }
         }
@@ -194,21 +224,17 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
     return result;
   }
 
-  transformApiToFieldData(api: IItService) {
-    const instance = api.setting.Instances['0'];
-    const parameters = instance.Process.Parameters;
-    const hostParts = parameters.Host.replace('tls://', '').split(':');
+  checkIsCustom(port: number | TItServiceAzureProtocol): boolean {
+    if (port === null) return false;
+    for (const connection of this.appData().connectionData.options) {
+      if (connection.value !== 0 && connection.value === port) return false;
+    }
+    return true;
+  }
 
-    return {
-      name: instance.Name,
-      host: hostParts[0],
-      connection: parseInt(hostParts[1], 10),
-      connectionCustom: null,
-      keepAlive: parameters.KeepAlive,
-      qoS: parameters.QoS,
-      useTls: false,
-      useCert: false,
-      useCaType: 'public'
+  checkFileValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value ? null : { fileRequire: true };
     };
   }
 
@@ -225,10 +251,29 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
       qoS: [{ value: 1, disabled: true }, [Validators.required]],
       useTls: [{ value: false, disabled: true }, []],
       useCert: [{ value: false, disabled: true }, []],
-      useCaType: [{ value: 'public', disabled: true }, []]
+      useCaType: [{ value: 'public', disabled: true }, []],
+      file: [{ value: null, disabled: true }, []]
     });
 
     this.setFormValue(this.currentFieldData() ?? null);
+
+    this.connectionCtrl?.valueChanges.subscribe((value) => {
+      if (value === 0) {
+        this.connectionCustomCtrl?.setValidators([Validators.required]);
+      } else {
+        this.connectionCustomCtrl?.clearValidators();
+      }
+      this.connectionCustomCtrl?.updateValueAndValidity();
+    });
+
+    this.useCaTypeCtrl?.valueChanges.subscribe((value) => {
+      if (value === 'public') {
+        this.fileCtrl?.clearValidators();
+      } else {
+        this.fileCtrl?.setValidators([Validators.required]);
+      }
+      this.fileCtrl?.updateValueAndValidity();
+    });
 
     this.form.valueChanges.subscribe((fieldData: TItServiceAwsField) => {
       const value = this.transformFieldDataToApi(fieldData);
@@ -256,6 +301,14 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return this.form.valid ? null : { invalidForm: { valid: false, message: 'form fields are invalid' } };
+    if (this.form.valid) {
+      if (this.useCaTypeCtrl?.value === 'privacy') {
+        return this.fileCtrl?.value ? null : { fileRequire: true };
+      } else {
+        return null;
+      }
+    } else {
+      return { invalidForm: { valid: false, message: 'form fields are invalid' } };
+    }
   }
 }
