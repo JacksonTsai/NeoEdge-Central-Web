@@ -16,6 +16,8 @@
             />
             @if (deviceNameCtrl.hasError('required')) {
               <mat-error>Required.</mat-error>
+            } @else if (deviceNameCtrl.hasError('whitespace')) {
+              <mat-error>The value not allow whitespace.</mat-error>
             }
           </mat-form-field>
 
