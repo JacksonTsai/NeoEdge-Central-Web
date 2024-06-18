@@ -150,25 +150,19 @@ export class ItServiceDetailService {
   };
 
   apiToFieldData(api: IItService | IItServiceDetail): IItServiceField {
-    const instance = api.setting.Instances['0'];
-    const parameters = instance.Process.Parameters;
+    const instance = api.setting?.Instances?.['0'] || null;
+    const parameters = instance?.Process?.Parameters || null;
     let host: string;
     let connection: number | null = null;
 
-    if (parameters.Host.startsWith('tls://')) {
-      const hostParts = parameters.Host.replace('tls://', '').split(':');
-      host = hostParts[0];
-      connection = hostParts.length > 1 ? parseInt(hostParts[1], 10) : null;
-    } else if (parameters.Host.startsWith('tcp:')) {
-      const hostParts = parameters.Host.replace('tcp:', '').split('//:');
-      host = hostParts[0];
-      connection = hostParts.length > 1 ? parseInt(hostParts[1], 10) : null;
-    } else {
-      host = parameters.Host;
+    if (parameters?.Host) {
+      const { host: extractedHost, connection: extractedConnection } = this.extractHostAndConnection(parameters.Host);
+      host = extractedHost;
+      connection = extractedConnection;
     }
 
     // Azure
-    if (parameters.Protocol) {
+    if (parameters?.Protocol) {
       connection = parameters.Protocol;
     }
 
@@ -178,9 +172,29 @@ export class ItServiceDetailService {
       connection: connection,
       keepAlive: parameters?.KeepAlive,
       qoS: parameters?.QoS,
-      caCertFileName: parameters.Credentials?.CaCert?.Name,
-      caCertFileContent: parameters.Credentials?.CaCert?.Content,
-      skipCertVerify: parameters.Credentials?.SkipCertVerify
+      caCertFileName: parameters?.Credentials?.CaCert?.Name,
+      caCertFileContent: parameters?.Credentials?.CaCert?.Content,
+      skipCertVerify: parameters?.Credentials?.SkipCertVerify
     };
+  }
+
+  private extractHostAndConnection(hostString: string): { host: string; connection: number | null } {
+    let host: string;
+    let connection: number | null = null;
+
+    if (hostString.startsWith('tls://') || hostString.startsWith('tcp://')) {
+      const protocol = hostString.startsWith('tls://') ? 'tls://' : 'tcp://';
+      const hostParts = hostString.replace(protocol, '').split(':');
+      host = hostParts[0];
+      connection = hostParts.length > 1 ? parseInt(hostParts[1], 10) : null;
+    } else if (hostString.startsWith('tcp:')) {
+      const hostParts = hostString.replace('tcp:', '').split('//:');
+      host = hostParts[0];
+      connection = hostParts.length > 1 ? parseInt(hostParts[1], 10) : null;
+    } else {
+      host = hostString;
+    }
+
+    return { host, connection };
   }
 }
