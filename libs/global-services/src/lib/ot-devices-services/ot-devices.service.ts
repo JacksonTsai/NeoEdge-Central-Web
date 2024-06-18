@@ -110,7 +110,27 @@ export class OtDevicesService {
         return this.handleError(err);
       })
     );
+  copyDevice$ = (profileId, name) => {
+    return this.#http.post(`${this.OT_DEVICE_PROFILES_PATH}/${profileId}/copy`, { name }).pipe(
+      map((resp) => {
+        this.#snackBar.open('Copy ot device successfully.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
 
+        return resp;
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Copy ot device failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
   deleteOtDevice$ = (profileId: number, name: string) =>
     this.#http.delete(`${this.OT_DEVICE_PROFILES_PATH}/${profileId}`, { name }).pipe(
       map((resp) => {

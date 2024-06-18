@@ -21,7 +21,7 @@ import { OtDevicesStore } from '../../stores/ot-devices.store';
       [devicesLength]="otDevicesLength()"
       (handleDetailDevice)="onDetailDevice($event)"
       (handleDeleteDevice)="onDeleteDevice($event)"
-      (handleCopyDevice)="onCopyDevice()"
+      (handleCopyDevice)="onCopyDevice($event)"
       (handleCreateDevice)="onCreateDevice()"
       (handlePageChange)="onPageChange($event)"
     >
@@ -42,11 +42,14 @@ export class OtDevicesPageComponent {
   isLoading = this.#otDevicesStore.isLoading;
 
   constructor() {
-    effect(() => {
-      if (OT_DEVICES_LOADING.REFRESH_TABLE === this.isLoading()) {
-        this.#otDevicesStore.queryOtDevicesTableByPage({ size: this.tableSize(), page: this.tablePage() });
-      }
-    });
+    effect(
+      () => {
+        if (OT_DEVICES_LOADING.REFRESH_TABLE === this.isLoading()) {
+          this.#otDevicesStore.queryOtDevicesTableByPage({ size: this.tableSize(), page: this.tablePage() });
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   onDetailDevice = (event) => {};
@@ -68,7 +71,7 @@ export class OtDevicesPageComponent {
       });
   };
 
-  onCopyDevice = () => {
+  onCopyDevice = (event: IOtDevice<any>) => {
     let editRoleDialogRef = this.#dialog.open(CopyProfileDialogComponent, {
       panelClass: 'med-dialog',
       disableClose: true,
@@ -76,8 +79,8 @@ export class OtDevicesPageComponent {
       restoreFocus: false,
       data: {
         type: 'ot',
-        fromCopyOpts: [...this.#otDevicesStore.otDevices().map((d) => ({ displayName: d.name, id: d.id }))],
-        deleteFn: this.#otDevicesStore.deleteOtDevice
+        copyFrom: { displayName: event.name, id: event.id },
+        copyFn: this.#otDevicesStore.copyDevice
       }
     });
 

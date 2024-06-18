@@ -5,7 +5,12 @@
     <span> Create IT App From Copy </span>
   }
 </h1>
+
 <mat-dialog-content>
+  <h3>
+    Copy from
+    <span color="primary">{{ data.copyFrom.displayName }}</span>
+  </h3>
   <form [formGroup]="form">
     <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>
@@ -20,18 +25,8 @@
         <mat-error>Required.</mat-error>
       } @else if (nameCtrl.hasError('whitespace')) {
         <mat-error>The value not allow whitespace.</mat-error>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" floatLabel="always">
-      <mat-label>Type</mat-label>
-      <mat-select formControlName="copyFrom">
-        @for (opt of data.fromCopyOpts; track opt.id) {
-          <mat-option [value]="opt"> {{ opt.displayName }} </mat-option>
-        }
-      </mat-select>
-      @if (copyFromCtrl.hasError('required')) {
-        <mat-error>Required.</mat-error>
+      } @else if (nameCtrl.hasError('format')) {
+        <mat-error>Only allow input of A-Z, a-z, 0-9, -, _</mat-error>
       }
     </mat-form-field>
   </form>

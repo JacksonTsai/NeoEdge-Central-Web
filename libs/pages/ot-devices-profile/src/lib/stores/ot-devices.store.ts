@@ -64,6 +64,20 @@ export const OtDevicesStore = signalStore(
           )
         )
       )
+    ),
+    copyDevice: rxMethod<{ profileId: number; name: string }>(
+      pipe(
+        tap(() => patchState(store, { isLoading: OT_DEVICES_LOADING.COPY })),
+        switchMap(({ profileId, name }) => {
+          return otDevicesService.copyDevice$(profileId, name).pipe(
+            tap(() => {
+              patchState(store, { isLoading: OT_DEVICES_LOADING.REFRESH_TABLE });
+            }),
+            tap(() => dialog.closeAll()),
+            catchError(() => EMPTY)
+          );
+        })
+      )
     )
   })),
   withHooks((store, globalStore = inject(Store)) => {

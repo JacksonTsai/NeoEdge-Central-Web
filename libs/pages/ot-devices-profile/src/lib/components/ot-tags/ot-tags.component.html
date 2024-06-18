@@ -28,6 +28,8 @@
             />
             @if (tagNameCtrl(i).hasError('required')) {
               <mat-error>Required.</mat-error>
+            } @else if (tagNameCtrl(i).hasError('whitespace')) {
+              <mat-error>The value not allow whitespace.</mat-error>
             }
           </mat-form-field>
         </td>
