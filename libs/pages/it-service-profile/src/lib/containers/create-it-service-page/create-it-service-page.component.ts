@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
 import { ICreateItServiceReq } from '@neo-edge-web/models';
 import { CreateItServiceComponent } from '../../components';
 import { ItServiceStore } from '../../stores/it-service.store';
@@ -20,13 +19,11 @@ import { ItServiceStore } from '../../stores/it-service.store';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateItServicePageComponent {
-  #router = inject(Router);
   #itServiceStore = inject(ItServiceStore);
 
   supportApps = this.#itServiceStore.supportApps;
 
   onSubmit = (event: ICreateItServiceReq) => {
     this.#itServiceStore.createItService(event);
-    this.#router.navigate([`neoflow/it-service-profile`]);
   };
 }
