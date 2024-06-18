@@ -23,9 +23,7 @@
       <input matInput formControlName="name" type="text" maxlength="128" />
       @if (nameCtrl.hasError('required')) {
         <mat-error>Required.</mat-error>
-      } @else if (nameCtrl.hasError('whitespace')) {
-        <mat-error>The value not allow whitespace.</mat-error>
-      } @else if (nameCtrl.hasError('format')) {
+      } @else if (nameCtrl.hasError('whitespace') || nameCtrl.hasError('format')) {
         <mat-error>Only allow input of A-Z, a-z, 0-9, -, _</mat-error>
       }
     </mat-form-field>
