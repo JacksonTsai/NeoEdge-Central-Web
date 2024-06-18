@@ -34,9 +34,7 @@ export const CreateOtDevicesStore = signalStore(
               map((d) => {
                 patchState(store, {
                   isLoading: CREATE_OT_DEVICES_LOADING.NONE,
-                  // todo remove 移除map
-                  // supportDevices: d.apps
-                  supportDevices: d.apps.map((v) => ({ ...v, isAvailable: 1 }))
+                  supportDevices: d.apps
                 });
               }),
               catchError(() => EMPTY)

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input, signal } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   NG_VALIDATORS,
@@ -75,8 +74,14 @@ export class OtDeviceProfileComponent implements OnInit, ControlValueAccessor, V
     console.log(v);
   }
 
-  validate(control: AbstractControl) {
-    return this.form.invalid ? { formError: 'error' } : null;
+  validate() {
+    if (SUPPORT_APPS_OT_DEVICE.MODBUS_RTU === this.selectedDeviceProtocol().name) {
+      return this.rtuProfileCtrl.invalid ? { profile: 'error' } : null;
+    } else if (SUPPORT_APPS_OT_DEVICE.MODBUS_TCP === this.selectedDeviceProtocol().name) {
+      return this.tcpProfileCtrl.invalid ? { profile: 'error' } : null;
+    } else {
+      return this.texolProfileCtrl.invalid ? { profile: 'error' } : null;
+    }
   }
 
   registerOnChange(fn: any) {
