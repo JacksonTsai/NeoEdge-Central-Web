@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { ItServiceDetailService, ItServiceService, SupportAppsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
@@ -33,6 +34,7 @@ export const ItServiceStore = signalStore(
   withMethods(
     (
       store,
+      router = inject(Router),
       dialog = inject(MatDialog),
       supportAppsService = inject(SupportAppsService),
       itServiceService = inject(ItServiceService),
@@ -85,6 +87,9 @@ export const ItServiceStore = signalStore(
           tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.CREATE })),
           switchMap((payload) =>
             itServiceService.createItService$(payload).pipe(
+              tap(() => {
+                router.navigate([`neoflow/it-service-profile`]);
+              }),
               tap(() => {
                 patchState(store, { isLoading: IT_SERVICE_LOADING.REFRESH_TABLE });
               }),
