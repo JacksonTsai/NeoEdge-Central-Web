@@ -105,7 +105,7 @@
           }
         </mat-radio-group>
         @if (useCaTypeCtrl.value === 'private') {
-          <ne-upload-file accept=".crt,.cer,.pem,.der,.p12,.pfx" sizeMax="1MB" formControlName="file"></ne-upload-file>
+          <ne-upload-file accept=".crt,.cer,.pem,.der,.p12,.pfx" maxSize="1MB" formControlName="file"></ne-upload-file>
         }
       }
     }
