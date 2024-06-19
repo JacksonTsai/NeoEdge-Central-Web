@@ -47,7 +47,7 @@ export class GatewayDetailService {
     }
     const formData = obj2FormData(payload);
 
-    return this.#http.put(`${this.GATEWAYS_PATH}/${gatewayId}/profile`, formData).pipe(
+    return this.#http.put(`${this.GATEWAYS_PATH}/${gatewayId}`, formData).pipe(
       tap(() => {
         this.#snackBar.open('Setting success.', 'X', {
           horizontalPosition: 'end',
