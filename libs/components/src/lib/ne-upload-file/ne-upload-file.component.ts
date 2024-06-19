@@ -23,6 +23,7 @@ import { IItServiceCaFile } from '@neo-edge-web/models';
 export class NeUploadFileComponent implements ControlValueAccessor {
   public sizeMax = input<string | null>(null);
   public accept = input<string | null>(null);
+  public isDisabled = signal(false);
   public fileInfo = signal<IItServiceCaFile | null>(null);
   public acceptText = computed<string>(() => {
     if (!this.accept()) return '';
@@ -39,17 +40,22 @@ export class NeUploadFileComponent implements ControlValueAccessor {
   @HostListener('change', ['$event.target.files']) emitFiles(event: FileList) {
     if (!event) return;
     const file = event && event.item(0);
+    this.setFormValue(file, '');
     const reader = new FileReader();
     reader.onload = (e) => {
-      this.fileInfo.set({
-        file: file,
-        name: file.name,
-        content: reader.result
-      });
-      this.onChange(this.fileInfo());
+      this.setFormValue(file, reader.result);
       this.onTouched();
     };
     reader.readAsText(file);
+  }
+
+  private setFormValue(file: File, content: string | ArrayBuffer): void {
+    this.fileInfo.set({
+      file: file,
+      name: file.name,
+      content: content
+    });
+    this.onChange(this.fileInfo());
   }
 
   public writeValue(value: IItServiceCaFile): void {
@@ -62,6 +68,10 @@ export class NeUploadFileComponent implements ControlValueAccessor {
 
   public registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  public setDisabledState(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
   }
 
   public onBlur(): void {

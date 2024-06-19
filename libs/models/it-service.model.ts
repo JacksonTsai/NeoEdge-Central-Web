@@ -166,6 +166,6 @@ export enum IT_SERVICE_APP {
 }
 
 export enum IT_SERVICE_CA_TYPE {
-  PUBLIC,
-  PRIVACY
+  Public = 'public',
+  Private = 'private'
 }

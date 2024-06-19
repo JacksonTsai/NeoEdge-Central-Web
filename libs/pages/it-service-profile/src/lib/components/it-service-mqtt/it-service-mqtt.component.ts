@@ -29,13 +29,13 @@ import {
   IItServiceDetailSelectedAppData,
   IItServiceField,
   IItServiceSettingCredentials,
+  IT_SERVICE_CA_TYPE,
+  IT_SERVICE_DETAIL_LOADING,
   IT_SERVICE_DETAIL_MODE,
   TItServiceAwsField,
   TItServiceAzureProtocol
 } from '@neo-edge-web/models';
 import { whitespaceValidator } from '@neo-edge-web/validators';
-
-const IT_SERVICE_AWS_SCHEMA = 'tls';
 
 @Component({
   selector: 'ne-it-service-mqtt',
@@ -69,17 +69,21 @@ const IT_SERVICE_AWS_SCHEMA = 'tls';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Validator {
+  title = input<string>('');
   mode = input<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.CREATE);
   appData = input<IItServiceDetailSelectedAppData>();
   itServiceDetail = input<IItServiceDetail>();
+  isLoading = input<IT_SERVICE_DETAIL_LOADING>();
   formService = inject(FormService);
   validatorsService = inject(ValidatorsService);
   itServiceDetailService = inject(ItServiceDetailService);
   #fb = inject(FormBuilder);
   form: FormGroup;
+  caType = IT_SERVICE_CA_TYPE;
 
   onChange: any = () => {};
   onTouched: any = () => {};
+  sortNull: any = () => {};
 
   currentFieldData = computed<IItServiceField | null>(() => {
     if (!this.itServiceDetail()) return null;
@@ -127,12 +131,21 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
   }
 
   constructor() {
-    effect(() => {
-      this.changeEditMode(false);
-      if (this.mode() === IT_SERVICE_DETAIL_MODE.CANCEL) {
-        this.onCancelEdit();
+    effect(
+      () => {
+        if (this.isLoading() === IT_SERVICE_DETAIL_LOADING.REFRESH) {
+          this.setFormValue(this.currentFieldData());
+        }
+
+        this.changeEditMode(false);
+        if (this.mode() === IT_SERVICE_DETAIL_MODE.CANCEL) {
+          this.onCancelEdit();
+        }
+      },
+      {
+        allowSignalWrites: true
       }
-    });
+    );
   }
 
   setFormValue = (itServiceDetail: IItServiceField | null): void => {
@@ -146,7 +159,7 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
       qoS: itServiceDetail?.qoS ?? 1,
       useTls: !!itServiceDetail?.useTls,
       useCert: !!itServiceDetail?.useCert,
-      useCaType: itServiceDetail?.useCaType ?? 'public',
+      useCaType: itServiceDetail?.useCaType ?? IT_SERVICE_CA_TYPE.Public,
       file: itServiceDetail?.file ?? null
     });
   };
@@ -178,7 +191,7 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
   };
 
   onCancelEdit = (): void => {
-    this.changeEditMode(false);
+    this.changeEditMode(true);
     this.setFormValue(this.currentFieldData());
   };
 
@@ -187,9 +200,9 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
     const connection = this.checkIsCustom(fieldData?.connection) ? fieldData?.connectionCustom : fieldData?.connection;
     const Credentials: IItServiceSettingCredentials = {};
 
-    if (fieldData?.useTls && fieldData?.useCert !== null) {
+    if (fieldData?.useCert !== null) {
       Credentials.SkipCertVerify = !fieldData?.useCert;
-      if (fieldData.useCaType === 'private' && fieldData.file) {
+      if (fieldData.useCaType === IT_SERVICE_CA_TYPE.Private && fieldData.file) {
         Credentials.CaCert = {
           Name: fieldData?.file.name,
           Content: fieldData?.file.content as string
@@ -251,7 +264,7 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
       qoS: [{ value: 1, disabled: true }, [Validators.required]],
       useTls: [{ value: false, disabled: true }, []],
       useCert: [{ value: false, disabled: true }, []],
-      useCaType: [{ value: 'public', disabled: true }, []],
+      useCaType: [{ value: IT_SERVICE_CA_TYPE.Public, disabled: true }, []],
       file: [{ value: null, disabled: true }, []]
     });
 
@@ -267,7 +280,7 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
     });
 
     this.useCaTypeCtrl?.valueChanges.subscribe((value) => {
-      if (value === 'public') {
+      if (value === IT_SERVICE_CA_TYPE.Public) {
         this.fileCtrl?.clearValidators();
       } else {
         this.fileCtrl?.setValidators([Validators.required]);
@@ -302,7 +315,7 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
 
   validate(control: AbstractControl): ValidationErrors | null {
     if (this.form.valid) {
-      if (this.useCaTypeCtrl?.value === 'privacy') {
+      if (this.useCaTypeCtrl?.value === IT_SERVICE_CA_TYPE.Private) {
         return this.fileCtrl?.value ? null : { fileRequire: true };
       } else {
         return null;

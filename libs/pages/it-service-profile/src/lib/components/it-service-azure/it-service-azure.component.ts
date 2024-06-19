@@ -24,6 +24,7 @@ import {
   IItServiceDetail,
   IItServiceDetailSelectedAppData,
   IItServiceField,
+  IT_SERVICE_DETAIL_LOADING,
   IT_SERVICE_DETAIL_MODE,
   TItServiceAzureField
 } from '@neo-edge-web/models';
@@ -58,9 +59,11 @@ import { whitespaceValidator } from '@neo-edge-web/validators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItServiceAzureComponent implements OnInit, ControlValueAccessor, Validator {
+  title = input<string>('');
   mode = input<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.CREATE);
   appData = input<IItServiceDetailSelectedAppData>();
   itServiceDetail = input<IItServiceDetail>();
+  isLoading = input<IT_SERVICE_DETAIL_LOADING>();
   formService = inject(FormService);
   validatorsService = inject(ValidatorsService);
   itServiceDetailService = inject(ItServiceDetailService);
@@ -89,6 +92,10 @@ export class ItServiceAzureComponent implements OnInit, ControlValueAccessor, Va
 
   constructor() {
     effect(() => {
+      if (this.isLoading() === IT_SERVICE_DETAIL_LOADING.REFRESH) {
+        this.setFormValue(this.currentFieldData());
+      }
+
       this.changeEditMode(false);
       if (this.mode() === IT_SERVICE_DETAIL_MODE.CANCEL) {
         this.onCancelEdit();

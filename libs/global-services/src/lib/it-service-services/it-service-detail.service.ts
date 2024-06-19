@@ -10,6 +10,7 @@ import {
   IItServiceQoSData,
   IItServiceQoSOption,
   ISupportAppsWithVersion,
+  IT_SERVICE_CA_TYPE,
   TSupportAppsItService
 } from '@neo-edge-web/models';
 
@@ -186,7 +187,7 @@ export class ItServiceDetailService {
       caCertFileContent: parameters?.Credentials?.CaCert?.Content,
       useTls: parameters?.Host.startsWith('tls://'),
       useCert: !credentials?.SkipCertVerify,
-      useCaType: credentials?.CaCert?.name ? 'privacy' : 'public',
+      useCaType: credentials?.CaCert?.Name ? IT_SERVICE_CA_TYPE.Private : IT_SERVICE_CA_TYPE.Public,
       file: fileData
     };
   }

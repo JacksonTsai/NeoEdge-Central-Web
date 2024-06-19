@@ -1,6 +1,6 @@
 <form [formGroup]="form" class="neoflow-form">
   <section class="card__sec">
-    <h3 class="card__sub-title">IT Service Profile</h3>
+    <h3 class="card__sub-title">{{ title() }}</h3>
     <div class="d-grid col-3">
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>IT Service Name</mat-label>
@@ -100,8 +100,9 @@
       </div>
       @if (useCertCtrl.value) {
         <mat-radio-group class="radio-group" formControlName="useCaType" color="primary">
-          <mat-radio-button value="public">By Public CA</mat-radio-button>
-          <mat-radio-button value="private">By Private CA</mat-radio-button>
+          @for (item of caType | keyvalue: sortNull; track item.key) {
+            <mat-radio-button [value]="item.value">By {{ item.key }} CA</mat-radio-button>
+          }
         </mat-radio-group>
         @if (useCaTypeCtrl.value === 'private') {
           <ne-upload-file accept=".crt,.cer,.pem,.der,.p12,.pfx" sizeMax="1MB" formControlName="file"></ne-upload-file>
@@ -110,4 +111,3 @@
     }
   </section>
 </form>
-MQTT: {{ form.value | json }}
