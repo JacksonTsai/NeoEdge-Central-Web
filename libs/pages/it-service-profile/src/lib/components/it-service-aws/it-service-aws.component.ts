@@ -21,10 +21,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormService, ItServiceDetailService, ValidatorsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
-  IItService,
   IItServiceDetail,
   IItServiceDetailSelectedAppData,
   IItServiceField,
+  IT_SERVICE_DETAIL_LOADING,
   IT_SERVICE_DETAIL_MODE,
   TItServiceAwsField
 } from '@neo-edge-web/models';
@@ -61,9 +61,11 @@ const IT_SERVICE_AWS_SCHEMA = 'tls';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Validator {
+  title = input<string>('');
   mode = input<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.CREATE);
   appData = input<IItServiceDetailSelectedAppData>();
   itServiceDetail = input<IItServiceDetail>();
+  isLoading = input<IT_SERVICE_DETAIL_LOADING>();
   formService = inject(FormService);
   validatorsService = inject(ValidatorsService);
   itServiceDetailService = inject(ItServiceDetailService);
@@ -100,6 +102,10 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
 
   constructor() {
     effect(() => {
+      if (this.isLoading() === IT_SERVICE_DETAIL_LOADING.REFRESH) {
+        this.setFormValue(this.currentFieldData());
+      }
+
       this.changeEditMode(false);
       if (this.mode() === IT_SERVICE_DETAIL_MODE.CANCEL) {
         this.onCancelEdit();
@@ -164,20 +170,6 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
     };
 
     return result;
-  }
-
-  transformApiToFieldData(api: IItService) {
-    const instance = api.setting.Instances['0'];
-    const parameters = instance.Process.Parameters;
-    const hostParts = parameters.Host.replace('tls://', '').split(':');
-
-    return {
-      name: instance.Name,
-      host: hostParts[0],
-      connection: parseInt(hostParts[1], 10),
-      keepAlive: parameters.KeepAlive,
-      qoS: parameters.QoS
-    };
   }
 
   ngOnInit(): void {

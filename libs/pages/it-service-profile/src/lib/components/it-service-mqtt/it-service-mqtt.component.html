@@ -1,1 +1,113 @@
-<p>it-service-mqtt works!</p>
+<form [formGroup]="form" class="neoflow-form">
+  <section class="card__sec">
+    <h3 class="card__sub-title">{{ title() }}</h3>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>IT Service Name</mat-label>
+        <input matInput formControlName="name" type="text" maxlength="64" id="it-service-mqtt-name" />
+        @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        } @else if (nameCtrl.hasError('format')) {
+          <mat-error>Only allow input of A-Z, a-z, 0-9, -, _</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Host</mat-label>
+        <input
+          matInput
+          formControlName="host"
+          type="text"
+          maxlength="128"
+          placeholder="example.hivemq.cloud"
+          id="it-service-mqtt-host"
+        />
+        @if (hostCtrl.hasError('required') || hostCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        } @else if (hostCtrl.hasError('format')) {
+          <mat-error>Please enter the correct host.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Connection</mat-label>
+        <mat-select formControlName="connection" id="it-service-mqtt-connection">
+          @for (item of appData()?.connectionData?.options; track item?.key) {
+            <mat-option [value]="item?.value">{{ item?.label }}</mat-option>
+          }
+        </mat-select>
+        @if (connectionCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+      @if (connectionCtrl.value === 0) {
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Custom Connection</mat-label>
+          <input matInput formControlName="connectionCustom" type="number" id="it-service-mqtt-connection-custom" />
+          @if (connectionCustomCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
+      }
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Keep Alive (sec)</mat-label>
+        <input
+          matInput
+          formControlName="keepAlive"
+          type="number"
+          placeholder="Range: 30 ~ 300"
+          min="30"
+          max="300"
+          id="it-service-mqtt-keep-alive"
+          (keypress)="formService.restrictToNumbers($event, 3)"
+        />
+        @if (keepAliveCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        } @else if (keepAliveCtrl.hasError('min') || keepAliveCtrl.hasError('max')) {
+          <mat-error>Keep Alive should be between 30-300</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="d-grid col-3">
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label> Message QoS </mat-label>
+        <mat-select formControlName="qoS" id="it-service-mqtt-qo-s">
+          @for (item of appData()?.qoSData?.options; track item.value) {
+            <mat-option [value]="item.value">{{ item.value }}</mat-option>
+          }
+        </mat-select>
+        @if (qoSCtrl.hasError('required')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+      <mat-icon
+        svgIcon="icon:info_gary"
+        class="explain-icon"
+        [matTooltip]="appData().qoSData?.tip"
+        matTooltipClass="tooltip-break-line"
+      ></mat-icon>
+    </div>
+    <div>
+      <mat-checkbox class="example-margin" color="primary" formControlName="useTls">Use TLS</mat-checkbox>
+    </div>
+    @if (useTlsCtrl.value) {
+      <div>
+        <mat-checkbox class="example-margin" color="primary" formControlName="useCert"
+          >Verify Broker X.509 Certificate</mat-checkbox
+        >
+      </div>
+      @if (useCertCtrl.value) {
+        <mat-radio-group class="radio-group" formControlName="useCaType" color="primary">
+          @for (item of caType | keyvalue: sortNull; track item.key) {
+            <mat-radio-button [value]="item.value">By {{ item.key }} CA</mat-radio-button>
+          }
+        </mat-radio-group>
+        @if (useCaTypeCtrl.value === 'private') {
+          <ne-upload-file accept=".crt,.cer,.pem,.der,.p12,.pfx" maxSize="1MB" formControlName="file"></ne-upload-file>
+        }
+      }
+    }
+  </section>
+</form>

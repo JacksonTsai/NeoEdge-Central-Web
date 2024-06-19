@@ -4,6 +4,6 @@ export interface IItServiceSettingCaCert {
 }
 
 export interface IItServiceSettingCredentials {
-  CaCert: IItServiceSettingCaCert;
+  CaCert?: IItServiceSettingCaCert;
   SkipCertVerify?: boolean;
 }

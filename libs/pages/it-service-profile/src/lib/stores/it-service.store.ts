@@ -58,7 +58,7 @@ export const ItServiceStore = signalStore(
                   d.itServices.map((item) => {
                     const { connection } = itServiceDetailService.apiToFieldData(item);
                     if (connection) {
-                      let connectionLabel = connectionOpts.find((v) => v.value === connection).label;
+                      let connectionLabel = connectionOpts.find((v) => v.value === connection)?.label;
                       if (!connectionLabel) {
                         connectionLabel = item.appVersionId === 3 ? `MQTT(${connection})` : `HTTP(${connection})`;
                       }
@@ -79,7 +79,9 @@ export const ItServiceStore = signalStore(
                     dataLength: d.total
                   });
                 }),
-                catchError(() => EMPTY)
+                catchError((err) => {
+                  throw err;
+                })
               );
           })
         )

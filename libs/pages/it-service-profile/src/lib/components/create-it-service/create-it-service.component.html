@@ -35,19 +35,27 @@
         <h2 class="card__title">Settings</h2>
         @if (selectedApp()) {
           <form [formGroup]="form">
-            <!-- <ng-container
-              *ngComponentOutlet="selectedApp().component; inputs: selectedApp()?.inputs"
-              formControlName="itServiceForm"
-            /> -->
             @switch (selectedApp()?.key) {
               @case ('AWS') {
-                <ne-it-service-aws formControlName="itServiceForm" [appData]="selectedApp()"></ne-it-service-aws>
+                <ne-it-service-aws
+                  title="IT Service Profile"
+                  formControlName="itServiceForm"
+                  [appData]="selectedApp()"
+                ></ne-it-service-aws>
               }
               @case ('AZURE') {
-                <ne-it-service-azure></ne-it-service-azure>
+                <ne-it-service-azure
+                  title="IT Service Profile"
+                  formControlName="itServiceForm"
+                  [appData]="selectedApp()"
+                ></ne-it-service-azure>
               }
               @case ('MQTT') {
-                <ne-it-service-mqtt></ne-it-service-mqtt>
+                <ne-it-service-mqtt
+                  title="IT Service Profile"
+                  formControlName="itServiceForm"
+                  [appData]="selectedApp()"
+                ></ne-it-service-mqtt>
               }
             }
           </form>

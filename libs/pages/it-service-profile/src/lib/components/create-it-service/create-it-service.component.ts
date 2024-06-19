@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  OnInit,
   Output,
   ViewChild,
   computed,
@@ -47,7 +48,7 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
   styleUrl: './create-it-service.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CreateItServiceComponent {
+export class CreateItServiceComponent implements OnInit {
   @Output() handleSubmitItService = new EventEmitter<ICreateItServiceReq>();
   @ViewChild('stepper') private stepper: MatStepper;
   supportApps = input<ISupportApps[]>();
@@ -65,7 +66,7 @@ export class CreateItServiceComponent {
     return this.supportApps()?.filter((v) => !v.isAvailable);
   });
 
-  constructor() {
+  ngOnInit(): void {
     this.form = this.#fb.group({
       itServiceForm: null
     });

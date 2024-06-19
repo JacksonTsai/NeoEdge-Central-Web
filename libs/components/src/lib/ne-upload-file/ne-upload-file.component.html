@@ -1,0 +1,25 @@
+<input #inputFile hidden="true" type="file" onclick="this.value = null" [accept]="accept()" />
+@if (!fileInfo()) {
+  <button type="button" mat-stroked-button color="primary" (click)="inputFile.click()" [disabled]="isDisabled()">
+    Upload File
+  </button>
+} @else {
+  <button
+    type="button"
+    mat-stroked-button
+    (click)="inputFile.click()"
+    [disabled]="isDisabled()"
+    class="upload-file--uploaded"
+  >
+    <mat-icon svgIcon="icon:description"></mat-icon>
+    {{ fileInfo()?.name }}
+  </button>
+}
+<ul class="upload-file__tip">
+  @if (accept()) {
+    <li>{{ acceptText() }} files are allowed</li>
+  }
+  @if (maxSize()) {
+    <li>Maximum size: {{ maxSize() }}</li>
+  }
+</ul>
