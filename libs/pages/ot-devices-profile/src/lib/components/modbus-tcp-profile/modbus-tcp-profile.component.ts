@@ -147,7 +147,7 @@ export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, Control
       slaveId: [{ value: 1, disabled: false }, [Validators.required, positiveIntegerValidator]],
       description: [{ value: '', disabled: false }],
       ipAddress: [{ value: '', disabled: false }, [Validators.required, ipValidator]],
-      port: [{ value: '', disabled: false }, [Validators.required]],
+      port: [{ value: 502, disabled: false }, [Validators.required]],
 
       initialDelay: [{ value: 0, disabled: false }, [Validators.required, Validators.min(0), Validators.max(30000)]],
       delayBetweenPolls: [

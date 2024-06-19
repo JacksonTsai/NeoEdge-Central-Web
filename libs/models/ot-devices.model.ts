@@ -129,6 +129,7 @@ export enum OT_DEVICES_LOADING {
   CREATE,
   DELETE,
   DETAIL,
+  COPY,
   REFRESH_TABLE
 }
 

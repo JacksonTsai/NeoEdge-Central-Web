@@ -124,8 +124,8 @@ export class OtDevicesComponent implements AfterViewInit {
     }
   };
 
-  onCopyDevice = () => {
-    this.handleCopyDevice.emit();
+  onCopyDevice = (device) => {
+    this.handleCopyDevice.emit(device);
   };
 
   onCreateDevice = () => {

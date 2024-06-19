@@ -15,9 +15,6 @@
     </mat-form-field>
   </div>
   <div class="ot-devices-top-action__right">
-    <button id="ot-devcies-copy-device-btn" type="button" mat-stroked-button color="primary" (click)="onCopyDevice()">
-      Copy
-    </button>
     <button
       id="ot-devcies-create-device-btn"
       type="button"
@@ -115,6 +112,15 @@
           </button>
 
           <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              id="ot-device-detail-copy-{{ element.id }}-btn"
+              type="button"
+              (click)="onCopyDevice(element)"
+            >
+              <mat-icon svgIcon="icon:copy_gary"></mat-icon>
+              <span> Duplicate </span>
+            </button>
             <button
               mat-menu-item
               id="ot-devices-detail-delete-{{ element.id }}-btn"
