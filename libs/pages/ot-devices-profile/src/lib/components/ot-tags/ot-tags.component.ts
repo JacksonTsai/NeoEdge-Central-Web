@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input, signal } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ISupportAppsWithVersion } from '@neo-edge-web/models';
+import { IOtTag, ISupportAppsWithVersion } from '@neo-edge-web/models';
 import { whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
@@ -74,6 +74,9 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     'action'
   ];
 
+  generateTagType = signal('');
+  tags = signal(null);
+
   get tagsArray() {
     return this.form.get('tags') as UntypedFormArray;
   }
@@ -111,7 +114,15 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
   };
 
   writeValue(v) {
-    console.log(v);
+    if (v && 'import-edit' === v?.generateTagType) {
+      this.tagsArray.clear();
+      this.dataSource.data = [];
+      v.tags.map((tag) => {
+        this.addTag(tag);
+      });
+    } else {
+      this.addTag();
+    }
   }
 
   validate(control: AbstractControl) {
@@ -161,27 +172,41 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     } else {
       this.triggerCtrl(i).setValue(this.tagOptions.tagTrigger[triggerCyclicIdx]);
     }
+    this.triggerChange(i);
   };
 
-  addTag = () => {
+  triggerChange = (i: number) => {
+    if (this.triggerCtrl(i).value.value === 'DataChange') {
+      this.intervalCtrl(i).setValue('');
+      this.intervalCtrl(i).disable();
+    } else {
+      this.intervalCtrl(i).setValue(1000);
+      this.intervalCtrl(i).enable();
+    }
+  };
+
+  addTag = (data?: IOtTag) => {
     this.tagsArray.push(
       new UntypedFormGroup({
-        tagName: new UntypedFormControl({ value: '', disabled: false }, [Validators.required, whitespaceValidator]),
-        enable: new UntypedFormControl({ value: true, disabled: false }),
-        tagType: new UntypedFormControl({ value: tagOptions.tagTypeOpts[0], disabled: false }),
-        function: new UntypedFormControl({ value: tagOptions.tagFunctionOpts[2], disabled: false }),
-        startAddress: new UntypedFormControl({ value: 0, disabled: false }, [
+        tagName: new UntypedFormControl({ value: data?.tagName ?? '', disabled: false }, [
+          Validators.required,
+          whitespaceValidator
+        ]),
+        enable: new UntypedFormControl({ value: data?.enable ?? true, disabled: false }),
+        tagType: new UntypedFormControl({ value: data?.dataType ?? tagOptions.tagTypeOpts[0], disabled: false }),
+        function: new UntypedFormControl({ value: data?.function ?? tagOptions.tagFunctionOpts[2], disabled: false }),
+        startAddress: new UntypedFormControl({ value: data?.startAddress ?? 0, disabled: false }, [
           Validators.required,
           Validators.min(0),
           Validators.max(65535)
         ]),
-        quantity: new UntypedFormControl({ value: 1, disabled: true }, [
+        quantity: new UntypedFormControl({ value: data?.quantity ?? 1, disabled: true }, [
           Validators.required,
           Validators.min(0),
           Validators.max(65535)
         ]),
-        trigger: new UntypedFormControl({ value: tagOptions.tagTrigger[0], disabled: false }),
-        interval: new UntypedFormControl({ value: 1000, disabled: false }, [
+        trigger: new UntypedFormControl({ value: data?.trigger ?? tagOptions.tagTrigger[0], disabled: false }),
+        interval: new UntypedFormControl({ value: data?.interval ?? 1000, disabled: false }, [
           (Validators.required, Validators.min(100), Validators.max(86400000))
         ])
       })
@@ -210,8 +235,6 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     this.form = this.#fb.group({
       tags: this.#fb.array([])
     });
-
-    this.addTag();
 
     this.tagsArray.valueChanges
       .pipe(

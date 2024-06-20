@@ -129,7 +129,11 @@
         <th mat-header-cell *matHeaderCellDef>Trigger</th>
         <td mat-cell *matCellDef="let element; let i = index">
           <mat-form-field class="trigger-field" appearance="outline" floatLabel="always">
-            <mat-select id="ot-tags-tag-trigger-select-{{ i }}" [formControl]="triggerCtrl(i)">
+            <mat-select
+              id="ot-tags-tag-trigger-select-{{ i }}"
+              [formControl]="triggerCtrl(i)"
+              (selectionChange)="triggerChange(i)"
+            >
               @for (tagTrigger of tagOptions.tagTrigger; track tagTrigger.value) {
                 <mat-option
                   id="ot-tags-tag-trigger-option-{{ tagTrigger.value }}-{{ i }}"

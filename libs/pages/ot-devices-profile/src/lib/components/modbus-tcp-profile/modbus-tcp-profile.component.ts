@@ -1,14 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  computed,
-  forwardRef,
-  inject,
-  input
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input } from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -29,7 +20,6 @@ import { pick } from '@neo-edge-web/utils';
 import { ipValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
-import { rtuOptions, texolOptions } from '../../configs';
 
 @UntilDestroy()
 @Component({
@@ -54,11 +44,7 @@ export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, Control
   form: UntypedFormGroup;
 
   otDeviceType = SUPPORT_APPS_OT_DEVICE.MODBUS_RTU;
-  options = computed(() => {
-    return SUPPORT_APPS_OT_DEVICE.TEXOL === this.selectedDeviceProtocol().name
-      ? { ...texolOptions }
-      : { ...rtuOptions };
-  });
+
   change: (value) => void;
   touch: (value) => void;
 

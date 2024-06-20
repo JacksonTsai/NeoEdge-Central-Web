@@ -53,6 +53,7 @@ export const appConfig: ApplicationConfig = {
       useValue: {
         basePath: environment.basePath,
         authPath: environment.authPath,
+        docPath: environment.docPath,
         wsPath: environment.wsPath
       }
     },

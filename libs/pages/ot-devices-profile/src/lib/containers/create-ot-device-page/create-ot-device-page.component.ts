@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,6 +19,7 @@ import {
   SelectCommandTemplateComponent,
   SelectDeviceProtocolComponent
 } from '../../components';
+import { OtTexolTagComponent } from '../../components/ot-texol-tag/ot-texol-tag.component';
 import { CreateOtDevicesStore } from '../../stores/create-ot-device.store';
 
 @Component({
@@ -34,7 +35,8 @@ import { CreateOtDevicesStore } from '../../stores/create-ot-device.store';
     SelectDeviceProtocolComponent,
     ReactiveFormsModule,
     SelectCommandTemplateComponent,
-    OtTagsComponent
+    OtTagsComponent,
+    OtTexolTagComponent
   ],
   templateUrl: './create-ot-device-page.component.html',
   styleUrl: './create-ot-device-page.component.scss',
@@ -43,10 +45,11 @@ import { CreateOtDevicesStore } from '../../stores/create-ot-device.store';
 })
 export class CreateOtDevicePageComponent implements OnInit {
   #createOtDevicesStore = inject(CreateOtDevicesStore);
+  #cd = inject(ChangeDetectorRef);
+  #fb = inject(FormBuilder);
   @ViewChild('stepper') stepper: MatStepper;
   supportDevices = this.#createOtDevicesStore.supportDevices;
-
-  #fb = inject(FormBuilder);
+  texolTagDoc = this.#createOtDevicesStore.texolTagDoc;
   form: FormGroup;
 
   get currentStepperId() {
@@ -85,23 +88,44 @@ export class CreateOtDevicePageComponent implements OnInit {
     }
   };
 
-  setRTUInstance = (otProfile: IRtuProfileForUI, otTags: IOtTagsForUI[]): IInstances<any> => {
-    const tags = otTags
-      .map((d) => ({
-        Function: d.function.value,
-        StartingAddress: d.startAddress,
-        Quantity: d.quantity,
-        Trigger: d.trigger.value,
-        Interval: d.interval,
-        Enable: d.enable,
-        Name: d.tagName,
-        DataType: d.tagType.value,
-        Swap: this.swapType(otProfile.advanced.swapByte, otProfile.advanced.swapWord)
-      }))
-      .reduce((acc, value, index) => {
-        acc[index] = value;
-        return acc;
-      }, {});
+  setRTUInstance = (
+    otProfile: IRtuProfileForUI,
+    otTags: IOtTagsForUI[] | { generateTagType: string; tags: any }
+  ): IInstances<any> => {
+    const rtuInstancesDevices = {
+      Name: otProfile.basic.deviceName,
+      SlaveID: otProfile.basic.slaveId
+    };
+    debugger;
+    if (Array.isArray(otTags)) {
+      const tags = otTags
+        .map((d) => ({
+          Function: d.function.value,
+          StartingAddress: d.startAddress,
+          Quantity: d.quantity,
+          Trigger: d.trigger.value,
+          Interval: d.interval,
+          Enable: d.enable,
+          Name: d.tagName,
+          DataType: d.tagType.value,
+          Swap: this.swapType(otProfile.advanced.swapByte, otProfile.advanced.swapWord)
+        }))
+        .reduce((acc, value, index) => {
+          acc[index] = value;
+          return acc;
+        }, {});
+      rtuInstancesDevices['Commands'] = tags;
+    } else {
+      const profile = `${otTags.tags.component}.${otTags.tags.level2}.${otTags.tags.level3}.Axial.${otTags.tags.axial}.profile`;
+      if ('texol-general' === otTags.generateTagType) {
+        rtuInstancesDevices['Profile'] = {
+          Name: 'General.profile',
+          Domains: [...Object.keys(otTags.tags).filter((key) => otTags.tags[key])]
+        };
+      } else {
+        rtuInstancesDevices['Profile'] = { Name: profile };
+      }
+    }
 
     return {
       Instances: {
@@ -118,11 +142,7 @@ export class CreateOtDevicePageComponent implements OnInit {
               PollingRetries: otProfile.advanced.pollingRetries
             },
             Devices: {
-              0: {
-                Name: otProfile.basic.deviceName,
-                SlaveID: otProfile.basic.slaveId,
-                Commands: { ...tags }
-              }
+              0: { ...rtuInstancesDevices }
             }
           }
         }
@@ -201,7 +221,6 @@ export class CreateOtDevicePageComponent implements OnInit {
           setting: { ...this.setTCPInstance(deviceProfile.profile, otTags) }
         };
       }
-
       this.#createOtDevicesStore.createOtDevice({ profile, deviceIcon: deviceProfile.deviceIcon });
     }
   };
@@ -228,6 +247,11 @@ export class CreateOtDevicePageComponent implements OnInit {
       deviceProfile: [],
       selectCommandTemplate: [],
       otTags: []
+    });
+
+    this.selectCommandTemplateCtrl.valueChanges.subscribe((d) => {
+      this.otTagsCtrl.setValue(d);
+      this.#cd.markForCheck();
     });
 
     this.selectDeviceProtocolCtrl.valueChanges.subscribe((d) => {

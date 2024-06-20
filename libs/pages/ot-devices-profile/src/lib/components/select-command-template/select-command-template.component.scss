@@ -1,3 +1,20 @@
-:host {
+mat-form-field {
   display: block;
+  width: 320px;
+  margin-top: 8px;
+}
+mat-checkbox {
+  display: block;
+  width: 320px;
+  margin-top: 8px;
+}
+.texol-content {
+  form {
+    margin-left: 24px;
+    margin-top: 16px;
+  }
+}
+
+.import-csv {
+  margin: 16px;
 }

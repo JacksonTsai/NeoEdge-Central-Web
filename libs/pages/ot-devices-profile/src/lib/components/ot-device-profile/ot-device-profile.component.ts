@@ -75,9 +75,9 @@ export class OtDeviceProfileComponent implements OnInit, ControlValueAccessor, V
   }
 
   validate() {
-    if (SUPPORT_APPS_OT_DEVICE.MODBUS_RTU === this.selectedDeviceProtocol().name) {
+    if (SUPPORT_APPS_OT_DEVICE.MODBUS_RTU === this.selectedDeviceProtocol()?.name) {
       return this.rtuProfileCtrl.invalid ? { profile: 'error' } : null;
-    } else if (SUPPORT_APPS_OT_DEVICE.MODBUS_TCP === this.selectedDeviceProtocol().name) {
+    } else if (SUPPORT_APPS_OT_DEVICE.MODBUS_TCP === this.selectedDeviceProtocol()?.name) {
       return this.tcpProfileCtrl.invalid ? { profile: 'error' } : null;
     } else {
       return this.texolProfileCtrl.invalid ? { profile: 'error' } : null;

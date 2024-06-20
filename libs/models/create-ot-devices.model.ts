@@ -3,6 +3,7 @@ import { ISupportApps } from './support-apps.model';
 export interface ICreateOtDevicesState {
   supportDevices: ISupportApps[];
   isLoading: CREATE_OT_DEVICES_LOADING;
+  texolTagDoc?: any;
 }
 
 export enum CREATE_OT_DEVICES_LOADING {

@@ -9,7 +9,7 @@
           formControlName="rtuProfile"
           [selectedDeviceProtocol]="selectedDeviceProtocol()"
         ></ne-modbus-rtu-profile>
-      } @else if (otDeviceType.TEXOL === selectedDeviceProtocol().name) {
+      } @else if (otDeviceType.TEXOL213MM2R1 === selectedDeviceProtocol().name) {
         <ne-modbus-rtu-profile
           [selectedDeviceProtocol]="selectedDeviceProtocol()"
           formControlName="texolProfile"

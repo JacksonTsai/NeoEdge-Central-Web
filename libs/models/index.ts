@@ -12,6 +12,7 @@ export * from './ne-menu.model';
 export * from './ot-devices.model';
 export * from './ot-profile.model';
 export * from './ot-tags.model';
+export * from './ot-texol.model';
 export * from './permissions.model';
 export * from './projects.model';
 export * from './region.model';

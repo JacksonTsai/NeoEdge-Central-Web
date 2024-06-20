@@ -57,7 +57,7 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
 
   otDeviceType = SUPPORT_APPS_OT_DEVICE.MODBUS_RTU;
   options = computed(() => {
-    return SUPPORT_APPS_OT_DEVICE.TEXOL === this.selectedDeviceProtocol().name
+    return SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.selectedDeviceProtocol().name
       ? { ...texolOptions }
       : { ...rtuOptions };
   });
@@ -191,7 +191,7 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
       swapWord: [{ value: false, disabled: false }, [Validators.required]]
     });
 
-    if (SUPPORT_APPS_OT_DEVICE.TEXOL === this.selectedDeviceProtocol().name) {
+    if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.selectedDeviceProtocol().name) {
       this.setTexolDefault();
     }
 

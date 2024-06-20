@@ -7,6 +7,7 @@ export interface RestConfig {
   basePath: string;
   authPath: string;
   wsPath: string;
+  docPath: string;
 }
 
 export const REST_CONFIG = new InjectionToken<RestConfig>('REST_CONFIG');
@@ -32,9 +33,7 @@ export class HttpService {
       query?: HttpParams | { [param: string]: string | string[] };
       config?: { basePath: string };
     }
-  ): // query?: HttpParams | { [param: string]: string | string[] },
-  // config?: { basePath: string }
-  Observable<any> {
+  ): Observable<any> {
     const basePath = params?.config && params.config?.basePath ? params.config.basePath : this.#restConfig.basePath;
     return this.#http.get(`${basePath}${url}`, { params: params?.query }).pipe(catchError(this.formatError));
   }

@@ -32,6 +32,7 @@
         <mat-card-content>
           <ne-select-command-template
             [selectedDeviceProtocol]="selectDeviceProtocolCtrl.value"
+            [texolTagDoc]="texolTagDoc()"
             formControlName="selectCommandTemplate"
           >
           </ne-select-command-template>
@@ -43,7 +44,20 @@
       <ng-template matStepLabel>Tags</ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-ot-tags formControlName="otTags"></ne-ot-tags>
+          @if (
+            'create' === selectCommandTemplateCtrl.value?.generateTagType ||
+            'import-edit' === selectCommandTemplateCtrl.value?.generateTagType
+          ) {
+            <ne-ot-tags formControlName="otTags"></ne-ot-tags>
+          } @else if (
+            'texol-general' === selectCommandTemplateCtrl.value?.generateTagType ||
+            'texol-dedicated' === selectCommandTemplateCtrl.value?.generateTagType
+          ) {
+            <ne-ot-texol-tag
+              [texolTagsType]="selectCommandTemplateCtrl.value"
+              [texolTagDoc]="texolTagDoc()"
+            ></ne-ot-texol-tag>
+          }
         </mat-card-content>
       </mat-card>
     </mat-step>

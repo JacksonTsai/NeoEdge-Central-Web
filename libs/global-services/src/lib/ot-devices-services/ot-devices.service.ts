@@ -89,6 +89,7 @@ export class OtDevicesService {
       })
     );
   };
+
   editOtDevice$ = <T>(payload: IEditOtDeviceReq<T>) =>
     // payload  formdata
     this.#http.put(this.OT_DEVICE_PROFILES_PATH, payload).pipe(
@@ -110,6 +111,7 @@ export class OtDevicesService {
         return this.handleError(err);
       })
     );
+
   copyDevice$ = (profileId, name) => {
     return this.#http.post(`${this.OT_DEVICE_PROFILES_PATH}/${profileId}/copy`, { name }).pipe(
       map((resp) => {
@@ -131,6 +133,7 @@ export class OtDevicesService {
       })
     );
   };
+
   deleteOtDevice$ = (profileId: number, name: string) =>
     this.#http.delete(`${this.OT_DEVICE_PROFILES_PATH}/${profileId}`, { name }).pipe(
       map((resp) => {
