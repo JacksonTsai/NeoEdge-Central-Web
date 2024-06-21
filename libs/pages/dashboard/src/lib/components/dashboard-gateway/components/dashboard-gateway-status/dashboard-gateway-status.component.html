@@ -1,7 +1,7 @@
+<h3 class="dashboard-card__subtitle">Gateway Status</h3>
 @if (chartOptions()) {
   <div id="chart">
     <apx-chart
-      [title]="chartOptions()?.title"
       [colors]="chartOptions()?.colors"
       [chart]="chartOptions()?.chart"
       [series]="chartOptions()?.series"

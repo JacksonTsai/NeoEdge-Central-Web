@@ -1,3 +1,16 @@
 :host {
   display: block;
 }
+
+.dashboard-gateway-content {
+  display: flex;
+  gap: 20px;
+
+  ne-dashboard-gateway-location {
+    flex: 1 1 auto;
+  }
+
+  ne-dashboard-gateway-status {
+    flex: 0 0 33.33%;
+  }
+}

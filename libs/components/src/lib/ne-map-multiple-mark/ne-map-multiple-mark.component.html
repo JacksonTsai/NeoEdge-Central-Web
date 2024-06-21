@@ -1,0 +1,3 @@
+<div class="map-wrapper" [style.width]="width()" [style.height]="height()">
+  <div class="ne-map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
+</div>

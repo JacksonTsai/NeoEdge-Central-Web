@@ -44,10 +44,7 @@ export class DashboardGatewayStatusComponent {
 
   getChartOption(setting: IPieChartSetting): TPieChartOptions {
     return {
-      title: {
-        text: 'Gateway Status'
-      },
-      colors: getChartColor(5),
+      colors: getChartColor(5, 'status'),
       chart: {
         type: 'donut'
       },

@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.map-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .ne-map {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
+  }
+}

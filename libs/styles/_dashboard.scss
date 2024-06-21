@@ -2,7 +2,15 @@
 
 .dashboard-card {
   &__title {
+    margin-bottom: 16px;
     color: $primary;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    margin-bottom: 16px;
+    font-size: 20px;
+    color: $accent;
     line-height: 1.2;
   }
 }

@@ -3,8 +3,10 @@
     <h2 class="dashboard-card__title">Gateway {{ gatewaysList().length | formatCount }}</h2>
   </mat-card-header>
   <mat-card-content>
-    <ne-dashboard-gateway-location [gatewaysList]="gatewaysList()"></ne-dashboard-gateway-location>
-    <ne-dashboard-gateway-status [gatewaysStatusList]="gatewaysStatusList()"></ne-dashboard-gateway-status>
+    <div class="dashboard-gateway-content">
+      <ne-dashboard-gateway-location [gatewaysList]="gatewaysList()"></ne-dashboard-gateway-location>
+      <ne-dashboard-gateway-status [gatewaysStatusList]="gatewaysStatusList()"></ne-dashboard-gateway-status>
+    </div>
   </mat-card-content>
   <mat-card-actions class="dashboard-action">
     <a [routerLink]="['/project/gateways']" color="primary" mat-stroked-button>
