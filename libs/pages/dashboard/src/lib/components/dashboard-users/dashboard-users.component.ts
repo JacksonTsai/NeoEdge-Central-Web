@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { IProjectByIdResp, User } from '@neo-edge-web/models';
+import { FormatCountPipe } from '@neo-edge-web/pipes';
 
 @Component({
   selector: 'ne-dashboard-users',
   standalone: true,
-  imports: [CommonModule, MatExpansionModule],
+  imports: [CommonModule, MatExpansionModule, FormatCountPipe],
   templateUrl: './dashboard-users.component.html',
   styleUrl: './dashboard-users.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -7,7 +7,14 @@ import { DashboardStore } from '../../stores/dashboard.store';
   selector: 'ne-dashboard-page',
   standalone: true,
   imports: [CommonModule, DashboardComponent],
-  template: ` <ne-dashboard [projectDetail]="projectDetail()" [usersList]="usersList()"></ne-dashboard> `,
+  template: `
+    <ne-dashboard
+      [projectDetail]="projectDetail()"
+      [usersList]="usersList()"
+      [itList]="itList()"
+      [otList]="otList()"
+    ></ne-dashboard>
+  `,
   styleUrl: './dashboard-page.component.scss',
   providers: [DashboardStore],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -17,4 +24,6 @@ export class DashboardPageComponent {
 
   projectDetail = this.#dashboardStore.projectDetail;
   usersList = this.#dashboardStore.usersList;
+  itList = this.#dashboardStore.itList;
+  otList = this.#dashboardStore.otList;
 }

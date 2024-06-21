@@ -1,3 +1,11 @@
 <h1 class="page-title">Dashboard</h1>
-<ne-dashboard-project [projectDetail]="projectDetail()"></ne-dashboard-project>
-<ne-dashboard-users [projectDetail]="projectDetail()" [usersList]="usersList()"></ne-dashboard-users>
+<div class="dashboard">
+  <aside class="dashboard__aside">
+    <ne-dashboard-project [projectDetail]="projectDetail()"></ne-dashboard-project>
+    <ne-dashboard-users [projectDetail]="projectDetail()" [usersList]="usersList()"></ne-dashboard-users>
+  </aside>
+  <section class="dashboard__main">
+    <ne-dashboard-it-ot type="it" [dataTable]="itList()"></ne-dashboard-it-ot>
+    <ne-dashboard-it-ot type="ot" [dataTable]="otList()"></ne-dashboard-it-ot>
+  </section>
+</div>

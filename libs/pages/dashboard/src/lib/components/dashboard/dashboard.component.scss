@@ -1,3 +1,32 @@
 :host {
   display: block;
 }
+
+.dashboard {
+  &,
+  &__aside,
+  &__main {
+    display: grid;
+    gap: 20px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    display: flex;
+
+    &__aside {
+      width: 33.33%;
+      order: 2;
+    }
+
+    &__main {
+      width: 66.66%;
+      order: 1;
+    }
+  }
+
+  @media screen and (min-width: 1200px) {
+    &__main {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
