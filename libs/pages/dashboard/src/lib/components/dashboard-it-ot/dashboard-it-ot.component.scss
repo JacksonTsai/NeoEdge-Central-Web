@@ -1,23 +1,27 @@
+@use 'colors' as *;
+
 :host {
   display: block;
 }
 
 mat-card-content {
-  padding-top: 20px;
+  padding-top: 16px;
 }
 
 .app-sum {
   padding: 0;
   margin: 0;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 
   &__item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 8px;
+    border-radius: 4px;
 
-    &:not(:last-child) {
-      margin-bottom: 16px;
+    &:hover {
+      background-color: $hover-gray;
     }
   }
 

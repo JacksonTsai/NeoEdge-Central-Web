@@ -13,6 +13,7 @@ import { DashboardStore } from '../../stores/dashboard.store';
       [usersList]="usersList()"
       [itList]="itList()"
       [otList]="otList()"
+      [gatewaysList]="gatewaysList()"
     ></ne-dashboard>
   `,
   styleUrl: './dashboard-page.component.scss',
@@ -26,4 +27,5 @@ export class DashboardPageComponent {
   usersList = this.#dashboardStore.usersList;
   itList = this.#dashboardStore.itList;
   otList = this.#dashboardStore.otList;
+  gatewaysList = this.#dashboardStore.gatewaysList;
 }

@@ -8,7 +8,7 @@ export interface IDashboardState {
   isLoading: DASHBOARD_LOADING;
   projectId: number;
   projectDetail: IProjectByIdResp;
-  gateways: Gateway[];
+  gatewaysList: Gateway[];
   usersList: User[];
   itList: IItService[];
   otList: IOtDevice<any>[];
@@ -16,6 +16,13 @@ export interface IDashboardState {
   licenseConsumption?: any;
   activities?: any;
 }
+
+export interface IDashboardGatewayStatusItem {
+  name: string;
+  list: Gateway[];
+}
+
+export type TDashboardGatewayStatus = Record<string, IDashboardGatewayStatusItem>;
 
 export enum DASHBOARD_LOADING {
   NONE,

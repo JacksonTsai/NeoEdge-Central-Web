@@ -5,6 +5,7 @@
     <ne-dashboard-users [projectDetail]="projectDetail()" [usersList]="usersList()"></ne-dashboard-users>
   </aside>
   <section class="dashboard__main">
+    <ne-dashboard-gateway [gatewaysList]="gatewaysList()"></ne-dashboard-gateway>
     <ne-dashboard-it-ot type="it" [dataTable]="itList()"></ne-dashboard-it-ot>
     <ne-dashboard-it-ot type="ot" [dataTable]="otList()"></ne-dashboard-it-ot>
   </section>

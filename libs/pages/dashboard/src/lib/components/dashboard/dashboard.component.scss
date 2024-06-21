@@ -22,6 +22,10 @@
       width: 66.66%;
       order: 1;
     }
+
+    ne-dashboard-gateway {
+      grid-column: span 2;
+    }
   }
 
   @media screen and (min-width: 1200px) {

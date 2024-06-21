@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-header>
+    <h2 class="dashboard-card__title">Gateway {{ gatewaysList().length | formatCount }}</h2>
+  </mat-card-header>
+  <mat-card-content>
+    <ne-dashboard-gateway-location [gatewaysList]="gatewaysList()"></ne-dashboard-gateway-location>
+    <ne-dashboard-gateway-status [gatewaysStatusList]="gatewaysStatusList()"></ne-dashboard-gateway-status>
+  </mat-card-content>
+  <mat-card-actions class="dashboard-action">
+    <a [routerLink]="['/project/gateways']" color="primary" mat-stroked-button>
+      <span>See more Detail</span>
+      <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
+    </a>
+  </mat-card-actions>
+</mat-card>

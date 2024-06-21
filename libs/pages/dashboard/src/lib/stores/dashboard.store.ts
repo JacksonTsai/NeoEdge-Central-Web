@@ -18,7 +18,7 @@ const initialState: IDashboardState = {
   projectId: 0,
   projectDetail: null,
   usersList: [],
-  gateways: [],
+  gatewaysList: [],
   itList: [],
   otList: []
 };
@@ -63,7 +63,7 @@ export const DashboardStore = signalStore(
           tap(() => patchState(store, { isLoading: DASHBOARD_LOADING.GET })),
           switchMap(() =>
             gatewaysService.gatewaysByProjectId$(store.projectId()).pipe(
-              tap((d) => patchState(store, { gateways: d.gateways, isLoading: DASHBOARD_LOADING.NONE })),
+              tap((d) => patchState(store, { gatewaysList: d.gateways, isLoading: DASHBOARD_LOADING.NONE })),
               catchError(() => EMPTY)
             )
           )
@@ -106,6 +106,7 @@ export const DashboardStore = signalStore(
                 store.getAllUsers();
                 store.getAllItServiceProfiles();
                 store.getAllOtDeviceProfiles();
+                store.getAllGateways();
               }
             })
           )

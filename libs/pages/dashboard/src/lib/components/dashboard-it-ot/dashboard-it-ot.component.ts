@@ -12,13 +12,13 @@ type TITOT = 'it' | 'ot';
 type TITOTList = IItService[] | IOtDevice<any>[];
 type TITOTData = IItService | IOtDevice<any>;
 
-interface CategoryItem {
+interface ICategoryItem {
   name: string;
   setting: ISupportAppsUI;
   list: TITOTList;
 }
 
-type Category = Record<string, CategoryItem>;
+type Category = Record<string, ICategoryItem>;
 
 @Component({
   selector: 'ne-dashboard-it-ot',
@@ -41,18 +41,19 @@ export class DashboardItOtComponent {
     const data = this.dataTable();
     const result = {};
     data.forEach((item: TITOTData) => {
-      if (!result[item.appVersionId]) {
+      const key = item.appVersionId;
+      if (!result[key]) {
         const supportAppsSetting = this.type() === 'it' ? itServiceSupportApps : otDeviceSupportApps || [];
         const appName = item.appClass.toUpperCase();
         const matchedApp = supportAppsSetting.find((item) => appName.includes(item.key));
 
-        result[item.appVersionId] = {
+        result[key] = {
           name: item.appClass,
           setting: matchedApp,
           list: []
         };
       }
-      result[item.appVersionId].list.push(item);
+      result[key].list.push(item);
     });
     return result;
   });

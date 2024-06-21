@@ -19,15 +19,15 @@
         }
       </ul>
     }
-    <div>
-      <a
-        [routerLink]="type() === 'it' ? ['/neoflow/it-service-profile'] : ['/neoflow/ot-device-profile']"
-        color="primary"
-        mat-stroked-button
-      >
-        <span>See more Detail</span>
-        <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
-      </a>
-    </div>
   </mat-card-content>
+  <mat-card-actions class="dashboard-action">
+    <a
+      [routerLink]="type() === 'it' ? ['/neoflow/it-service-profile'] : ['/neoflow/ot-device-profile']"
+      color="primary"
+      mat-stroked-button
+    >
+      <span>See more Detail</span>
+      <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
+    </a>
+  </mat-card-actions>
 </mat-card>
