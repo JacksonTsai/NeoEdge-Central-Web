@@ -1,0 +1,33 @@
+<mat-accordion class="dashboard-card">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title><h2 class="dashboard-card__title">Project Detail</h2></mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul class="dashboard-list">
+      <li class="dashboard-list__item">
+        <h3 class="dashboard-list__title">Name</h3>
+        <p class="dashboard-list__content">{{ projectDetail()?.name ?? '-' }}</p>
+      </li>
+      <li class="dashboard-list__item">
+        <h3 class="dashboard-list__title">Project short name</h3>
+        <p class="dashboard-list__content">{{ projectDetail()?.shortName ?? '-' }}</p>
+      </li>
+      <li class="dashboard-list__item">
+        <h3 class="dashboard-list__title">Customer</h3>
+        <p class="dashboard-list__content">{{ projectDetail()?.cusomter ?? '-' }}</p>
+      </li>
+      <li class="dashboard-list__item">
+        <h3 class="dashboard-list__title">Description</h3>
+        <p class="dashboard-list__content">{{ projectDetail()?.description ?? '-' }}</p>
+      </li>
+      <li class="dashboard-list__item">
+        <h3 class="dashboard-list__title">Create by</h3>
+        <p class="dashboard-list__content">{{ projectDetail()?.createdBy ?? '-' }}</p>
+      </li>
+      <li class="dashboard-list__item">
+        <h3 class="dashboard-list__title">Lastest update time</h3>
+        <p class="dashboard-list__content">{{ (projectDetail()?.updatedAt | dateTimeFormat) ?? '-' }}</p>
+      </li>
+    </ul>
+  </mat-expansion-panel>
+</mat-accordion>

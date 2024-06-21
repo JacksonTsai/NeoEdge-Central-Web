@@ -1,6 +1,7 @@
 export * from './auth.model';
 export * from './company.model';
 export * from './create-ot-devices.model';
+export * from './dashboard.model';
 export * from './dateFormat.model';
 export * from './gateway-detail.mode';
 export * from './gateways.model';

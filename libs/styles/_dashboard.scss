@@ -1,0 +1,25 @@
+@use 'colors' as *;
+
+.dashboard-card {
+  &__title {
+    color: $primary;
+    line-height: 1.2;
+  }
+}
+
+.dashboard-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+
+  &__title {
+    font-weight: 500;
+  }
+}
