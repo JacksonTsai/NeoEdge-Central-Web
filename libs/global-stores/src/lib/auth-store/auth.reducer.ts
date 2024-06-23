@@ -10,6 +10,7 @@ const initialState: IAuthState = {
   tryLoginCount: 0,
   isAuthVerifying: false,
   userProfile: null,
+  userProjects: [],
   currentProjectId: 0,
   currentProjectName: ''
 };
@@ -40,10 +41,11 @@ export const authReducer = createReducer(
       tryLoginCount: 0
     };
   }),
-  on(AuthAction.loinSuccessRedirect, AuthAction.userProfileSuccess, (state, { userProfile }) => {
+  on(AuthAction.loinSuccessRedirect, AuthAction.userProfileSuccess, (state, { userProfile, userProjects }) => {
     return {
       ...state,
       userProfile,
+      userProjects,
       currentProjectId: userProfile?.defaultProjectId,
       currentProjectName: userProfile?.defaultProjectName
     };

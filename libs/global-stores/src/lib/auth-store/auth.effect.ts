@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService, ProjectsService, UserService } from '@neo-edge-web/global-services';
-import { IGetUserProfileResp, ILoginResp, PERMISSION } from '@neo-edge-web/models';
+import { ILoginResp, PERMISSION } from '@neo-edge-web/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { SessionStorageService } from 'ngx-webstorage';
-import { EMPTY, interval, of } from 'rxjs';
+import { EMPTY, combineLatest, interval, of } from 'rxjs';
 import { catchError, exhaustMap, map, switchMap, tap } from 'rxjs/operators';
 import * as AuthAction from './auth.actions';
 @Injectable()
@@ -37,20 +37,30 @@ export class AuthEffects {
     this.#actions.pipe(
       ofType(AuthAction.loginSuccess),
       switchMap(({ fromUserLogin }) => {
-        return this.#userService.userProfile$.pipe(
-          map((userProfile: IGetUserProfileResp) => {
+        return combineLatest([this.#userService.userProfile$, this.#userService.userProjects$()]).pipe(
+          map(([userProfile, userProjects]) => {
             this.#storage.store('user_profile', userProfile);
             this.#permissionsService.loadPermissions([...userProfile.role.permissions.map((d) => PERMISSION[d])]);
-            return { fromUserLogin, userProfile };
+            return { fromUserLogin, userProfile, userProjects };
           }),
-          switchMap(({ fromUserLogin, userProfile }) => {
+          switchMap(({ fromUserLogin, userProfile, userProjects }) => {
             return userProfile.defaultProjectId
-              ? this.#projectsService
-                  .switchProject$(userProfile.defaultProjectId)
-                  .pipe(
-                    map(() => AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin }))
+              ? this.#projectsService.switchProject$(userProfile.defaultProjectId).pipe(
+                  map(() =>
+                    AuthAction.loinSuccessRedirect({
+                      userProfile,
+                      isRedirectDefaultPage: fromUserLogin,
+                      userProjects: userProjects.projects
+                    })
                   )
-              : of(AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin }));
+                )
+              : of(
+                  AuthAction.loinSuccessRedirect({
+                    userProfile,
+                    isRedirectDefaultPage: fromUserLogin,
+                    userProjects: userProjects.projects
+                  })
+                );
           }),
           catchError(() => of(AuthAction.loginFail))
         );
@@ -61,7 +71,7 @@ export class AuthEffects {
   loginSuccessRedirect$ = createEffect(() =>
     this.#actions.pipe(
       ofType(AuthAction.loinSuccessRedirect),
-      map(({ userProfile, isRedirectDefaultPage }) => {
+      map(({ userProfile, isRedirectDefaultPage, userProjects }) => {
         if (isRedirectDefaultPage) {
           if (userProfile?.defaultProjectName) {
             this.#router.navigateByUrl('/project/dashboard');
@@ -69,7 +79,7 @@ export class AuthEffects {
             this.#router.navigateByUrl('/company-account/company-info');
           }
         }
-        return AuthAction.userProfileSuccess({ userProfile });
+        return AuthAction.userProfileSuccess({ userProfile, userProjects });
       })
     )
   );
@@ -77,11 +87,11 @@ export class AuthEffects {
   userProfile$ = createEffect(() =>
     this.#actions.pipe(
       ofType(AuthAction.userProfileAction),
-      exhaustMap(() =>
-        this.#userService.userProfile$.pipe(
-          map((userProfile: IGetUserProfileResp) => {
+      switchMap(() =>
+        combineLatest([this.#userService.userProfile$, this.#userService.userProjects$()]).pipe(
+          map(([userProfile, userProjects]) => {
             this.#storage.store('user_profile', userProfile);
-            return AuthAction.userProfileSuccess({ userProfile });
+            return AuthAction.userProfileSuccess({ userProfile, userProjects: userProjects.projects });
           }),
           catchError(() => of(AuthAction.loginFail))
         )
