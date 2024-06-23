@@ -1,20 +1,30 @@
 <div class="command-template-wrapper">
-  @if (this.selectedDeviceProtocol()) {
+  @if (appName()) {
     <section class="card__sec">
       <h3 class="card__sub-title">Select Modbus Command Template</h3>
-      @if (supportAppsOtDevice.TEXOL213MM2R1 !== this.selectedDeviceProtocol().name) {
-        <mat-radio-group [formControl]="createTypeCtrl">
+      @if (supportAppsOtDevice.TEXOL213MM2R1 !== appName()) {
+        <mat-radio-group class="create-type" [formControl]="createTypeCtrl">
           <mat-radio-button id="command-template-create-from-scratch" [value]="'create'" color="primary">
             Create From Scratch
           </mat-radio-button>
           <mat-radio-button id="command-template-improt-from-csv" [value]="'import'" color="primary">
             Import Tags From csv
           </mat-radio-button>
+          <span
+            class="download-csv-template"
+            id="command-template-download-tags-template"
+            [matTooltip]="'Download CSV template'"
+            (click)="downloadCsvTagTemplate()"
+          >
+            <mat-icon svgIcon="icon:download"></mat-icon>
+          </span>
         </mat-radio-group>
+
         @if ('import' === createTypeCtrl.value) {
           <div class="import-csv">
             <ne-upload-file accept=".csv" maxSize="128KB" [formControl]="tagFileCtrl"></ne-upload-file>
           </div>
+
           @for (result of importCsvResult(); track result) {
             <ul>
               <li color="danger">
@@ -26,51 +36,89 @@
       } @else {
         <div class="texol-content">
           <mat-radio-group [formControl]="texolModeCtrl">
-            <mat-radio-button id="command-template-create-from-scratch" [value]="texolTagType.General" color="primary">
+            <mat-radio-button id="command-template-texol-general-type" [value]="texolTagType.General" color="primary">
               General
             </mat-radio-button>
-            <mat-radio-button id="command-template-improt-from-csv" [value]="texolTagType.Dedicated" color="primary">
+            <mat-radio-button
+              id="command-template-texol-dedicated-type"
+              [value]="texolTagType.Dedicated"
+              color="primary"
+            >
               Component
             </mat-radio-button>
           </mat-radio-group>
           @if (isTexolGeneral) {
             <form [formGroup]="texolGeneralForm">
-              <mat-checkbox color="primary" formControlName="timeDomain"> Time-domain feature </mat-checkbox>
-              <mat-checkbox color="primary" formControlName="frequencyDomain"> Frequency-domain feature </mat-checkbox>
-              <mat-checkbox color="primary" formControlName="damageDomain"> Damage feature </mat-checkbox>
+              <mat-checkbox id="command-template-texol-general-type-time" color="primary" formControlName="timeDomain">
+                Time-domain feature
+              </mat-checkbox>
+              <mat-checkbox
+                id="command-template-texol-general-type-frequency"
+                color="primary"
+                formControlName="frequencyDomain"
+              >
+                Frequency-domain feature
+              </mat-checkbox>
+              <mat-checkbox
+                id="command-template-texol-general-type-damage"
+                color="primary"
+                formControlName="damageDomain"
+              >
+                Damage feature
+              </mat-checkbox>
             </form>
           } @else {
             <form [formGroup]="texolDedicatedForm">
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Component</mat-label>
-                <mat-select formControlName="component">
+                <mat-select id="command-template-texol-dedicated-component-select" formControlName="component">
                   @for (texolComp of texolCompLevelOpts; track texolComp) {
-                    <mat-option [value]="texolComp"> {{ texolComp }}</mat-option>
+                    <mat-option
+                      id="command-template-texol-dedicated-component-option-{{ texolComp }}"
+                      [value]="texolComp"
+                    >
+                      {{ texolComp }}</mat-option
+                    >
                   }
                 </mat-select>
               </mat-form-field>
 
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Level 2</mat-label>
-                <mat-select formControlName="level2">
+                <mat-select id="command-template-texol-dedicated-level2-select" formControlName="level2">
                   @for (texolLevel2 of texolLevel2Opts; track texolLevel2) {
-                    <mat-option [value]="texolLevel2"> {{ texolLevel2 }}</mat-option>
+                    <mat-option
+                      id="command-template-texol-dedicated-level2-option-{{ texolLevel2 }}"
+                      [value]="texolLevel2"
+                    >
+                      {{ texolLevel2 }}</mat-option
+                    >
                   }
                 </mat-select>
               </mat-form-field>
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Level 3</mat-label>
-                <mat-select formControlName="level3">
+                <mat-select id="command-template-texol-dedicated-level3-select" formControlName="level3">
                   @for (texolLevel3 of texolLevel3Opts; track texolLevel3) {
-                    <mat-option [value]="texolLevel3"> {{ texolLevel3 }}</mat-option>
+                    <mat-option
+                      id="command-template-texol-dedicated-level3-option-{{ texolLevel3 }}"
+                      [value]="texolLevel3"
+                    >
+                      {{ texolLevel3 }}</mat-option
+                    >
                   }
                 </mat-select>
               </mat-form-field>
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Axial</mat-label>
-                <mat-select formControlName="axial">
+                <mat-select id="command-template-texol-dedicated-axial-select" formControlName="axial">
                   @for (texolLevelAxial of texolLevelAxialOpts; track texolLevelAxial) {
-                    <mat-option [value]="texolLevelAxial"> {{ texolLevelAxial }}</mat-option>
+                    <mat-option
+                      id="command-template-texol-dedicated-axial-option-{{ texolLevelAxial }}"
+                      [value]="texolLevelAxial"
+                    >
+                      {{ texolLevelAxial }}</mat-option
+                    >
                   }
                 </mat-select>
               </mat-form-field>

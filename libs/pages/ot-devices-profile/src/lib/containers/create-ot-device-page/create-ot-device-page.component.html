@@ -19,7 +19,8 @@
       <mat-card class="card">
         <mat-card-content>
           <ne-ot-device-profile
-            [selectedDeviceProtocol]="selectDeviceProtocolCtrl.value"
+            [isEditMode]="true"
+            [appName]="selectDeviceProtocolCtrl.value?.name"
             formControlName="deviceProfile"
           ></ne-ot-device-profile>
         </mat-card-content>
@@ -31,8 +32,9 @@
       <mat-card class="card">
         <mat-card-content>
           <ne-select-command-template
-            [selectedDeviceProtocol]="selectDeviceProtocolCtrl.value"
+            [appName]="selectDeviceProtocolCtrl.value?.name"
             [texolTagDoc]="texolTagDoc()"
+            (handleDownloadTagTemplateCsv)="onDownloadTagTemplateCsv()"
             formControlName="selectCommandTemplate"
           >
           </ne-select-command-template>
@@ -48,12 +50,17 @@
             'create' === selectCommandTemplateCtrl.value?.generateTagType ||
             'import-edit' === selectCommandTemplateCtrl.value?.generateTagType
           ) {
-            <ne-ot-tags formControlName="otTags"></ne-ot-tags>
+            <ne-ot-tags
+              [isEditMode]="true"
+              (handleExportTags)="onExportTags($event)"
+              formControlName="otTags"
+            ></ne-ot-tags>
           } @else if (
             'texol-general' === selectCommandTemplateCtrl.value?.generateTagType ||
             'texol-dedicated' === selectCommandTemplateCtrl.value?.generateTagType
           ) {
             <ne-ot-texol-tag
+              [isEditMode]="true"
               [texolTagsType]="selectCommandTemplateCtrl.value"
               [texolTagDoc]="texolTagDoc()"
             ></ne-ot-texol-tag>

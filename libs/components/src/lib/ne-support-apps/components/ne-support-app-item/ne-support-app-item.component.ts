@@ -28,7 +28,6 @@ export class NeSupportAppItemComponent {
 
   appSettings = computed<ISupportAppsUI | null>(() => {
     const appData = this.appData();
-    if (!appData?.flowGroup) return null;
 
     const supportAppsSettingsMap = {
       0: otDeviceSupportApps,
@@ -36,9 +35,9 @@ export class NeSupportAppItemComponent {
       2: neoflowSupportApps
     };
 
-    const supportAppsSetting = supportAppsSettingsMap[appData.flowGroup] || [];
+    const supportAppsSetting = supportAppsSettingsMap[appData?.flowGroup] || [];
 
-    const appName = appData.name.toUpperCase();
+    const appName = appData?.name.toUpperCase();
     const matchedApp = supportAppsSetting.find((item) => appName.includes(item.key));
 
     return matchedApp || null;

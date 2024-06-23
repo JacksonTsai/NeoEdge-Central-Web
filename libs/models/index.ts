@@ -9,6 +9,7 @@ export * from './it-service-setting.model';
 export * from './it-service.model';
 export * from './language.model';
 export * from './ne-menu.model';
+export * from './ot-device-detail.model';
 export * from './ot-devices.model';
 export * from './ot-profile.model';
 export * from './ot-tags.model';

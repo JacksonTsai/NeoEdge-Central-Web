@@ -1,1 +1,68 @@
-<p>ot-device-detail-page works!</p>
+<div class="ot-device-detail-wrapper">
+  <ne-support-app-item
+    [appData]="otDeviceVersion()"
+    [versionData]="otDeviceVersion()?.appVersions"
+    [clickable]="false"
+    [single]="true"
+  ></ne-support-app-item>
+  <mat-card class="card">
+    <mat-card-content>
+      <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Profile">
+          <div class="ot-detail-content">
+            <ne-ot-device-profile
+              [isLoading]="isLoading()"
+              [isEditMode]="isEditMode()"
+              [appName]="otDeviceVersion()?.name"
+              [formControl]="deviceProfileCtrl"
+            ></ne-ot-device-profile>
+          </div>
+        </mat-tab>
+        <mat-tab label="Tags">
+          <div class="ot-detail-content">
+            @if (isTexolProfile) {
+              <ne-select-command-template
+                [isEditMode]="isEditMode()"
+                [appName]="otDeviceVersion().name"
+                [texolTagDoc]="texolTagDoc()"
+                [formControl]="selectTexolTemplateCtrl"
+              ></ne-select-command-template>
+            } @else {
+              <ne-ot-tags
+                [isEditMode]="isEditMode()"
+                (handleExportTags)="onExportTags($event)"
+                [formControl]="otTagsCtrl"
+              ></ne-ot-tags>
+            }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="ot-detail-action">
+    @if (!isEditMode()) {
+      <div class="edit-btn">
+        <button id="ot-device-detail-edit-btn" type="button" mat-stroked-button color="primary" (click)="onEdit()">
+          <mat-icon svgIcon="icon:edit_primary"></mat-icon>
+          Edit
+        </button>
+      </div>
+    }
+    @if (isEditMode()) {
+      <button id="ot-device-detail-cancel-btn" type="button" mat-stroked-button color="primary" (click)="onCancel()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        (click)="onSave()"
+        [disabled]="false"
+        id="ot-device-detail-save-btn"
+      >
+        Save
+      </button>
+    }
+  </div>
+</div>

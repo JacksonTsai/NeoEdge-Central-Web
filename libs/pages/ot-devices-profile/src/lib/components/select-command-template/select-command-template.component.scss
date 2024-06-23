@@ -18,3 +18,14 @@ mat-checkbox {
 .import-csv {
   margin: 16px;
 }
+
+.create-type {
+  mat-icon {
+    margin-left: 10px;
+    transform: translateY(6px);
+  }
+}
+
+.download-csv-template {
+  cursor: pointer;
+}

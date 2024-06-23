@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, effect, forwardRef, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  effect,
+  forwardRef,
+  inject,
+  input,
+  signal
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -14,10 +25,12 @@ import {
 } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NeUploadFileComponent } from '@neo-edge-web/components';
-import { ICsvTag, IOtTag, ISupportAppsWithVersion, SUPPORT_APPS_OT_DEVICE, TEXOL_TAG_TYPE } from '@neo-edge-web/models';
+import { ICsvTag, IOtTag, SUPPORT_APPS_OT_DEVICE, TEXOL_TAG_TYPE } from '@neo-edge-web/models';
 import { csvToObj } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { merge, tap } from 'rxjs';
@@ -34,7 +47,9 @@ import { tagOptions, texolFieldValidators } from '../../configs';
     ReactiveFormsModule,
     MatSelectModule,
     MatCheckboxModule,
-    NeUploadFileComponent
+    NeUploadFileComponent,
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './select-command-template.component.html',
   styleUrl: './select-command-template.component.scss',
@@ -49,9 +64,10 @@ import { tagOptions, texolFieldValidators } from '../../configs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectCommandTemplateComponent implements OnInit, ControlValueAccessor, Validator {
-  selectedDeviceProtocol = input<ISupportAppsWithVersion>();
+  @Output() handleDownloadTagTemplateCsv = new EventEmitter();
+  appName = input<SUPPORT_APPS_OT_DEVICE>();
   texolTagDoc = input<any>({});
-
+  isEditMode = input(false);
   #fb = inject(FormBuilder);
   texolTagType = TEXOL_TAG_TYPE;
   createTypeOpts = ['create', 'import'];
@@ -66,8 +82,25 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
 
   constructor() {
     effect(() => {
-      if (this.selectedDeviceProtocol()) {
+      if (this.appName()) {
         this.onChange();
+      }
+    });
+
+    effect(() => {
+      const originTexolDedicatedForm = this.texolDedicatedForm.getRawValue();
+      if (!this.isEditMode()) {
+        this.texolModeCtrl.disable();
+        this.texolGeneralForm.disable();
+        this.texolDedicatedForm.disable();
+      } else {
+        this.texolModeCtrl.enable();
+        this.texolGeneralForm.enable();
+        this.texolDedicatedForm.enable();
+      }
+
+      if (!this.isTexolGeneral && originTexolDedicatedForm.component && originTexolDedicatedForm.axial) {
+        this.texolDedicatedForm.setValue(originTexolDedicatedForm);
       }
     });
   }
@@ -100,23 +133,27 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
   }
 
   get texolLevel2Opts() {
-    if (this.texolTagDoc() && this.componentCtrl.value) {
-      return Object.keys(this.texolTagDoc()[this.componentCtrl.value]) ?? [];
+    if (this.texolTagDoc() && this.componentCtrl.getRawValue()) {
+      return Object.keys(this.texolTagDoc()[this.componentCtrl.getRawValue()]) ?? [];
     }
     return [];
   }
 
   get texolLevel3Opts() {
-    if (this.texolTagDoc() && this.level2Ctrl.value) {
-      return Object.keys(this.texolTagDoc()[this.componentCtrl.value][this.level2Ctrl.value]) ?? [];
+    if (this.texolTagDoc() && this.componentCtrl.getRawValue() && this.level2Ctrl.getRawValue()) {
+      return Object.keys(this.texolTagDoc()[this.componentCtrl.getRawValue()][this.level2Ctrl.getRawValue()]) ?? [];
     }
     return [];
   }
 
   get texolLevelAxialOpts() {
-    if (this.texolTagDoc() && this.level2Ctrl.value && this.level3Ctrl.value) {
+    if (this.texolTagDoc() && this.level2Ctrl.getRawValue() && this.level3Ctrl.getRawValue()) {
       return (
-        Object.keys(this.texolTagDoc()[this.componentCtrl.value][this.level2Ctrl.value][this.level3Ctrl.value]) ?? []
+        Object.keys(
+          this.texolTagDoc()[this.componentCtrl.getRawValue()][this.level2Ctrl.getRawValue()][
+            this.level3Ctrl.getRawValue()
+          ]
+        ) ?? []
       );
     }
     return [];
@@ -125,15 +162,43 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
   change: (value) => void;
   touch: (value) => void;
 
-  writeValue(v) {
-    console.log(v);
+  writeValue(v: {
+    texolMode: TEXOL_TAG_TYPE;
+    tags: {
+      timeDomain: boolean;
+      frequencyDomain: boolean;
+      damageDomain: boolean;
+    } & {
+      component: string;
+      level2: string;
+      level3: string;
+      axial: string;
+    };
+  }) {
+    if (!v) {
+      return;
+    }
+    if (TEXOL_TAG_TYPE.General === v.texolMode) {
+      this.texolModeCtrl.setValue(TEXOL_TAG_TYPE.General);
+      this.texolGeneralForm.patchValue({
+        timeDomain: v.tags.timeDomain,
+        frequencyDomain: v.tags.frequencyDomain,
+        damageDomain: v.tags.damageDomain
+      });
+    } else {
+      this.texolModeCtrl.setValue(TEXOL_TAG_TYPE.Dedicated);
+      this.componentCtrl.setValue(this.texolCompLevelOpts.find((d) => d === v.tags.component));
+      this.level2Ctrl.setValue(this.texolLevel2Opts.find((d) => d === v.tags.level2));
+      this.level3Ctrl.setValue(this.texolLevel3Opts.find((d) => d === v.tags.level3));
+      this.axialCtrl.setValue(this.texolLevelAxialOpts.find((d) => d === v.tags.axial));
+    }
   }
 
   validate() {
-    if (!this.selectedDeviceProtocol()) {
+    if (!this.appName()) {
       return null;
     }
-    if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.selectedDeviceProtocol().name) {
+    if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.appName()) {
       if (TEXOL_TAG_TYPE.General === this.texolModeCtrl.value) {
         return this.texolGeneralForm.invalid ? { formError: true } : null;
       } else {
@@ -158,7 +223,7 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
 
   onChange() {
     if (this.change) {
-      if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.selectedDeviceProtocol().name) {
+      if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.appName()) {
         if (TEXOL_TAG_TYPE.General === this.texolModeCtrl.value) {
           this.change({ generateTagType: 'texol-general', tags: this.texolGeneralForm.value });
         } else {
@@ -233,6 +298,10 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
     return this.importCsvResult();
   };
 
+  downloadCsvTagTemplate = () => {
+    this.handleDownloadTagTemplateCsv.emit();
+  };
+
   ngOnInit() {
     this.tagFileCtrl.valueChanges.subscribe((d) => {
       if (d?.content) {
@@ -245,17 +314,17 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
     });
 
     this.texolDedicatedForm = this.#fb.group({
-      component: ['', [Validators.required]],
-      level2: ['', [Validators.required]],
-      level3: ['', [Validators.required]],
-      axial: ['', [Validators.required]]
+      component: [{ value: '', disabled: false }, [Validators.required]],
+      level2: [{ value: '', disabled: false }, [Validators.required]],
+      level3: [{ value: '', disabled: false }, [Validators.required]],
+      axial: [{ value: '', disabled: false }, [Validators.required]]
     });
 
     this.texolGeneralForm = this.#fb.group(
       {
-        timeDomain: [false],
-        frequencyDomain: [false],
-        damageDomain: [false]
+        timeDomain: [{ value: false, disabled: false }],
+        frequencyDomain: [{ value: false, disabled: false }],
+        damageDomain: [{ value: false, disabled: false }]
       },
       {
         validator: this.texolGeneralFormValidator
@@ -299,6 +368,7 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
       this.texolGeneralForm.valueChanges
     )
       .pipe(
+        untilDestroyed(this),
         tap(() => {
           this.onChange();
         })

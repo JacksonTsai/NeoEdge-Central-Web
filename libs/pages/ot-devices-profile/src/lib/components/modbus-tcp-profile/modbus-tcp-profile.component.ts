@@ -1,5 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  effect,
+  forwardRef,
+  inject,
+  input
+} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -15,7 +24,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ISupportAppsWithVersion, ITcpProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
+import { ITcpProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
 import { ipValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -39,14 +48,43 @@ import { tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, ControlValueAccessor, Validator {
-  selectedDeviceProtocol = input<ISupportAppsWithVersion>();
+  isEditMode = input(false);
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
-
   otDeviceType = SUPPORT_APPS_OT_DEVICE.MODBUS_RTU;
 
   change: (value) => void;
   touch: (value) => void;
+
+  constructor() {
+    effect(() => {
+      if (this.isEditMode()) {
+        this.deviceNameCtrl.enable();
+        this.slaveIdCtrl.enable();
+        this.descriptionCtrl.enable();
+        this.ipAddressCtrl.enable();
+        this.portCtrl.enable();
+        this.initialDelayCtrl.enable();
+        this.delayBetweenPollsCtrl.enable();
+        this.responseTimeoutCtrl.enable();
+        this.pollingRetriesCtrl.enable();
+        this.swapByteCtrl.enable();
+        this.swapWordCtrl.enable();
+      } else {
+        this.deviceNameCtrl.disable();
+        this.slaveIdCtrl.disable();
+        this.descriptionCtrl.disable();
+        this.ipAddressCtrl.disable();
+        this.portCtrl.disable();
+        this.initialDelayCtrl.disable();
+        this.delayBetweenPollsCtrl.disable();
+        this.responseTimeoutCtrl.disable();
+        this.pollingRetriesCtrl.disable();
+        this.swapByteCtrl.disable();
+        this.swapWordCtrl.disable();
+      }
+    });
+  }
 
   get deviceNameCtrl() {
     return this.form.get('deviceName') as UntypedFormControl;
@@ -93,7 +131,19 @@ export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, Control
   }
 
   writeValue(v) {
-    console.log(v);
+    if (v) {
+      this.deviceNameCtrl.setValue(v.deviceName);
+      this.slaveIdCtrl.setValue(v.slaveId);
+      this.descriptionCtrl.setValue(v.description);
+      this.ipAddressCtrl.setValue(v.ip);
+      this.portCtrl.setValue(v.port);
+      this.initialDelayCtrl.setValue(v.initialDelay);
+      this.delayBetweenPollsCtrl.setValue(v.delayBetweenPolls);
+      this.responseTimeoutCtrl.setValue(v.responseTimeout);
+      this.pollingRetriesCtrl.setValue(v.pollingRetries);
+      this.swapByteCtrl.setValue(v.swapByte);
+      this.swapWordCtrl.setValue(v.swapWord);
+    }
   }
 
   validate(control: AbstractControl) {

@@ -1,10 +1,28 @@
 <div class="ot-tags-wrapper">
   <div class="ot-tags-wrapper__top">
     <h2 class="card__title">Tags</h2>
-    <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
-      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
-      Add Tag
-    </button>
+    <div>
+      @if (isEditMode()) {
+        <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
+          <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+          Add Tag
+        </button>
+      }
+
+      <button
+        id="ot-tags-export-tag-btn"
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="exportTags()"
+        [disabled]="tagsArray.value.length === 0"
+      >
+        @if (tagsArray.value.length > 0) {
+          <mat-icon color="primary" svgIcon="icon:download"></mat-icon>
+        }
+        Export Tags
+      </button>
+    </div>
   </div>
   <form [formGroup]="form">
     <table mat-table [dataSource]="dataSource" formArrayName="tags">

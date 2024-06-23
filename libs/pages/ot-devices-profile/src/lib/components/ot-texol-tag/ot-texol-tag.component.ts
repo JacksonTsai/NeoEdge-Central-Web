@@ -10,22 +10,23 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OtTexolTagComponent {
+  isEditMode = input(false);
   texolTagsType = input<{ generateTagType: 'texol-general' | 'texol-dedicated'; tags: any }>();
   texolTagDoc = input<any>({});
 
   get texolTagByType() {
-    if ('texol-general' === this.texolTagsType()?.generateTagType) {
+    if ('texol-general' === this.texolTagsType()?.generateTagType && this.texolTagDoc()) {
       const texolGeneralTags = [...this.texolTagDoc()['General']['allDomain']];
 
-      if (this.texolTagsType().tags.timeDomain) {
+      if (this.texolTagsType().tags?.timeDomain) {
         texolGeneralTags.push(...this.texolTagDoc()['General']['timeDomain']);
       }
 
-      if (this.texolTagsType().tags.frequencyDomain) {
+      if (this.texolTagsType().tags?.frequencyDomain) {
         texolGeneralTags.push(...this.texolTagDoc()['General']['frequencyDomain']);
       }
 
-      if (this.texolTagsType().tags.damageDomain) {
+      if (this.texolTagsType().tags?.damageDomain) {
         texolGeneralTags.push(...this.texolTagDoc()['General']['damageDomain']);
       }
 
