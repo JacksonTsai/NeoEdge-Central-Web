@@ -87,7 +87,7 @@ export class RolesComponent implements AfterViewInit {
   };
 
   includeUsers = (role: IRole) => {
-    return role?.users?.length > 1 ? true : false;
+    return role?.users?.length > 0 ? true : false;
   };
 
   isBuildIn = (role: IRole) => {
