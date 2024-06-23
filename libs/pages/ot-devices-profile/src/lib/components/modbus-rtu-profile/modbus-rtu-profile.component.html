@@ -1,182 +1,175 @@
 <div class="modbus-rtu-profile-wrapper">
-  @if (selectedDeviceProtocol()) {
-    <h2 class="card__title">Device Profile</h2>
-    <form [formGroup]="form">
-      <section class="card__sec">
-        <h3 class="card__sub-title">Basic</h3>
-        <div class="modbus-rtu-profile-wrapper__profile">
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Device Name</mat-label>
-            <input
-              id="ot-devcie-modbus-rtu-device-name-input"
-              matInput
-              formControlName="deviceName"
-              type="text"
-              maxlength="128"
-            />
-            @if (deviceNameCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            } @else if (deviceNameCtrl.hasError('whitespace')) {
-              <mat-error>The value not allow whitespace.</mat-error>
+  <h2 class="card__title">Device Profile</h2>
+  <form [formGroup]="form">
+    <section class="card__sec">
+      <h3 class="card__sub-title">Basic</h3>
+      <div class="modbus-rtu-profile-wrapper__profile">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Device Name</mat-label>
+          <input
+            id="ot-devcie-modbus-rtu-device-name-input"
+            matInput
+            formControlName="deviceName"
+            type="text"
+            maxlength="128"
+          />
+          @if (deviceNameCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          } @else if (deviceNameCtrl.hasError('whitespace')) {
+            <mat-error>The value not allow whitespace.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Slave ID</mat-label>
+          <input id="ot-devcie-modbus-rtu-slave-id-input" matInput formControlName="slaveId" type="number" />
+          @if (slaveIdCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+          @if (slaveIdCtrl.hasError('positiveInteger')) {
+            <mat-error>Must be a positive integer.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Description</mat-label>
+          <input
+            id="ot-devcie-modbus-rtu-description-input"
+            matInput
+            formControlName="description"
+            type="text"
+            maxlength="512"
+          />
+          @if (descriptionCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </section>
+    <section class="card__sec">
+      <h3 class="card__sub-title">Connection Settings</h3>
+      <div class="modbus-rtu-profile-wrapper__profile">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Mode</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-mode-select" formControlName="mode">
+            @for (mode of options().rtuModeOpts; track mode.value) {
+              <mat-option id="ot-devcie-modbus-rtu-mode-option-{{ mode.value }}" [value]="mode"
+                >{{ mode.displayName }}
+              </mat-option>
             }
-          </mat-form-field>
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Slave ID</mat-label>
-            <input id="ot-devcie-modbus-rtu-slave-id-input" matInput formControlName="slaveId" type="number" />
-            @if (slaveIdCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Baud Rate</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-baud-rate-select" formControlName="baudRate">
+            @for (baudRate of options().rtuBaudRateOpts; track baudRate) {
+              <mat-option id="ot-devcie-modbus-rtu-baud-rate-option-{{ baudRate }}" [value]="baudRate"
+                >{{ baudRate }}
+              </mat-option>
             }
-            @if (slaveIdCtrl.hasError('positiveInteger')) {
-              <mat-error>Must be a positive integer.</mat-error>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Data Bits</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-data-bit-select" formControlName="dataBits">
+            @for (dataBit of options().rtuDataBitsOpts; track dataBit) {
+              <mat-option id="ot-devcie-modbus-rtu-data-bit-option-{{ dataBit }}" [value]="dataBit"
+                >{{ dataBit }}
+              </mat-option>
             }
-          </mat-form-field>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Description</mat-label>
-            <input
-              id="ot-devcie-modbus-rtu-description-input"
-              matInput
-              formControlName="description"
-              type="text"
-              maxlength="512"
-            />
-            @if (descriptionCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Parity</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-parity-select" formControlName="parity">
+            @for (parity of options().rtuParityOpts; track parity) {
+              <mat-option id="ot-devcie-modbus-rtu-parity-option-{{ parity }}" [value]="parity"
+                >{{ parity.displayName }}
+              </mat-option>
             }
-          </mat-form-field>
-        </div>
-      </section>
-      <section class="card__sec">
-        <h3 class="card__sub-title">Connection Settings</h3>
-        <div class="modbus-rtu-profile-wrapper__profile">
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Mode</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-mode-select" formControlName="mode">
-              @for (mode of options().rtuModeOpts; track mode.value) {
-                <mat-option id="ot-devcie-modbus-rtu-mode-option-{{ mode.value }}" [value]="mode"
-                  >{{ mode.displayName }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Baud Rate</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-baud-rate-select" formControlName="baudRate">
-              @for (baudRate of options().rtuBaudRateOpts; track baudRate) {
-                <mat-option id="ot-devcie-modbus-rtu-baud-rate-option-{{ baudRate }}" [value]="baudRate"
-                  >{{ baudRate }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Data Bits</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-data-bit-select" formControlName="dataBits">
-              @for (dataBit of options().rtuDataBitsOpts; track dataBit) {
-                <mat-option id="ot-devcie-modbus-rtu-data-bit-option-{{ dataBit }}" [value]="dataBit"
-                  >{{ dataBit }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Parity</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-parity-select" formControlName="parity">
-              @for (parity of options().rtuParityOpts; track parity) {
-                <mat-option id="ot-devcie-modbus-rtu-parity-option-{{ parity }}" [value]="parity"
-                  >{{ parity.displayName }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Stop Bits</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-stop-bit-select" formControlName="stopBit">
-              @for (stopBits of options().rtuStopBitsOpts; track stopBits) {
-                <mat-option id="ot-devcie-modbus-rtu-stop-bit-option-{{ stopBits }}" [value]="stopBits"
-                  >{{ stopBits }}
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </section>
-      <section class="card__sec">
-        <h3 class="card__sub-title">Advanced</h3>
-        <div class="modbus-rtu-profile-wrapper__profile">
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Initial Delay(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-rtu-initial-delay-input"
-              matInput
-              formControlName="initialDelay"
-              type="number"
-            />
-            @if (initialDelayCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Stop Bits</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-stop-bit-select" formControlName="stopBit">
+            @for (stopBits of options().rtuStopBitsOpts; track stopBits) {
+              <mat-option id="ot-devcie-modbus-rtu-stop-bit-option-{{ stopBits }}" [value]="stopBits"
+                >{{ stopBits }}
+              </mat-option>
             }
-          </mat-form-field>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </section>
+    <section class="card__sec">
+      <h3 class="card__sub-title">Advanced</h3>
+      <div class="modbus-rtu-profile-wrapper__profile">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Initial Delay(ms)</mat-label>
+          <input id="ot-devcie-modbus-rtu-initial-delay-input" matInput formControlName="initialDelay" type="number" />
+          @if (initialDelayCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>delay Btw Polls(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-rtu-delay-between-polls-input"
-              matInput
-              formControlName="delayBetweenPolls"
-              type="number"
-            />
-            @if (delayBetweenPollsCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>delay Btw Polls(ms)</mat-label>
+          <input
+            id="ot-devcie-modbus-rtu-delay-between-polls-input"
+            matInput
+            formControlName="delayBetweenPolls"
+            type="number"
+          />
+          @if (delayBetweenPollsCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Response Timeout(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-rtu-response-timeout-input"
-              matInput
-              formControlName="responseTimeout"
-              type="number"
-            />
-            @if (responseTimeoutCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Response Timeout(ms)</mat-label>
+          <input
+            id="ot-devcie-modbus-rtu-response-timeout-input"
+            matInput
+            formControlName="responseTimeout"
+            type="number"
+          />
+          @if (responseTimeoutCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Polling Retries(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-rtu-polling-retries-input"
-              matInput
-              formControlName="pollingRetries"
-              type="number"
-            />
-            @if (pollingRetriesCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Polling Retries(ms)</mat-label>
+          <input
+            id="ot-devcie-modbus-rtu-polling-retries-input"
+            matInput
+            formControlName="pollingRetries"
+            type="number"
+          />
+          @if (pollingRetriesCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Swap Byte</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-swap-byte-select" formControlName="swapByte">
-              <mat-option id="ot-devcie-modbus-rtu-swap-byte-option-true" [value]="true"> True </mat-option>
-              <mat-option id="ot-devcie-modbus-rtu-swap-byte-option-false" [value]="false"> False </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Swap Byte</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-swap-byte-select" formControlName="swapByte">
+            <mat-option id="ot-devcie-modbus-rtu-swap-byte-option-true" [value]="true"> True </mat-option>
+            <mat-option id="ot-devcie-modbus-rtu-swap-byte-option-false" [value]="false"> False </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Swap Word</mat-label>
-            <mat-select id="ot-devcie-modbus-rtu-swap-word-select" formControlName="swapWord">
-              <mat-option id="ot-devcie-modbus-rtu-swap-word-option-true" [value]="true"> True </mat-option>
-              <mat-option id="ot-devcie-modbus-rtu-swap-word-option-false" [value]="false"> False </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </section>
-    </form>
-  }
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Swap Word</mat-label>
+          <mat-select id="ot-devcie-modbus-rtu-swap-word-select" formControlName="swapWord">
+            <mat-option id="ot-devcie-modbus-rtu-swap-word-option-true" [value]="true"> True </mat-option>
+            <mat-option id="ot-devcie-modbus-rtu-swap-word-option-false" [value]="false"> False </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </section>
+  </form>
 </div>

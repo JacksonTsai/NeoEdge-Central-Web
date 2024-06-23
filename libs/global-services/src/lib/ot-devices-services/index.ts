@@ -1,2 +1,2 @@
-export * from './ot-device-detail.service';
+export * from './ot-device-texol.service';
 export * from './ot-devices.service';

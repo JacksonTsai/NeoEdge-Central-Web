@@ -7,7 +7,7 @@ export const rtuOptions = {
     { displayName: 'Odd', value: 'Odd' },
     { displayName: 'Even', value: 'Even' }
   ],
-  rtuStopBitsOpts: [1, 2]
+  rtuStopBitsOpts: ['1', '2']
 };
 
 export const texolOptions = {
@@ -15,7 +15,7 @@ export const texolOptions = {
   rtuBaudRateOpts: [115200],
   rtuDataBitsOpts: [8],
   rtuParityOpts: [{ displayName: 'Even', value: 'Even' }],
-  rtuStopBitsOpts: [1]
+  rtuStopBitsOpts: ['1']
 };
 
 export const tagOptions = {
