@@ -94,7 +94,7 @@ export const GatewaysStore = signalStore(
           switchMap(() =>
             projectsService.getProjectLabels$().pipe(
               tap((d) => {
-                patchState(store, { labels: d.labels });
+                patchState(store, { labels: d.labels, isLoading: GATEWAYS_LOADING.NONE });
               }),
               catchError(() => EMPTY)
             )
