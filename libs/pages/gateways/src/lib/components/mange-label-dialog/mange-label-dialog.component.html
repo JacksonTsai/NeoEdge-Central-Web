@@ -7,7 +7,7 @@
           <mat-form-field class="label-item__field" appearance="outline" floatLabel="always">
             <mat-label>Label Name</mat-label>
             <input id="manage-label-name-{{ i }}" matInput formControlName="name" type="text" maxlength="10" />
-            @if (labelNameCtrl(i).hasError('required')) {
+            @if (labelNameCtrl(i).hasError('required') || labelNameCtrl(i).hasError('whitespace')) {
               <mat-error>Required.</mat-error>
             }
           </mat-form-field>
