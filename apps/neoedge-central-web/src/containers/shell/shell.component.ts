@@ -57,9 +57,11 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
           <button mat-menu-item (click)="goToUserProfile()">
             <span>My Profile</span>
           </button>
-          <button mat-menu-item (click)="onSwitchProject()">
-            <span>Switch Project</span>
-          </button>
+          @if (userProjects().length > 0) {
+            <button mat-menu-item (click)="onSwitchProject()">
+              <span>Switch Project</span>
+            </button>
+          }
           <button mat-menu-item (click)="onLogout()">
             <span>Logout</span>
           </button>
@@ -84,6 +86,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   appVersion = this.envVariable.betaVersion;
   userName = signal('');
   role = signal('');
+  userProjects = signal([]);
   defaultMenuTree = MENU_TREE;
   menuTreeByPermission = signal<MenuItem[]>([]);
   isMobile = false;
@@ -175,14 +178,16 @@ export class ShellComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this.#globalStore.select(AuthStore.selectUserProfile),
-      this.#globalStore.select(AuthStore.selectCurrentProject)
+      this.#globalStore.select(AuthStore.selectCurrentProject),
+      this.#globalStore.select(AuthStore.selectUserProjects)
     ])
       .pipe(
         untilDestroyed(this),
-        map(([{ userProfile }, { currentProjectName }]) => {
+        map(([{ userProfile }, { currentProjectName }, { userProjects }]) => {
           if (!userProfile) {
             return;
           }
+          this.userProjects.set(userProjects);
           const userPermission = userProfile.role.permissions;
           if (userPermission.length > 0) {
             let newMenu = this.defaultMenuTree?.filter((menu) => {

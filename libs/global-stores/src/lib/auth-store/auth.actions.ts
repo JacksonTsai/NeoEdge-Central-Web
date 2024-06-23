@@ -1,4 +1,4 @@
-import { IGetUserProfileResp, ILoginReq, ILoginResp, IRefreshTokenResp } from '@neo-edge-web/models';
+import { IGetUserProfileResp, ILoginReq, ILoginResp, IProjectByIdResp, IRefreshTokenResp } from '@neo-edge-web/models';
 import { createAction, props } from '@ngrx/store';
 
 export const loginAction = createAction('[Auth] Login', props<{ loginReq: ILoginReq }>());
@@ -12,12 +12,12 @@ export const userProfileAction = createAction('[Auth] Get Profile');
 
 export const loinSuccessRedirect = createAction(
   '[Auth] Redirect To Default Page',
-  props<{ userProfile: IGetUserProfileResp; isRedirectDefaultPage: boolean }>()
+  props<{ userProfile: IGetUserProfileResp; isRedirectDefaultPage: boolean; userProjects: IProjectByIdResp[] }>()
 );
 
 export const userProfileSuccess = createAction(
   '[Auth] Get Profile Success',
-  props<{ userProfile: IGetUserProfileResp }>()
+  props<{ userProfile: IGetUserProfileResp; userProjects: IProjectByIdResp[] }>()
 );
 
 export const loginFail = createAction('[Auth] Login Fail');

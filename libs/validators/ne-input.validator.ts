@@ -33,6 +33,9 @@ export const positiveIntegerValidator = (control: FormControl): ValidationErrors
 };
 
 export const whitespaceValidator = (control: FormControl): ValidationErrors | null => {
+  if (typeof control.value !== 'string') {
+    return null;
+  }
   return (control.value || '').trim().length ? null : { whitespace: true };
 };
 

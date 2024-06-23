@@ -48,7 +48,6 @@ export interface IAddGatewayReq {
   isPartnerIpc: number;
   name: string;
   osId: number;
-  projectId: number;
 }
 
 export interface IAddGatewayResp {

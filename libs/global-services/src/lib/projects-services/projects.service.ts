@@ -140,7 +140,7 @@ export class ProjectsService {
         });
       }),
       catchError((err) => {
-        this.#snackBar.open('Get project labels failure.', 'X', {
+        this.#snackBar.open('Edit failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

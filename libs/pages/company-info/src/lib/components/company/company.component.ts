@@ -32,6 +32,7 @@ import {
   SUBSCRIPTION_PLAN
 } from '@neo-edge-web/models';
 import { datetimeFormat, img2Base64 } from '@neo-edge-web/utils';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { NgxPermissionsModule } from 'ngx-permissions';
 
 interface ICompForm {
@@ -174,9 +175,9 @@ export class CompanyComponent implements OnInit {
       website: compInfo?.website ?? ''
     });
     if (compInfo?.iconPath !== '') {
-      this.companyLogo.set(this.iconPathCtrl.value);
+      this.companyLogo.set(`${this.iconPathCtrl.value}?timestamp=${Date.now()}`);
     } else {
-      this.companyLogo.set(defaultCompLogo);
+      this.companyLogo.set(`defaultCompLogo?timestamp=${Date.now()}`);
     }
   };
 
@@ -250,13 +251,13 @@ export class CompanyComponent implements OnInit {
       agreementEnd: [{ value: this.compInfo()?.agreementEnd ?? '' }],
       bizContactEmail: [
         { value: this.compInfo()?.bizContact.email ?? '', disabled: true },
-        [Validators.required, Validators.email]
+        [Validators.required, Validators.email, whitespaceValidator]
       ],
       bizContactName: [
         { value: this.compInfo()?.bizContact.name ?? '', disabled: true },
-        [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]
+        [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/), whitespaceValidator]
       ],
-      country: [{ value: this.compInfo()?.country ?? '', disabled: true }, [Validators.required]],
+      country: [{ value: this.compInfo()?.country ?? '', disabled: true }, [Validators.required, whitespaceValidator]],
       datetimeFormat: [{ value: this.compInfo()?.datetimeFormat ?? '', disabled: true }, [Validators.required]],
       fqdn: [{ value: this.compInfo()?.fqdn ?? '' }, [Validators.required]],
       language: [{ value: this.compInfo()?.language ?? '', disabled: true }, [Validators.required]],
@@ -267,11 +268,11 @@ export class CompanyComponent implements OnInit {
       status: [{ value: this.compInfo()?.status ?? '' }],
       techContactEmail: [
         { value: this.compInfo()?.techContact.email ?? '', disabled: true },
-        [Validators.required, Validators.email]
+        [Validators.required, Validators.email, whitespaceValidator]
       ],
       techContactName: [
         { value: this.compInfo()?.techContact.name ?? '', disabled: true },
-        [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)]
+        [Validators.required, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/), whitespaceValidator]
       ],
       website: [{ value: this.compInfo()?.website ?? '' }]
     });
