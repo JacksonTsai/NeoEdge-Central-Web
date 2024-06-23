@@ -52,7 +52,9 @@ export class OtDevicesPageComponent {
     );
   }
 
-  onDetailDevice = (event) => {};
+  onDetailDevice = (event) => {
+    this.#router.navigate([`/neoflow/ot-device-profile/${event.id}`]);
+  };
 
   onDeleteDevice = (event: IOtDevice<any>) => {
     let editRoleDialogRef = this.#dialog.open(DeleteOtDeviceConfirmDialogComponent, {

@@ -1,0 +1,14 @@
+<div class="texol-tags">
+  @if (texolTagsType()) {
+    @for (texolTag of texolTagByType; track texolTag.TagName) {
+      <div class="tag-item">
+        <div class="tag-name">
+          {{ texolTag.TagName }}
+        </div>
+        <div class="data-type">
+          {{ texolTag.DataType }}
+        </div>
+      </div>
+    }
+  }
+</div>

@@ -5,12 +5,12 @@ import {
   Component,
   OnInit,
   computed,
+  effect,
   forwardRef,
   inject,
   input
 } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
@@ -24,7 +24,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { IRtuProfileForUI, ISupportAppsWithVersion, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
+import { IRtuProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
 import { positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -49,7 +49,8 @@ import { rtuOptions, texolOptions } from '../../configs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, Validator, AfterViewInit {
-  selectedDeviceProtocol = input<ISupportAppsWithVersion>();
+  appName = input<SUPPORT_APPS_OT_DEVICE>();
+  isEditMode = input(false);
   form: FormGroup;
   #fb = inject(FormBuilder);
   change: (value) => void;
@@ -57,10 +58,44 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
 
   otDeviceType = SUPPORT_APPS_OT_DEVICE.MODBUS_RTU;
   options = computed(() => {
-    return SUPPORT_APPS_OT_DEVICE.TEXOL === this.selectedDeviceProtocol().name
-      ? { ...texolOptions }
-      : { ...rtuOptions };
+    return SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.appName() ? { ...texolOptions } : { ...rtuOptions };
   });
+
+  constructor() {
+    effect(() => {
+      if (this.isEditMode()) {
+        this.deviceNameCtrl.enable();
+        this.slaveIdCtrl.enable();
+        this.descriptionCtrl.enable();
+        this.initialDelayCtrl.enable();
+        this.delayBetweenPollsCtrl.enable();
+        this.responseTimeoutCtrl.enable();
+        this.pollingRetriesCtrl.enable();
+        this.swapByteCtrl.enable();
+        this.swapWordCtrl.enable();
+        this.modeCtrl.enable();
+        this.baudRateCtrl.enable();
+        this.dataBitsCtrl.enable();
+        this.parityCtrl.enable();
+        this.stopBitCtrl.enable();
+      } else {
+        this.deviceNameCtrl.disable();
+        this.slaveIdCtrl.disable();
+        this.descriptionCtrl.disable();
+        this.initialDelayCtrl.disable();
+        this.delayBetweenPollsCtrl.disable();
+        this.responseTimeoutCtrl.disable();
+        this.pollingRetriesCtrl.disable();
+        this.swapByteCtrl.disable();
+        this.swapWordCtrl.disable();
+        this.modeCtrl.disable();
+        this.baudRateCtrl.disable();
+        this.dataBitsCtrl.disable();
+        this.parityCtrl.disable();
+        this.stopBitCtrl.disable();
+      }
+    });
+  }
 
   get deviceNameCtrl() {
     return this.form.get('deviceName') as UntypedFormControl;
@@ -118,11 +153,26 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
     return this.form.get('swapWord') as UntypedFormControl;
   }
 
-  writeValue(profileData) {
-    console.log(profileData);
+  writeValue(v) {
+    if (v) {
+      this.deviceNameCtrl.setValue(v.deviceName);
+      this.slaveIdCtrl.setValue(v.slaveId);
+      this.descriptionCtrl.setValue(v.description);
+      this.initialDelayCtrl.setValue(v.initialDelay);
+      this.delayBetweenPollsCtrl.setValue(v.delayBetweenPolls);
+      this.responseTimeoutCtrl.setValue(v.responseTimeout);
+      this.pollingRetriesCtrl.setValue(v.pollingRetries);
+      this.swapByteCtrl.setValue(v.swapByte);
+      this.swapWordCtrl.setValue(v.swapWord);
+      this.modeCtrl.setValue(this.options().rtuModeOpts.find((d) => d.value === v.mode));
+      this.baudRateCtrl.setValue(v.baudRate);
+      this.dataBitsCtrl.setValue(v.dataBits);
+      this.parityCtrl.setValue(this.options().rtuParityOpts.find((d) => d.value === v.parity));
+      this.stopBitCtrl.setValue(this.options().rtuStopBitsOpts.find((d) => d === v.stopBit));
+    }
   }
 
-  validate(control: AbstractControl) {
+  validate() {
     return this.form.invalid ? { formError: 'error' } : null;
   }
 
@@ -191,7 +241,7 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
       swapWord: [{ value: false, disabled: false }, [Validators.required]]
     });
 
-    if (SUPPORT_APPS_OT_DEVICE.TEXOL === this.selectedDeviceProtocol().name) {
+    if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.appName()) {
       this.setTexolDefault();
     }
 

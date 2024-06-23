@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, forwardRef, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  effect,
+  forwardRef,
+  inject,
+  input,
+  signal
+} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -20,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ISupportAppsWithVersion } from '@neo-edge-web/models';
+import { IOtTag } from '@neo-edge-web/models';
 import { whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
@@ -54,8 +65,9 @@ import { tagOptions } from '../../configs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator {
-  selectedDeviceProtocol = input<ISupportAppsWithVersion>();
+  @Output() handleExportTags = new EventEmitter();
   #fb = inject(FormBuilder);
+  isEditMode = input(false);
   form!: UntypedFormGroup;
   dataSource = new MatTableDataSource<any>([]);
   change: (value) => void;
@@ -74,8 +86,39 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     'action'
   ];
 
+  generateTagType = signal('');
+  tags = signal(null);
+
   get tagsArray() {
     return this.form.get('tags') as UntypedFormArray;
+  }
+
+  constructor() {
+    effect(() => {
+      if (this.isEditMode()) {
+        for (let i = 0; i < this.tagsArray.length; i++) {
+          this.tagNameCtrl(i).enable();
+          this.enableCtrl(i).enable();
+          this.tagTypeCtrl(i).enable();
+          this.functionCtrl(i).enable();
+          this.startAddressCtrl(i).enable();
+          this.quantityCtrl(i).enable();
+          this.triggerCtrl(i).enable();
+          this.intervalCtrl(i).enable();
+        }
+      } else {
+        for (let i = 0; i < this.tagsArray.length; i++) {
+          this.tagNameCtrl(i).disable();
+          this.enableCtrl(i).disable();
+          this.tagTypeCtrl(i).disable();
+          this.functionCtrl(i).disable();
+          this.startAddressCtrl(i).disable();
+          this.quantityCtrl(i).disable();
+          this.triggerCtrl(i).disable();
+          this.intervalCtrl(i).disable();
+        }
+      }
+    });
   }
 
   tagNameCtrl = (i: number) => {
@@ -111,7 +154,18 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
   };
 
   writeValue(v) {
-    console.log(v);
+    if (!v) {
+      return;
+    }
+
+    if (v.generateTagType === 'import-edit') {
+      this.tagsArray.clear();
+      this.dataSource.data = [];
+    }
+
+    if (Array.isArray(v.tags) && v.tags.length > 0) {
+      v.tags.map((tag) => this.addTag(tag));
+    }
   }
 
   validate(control: AbstractControl) {
@@ -161,27 +215,50 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     } else {
       this.triggerCtrl(i).setValue(this.tagOptions.tagTrigger[triggerCyclicIdx]);
     }
+    this.triggerChange(i);
   };
 
-  addTag = () => {
+  triggerChange = (i: number) => {
+    if (this.triggerCtrl(i).value.value === 'DataChange') {
+      this.intervalCtrl(i).setValue('');
+      this.intervalCtrl(i).disable();
+    } else {
+      this.intervalCtrl(i).setValue(1000);
+      this.intervalCtrl(i).enable();
+    }
+  };
+
+  addTag = (data?: IOtTag) => {
     this.tagsArray.push(
       new UntypedFormGroup({
-        tagName: new UntypedFormControl({ value: '', disabled: false }, [Validators.required, whitespaceValidator]),
-        enable: new UntypedFormControl({ value: true, disabled: false }),
-        tagType: new UntypedFormControl({ value: tagOptions.tagTypeOpts[0], disabled: false }),
-        function: new UntypedFormControl({ value: tagOptions.tagFunctionOpts[2], disabled: false }),
-        startAddress: new UntypedFormControl({ value: 0, disabled: false }, [
+        tagName: new UntypedFormControl({ value: data?.tagName ?? '', disabled: !this.isEditMode() }, [
+          Validators.required,
+          whitespaceValidator
+        ]),
+        enable: new UntypedFormControl({ value: data?.enable ?? true, disabled: !this.isEditMode() }),
+        tagType: new UntypedFormControl({
+          value: data?.dataType ?? tagOptions.tagTypeOpts[0],
+          disabled: !this.isEditMode()
+        }),
+        function: new UntypedFormControl({
+          value: data?.function ?? tagOptions.tagFunctionOpts[2],
+          disabled: !this.isEditMode()
+        }),
+        startAddress: new UntypedFormControl({ value: data?.startAddress ?? 0, disabled: !this.isEditMode() }, [
           Validators.required,
           Validators.min(0),
           Validators.max(65535)
         ]),
-        quantity: new UntypedFormControl({ value: 1, disabled: true }, [
+        quantity: new UntypedFormControl({ value: data?.quantity ?? 1, disabled: !this.isEditMode() }, [
           Validators.required,
           Validators.min(0),
           Validators.max(65535)
         ]),
-        trigger: new UntypedFormControl({ value: tagOptions.tagTrigger[0], disabled: false }),
-        interval: new UntypedFormControl({ value: 1000, disabled: false }, [
+        trigger: new UntypedFormControl({
+          value: data?.trigger ?? tagOptions.tagTrigger[0],
+          disabled: !this.isEditMode()
+        }),
+        interval: new UntypedFormControl({ value: data?.interval ?? 1000, disabled: !this.isEditMode() }, [
           (Validators.required, Validators.min(100), Validators.max(86400000))
         ])
       })
@@ -206,12 +283,14 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     this.dataSource.data = [...this.dataSource.data.filter((_, i) => i !== index)];
   };
 
+  exportTags = () => {
+    this.handleExportTags.emit(this.tagsArray.getRawValue());
+  };
+
   ngOnInit() {
     this.form = this.#fb.group({
       tags: this.#fb.array([])
     });
-
-    this.addTag();
 
     this.tagsArray.valueChanges
       .pipe(

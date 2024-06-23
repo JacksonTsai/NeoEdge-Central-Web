@@ -51,6 +51,7 @@ export interface IInstancesTcp {
 export interface IDevices {
   Name: string;
   SlaveID: number;
+  Profile?: any;
   Commands: {
     [key: string]: IDevicesCommands;
   };
@@ -58,7 +59,7 @@ export interface IDevices {
 
 export interface IDevicesCommands {
   Name: string;
-  Swap: string;
+  Swap: 'ByteWord' | 'Word' | 'Byte' | 'None';
   Enable: boolean;
   Trigger: string;
   DataType: string;

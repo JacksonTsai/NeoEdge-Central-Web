@@ -6,11 +6,11 @@
   [id]="'support-app-' + appData()?.id"
 >
   <div class="support-app-item__img">
-    <img [src]="appSettings()?.img" [alt]="appData()?.name" />
+    <img [src]="appSettings()?.img" [alt]="appData()?.name" width="60" height="60" />
   </div>
   <div class="support-app-item__text">
     <h4 class="support-app-item__title">{{ appData()?.name }}</h4>
-    <div class="support-app-item__ver">version: {{ versionData()?.version }}</div>
+    <div class="support-app-item__ver">version: {{ versionData()?.version ?? appData()?.version?.version }}</div>
     <div class="support-app-item__cate">#{{ appCategory() }}</div>
   </div>
   @if (!appData()?.isAvailable) {

@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { IGatewayLabels, IProjectLabel } from '@neo-edge-web/models';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { gatewayLabelColor } from '../../configs/gateway-lable.config';
 import { GatewaysStore } from '../../stores/gateways.store';
 
@@ -95,7 +96,7 @@ export class MangeLabelDialogComponent implements OnInit {
   addLabel = (data?: IGatewayLabels) => {
     return new UntypedFormGroup({
       id: new UntypedFormControl(data?.id ?? null),
-      name: new UntypedFormControl(data?.name ?? '', [Validators.required]),
+      name: new UntypedFormControl(data?.name ?? '', [Validators.required, whitespaceValidator]),
       colorCode: new UntypedFormControl(data?.colorCode ?? this.gwColorLabel[this.nextLabelColorIndex()].colorCode)
     });
   };

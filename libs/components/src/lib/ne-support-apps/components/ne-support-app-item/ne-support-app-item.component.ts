@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, computed, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { itServiceSupportApps, neoflowSupportApps, otDeviceSupportApps } from '@neo-edge-web/configs';
@@ -19,14 +19,33 @@ import {
   styleUrl: './ne-support-app-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NeSupportAppItemComponent implements AfterViewInit {
+export class NeSupportAppItemComponent {
   @Output() handlerClick = new EventEmitter<ISupportAppsWithVersion>();
   appData = input<ISupportApps>();
   versionData = input<IAppVersion>();
   clickable = input(true);
   single = input(false);
-  appSettings = signal<ISupportAppsUI>({ key: '', img: '' });
-  appCategory = signal<string>(SUPPORT_APPS_CATEGORIES[1]);
+
+  appSettings = computed<ISupportAppsUI | null>(() => {
+    const appData = this.appData();
+
+    const supportAppsSettingsMap = {
+      0: otDeviceSupportApps,
+      1: itServiceSupportApps,
+      2: neoflowSupportApps
+    };
+
+    const supportAppsSetting = supportAppsSettingsMap[appData?.flowGroup] || [];
+
+    const appName = appData?.name.toUpperCase();
+    const matchedApp = supportAppsSetting.find((item) => appName.includes(item.key));
+
+    return matchedApp || null;
+  });
+
+  appCategory = computed<string>(() => {
+    return this.getCategoryName(this.appData()?.category) ?? SUPPORT_APPS_CATEGORIES[1];
+  });
 
   getCategoryName(value: number): string {
     return SUPPORT_APPS_CATEGORIES[value];
@@ -41,28 +60,4 @@ export class NeSupportAppItemComponent implements AfterViewInit {
       ...this.appData()
     });
   };
-
-  ngAfterViewInit(): void {
-    let supportAppsSetting: ISupportAppsUI[] = [];
-    switch (this.appData()?.flowGroup) {
-      case 0:
-        supportAppsSetting = otDeviceSupportApps;
-        break;
-      case 1:
-        supportAppsSetting = itServiceSupportApps;
-        break;
-      case 2:
-        supportAppsSetting = neoflowSupportApps;
-        break;
-    }
-
-    for (const item of supportAppsSetting) {
-      if (this.appData()?.name.toUpperCase().includes(item.key)) {
-        this.appSettings.set(item);
-        break;
-      }
-    }
-
-    this.appCategory.set(this.getCategoryName(this.appData()?.category));
-  }
 }

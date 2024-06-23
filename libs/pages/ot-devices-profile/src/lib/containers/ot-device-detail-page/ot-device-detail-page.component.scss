@@ -1,3 +1,19 @@
-:host {
-  display: block;
+.card {
+  margin-top: 8px;
+  height: calc(100vh - 320px);
+  overflow: auto;
+}
+
+.ot-detail-content {
+  padding: 16px;
+}
+
+.ot-detail-action {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+mat-divider {
+  margin: 16px 0;
 }

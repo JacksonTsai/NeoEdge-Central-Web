@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ItServiceDetailService, ItServiceService, SupportAppsService } from '@neo-edge-web/global-services';
 import {
   ICreateItServiceReq,
-  IGetSupportAppsReq,
   IItServiceState,
   IT_SERVICE_LOADING,
   SUPPORT_APPS_FLOW_GROUPS,
@@ -58,7 +57,7 @@ export const ItServiceStore = signalStore(
                   d.itServices.map((item) => {
                     const { connection } = itServiceDetailService.apiToFieldData(item);
                     if (connection) {
-                      let connectionLabel = connectionOpts.find((v) => v.value === connection).label;
+                      let connectionLabel = connectionOpts.find((v) => v.value === connection)?.label;
                       if (!connectionLabel) {
                         connectionLabel = item.appVersionId === 3 ? `MQTT(${connection})` : `HTTP(${connection})`;
                       }
@@ -79,7 +78,9 @@ export const ItServiceStore = signalStore(
                     dataLength: d.total
                   });
                 }),
-                catchError(() => EMPTY)
+                catchError((err) => {
+                  throw err;
+                })
               );
           })
         )
@@ -128,33 +129,28 @@ export const ItServiceStore = signalStore(
           })
         )
       ),
-      getSupportApps: rxMethod<IGetSupportAppsReq>(
-        pipe(
-          tap(() => patchState(store, { isLoading: IT_SERVICE_LOADING.GET_APPS })),
-          switchMap((payload) =>
-            supportAppsService.getApps$(payload.flowGroups).pipe(
-              map((d) => {
-                patchState(store, {
-                  isLoading: IT_SERVICE_LOADING.NONE,
-                  supportApps: d.apps
-                });
-              }),
-              catchError(() => EMPTY)
-            )
-          )
-        )
-      ),
       getAllConnection: () => {
         patchState(store, { connections: itServiceDetailService.getConnection() });
       }
     })
   ),
-  withHooks((store) => {
+  withHooks((store, supportAppsService = inject(SupportAppsService)) => {
     return {
       onInit() {
         store.getAllConnection();
-        store.getSupportApps({ flowGroups: SUPPORT_APPS_FLOW_GROUPS.it_service });
-        store.queryDataTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
+        supportAppsService
+          .getApps$(SUPPORT_APPS_FLOW_GROUPS.it_service)
+          .pipe(
+            map((d) => {
+              patchState(store, {
+                isLoading: IT_SERVICE_LOADING.NONE,
+                supportApps: d.apps
+              });
+              store.queryDataTableByPage({ page: INIT_TABLE_PAGE, size: INIT_TABLE_SIZE });
+            }),
+            catchError(() => EMPTY)
+          )
+          .subscribe();
       }
     };
   })

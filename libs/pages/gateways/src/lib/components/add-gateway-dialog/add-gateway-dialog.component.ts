@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GatewaysService } from '@neo-edge-web/global-services';
 import { GATEWAYS_TYPE, IAddGatewayReq } from '@neo-edge-web/models';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take, tap } from 'rxjs';
 import { GatewaysStore } from '../../stores/gateways.store';
@@ -40,6 +41,8 @@ export class AddGatewayDialogComponent implements OnInit {
   #snackBar = inject(MatSnackBar);
   #fb = inject(FormBuilder);
   form!: UntypedFormGroup;
+  otherForm!: UntypedFormGroup;
+  partnerForm!: UntypedFormGroup;
   gatewayType = GATEWAYS_TYPE;
   partnerIpcNameOpts = this.data.gwStore.partnersIpc().map((d) => d.name);
   isPartnerIpcCtrl = new UntypedFormControl(GATEWAYS_TYPE.PARTNER);
@@ -47,23 +50,31 @@ export class AddGatewayDialogComponent implements OnInit {
   enrollCommand = signal(null);
 
   get gatewayLogo() {
-    if (!this.ipcVendorNameCtrl.value || !this.ipcModelNameCtrl.value || !this.isPartnerIpcCtrl.value) {
+    if (!this.partnerIpcVendorNameCtrl.value || !this.partnerIpcModelNameCtrl.value || !this.isPartnerIpcCtrl.value) {
       return '/assets/images/default_gateway.png';
     }
 
-    if (this.ipcVendorNameCtrl.value && this.ipcModelNameCtrl.value) {
-      return `/assets/images/default_${this.ipcVendorNameCtrl.value.toLowerCase()}_${this.ipcModelNameCtrl.value.seriesName}.png?timestamp=${Date.now()}`;
+    if (this.partnerIpcVendorNameCtrl.value && this.partnerIpcModelNameCtrl.value) {
+      return `/assets/images/default_${this.partnerIpcVendorNameCtrl.value.toLowerCase()}_${this.partnerIpcModelNameCtrl.value.seriesName}.png?timestamp=${Date.now()}`;
     }
 
     return '/assets/images/default_gateway.png';
   }
 
-  get ipcVendorNameCtrl() {
-    return this.form.get('ipcVendorName') as UntypedFormControl;
+  get partnerIpcVendorNameCtrl() {
+    return this.partnerForm.get('ipcVendorName') as UntypedFormControl;
   }
 
-  get ipcModelNameCtrl() {
-    return this.form.get('ipcModelName') as UntypedFormControl;
+  get partnerIpcModelNameCtrl() {
+    return this.partnerForm.get('ipcModelName') as UntypedFormControl;
+  }
+
+  get otherIpcVendorNameCtrl() {
+    return this.otherForm.get('ipcVendorName') as UntypedFormControl;
+  }
+
+  get otherIpcModelNameCtrl() {
+    return this.otherForm.get('ipcModelName') as UntypedFormControl;
   }
 
   get nameCtrl() {
@@ -83,8 +94,8 @@ export class AddGatewayDialogComponent implements OnInit {
   }
 
   get partnerOsBySeries() {
-    const ipcName = this.ipcVendorNameCtrl.value ?? '';
-    const seriesName = this.ipcModelNameCtrl.value ? this.ipcModelNameCtrl?.value.seriesName : '';
+    const ipcName = this.partnerIpcVendorNameCtrl.value ?? '';
+    const seriesName = this.partnerIpcModelNameCtrl.value ? this.partnerIpcModelNameCtrl?.value.seriesName : '';
     if (!ipcName || !seriesName) {
       return [];
     }
@@ -109,13 +120,17 @@ export class AddGatewayDialogComponent implements OnInit {
   }
 
   get partnerModelByIpcOpts() {
-    const ipc = this.data.gwStore.partnersIpc().find((d) => d.name === this.ipcVendorNameCtrl.value);
+    const ipc = this.data.gwStore.partnersIpc().find((d) => d.name === this.partnerIpcVendorNameCtrl.value);
     if (!ipc) {
       return [];
     }
     return ipc.partnerModelSeries.flatMap((series) =>
       series.models.map((model) => ({ seriesName: series.name, model: model.name }))
     );
+  }
+
+  get isFormInvalid() {
+    return this.isPartner ? this.partnerForm.invalid || this.form.invalid : this.otherForm.invalid || this.form.invalid;
   }
 
   copyCommand = () => {
@@ -134,17 +149,19 @@ export class AddGatewayDialogComponent implements OnInit {
   };
 
   onSubmit = () => {
-    if (this.form.invalid) {
+    const formInvalid = this.isPartner ? this.partnerForm.invalid : this.otherForm.invalid;
+    if (formInvalid) {
       return;
     }
+
     const payload: IAddGatewayReq = {
-      ipcModelName: this.ipcModelNameCtrl.value?.model ?? this.ipcModelNameCtrl.value,
-      ipcVendorName: this.ipcVendorNameCtrl.value,
+      ipcModelName: this.isPartner ? this.partnerIpcModelNameCtrl.value?.model : this.otherIpcModelNameCtrl.value,
+      ipcVendorName: this.isPartner ? this.partnerIpcVendorNameCtrl.value : this.otherIpcVendorNameCtrl.value,
       isPartnerIpc: this.isPartnerIpcCtrl.value,
       name: this.nameCtrl.value,
-      osId: this.osCtrl.value.id,
-      projectId: this.data.gwStore.projectId()
+      osId: this.osCtrl.value.id
     };
+
     this.data.gwService
       .addGateway$(payload)
       .pipe(
@@ -159,20 +176,29 @@ export class AddGatewayDialogComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.partnerForm = this.#fb.group({
+      ipcVendorName: ['', [Validators.required, whitespaceValidator]],
+      ipcModelName: ['', [Validators.required, whitespaceValidator]]
+    });
+
+    this.otherForm = this.#fb.group({
+      ipcVendorName: ['', [Validators.required, whitespaceValidator]],
+      ipcModelName: ['', [Validators.required, whitespaceValidator]]
+    });
+
     this.form = this.#fb.group({
-      ipcVendorName: ['', [Validators.required]],
-      ipcModelName: ['', [Validators.required]],
-      name: ['', [Validators.required]],
-      os: ['', [Validators.required]],
-      projectId: [this.data.gwStore.projectId()]
+      name: ['', [Validators.required, whitespaceValidator]],
+      os: ['', [Validators.required]]
     });
 
     this.isPartnerIpcCtrl.valueChanges.subscribe(() => {
+      this.partnerForm.reset();
+      this.otherForm.reset();
       this.form.reset();
     });
 
-    this.ipcVendorNameCtrl.valueChanges.subscribe(() => {
-      this.ipcModelNameCtrl.reset();
+    this.partnerIpcVendorNameCtrl.valueChanges.subscribe(() => {
+      this.partnerIpcModelNameCtrl.setValue('');
     });
   }
 }

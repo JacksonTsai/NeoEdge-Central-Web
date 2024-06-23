@@ -68,7 +68,7 @@
           <mat-form-field appearance="outline" floatLabel="always">
             <mat-label> User Name</mat-label>
             <input id="company-biz-contact-name" matInput formControlName="bizContactName" type="text" maxlength="64" />
-            @if (bizContactNameCtrl.hasError('required')) {
+            @if (bizContactNameCtrl.hasError('required') || bizContactNameCtrl.hasError('whitespace')) {
               <mat-error>Required.</mat-error>
             }
           </mat-form-field>
@@ -81,10 +81,9 @@
               type="text"
               maxlength="64"
             />
-            @if (bizContactEmailCtrl.hasError('required')) {
+            @if (bizContactEmailCtrl.hasError('required') || bizContactEmailCtrl.hasError('whitespace')) {
               <mat-error>Required.</mat-error>
-            }
-            @if (bizContactEmailCtrl.hasError('email') && !bizContactEmailCtrl.hasError('required')) {
+            } @else if (bizContactEmailCtrl.hasError('email')) {
               <mat-error> Please enter a valid email address </mat-error>
             }
           </mat-form-field>
@@ -99,7 +98,11 @@
               type="text"
               maxlength="64"
             />
-            @if (techContactNameCtrl.hasError('required') || techContactNameCtrl.hasError('pattern')) {
+            @if (
+              techContactNameCtrl.hasError('required') ||
+              techContactNameCtrl.hasError('pattern') ||
+              bizContactEmailCtrl.hasError('whitespace')
+            ) {
               <mat-error>Required.</mat-error>
             }
           </mat-form-field>
@@ -112,10 +115,9 @@
               type="text"
               maxlength="64"
             />
-            @if (techContactEmailCtrl.hasError('required')) {
+            @if (techContactEmailCtrl.hasError('required') || techContactEmailCtrl.hasError('whitespace')) {
               <mat-error>Required.</mat-error>
-            }
-            @if (techContactEmailCtrl.hasError('email') && !techContactEmailCtrl.hasError('required')) {
+            } @else if (techContactEmailCtrl.hasError('email')) {
               <mat-error> Please enter a valid email address </mat-error>
             }
           </mat-form-field>

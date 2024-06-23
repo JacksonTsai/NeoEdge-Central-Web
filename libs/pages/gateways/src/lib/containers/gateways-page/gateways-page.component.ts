@@ -53,6 +53,12 @@ export class GatewaysPageComponent {
       },
       { allowSignalWrites: true }
     );
+
+    effect(() => {
+      if (this.isLoading() === GATEWAYS_LOADING.REFRESH_LABEL) {
+        this.gatewaysStore.getProjectLabels();
+      }
+    });
   }
 
   onAddGateway = () => {

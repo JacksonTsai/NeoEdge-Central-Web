@@ -1,24 +1,15 @@
 <div class="ot-device-profile-wrapper">
   <form [formGroup]="form">
-    @if (selectedDeviceProtocol()) {
+    @if (appName()) {
       <div class="device-icon">
-        <ne-upload-preview-image [isEditMode]="true" formControlName="deviceIcon"></ne-upload-preview-image>
+        <ne-upload-preview-image [isEditMode]="isEditMode()" formControlName="deviceIcon"></ne-upload-preview-image>
       </div>
-      @if (otDeviceType.MODBUS_RTU === selectedDeviceProtocol().name) {
-        <ne-modbus-rtu-profile
-          formControlName="rtuProfile"
-          [selectedDeviceProtocol]="selectedDeviceProtocol()"
-        ></ne-modbus-rtu-profile>
-      } @else if (otDeviceType.TEXOL === selectedDeviceProtocol().name) {
-        <ne-modbus-rtu-profile
-          [selectedDeviceProtocol]="selectedDeviceProtocol()"
-          formControlName="texolProfile"
-        ></ne-modbus-rtu-profile>
-      } @else if (otDeviceType.MODBUS_TCP === selectedDeviceProtocol().name) {
-        <ne-modbus-tcp-profile
-          [selectedDeviceProtocol]="selectedDeviceProtocol()"
-          formControlName="tcpProfile"
-        ></ne-modbus-tcp-profile>
+      @if (otDeviceType.MODBUS_RTU === appName()) {
+        <ne-modbus-rtu-profile [isEditMode]="isEditMode()" formControlName="rtuProfile"></ne-modbus-rtu-profile>
+      } @else if (otDeviceType.TEXOL213MM2R1 === appName()) {
+        <ne-modbus-rtu-profile [isEditMode]="isEditMode()" formControlName="texolProfile"></ne-modbus-rtu-profile>
+      } @else if (otDeviceType.MODBUS_TCP === appName()) {
+        <ne-modbus-tcp-profile [isEditMode]="isEditMode()" formControlName="tcpProfile"></ne-modbus-tcp-profile>
       }
     }
   </form>

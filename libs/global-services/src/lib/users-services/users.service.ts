@@ -21,14 +21,19 @@ export class UsersService {
   }
 
   users$ = (queryStr?: TableQueryForUsers): Observable<IUsersResp> => {
-    let queryString = '';
-    if (queryStr && Object.keys(queryStr).length > 0) {
-      queryString = `?page=${queryStr?.page ?? 1}&size=${queryStr?.size ?? 10}`;
+    const params = new URLSearchParams();
+    if (queryStr) {
+      if (queryStr?.page) {
+        params.set('page', queryStr.page.toString());
+      }
+      if (queryStr?.size) {
+        params.set('size', queryStr.size.toString());
+      }
       if (queryStr?.accounts) {
-        queryString = `${queryString}&accounts=${queryStr.accounts}`;
+        params.set('names', queryStr.accounts);
       }
     }
-    return this.#http.get(`${this.USERS_PATH}${queryString}`).pipe(
+    return this.#http.get(`${this.USERS_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get users failure.', 'X', {
           horizontalPosition: 'end',
