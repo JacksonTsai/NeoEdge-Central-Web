@@ -174,9 +174,9 @@ export class CompanyComponent implements OnInit {
       website: compInfo?.website ?? ''
     });
     if (compInfo?.iconPath !== '') {
-      this.companyLogo.set(this.iconPathCtrl.value);
+      this.companyLogo.set(`${this.iconPathCtrl.value}?timestamp=${Date.now()}`);
     } else {
-      this.companyLogo.set(defaultCompLogo);
+      this.companyLogo.set(`defaultCompLogo?timestamp=${Date.now()}`);
     }
   };
 
