@@ -3,6 +3,7 @@ export const environment = {
   basePath: '/api/v2',
   authPath: '/api',
   wsPath: 'wss://api.neoedge-dev.net/ws',
+  docPath: 'https://docs.neoedgecentral.com',
   eulaVersion: '1.0',
   permissionOptions: [
     {

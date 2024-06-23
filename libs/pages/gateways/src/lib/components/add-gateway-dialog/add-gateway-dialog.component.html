@@ -1,163 +1,169 @@
 <h1 mat-dialog-title class="gl-h6">Add Gateway</h1>
 <mat-dialog-content class="add-gateway-wrapper">
-  <form [formGroup]="form">
-    @if (!enrollCommand()) {
-      <h4>Gateway type</h4>
-      <div class="select-ipc-type">
-        <mat-radio-group color="primary" aria-label="Select IPC option" [formControl]="isPartnerIpcCtrl">
-          <mat-radio-button id="add-gateway-dialog-certified-ipc" [value]="gatewayType.PARTNER">
-            Certified IPC
-          </mat-radio-button>
-          <mat-radio-button id="add-gateway-dialog-others" [value]="gatewayType.OTHER">Others</mat-radio-button>
-        </mat-radio-group>
-        <div class="gateway-logo">
-          @if (gatewayLogo) {
-            <img width="100%" height="100%" [src]="gatewayLogo" alt="gateway-logo" />
-          }
-        </div>
+  @if (!enrollCommand()) {
+    <h4>Gateway type</h4>
+    <div class="select-ipc-type">
+      <mat-radio-group color="primary" aria-label="Select IPC option" [formControl]="isPartnerIpcCtrl">
+        <mat-radio-button id="add-gateway-dialog-certified-ipc" [value]="gatewayType.PARTNER">
+          Certified IPC
+        </mat-radio-button>
+        <mat-radio-button id="add-gateway-dialog-others" [value]="gatewayType.OTHER">Others</mat-radio-button>
+      </mat-radio-group>
+      <div class="gateway-logo">
+        @if (gatewayLogo) {
+          <img width="100%" height="100%" [src]="gatewayLogo" alt="gateway-logo" />
+        }
       </div>
+    </div>
+    @if (isPartner) {
       <mat-form-field appearance="outline" floatLabel="always">
-        <mat-label>
-          @if (isPartner) {
-            Partners
-          } @else {
-            Vendor
-          }
-        </mat-label>
-        @if (isPartner) {
-          <mat-select id="add-gateway-dialog-select-vendor-name" formControlName="ipcVendorName">
-            @for (partnerName of partnerIpcOpt; track partnerName) {
-              <mat-option id="add-gateway-dialog-select-vendor-option-{{ partnerName }}" [value]="partnerName">
-                {{ partnerName }}
-              </mat-option>
-            }
-          </mat-select>
-        } @else {
-          <input
-            id="add-gateway-dialog-vendor-name-input"
-            matInput
-            formControlName="ipcVendorName"
-            type="text"
-            maxlength="64"
-          />
-        }
-        @if (isPartnerIpcCtrl.hasError('required')) {
-          <mat-error>Required.</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" floatLabel="always">
-        <mat-label> Model </mat-label>
-        @if (isPartner) {
-          <mat-select id="add-gateway-dialog-select-model-name" formControlName="ipcModelName">
-            @for (partnerModel of partnerModelByIpcOpts; track partnerModel.seriesName) {
-              <mat-option
-                id="add-gateway-dialog-select-model-option-{{ partnerModel.seriesName }}"
-                [value]="partnerModel"
-              >
-                {{ partnerModel.model }}
-              </mat-option>
-            }
-          </mat-select>
-        } @else {
-          <input
-            id="add-gateway-dialog-model-name-input"
-            matInput
-            formControlName="ipcModelName"
-            type="text"
-            maxlength="64"
-          />
-        }
-        @if (ipcVendorNameCtrl.hasError('required')) {
-          <mat-error>Required.</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" floatLabel="always">
-        <mat-label>Name</mat-label>
-        <input id="add-gateway-dialog-gw-name-input" matInput formControlName="name" type="text" maxlength="128" />
-        @if (nameCtrl.hasError('required')) {
-          <mat-error>Required.</mat-error>
-        }
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" floatLabel="always">
-        <mat-label>OS Version</mat-label>
-        <mat-select id="add-gateway-dialog-select-os" formControlName="os">
-          @for (os of osOpts; track os.id) {
-            <mat-option id="add-gateway-dialog-option-os-{{ os.id }}" [value]="os"> {{ os.name }} </mat-option>
+        <mat-label> Partners </mat-label>
+        <mat-select id="add-gateway-dialog-select-vendor-name" [formControl]="partnerIpcVendorNameCtrl">
+          @for (partnerName of partnerIpcOpt; track partnerName) {
+            <mat-option id="add-gateway-dialog-select-vendor-option-{{ partnerName }}" [value]="partnerName">
+              {{ partnerName }}
+            </mat-option>
           }
         </mat-select>
+
+        @if (otherIpcVendorNameCtrl.hasError('required') || otherIpcVendorNameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        }
       </mat-form-field>
     } @else {
-      <div class="enroll-gw">
-        <div class="gateway-logo enroll-gateway-logo">
-          @if (gatewayLogo) {
-            <img width="100%" height="100%" [src]="gatewayLogo" alt="gateway-logo" />
-          }
-        </div>
-        <div class="item">
-          <div class="label">Vendor</div>
-          <div class="value">
-            {{ enrollCommand().ipcVendorName }}
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="label">Model</div>
-          <div class="value">
-            {{ enrollCommand().ipcModelName }}
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="label">Gateway Name</div>
-          <div class="value">
-            {{ enrollCommand().name }}
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="label">OS</div>
-          <div class="value">
-            {{ osCtrl.value.name }}
-          </div>
-        </div>
-
-        <div class="item">
-          <div class="label">Enrollment Command</div>
-          <div class="value enroll-command">
-            <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
-              <mat-label>command</mat-label>
-              <input
-                id="add-gateway-dialog-enrollment-command-input"
-                matInput
-                type="text"
-                maxlength="128"
-                [value]="enrollCommand()?.command"
-                disabled="true"
-              />
-            </mat-form-field>
-            <button
-              id="add-gateway-dialog-enrollment-command-copy-btn"
-              type="button"
-              mat-icon-button
-              color="primary"
-              (click)="copyCommand()"
-            >
-              <mat-icon svgIcon="icon:copy_gary"></mat-icon>
-            </button>
-          </div>
-        </div>
-
-        <h5 class="tip tip--warning">
-          On Gateway ssh console, run above command to install NeoEdge X. The command will expired in
-          {{ enrollCommand().commandEffectiveHour }}
-          hours.
-        </h5>
-      </div>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label> Vendor </mat-label>
+        <input
+          id="add-gateway-dialog-vendor-name-input"
+          matInput
+          [formControl]="otherIpcVendorNameCtrl"
+          type="text"
+          maxlength="64"
+        />
+        @if (otherIpcVendorNameCtrl.hasError('required') || otherIpcVendorNameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
     }
-  </form>
+
+    @if (isPartner) {
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label> Model </mat-label>
+        <mat-select id="add-gateway-dialog-select-model-name" [formControl]="partnerIpcModelNameCtrl">
+          @for (partnerModel of partnerModelByIpcOpts; track partnerModel.seriesName) {
+            <mat-option
+              id="add-gateway-dialog-select-model-option-{{ partnerModel.seriesName }}"
+              [value]="partnerModel"
+            >
+              {{ partnerModel.model }}
+            </mat-option>
+          }
+        </mat-select>
+        @if (otherIpcModelNameCtrl.hasError('required') || otherIpcModelNameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+    } @else {
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label> Model </mat-label>
+        <input
+          id="add-gateway-dialog-model-name-input"
+          matInput
+          [formControl]="otherIpcModelNameCtrl"
+          type="text"
+          maxlength="64"
+        />
+
+        @if (otherIpcModelNameCtrl.hasError('required') || otherIpcModelNameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Name</mat-label>
+      <input id="add-gateway-dialog-gw-name-input" matInput [formControl]="nameCtrl" type="text" maxlength="128" />
+      @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
+        <mat-error>Required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>OS Version</mat-label>
+      <mat-select id="add-gateway-dialog-select-os" [formControl]="osCtrl">
+        @for (os of osOpts; track os.id) {
+          <mat-option id="add-gateway-dialog-option-os-{{ os.id }}" [value]="os"> {{ os.name }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  } @else {
+    <div class="enroll-gw">
+      <div class="gateway-logo enroll-gateway-logo">
+        @if (gatewayLogo) {
+          <img width="100%" height="100%" [src]="gatewayLogo" alt="gateway-logo" />
+        }
+      </div>
+      <div class="item">
+        <div class="label">Vendor</div>
+        <div class="value">
+          {{ enrollCommand().ipcVendorName }}
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="label">Model</div>
+        <div class="value">
+          {{ enrollCommand().ipcModelName }}
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="label">Gateway Name</div>
+        <div class="value">
+          {{ enrollCommand().name }}
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="label">OS</div>
+        <div class="value">
+          {{ osCtrl.value.name }}
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="label">Enrollment Command</div>
+        <div class="value enroll-command">
+          <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
+            <mat-label>command</mat-label>
+            <input
+              id="add-gateway-dialog-enrollment-command-input"
+              matInput
+              type="text"
+              maxlength="128"
+              [value]="enrollCommand()?.command"
+              disabled="true"
+            />
+          </mat-form-field>
+          <button
+            id="add-gateway-dialog-enrollment-command-copy-btn"
+            type="button"
+            mat-icon-button
+            color="primary"
+            (click)="copyCommand()"
+          >
+            <mat-icon svgIcon="icon:copy_gary"></mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <h5 class="tip tip--warning">
+        On Gateway ssh console, run above command to install NeoEdge X. The command will expired in
+        {{ enrollCommand().commandEffectiveHour }}
+        hours.
+      </h5>
+    </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog__action">
@@ -169,7 +175,7 @@
       mat-raised-button
       color="primary"
       (click)="onSubmit()"
-      [disabled]="form.invalid"
+      [disabled]="isFormInvalid"
     >
       Submit
     </button>

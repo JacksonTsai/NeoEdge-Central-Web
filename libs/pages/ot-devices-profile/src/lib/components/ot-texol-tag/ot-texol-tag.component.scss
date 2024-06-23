@@ -1,0 +1,21 @@
+@use 'colors' as *;
+@use 'variables' as *;
+
+.texol-tags {
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  .tag-item {
+    min-width: 200px;
+    border: 1px solid $black-gary;
+    border-radius: $border-radius;
+    padding: 8px;
+    .tag-name {
+      font-weight: 600;
+    }
+    .data-type {
+      font-weight: 400;
+    }
+  }
+}

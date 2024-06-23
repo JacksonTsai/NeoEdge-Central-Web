@@ -1,10 +1,28 @@
 <div class="ot-tags-wrapper">
   <div class="ot-tags-wrapper__top">
     <h2 class="card__title">Tags</h2>
-    <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
-      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
-      Add Tag
-    </button>
+    <div>
+      @if (isEditMode()) {
+        <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
+          <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+          Add Tag
+        </button>
+      }
+
+      <button
+        id="ot-tags-export-tag-btn"
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="exportTags()"
+        [disabled]="tagsArray.value.length === 0"
+      >
+        @if (tagsArray.value.length > 0) {
+          <mat-icon color="primary" svgIcon="icon:download"></mat-icon>
+        }
+        Export Tags
+      </button>
+    </div>
   </div>
   <form [formGroup]="form">
     <table mat-table [dataSource]="dataSource" formArrayName="tags">
@@ -28,6 +46,8 @@
             />
             @if (tagNameCtrl(i).hasError('required')) {
               <mat-error>Required.</mat-error>
+            } @else if (tagNameCtrl(i).hasError('whitespace')) {
+              <mat-error>The value not allow whitespace.</mat-error>
             }
           </mat-form-field>
         </td>
@@ -127,7 +147,11 @@
         <th mat-header-cell *matHeaderCellDef>Trigger</th>
         <td mat-cell *matCellDef="let element; let i = index">
           <mat-form-field class="trigger-field" appearance="outline" floatLabel="always">
-            <mat-select id="ot-tags-tag-trigger-select-{{ i }}" [formControl]="triggerCtrl(i)">
+            <mat-select
+              id="ot-tags-tag-trigger-select-{{ i }}"
+              [formControl]="triggerCtrl(i)"
+              (selectionChange)="triggerChange(i)"
+            >
               @for (tagTrigger of tagOptions.tagTrigger; track tagTrigger.value) {
                 <mat-option
                   id="ot-tags-tag-trigger-option-{{ tagTrigger.value }}-{{ i }}"

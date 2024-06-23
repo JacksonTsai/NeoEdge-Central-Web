@@ -37,7 +37,7 @@ export class SupportAppsService {
     }
     return this.#http.get(`${this.SUPPORT_APPS_PATH}?${params}`).pipe(
       catchError((err) => {
-        this.#snackBar.open('Get gateways failure', 'X', {
+        this.#snackBar.open('Get APPs failure', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

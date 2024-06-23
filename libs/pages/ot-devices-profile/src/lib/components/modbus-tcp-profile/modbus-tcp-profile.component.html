@@ -1,142 +1,137 @@
 <div class="modbus-tcp-profile-wrapper">
-  @if (selectedDeviceProtocol()) {
-    <h2 class="card__title">Device Profile</h2>
-    <form [formGroup]="form">
-      <section class="card__sec">
-        <h3 class="card__sub-title">Basic</h3>
-        <div class="modbus-tcp-profile-wrapper__profile">
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Device Name</mat-label>
-            <input
-              id="ot-devcie-modbus-tcp-device-name-input"
-              matInput
-              formControlName="deviceName"
-              type="text"
-              maxlength="128"
-            />
-            @if (deviceNameCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+  <h2 class="card__title">Device Profile</h2>
+  <form [formGroup]="form">
+    <section class="card__sec">
+      <h3 class="card__sub-title">Basic</h3>
+      <div class="modbus-tcp-profile-wrapper__profile">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Device Name</mat-label>
+          <input
+            id="ot-devcie-modbus-tcp-device-name-input"
+            matInput
+            formControlName="deviceName"
+            type="text"
+            maxlength="128"
+          />
+          @if (deviceNameCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          } @else if (deviceNameCtrl.hasError('whitespace')) {
+            <mat-error>The value not allow whitespace.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Slave ID</mat-label>
-            <input id="ot-devcie-modbus-tcp-slave-id-input" matInput formControlName="slaveId" type="number" />
-            @if (slaveIdCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-            @if (slaveIdCtrl.hasError('positiveInteger')) {
-              <mat-error>Must be a positive integer.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Slave ID</mat-label>
+          <input id="ot-devcie-modbus-tcp-slave-id-input" matInput formControlName="slaveId" type="number" />
+          @if (slaveIdCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+          @if (slaveIdCtrl.hasError('positiveInteger')) {
+            <mat-error>Must be a positive integer.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>IP Address</mat-label>
-            <input id="ot-devcie-modbus-tcp-ip-input" matInput formControlName="ipAddress" type="text" />
-            @if (ipAddressCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>IP Address</mat-label>
+          <input id="ot-devcie-modbus-tcp-ip-input" matInput formControlName="ipAddress" type="text" />
+          @if (ipAddressCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
 
-            @if (ipAddressCtrl.hasError('ipInvalid')) {
-              <mat-error> Invalid IP format. </mat-error>
-            }
-          </mat-form-field>
+          @if (ipAddressCtrl.hasError('ipInvalid')) {
+            <mat-error> Invalid IP format. </mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Port</mat-label>
-            <input id="ot-devcie-modbus-tcp-port-input" matInput formControlName="port" type="number" />
-            @if (portCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Port</mat-label>
+          <input id="ot-devcie-modbus-tcp-port-input" matInput formControlName="port" type="number" />
+          @if (portCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Description</mat-label>
-            <input
-              id="ot-devcie-modbus-tcp-description-input"
-              matInput
-              formControlName="description"
-              type="text"
-              maxlength="512"
-            />
-            @if (descriptionCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </section>
-      <section class="card__sec">
-        <h3 class="card__sub-title">Advanced</h3>
-        <div class="modbus-tcp-profile-wrapper__profile">
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Initial Delay(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-tcp-initial-delay-input"
-              matInput
-              formControlName="initialDelay"
-              type="number"
-            />
-            @if (initialDelayCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Description</mat-label>
+          <input
+            id="ot-devcie-modbus-tcp-description-input"
+            matInput
+            formControlName="description"
+            type="text"
+            maxlength="512"
+          />
+          @if (descriptionCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </section>
+    <section class="card__sec">
+      <h3 class="card__sub-title">Advanced</h3>
+      <div class="modbus-tcp-profile-wrapper__profile">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Initial Delay(ms)</mat-label>
+          <input id="ot-devcie-modbus-tcp-initial-delay-input" matInput formControlName="initialDelay" type="number" />
+          @if (initialDelayCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>delay Btw Polls(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-tcp-delay-between-polls-input"
-              matInput
-              formControlName="delayBetweenPolls"
-              type="number"
-            />
-            @if (delayBetweenPollsCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>delay Btw Polls(ms)</mat-label>
+          <input
+            id="ot-devcie-modbus-tcp-delay-between-polls-input"
+            matInput
+            formControlName="delayBetweenPolls"
+            type="number"
+          />
+          @if (delayBetweenPollsCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Response Timeout(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-tcp-response-timeout-input"
-              matInput
-              formControlName="responseTimeout"
-              type="number"
-            />
-            @if (responseTimeoutCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Response Timeout(ms)</mat-label>
+          <input
+            id="ot-devcie-modbus-tcp-response-timeout-input"
+            matInput
+            formControlName="responseTimeout"
+            type="number"
+          />
+          @if (responseTimeoutCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Polling Retries(ms)</mat-label>
-            <input
-              id="ot-devcie-modbus-tcp-polling-tetries-input"
-              matInput
-              formControlName="pollingRetries"
-              type="number"
-            />
-            @if (pollingRetriesCtrl.hasError('required')) {
-              <mat-error>Required.</mat-error>
-            }
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Polling Retries(ms)</mat-label>
+          <input
+            id="ot-devcie-modbus-tcp-polling-tetries-input"
+            matInput
+            formControlName="pollingRetries"
+            type="number"
+          />
+          @if (pollingRetriesCtrl.hasError('required')) {
+            <mat-error>Required.</mat-error>
+          }
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Swap Byte</mat-label>
-            <mat-select id="ot-devcie-modbus-tcp-swap-byte-select" formControlName="swapByte">
-              <mat-option id="ot-devcie-modbus-tcp-swap-byte-true-option" [value]="true"> True </mat-option>
-              <mat-option id="ot-devcie-modbus-tcp-swap-byte-false-option" [value]="false"> False </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Swap Byte</mat-label>
+          <mat-select id="ot-devcie-modbus-tcp-swap-byte-select" formControlName="swapByte">
+            <mat-option id="ot-devcie-modbus-tcp-swap-byte-true-option" [value]="true"> True </mat-option>
+            <mat-option id="ot-devcie-modbus-tcp-swap-byte-false-option" [value]="false"> False </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline" floatLabel="always">
-            <mat-label>Swap Word</mat-label>
-            <mat-select id="ot-devcie-modbus-tcp-swap-word-select" formControlName="swapWord">
-              <mat-option id="ot-devcie-modbus-tcp-swap-word-true-option" [value]="true"> True </mat-option>
-              <mat-option id="ot-devcie-modbus-tcp-swap-word-false-option" [value]="false"> False </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </section>
-    </form>
-  }
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Swap Word</mat-label>
+          <mat-select id="ot-devcie-modbus-tcp-swap-word-select" formControlName="swapWord">
+            <mat-option id="ot-devcie-modbus-tcp-swap-word-true-option" [value]="true"> True </mat-option>
+            <mat-option id="ot-devcie-modbus-tcp-swap-word-false-option" [value]="false"> False </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </section>
+  </form>
 </div>

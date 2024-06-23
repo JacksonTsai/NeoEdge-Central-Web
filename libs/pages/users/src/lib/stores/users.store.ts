@@ -46,7 +46,7 @@ export const UsersStore = signalStore(
         pipe(
           tap(() => patchState(store, { isLoading: USERS_LOADING.TABLE })),
           switchMap(({ page, size, accounts }) => {
-            return usersService.users$({ page: page ?? INIT_TABLE_PAGE, size: size ?? INIT_TABLE_SIZE, accounts }).pipe(
+            return usersService.users$({ page: page, size: size, accounts }).pipe(
               map((d) => {
                 patchState(store, {
                   userTable: d.users,

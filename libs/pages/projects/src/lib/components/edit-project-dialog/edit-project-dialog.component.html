@@ -20,7 +20,7 @@
             type="text"
             maxlength="64"
           />
-          @if (nameCtrl.hasError('required')) {
+          @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
             <mat-error>Required.</mat-error>
           }
         </mat-form-field>
@@ -34,7 +34,7 @@
             type="text"
             maxlength="20"
           />
-          @if (shortNameCtrl.hasError('required')) {
+          @if (shortNameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
             <mat-error>Required.</mat-error>
           }
         </mat-form-field>

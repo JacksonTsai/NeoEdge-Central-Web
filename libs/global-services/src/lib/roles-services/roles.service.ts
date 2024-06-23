@@ -20,14 +20,20 @@ export class RolesService {
   }
 
   roles$ = (queryStr?: TableQueryForRoles): Observable<IGetRolesResp> => {
-    let queryString = '';
-    if (queryStr && Object.keys(queryStr).length > 0) {
-      queryString = `?page=${queryStr?.page ?? 1}&size=${queryStr?.size ?? 10}`;
+    const params = new URLSearchParams();
+    if (queryStr) {
+      if (queryStr?.page) {
+        params.set('page', queryStr.page.toString());
+      }
+      if (queryStr?.size) {
+        params.set('size', queryStr.size.toString());
+      }
       if (queryStr?.names) {
-        queryString = `${queryString}&names=${queryStr.names}`;
+        params.set('names', queryStr.names);
       }
     }
-    return this.#http.get(`${this.ROLES_PATH}${queryString}`).pipe(
+
+    return this.#http.get(`${this.ROLES_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get roles failure.', 'X', {
           horizontalPosition: 'end',

@@ -110,7 +110,12 @@
         <button id="gw-status-info-action-enable-remote-access" mat-menu-item [disabled]="!isConnected()">
           <span>Enable/Disable Remote Access</span>
         </button>
-        <button id="gw-status-info-action-fetch-gateway-hw" mat-menu-item [disabled]="!isConnected()">
+        <button
+          id="gw-status-info-action-fetch-gateway-hw"
+          mat-menu-item
+          [disabled]="!isConnected()"
+          (click)="onFetchGwHwInfo()"
+        >
           <span> Fetch Gateway Hardware Information </span>
         </button>
       </mat-menu>

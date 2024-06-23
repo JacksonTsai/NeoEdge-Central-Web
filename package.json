@@ -1,7 +1,7 @@
 {
   "name": "@neo-edge-web/source",
   "version": "0.0.0",
-  "betaVersion": "2.0.0-m3",
+  "betaVersion": "2.0.0-m3-2",
   "license": "MIT",
   "scripts": {
     "start": "run-p \"start:nx {1} --open --port {2}\" --",

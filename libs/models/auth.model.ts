@@ -1,4 +1,5 @@
 import { DATE_FORMAT } from './dateFormat.model';
+import { IProjectByIdResp } from './projects.model';
 
 export interface IAuthState {
   isLoginSuccess: boolean | null;
@@ -8,6 +9,7 @@ export interface IAuthState {
   accessToken: string;
   refreshToken: string;
   userProfile: IGetUserProfileResp | null;
+  userProjects: IProjectByIdResp[];
   currentProjectId: number;
   currentProjectName: string;
 }
