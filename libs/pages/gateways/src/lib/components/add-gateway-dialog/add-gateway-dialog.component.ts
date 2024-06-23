@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DoCheck, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GatewaysService } from '@neo-edge-web/global-services';
 import { GATEWAYS_TYPE, IAddGatewayReq } from '@neo-edge-web/models';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { take, tap } from 'rxjs';
 import { GatewaysStore } from '../../stores/gateways.store';
@@ -34,7 +35,7 @@ import { GatewaysStore } from '../../stores/gateways.store';
   styleUrl: './add-gateway-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddGatewayDialogComponent implements OnInit {
+export class AddGatewayDialogComponent implements OnInit, DoCheck {
   dialogRef!: MatDialogRef<AddGatewayDialogComponent>;
   data = inject<{ gwStore: GatewaysStore; gwService: GatewaysService }>(MAT_DIALOG_DATA);
   #snackBar = inject(MatSnackBar);
@@ -158,11 +159,18 @@ export class AddGatewayDialogComponent implements OnInit {
       .subscribe();
   };
 
+  ngDoCheck() {
+    if (!this.isPartner) {
+      this.ipcVendorNameCtrl.updateValueAndValidity();
+      this.ipcModelNameCtrl.updateValueAndValidity();
+    }
+  }
+
   ngOnInit() {
     this.form = this.#fb.group({
-      ipcVendorName: ['', [Validators.required]],
-      ipcModelName: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      ipcVendorName: ['', [Validators.required, whitespaceValidator]],
+      ipcModelName: ['', [Validators.required, whitespaceValidator]],
+      name: ['', [Validators.required, whitespaceValidator]],
       os: ['', [Validators.required]],
       projectId: [this.data.gwStore.projectId()]
     });
@@ -172,7 +180,7 @@ export class AddGatewayDialogComponent implements OnInit {
     });
 
     this.ipcVendorNameCtrl.valueChanges.subscribe(() => {
-      this.ipcModelNameCtrl.reset();
+      this.ipcModelNameCtrl.setValue('');
     });
   }
 }

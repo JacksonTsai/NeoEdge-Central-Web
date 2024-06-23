@@ -397,9 +397,9 @@ export class GatewayProfileComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.#fb.group({
-      name: [{ value: this.metaData().name, disabled: true }, [Validators.required]],
-      longitude: [{ value: this.metaData().longitude, disabled: true }, [Validators.required]],
-      latitude: [{ value: this.metaData().latitude, disabled: true }, [Validators.required]],
+      name: [{ value: this.metaData().name, disabled: true }, [Validators.required, whitespaceValidator]],
+      longitude: [{ value: this.metaData().longitude, disabled: true }, [Validators.required, whitespaceValidator]],
+      latitude: [{ value: this.metaData().latitude, disabled: true }, [Validators.required, whitespaceValidator]],
       ipcVendorName: [{ value: this.metaData().ipcVendorName, disabled: true }, [Validators.required]],
       ipcModelName: [{ value: this.metaData().ipcModelName, disabled: true }, [Validators.required]],
       gatewayIconPath: [{ value: this.metaData().gatewayIconPath, disabled: true }, [Validators.required]],

@@ -57,7 +57,7 @@
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Name</mat-label>
                 <input id="gw-profile-name" matInput formControlName="name" type="text" maxlength="64" />
-                @if (nameCtrl.hasError('required')) {
+                @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
                   <mat-error>Required.</mat-error>
                 }
               </mat-form-field>
@@ -71,7 +71,7 @@
                   type="text"
                   maxlength="64"
                 />
-                @if (ipcVendorNameCtrl.hasError('required')) {
+                @if (ipcVendorNameCtrl.hasError('required') || ipcVendorNameCtrl.hasError('whitespace')) {
                   <mat-error>Required.</mat-error>
                 }
               </mat-form-field>
@@ -79,7 +79,7 @@
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>Model</mat-label>
                 <input id="gw-profile-model-name" matInput formControlName="ipcModelName" type="text" maxlength="64" />
-                @if (ipcModelNameCtrl.hasError('required')) {
+                @if (ipcModelNameCtrl.hasError('required') || ipcModelNameCtrl.hasError('whitespace')) {
                   <mat-error>Required.</mat-error>
                 }
               </mat-form-field>

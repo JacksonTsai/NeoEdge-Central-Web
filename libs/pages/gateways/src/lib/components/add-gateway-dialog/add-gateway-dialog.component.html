@@ -41,7 +41,7 @@
             maxlength="64"
           />
         }
-        @if (isPartnerIpcCtrl.hasError('required')) {
+        @if (ipcVendorNameCtrl.hasError('required') || ipcVendorNameCtrl.hasError('whitespace')) {
           <mat-error>Required.</mat-error>
         }
       </mat-form-field>
@@ -68,7 +68,7 @@
             maxlength="64"
           />
         }
-        @if (ipcVendorNameCtrl.hasError('required')) {
+        @if (ipcVendorNameCtrl.hasError('required') || ipcVendorNameCtrl.hasError('whitespace')) {
           <mat-error>Required.</mat-error>
         }
       </mat-form-field>
@@ -76,7 +76,7 @@
       <mat-form-field appearance="outline" floatLabel="always">
         <mat-label>Name</mat-label>
         <input id="add-gateway-dialog-gw-name-input" matInput formControlName="name" type="text" maxlength="128" />
-        @if (nameCtrl.hasError('required')) {
+        @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
           <mat-error>Required.</mat-error>
         }
       </mat-form-field>
