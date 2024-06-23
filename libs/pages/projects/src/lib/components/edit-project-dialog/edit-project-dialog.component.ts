@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NeMultiSelectChipsComponent } from '@neo-edge-web/components';
 import { IEditProjectReq, IProjectField, IProjectsForUI, User } from '@neo-edge-web/models';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { ProjectsStore } from '../../stores/projects.store';
 
 @Component({
@@ -128,9 +129,9 @@ export class EditProjectDialogComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.#fb.group({
-      name: [this.data?.project?.name ?? '', [Validators.required]],
+      name: [this.data?.project?.name ?? '', [Validators.required, whitespaceValidator]],
       customer: [this.data?.project?.customer ?? ''],
-      shortName: [this.data?.project?.shortName ?? '', [Validators.required]],
+      shortName: [this.data?.project?.shortName ?? '', [Validators.required, whitespaceValidator]],
       description: [this.data?.project?.description ?? ''],
       users: [this.data?.project ? this.data.project.users.map((d) => ({ id: d.id, label: d.name })) : []],
       projectFields: this.#fb.array(
