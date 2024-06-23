@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Delete Role</h1>
+<h1 mat-dialog-title>Delete Project</h1>
 <mat-dialog-content>
   <div>
     You are going to delete project (
@@ -20,9 +20,9 @@
       id="roles-delete-dialog-name"
     />
     @if (projectNameCtrl.hasError('required')) {
-    <mat-error>Required.</mat-error>
+      <mat-error>Required.</mat-error>
     } @else if (projectNameCtrl.hasError('incorrectRoleName')) {
-    <mat-error>The input verification content is incorrect.</mat-error>
+      <mat-error>The input verification content is incorrect.</mat-error>
     }
   </mat-form-field>
 </mat-dialog-content>
