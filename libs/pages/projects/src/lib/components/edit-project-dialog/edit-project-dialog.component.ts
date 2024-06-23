@@ -122,6 +122,7 @@ export class EditProjectDialogComponent implements OnInit {
   };
 
   removeProjectField = (index) => {
+    this.form.markAsDirty();
     this.projectFieldsArr.removeAt(index);
   };
 
