@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { IAllPermission, IEditRoleReq, IGetRoleByIdResp } from '@neo-edge-web/models';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { RolesStore } from '../../stores/roles.store';
 
 @Component({
@@ -121,7 +122,7 @@ export class EditRoleDialogComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.#fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, whitespaceValidator]],
       description: ['']
     });
     if (this.isEditMode) {
