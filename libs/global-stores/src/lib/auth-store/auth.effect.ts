@@ -44,9 +44,13 @@ export class AuthEffects {
             return { fromUserLogin, userProfile };
           }),
           switchMap(({ fromUserLogin, userProfile }) => {
-            return this.#projectsService
-              .switchProject$(userProfile.defaultProjectId)
-              .pipe(map(() => AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin })));
+            return userProfile.defaultProjectId
+              ? this.#projectsService
+                  .switchProject$(userProfile.defaultProjectId)
+                  .pipe(
+                    map(() => AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin }))
+                  )
+              : of(AuthAction.loinSuccessRedirect({ userProfile, isRedirectDefaultPage: fromUserLogin }));
           }),
           catchError(() => of(AuthAction.loginFail))
         );

@@ -44,8 +44,8 @@ export const authReducer = createReducer(
     return {
       ...state,
       userProfile,
-      currentProjectId: userProfile.defaultProjectId,
-      currentProjectName: userProfile.defaultProjectName
+      currentProjectId: userProfile?.defaultProjectId,
+      currentProjectName: userProfile?.defaultProjectName
     };
   }),
   on(AuthAction.loginFail, (state) => ({ ...state, isLoginSuccess: false, isAuthVerifying: false })),
