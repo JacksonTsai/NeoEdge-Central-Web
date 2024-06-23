@@ -44,6 +44,7 @@ import {
 } from '@neo-edge-web/models';
 
 import { img2Base64 } from '@neo-edge-web/utils';
+import { whitespaceValidator } from '@neo-edge-web/validators';
 import { LatLng } from 'leaflet';
 import { NgxPermissionsModule } from 'ngx-permissions';
 @Component({
@@ -306,8 +307,14 @@ export class GatewayProfileComponent implements OnInit {
 
   addSerialPortFormGroup = (data?: IIpcSerialPort) => {
     return new UntypedFormGroup({
-      name: new UntypedFormControl({ value: data?.name ?? '', disabled: !this.isEditMode() }, [Validators.required]),
-      path: new UntypedFormControl({ value: data?.path ?? '', disabled: !this.isEditMode() }, [Validators.required])
+      name: new UntypedFormControl({ value: data?.name ?? '', disabled: !this.isEditMode() }, [
+        Validators.required,
+        whitespaceValidator
+      ]),
+      path: new UntypedFormControl({ value: data?.path ?? '', disabled: !this.isEditMode() }, [
+        Validators.required,
+        whitespaceValidator
+      ])
     });
   };
 
@@ -320,8 +327,14 @@ export class GatewayProfileComponent implements OnInit {
 
   addCustomFieldFormGroup = (data?: IGatewayCustomField) => {
     return new UntypedFormGroup({
-      name: new UntypedFormControl({ value: data?.name ?? '', disabled: !this.isEditMode() }, [Validators.required]),
-      value: new UntypedFormControl({ value: data?.value ?? '', disabled: !this.isEditMode() }, [Validators.required])
+      name: new UntypedFormControl({ value: data?.name ?? '', disabled: !this.isEditMode() }, [
+        Validators.required,
+        whitespaceValidator
+      ]),
+      value: new UntypedFormControl({ value: data?.value ?? '', disabled: !this.isEditMode() }, [
+        Validators.required,
+        whitespaceValidator
+      ])
     });
   };
 

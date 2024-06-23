@@ -101,7 +101,7 @@
                         maxlength="128"
                         [formControl]="serialPortNameCtrl(i)"
                       />
-                      @if (serialPortNameCtrl(i).hasError('required')) {
+                      @if (serialPortNameCtrl(i).hasError('required') || serialPortNameCtrl(i).hasError('whitespace')) {
                         <mat-error>Required.</mat-error>
                       }
                     </mat-form-field>
@@ -115,7 +115,7 @@
                         maxlength="128"
                         [formControl]="serialPortPathCtrl(i)"
                       />
-                      @if (serialPortPathCtrl(i).hasError('required')) {
+                      @if (serialPortPathCtrl(i).hasError('required') || serialPortPathCtrl(i).hasError('whitespace')) {
                         <mat-error>Required.</mat-error>
                       }
                     </mat-form-field>
@@ -198,7 +198,9 @@
                         maxlength="128"
                         [formControl]="customFieldNameCtrl(i)"
                       />
-                      @if (customFieldNameCtrl(i).hasError('required')) {
+                      @if (
+                        customFieldNameCtrl(i).hasError('required') || customFieldNameCtrl(i).hasError('whitespace')
+                      ) {
                         <mat-error>Required.</mat-error>
                       }
                     </mat-form-field>
@@ -213,7 +215,9 @@
                         maxlength="128"
                         [formControl]="customFieldValueCtrl(i)"
                       />
-                      @if (customFieldValueCtrl(i).hasError('required')) {
+                      @if (
+                        customFieldValueCtrl(i).hasError('required') || customFieldNameCtrl(i).hasError('whitespace')
+                      ) {
                         <mat-error>Required.</mat-error>
                       }
                     </mat-form-field>
