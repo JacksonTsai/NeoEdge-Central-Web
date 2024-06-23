@@ -61,7 +61,7 @@
         <div class="letters">
           @if (element.users.length > 0) {
             @for (user of element.users; track user.id) {
-              <span class="letter letter--border letter--gary-bg" [matTooltip]="user.name">
+              <span class="letter letter--border letter--gary-bg" [matTooltip]="user.account">
                 @if (user.name) {
                   {{ user.name[0] }}
                 }
