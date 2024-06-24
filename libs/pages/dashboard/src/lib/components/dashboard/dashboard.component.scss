@@ -1,16 +1,25 @@
+@use 'breakpoint' as *;
+
 :host {
   display: block;
 }
 
 .dashboard {
   &,
-  &__aside,
   &__main {
     display: grid;
     gap: 20px;
   }
 
-  @media screen and (min-width: 1024px) {
+  &__aside {
+    & > * {
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  @include breakpoint(large up) {
     display: flex;
 
     &__aside {
@@ -21,16 +30,11 @@
     &__main {
       width: 66.66%;
       order: 1;
+      grid-template-columns: repeat(2, 1fr);
     }
 
     ne-dashboard-gateway {
       grid-column: span 2;
-    }
-  }
-
-  @media screen and (min-width: 1200px) {
-    &__main {
-      grid-template-columns: repeat(2, 1fr);
     }
   }
 }

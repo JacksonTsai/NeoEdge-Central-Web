@@ -1,5 +1,5 @@
 <h3 class="dashboard-card__subtitle">Gateway Status</h3>
-<div id="chart">
+<div class="dashboard-gateway-chart">
   @if (chartOptions()) {
     <apx-chart
       [colors]="chartOptions()?.colors"
@@ -7,14 +7,16 @@
       [series]="chartOptions()?.series"
       [labels]="chartOptions()?.labels"
       [legend]="chartOptions()?.legend"
+      [tooltip]="chartOptions()?.tooltip"
       [responsive]="chartOptions()?.responsive"
+      [plotOptions]="chartOptions()?.plotOptions"
     ></apx-chart>
   }
 </div>
 
 @if (gatewaysStatusList()) {
   <ul class="gateway-status-sum no-bullet">
-    <li class="gateway-status-sum__item">
+    <li class="gateway-status-sum__item head">
       <span class="gateway-status-sum__item__name">Status</span>
       <span class="gateway-status-sum__item__count">Count</span>
     </li>

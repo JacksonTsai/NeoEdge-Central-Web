@@ -3,8 +3,10 @@ import {
   ApexChart,
   ApexLegend,
   ApexNonAxisChartSeries,
+  ApexPlotOptions,
   ApexResponsive,
   ApexTitleSubtitle,
+  ApexTooltip,
   ApexXAxis
 } from 'ng-apexcharts';
 
@@ -22,7 +24,9 @@ export type TPieChartOptions = {
   series: ApexNonAxisChartSeries;
   labels: any;
   legend?: ApexLegend;
+  tooltip?: ApexTooltip;
   responsive?: ApexResponsive[];
+  plotOptions?: ApexPlotOptions;
 };
 
 export interface IPieChartSetting {

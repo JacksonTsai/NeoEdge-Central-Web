@@ -17,6 +17,8 @@ export class DashboardGatewayStatusComponent {
   gatewayStatus = GATEWAY_STATUE;
   public chartOptions = signal<Partial<TPieChartOptions> | null>(null);
 
+  colorArr = getChartColor(5, 'status');
+
   constructor() {
     effect(
       () => {
@@ -44,7 +46,7 @@ export class DashboardGatewayStatusComponent {
 
   getChartOption(setting: IPieChartSetting): TPieChartOptions {
     return {
-      colors: getChartColor(5, 'status'),
+      colors: this.colorArr,
       chart: {
         type: 'donut',
         parentHeightOffset: 0
@@ -53,6 +55,45 @@ export class DashboardGatewayStatusComponent {
       labels: setting.labels,
       legend: {
         position: 'top'
+      },
+      tooltip: {
+        enabled: true,
+        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+          let total = 0;
+          for (const x of series) {
+            total += x;
+          }
+          const selected = series[seriesIndex];
+          return `
+          <div style="color:white;background-color:${this.colorArr[seriesIndex]};font-size:12px;padding:4px 8px;">
+            ${w.config.labels[seriesIndex]}: ${selected} (${((selected / total) * 100).toFixed(2)}%)
+          </div>
+          `;
+        }
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              name: {
+                show: true,
+                fontSize: '14px',
+                color: 'currentColor',
+                offsetY: -10
+              },
+              value: {
+                show: true,
+                fontSize: '32px',
+                fontWeight: 600
+              },
+              total: {
+                show: true,
+                label: 'Total'
+              }
+            }
+          }
+        }
       }
     };
   }

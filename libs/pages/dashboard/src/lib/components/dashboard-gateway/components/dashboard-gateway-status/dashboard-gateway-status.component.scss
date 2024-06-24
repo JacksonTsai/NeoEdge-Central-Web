@@ -1,13 +1,25 @@
 @use 'colors' as *;
+@use 'breakpoint' as *;
 
 :host {
   display: block;
+
+  ::ng-deep {
+    .apexcharts-tooltip-series-group.apexcharts-active,
+    .apexcharts-tooltip-series-group:last-child {
+      padding-bottom: 0;
+    }
+  }
 }
 
-#chart {
+.dashboard-gateway-chart {
   margin: 0 auto;
   padding: 0;
-  max-width: 380px;
+  max-width: 480px;
+
+  @include breakpoint(large up) {
+    max-width: 320px;
+  }
 }
 
 .gateway-status-sum {
@@ -19,5 +31,9 @@
     justify-content: space-between;
     padding: 4px 0;
     border-bottom: 1px solid $border-color;
+
+    &.head {
+      font-weight: 500;
+    }
   }
 }

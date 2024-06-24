@@ -35,3 +35,11 @@
 mat-card-actions.dashboard-action {
   padding: 16px;
 }
+
+mat-accordion {
+  mat-panel-title {
+    .dashboard-card__title {
+      margin-bottom: 0;
+    }
+  }
+}

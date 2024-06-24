@@ -1,16 +1,26 @@
+@use 'breakpoint' as *;
+
 :host {
   display: block;
 }
 
 .dashboard-gateway-content {
-  display: flex;
-  gap: 20px;
-
-  ne-dashboard-gateway-location {
-    flex: 1 1 auto;
+  @include breakpoint(large down) {
+    ne-dashboard-gateway-status {
+      margin-top: 20px;
+    }
   }
 
-  ne-dashboard-gateway-status {
-    flex: 0 0 33.33%;
+  @include breakpoint(large up) {
+    display: flex;
+    gap: 20px;
+
+    ne-dashboard-gateway-location {
+      flex: 1 1 auto;
+    }
+
+    ne-dashboard-gateway-status {
+      flex: 0 0 33.33%;
+    }
   }
 }
