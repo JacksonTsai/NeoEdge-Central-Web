@@ -225,7 +225,7 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
       baudRate: [{ value: 19200, disabled: false }, [Validators.required]],
       dataBits: [{ value: 8, disabled: false }, [Validators.required]],
       parity: [{ value: this.options().rtuParityOpts[0], disabled: false }, [Validators.required]],
-      stopBit: [{ value: 1, disabled: false }, [Validators.required]],
+      stopBit: [{ value: '1', disabled: false }, [Validators.required]],
 
       initialDelay: [{ value: 0, disabled: false }, [Validators.required, Validators.min(0), Validators.max(30000)]],
       delayBetweenPolls: [

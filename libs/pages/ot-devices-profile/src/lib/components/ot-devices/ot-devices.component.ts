@@ -148,7 +148,7 @@ export class OtDevicesComponent implements AfterViewInit {
       const deviceData = element as IOtDevice<IInstancesRtu>;
       if ('General.profile' === deviceData.setting?.Instances.RTU[0].Devices[0].Profile.Name) {
         if (deviceData.setting?.Instances.RTU[0].Devices[0]?.Profile?.Domains?.length > 0) {
-          return deviceData.setting?.Instances.RTU[0]?.Devices[0]?.Profile?.Domains?.json(',') ?? '-';
+          return deviceData.setting?.Instances.RTU[0]?.Devices[0]?.Profile?.Domains?.join(',') ?? '-';
         }
       } else {
         const texolProfileSplit = deviceData.setting?.Instances.RTU[0].Devices[0]?.Profile?.Name.split('.');
