@@ -145,9 +145,18 @@ export class OtDevicesComponent implements AfterViewInit {
       const deviceData = element as IOtDevice<IInstancesRtu>;
       return Object.keys(deviceData.setting?.Instances.RTU[0].Devices[0]?.Commands)?.length ?? 0;
     } else if (DEVICE_TYPE.TEXOL === deviceType) {
-      return 9999;
+      const deviceData = element as IOtDevice<IInstancesRtu>;
+      if ('General.profile' === deviceData.setting?.Instances.RTU[0].Devices[0].Profile.Name) {
+        if (deviceData.setting?.Instances.RTU[0].Devices[0]?.Profile?.Domains?.length > 0) {
+          return deviceData.setting?.Instances.RTU[0]?.Devices[0]?.Profile?.Domains?.json(',') ?? '-';
+        }
+      } else {
+        const texolProfileSplit = deviceData.setting?.Instances.RTU[0].Devices[0]?.Profile?.Name.split('.');
+        texolProfileSplit.pop();
+        return texolProfileSplit.join('.') ?? '-';
+      }
     }
-    return 0;
+    return '-';
   };
 
   ngAfterViewInit() {
