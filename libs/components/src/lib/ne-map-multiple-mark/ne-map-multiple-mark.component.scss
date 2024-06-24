@@ -12,5 +12,17 @@
     height: 100%;
     width: 100%;
     position: relative;
+
+    ::ng-deep {
+      .leaflet-popup-content {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+
+        img {
+          margin-right: 8px;
+        }
+      }
+    }
   }
 }

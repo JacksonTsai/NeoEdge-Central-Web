@@ -1,6 +1,6 @@
 <h3 class="dashboard-card__subtitle">Gateway Status</h3>
-@if (chartOptions()) {
-  <div id="chart">
+<div id="chart">
+  @if (chartOptions()) {
     <apx-chart
       [colors]="chartOptions()?.colors"
       [chart]="chartOptions()?.chart"
@@ -9,5 +9,20 @@
       [legend]="chartOptions()?.legend"
       [responsive]="chartOptions()?.responsive"
     ></apx-chart>
-  </div>
+  }
+</div>
+
+@if (gatewaysStatusList()) {
+  <ul class="gateway-status-sum no-bullet">
+    <li class="gateway-status-sum__item">
+      <span class="gateway-status-sum__item__name">Status</span>
+      <span class="gateway-status-sum__item__count">Count</span>
+    </li>
+    @for (item of gatewaysStatusList() | keyvalue; track item?.key) {
+      <li class="gateway-status-sum__item">
+        <span class="gateway-status-sum__item__name">{{ item?.value?.name }}</span>
+        <span class="gateway-status-sum__item__count">{{ item?.value?.list.length }}</span>
+      </li>
+    }
+  </ul>
 }

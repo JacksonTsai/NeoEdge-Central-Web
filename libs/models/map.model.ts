@@ -6,4 +6,7 @@ export interface ICoordinate {
 
 export type TCategoryCoordinate = ICoordinate & {
   category?: any;
+  tag?: string;
+  color?: string;
+  routerLink?: string;
 };

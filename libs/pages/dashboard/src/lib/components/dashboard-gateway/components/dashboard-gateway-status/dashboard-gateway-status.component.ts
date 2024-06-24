@@ -46,7 +46,8 @@ export class DashboardGatewayStatusComponent {
     return {
       colors: getChartColor(5, 'status'),
       chart: {
-        type: 'donut'
+        type: 'donut',
+        parentHeightOffset: 0
       },
       series: setting.series,
       labels: setting.labels,

@@ -1,9 +1,23 @@
+@use 'colors' as *;
+
 :host {
   display: block;
 }
 
 #chart {
-  max-width: 380px;
   margin: 0 auto;
   padding: 0;
+  max-width: 380px;
+}
+
+.gateway-status-sum {
+  font-size: 14px;
+  margin-top: -32px;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border-bottom: 1px solid $border-color;
+  }
 }
