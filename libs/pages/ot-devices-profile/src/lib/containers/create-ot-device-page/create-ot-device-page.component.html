@@ -32,6 +32,7 @@
       <mat-card class="card">
         <mat-card-content>
           <ne-select-command-template
+            [isEditMode]="true"
             [appName]="selectDeviceProtocolCtrl.value?.name"
             [texolTagDoc]="texolTagDoc()"
             (handleDownloadTagTemplateCsv)="onDownloadTagTemplateCsv()"

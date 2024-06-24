@@ -184,7 +184,6 @@ export class OtDeviceDetailPageComponent {
           texolMode: TEXOL_TAG_TYPE.General,
           tags: { ...otTexol.tags }
         });
-        // this.texolTagType.set(otTexol);
       } else {
         let rtuDeviceProfileNameSplit = rtuDeviceProfile.Name.split('.');
         if (rtuDeviceProfileNameSplit.length !== 6) {
