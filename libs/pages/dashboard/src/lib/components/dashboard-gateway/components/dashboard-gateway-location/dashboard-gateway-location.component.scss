@@ -1,0 +1,51 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+
+  ::ng-deep {
+    .leaflet-popup-content {
+      margin: 8px;
+      margin-right: 20px;
+    }
+
+    .gateway-status-tag {
+      --primary-color: #ccc;
+
+      display: flex;
+      align-items: center;
+      margin-right: 8px;
+      padding: 4px;
+      padding-right: 8px;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      border-radius: 99px;
+    }
+  }
+}
+
+mat-chip-listbox {
+  margin-bottom: 16px;
+}
+
+mat-chip-option {
+  --mdc-chip-label-text-size: 14px;
+}
+
+.status-filter {
+  &__icon {
+    --mdc-chip-with-icon-icon-color: #{$menu-icon-color};
+  }
+}
+
+.map-wrapper {
+  position: relative;
+
+  &__tip {
+    position: absolute;
+    z-index: 1200;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

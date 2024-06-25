@@ -38,6 +38,8 @@ export interface Gateway {
   isPartnerIpc: number;
   ipcModelSeriesName: string;
   labels: IGatewayLabels[] | null;
+  latitude: number;
+  longitude: number;
 }
 
 export type TableQueryForGateways = ITableQuery & { names?: string; labelIds?: number };

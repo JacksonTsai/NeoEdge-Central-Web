@@ -1,5 +1,6 @@
 export * from './lib/copy-profile-dialog/copy-profile-dialog.component';
 export * from './lib/ne-layout/ne-layout.component';
+export * from './lib/ne-map-multiple-mark/ne-map-multiple-mark.component';
 export * from './lib/ne-map/ne-map.component';
 export * from './lib/ne-menu';
 export * from './lib/ne-multi-select-chips/ne-multi-select-chips.component';

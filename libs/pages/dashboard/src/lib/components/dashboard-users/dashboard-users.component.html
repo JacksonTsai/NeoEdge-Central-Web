@@ -1,0 +1,19 @@
+<mat-accordion class="dashboard-card">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h2 class="dashboard-card__title">User List {{ currentUsersList().length | formatCount }}</h2>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul class="dashboard-list">
+      @for (user of currentUsersList(); track user.id; let i = $index) {
+        <li class="dashboard-list__item">
+          <p class="dashboard-list__content">
+            <span>{{ i + 1 }}.</span>
+            {{ user.account }}
+          </p>
+        </li>
+      }
+    </ul>
+  </mat-expansion-panel>
+</mat-accordion>

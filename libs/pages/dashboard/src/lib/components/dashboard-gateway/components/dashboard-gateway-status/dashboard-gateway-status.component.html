@@ -1,0 +1,32 @@
+<h3 class="dashboard-card__subtitle">Gateway Status</h3>
+<div class="dashboard-gateway-chart">
+  @if (chartOptions()) {
+    <apx-chart
+      [colors]="chartOptions()?.colors"
+      [chart]="chartOptions()?.chart"
+      [series]="chartOptions()?.series"
+      [labels]="chartOptions()?.labels"
+      [dataLabels]="chartOptions()?.dataLabels"
+      [legend]="chartOptions()?.legend"
+      [states]="chartOptions()?.states"
+      [tooltip]="chartOptions()?.tooltip"
+      [responsive]="chartOptions()?.responsive"
+      [plotOptions]="chartOptions()?.plotOptions"
+    ></apx-chart>
+  }
+</div>
+
+@if (gatewaysStatusList()) {
+  <ul class="gateway-status-sum no-bullet">
+    <li class="gateway-status-sum__item head">
+      <span class="gateway-status-sum__item__name">Status</span>
+      <span class="gateway-status-sum__item__count">Count</span>
+    </li>
+    @for (item of gatewaysStatusList() | keyvalue; track item?.key) {
+      <li class="gateway-status-sum__item">
+        <span class="gateway-status-sum__item__name">{{ item?.value?.name }}</span>
+        <span class="gateway-status-sum__item__count">{{ item?.value?.list.length }}</span>
+      </li>
+    }
+  </ul>
+}
