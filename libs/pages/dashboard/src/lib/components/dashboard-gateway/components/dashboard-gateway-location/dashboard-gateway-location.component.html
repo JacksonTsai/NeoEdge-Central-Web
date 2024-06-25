@@ -1,7 +1,7 @@
 <h3 class="dashboard-card__subtitle">Gateway Location</h3>
 <mat-chip-listbox aria-label="Status filter" [multiple]="true" (change)="onChangeFilter($event)">
   @for (status of statusList(); track status.value) {
-    <mat-chip-option [value]="status.value" selected>
+    <mat-chip-option [value]="status.value" selected [id]="'dashboard-gateway-location-' + status.value">
       <mat-icon class="status-filter__icon" matChipAvatar [svgIcon]="'icon:' + status.icon"></mat-icon>
       {{ status.label }}
     </mat-chip-option>

@@ -80,12 +80,13 @@ export class DashboardGatewayStatusComponent {
                 show: true,
                 fontSize: '14px',
                 color: 'currentColor',
-                offsetY: -10
+                offsetY: -18
               },
               value: {
                 show: true,
                 fontSize: '32px',
-                fontWeight: 600
+                fontWeight: 600,
+                offsetY: 0
               },
               total: {
                 show: true,

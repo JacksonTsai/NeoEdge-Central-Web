@@ -25,6 +25,7 @@
       [routerLink]="type() === 'it' ? ['/neoflow/it-service-profile'] : ['/neoflow/ot-device-profile']"
       color="primary"
       mat-stroked-button
+      [id]="'dashboard-see-more-' + type() + '-detail'"
     >
       <span>See more Detail</span>
       <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
