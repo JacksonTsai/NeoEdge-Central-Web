@@ -34,6 +34,7 @@
       "@neo-edge-web/models": ["libs/models/index.ts"],
       "@neo-edge-web/neoedge-central": ["libs/environments/neoedge-central/src/index.ts"],
       "@neo-edge-web/neoedge-central-web/environment": ["libs/environments/neoedge-central-web/index.ts"],
+      "@neo-edge-web/neoflows": ["libs/pages/neoflows/src/index.ts"],
       "@neo-edge-web/ot-devices-profile": ["libs/pages/ot-devices-profile/src/index.ts"],
       "@neo-edge-web/package-json": ["./package.json"],
       "@neo-edge-web/pipes": ["libs/pipes/index.ts"],

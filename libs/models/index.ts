@@ -12,6 +12,7 @@ export * from './it-service.model';
 export * from './language.model';
 export * from './map.model';
 export * from './ne-menu.model';
+export * from './neoflows.model';
 export * from './ot-device-detail.model';
 export * from './ot-devices.model';
 export * from './ot-profile.model';
