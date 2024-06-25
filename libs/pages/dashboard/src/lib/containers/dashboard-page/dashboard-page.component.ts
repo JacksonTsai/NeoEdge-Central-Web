@@ -14,6 +14,7 @@ import { DashboardStore } from '../../stores/dashboard.store';
       [itList]="itList()"
       [otList]="otList()"
       [gatewaysList]="gatewaysList()"
+      (handleReload)="onReload()"
     ></ne-dashboard>
   `,
   styleUrl: './dashboard-page.component.scss',
@@ -28,4 +29,12 @@ export class DashboardPageComponent {
   itList = this.#dashboardStore.itList;
   otList = this.#dashboardStore.otList;
   gatewaysList = this.#dashboardStore.gatewaysList;
+
+  onReload(): void {
+    this.#dashboardStore.getProjectDetail();
+    this.#dashboardStore.getAllUsers();
+    this.#dashboardStore.getAllItServiceProfiles();
+    this.#dashboardStore.getAllOtDeviceProfiles();
+    this.#dashboardStore.getAllGateways();
+  }
 }
