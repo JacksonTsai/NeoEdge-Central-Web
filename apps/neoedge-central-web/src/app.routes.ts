@@ -71,6 +71,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'neoflow/noeflow-settings',
+        loadChildren: () => import('@neo-edge-web/neoflows').then((m) => m.neoflowsRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: 'neoflow/ot-device-profile',
         loadChildren: () => import('@neo-edge-web/ot-devices-profile').then((m) => m.otDeviceProfileRoutes),
         data: {
