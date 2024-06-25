@@ -37,3 +37,15 @@ mat-chip-option {
     --mdc-chip-with-icon-icon-color: #{$menu-icon-color};
   }
 }
+
+.map-wrapper {
+  position: relative;
+
+  &__tip {
+    position: absolute;
+    z-index: 1200;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

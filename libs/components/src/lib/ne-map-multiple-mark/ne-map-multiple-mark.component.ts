@@ -29,6 +29,7 @@ export class NeMapMultipleMarkComponent {
   height = input<string>('150px');
   coordinateList = input<TCategoryCoordinate[]>([]);
   animation = input<boolean>(true);
+  isEdit = input(true);
   map = signal(null);
   markerLayer = [];
 

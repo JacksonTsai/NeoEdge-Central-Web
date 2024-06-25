@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
-import { GATEWAY_STATUE, IPieChartSetting, TDashboardGatewayStatus, TPieChartOptions } from '@neo-edge-web/models';
+import { GATEWAY_STATUE, IPieChartSetting, TDashboardGatewayStatus } from '@neo-edge-web/models';
 import { getChartColor } from '@neo-edge-web/utils';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'ne-dashboard-gateway-status',
@@ -15,7 +15,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 export class DashboardGatewayStatusComponent {
   gatewaysStatusList = input<TDashboardGatewayStatus>(null);
   gatewayStatus = GATEWAY_STATUE;
-  public chartOptions = signal<Partial<TPieChartOptions> | null>(null);
+  public chartOptions = signal<Partial<ApexOptions> | null>(null);
 
   colorArr = getChartColor(5, 'status');
 
@@ -24,6 +24,8 @@ export class DashboardGatewayStatusComponent {
       () => {
         if (this.gatewaysStatusList() !== null) {
           this.buildChart();
+        } else {
+          this.buildEmptyChart();
         }
       },
       { allowSignalWrites: true }
@@ -44,7 +46,7 @@ export class DashboardGatewayStatusComponent {
     this.chartOptions.set(this.getChartOption(chartSetting));
   }
 
-  getChartOption(setting: IPieChartSetting): TPieChartOptions {
+  getChartOption(setting: IPieChartSetting): ApexOptions {
     return {
       colors: this.colorArr,
       chart: {
@@ -97,5 +99,61 @@ export class DashboardGatewayStatusComponent {
         }
       }
     };
+  }
+
+  buildEmptyChart() {
+    const chartSetting: ApexOptions = {
+      colors: ['#C9C9C9'],
+      series: [100],
+      labels: ['No Data'],
+      dataLabels: {
+        enabled: false
+      },
+      legend: {
+        show: false
+      },
+      chart: {
+        type: 'donut',
+        parentHeightOffset: 0,
+        animations: {
+          enabled: false
+        }
+      },
+      states: {
+        hover: {
+          filter: {
+            type: 'none'
+          }
+        }
+      },
+      tooltip: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              name: {
+                show: true,
+                fontSize: '32px',
+                color: '#C9C9C9',
+                offsetY: 4
+              },
+              value: {
+                show: false
+              },
+              total: {
+                show: true,
+                label: 'No Data',
+                color: '#C9C9C9'
+              }
+            }
+          }
+        }
+      }
+    };
+
+    this.chartOptions.set(chartSetting);
   }
 }

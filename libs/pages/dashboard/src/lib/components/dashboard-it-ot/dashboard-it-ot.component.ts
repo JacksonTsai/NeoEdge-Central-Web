@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { itServiceSupportApps, otDeviceSupportApps } from '@neo-edge-web/configs';
-import { IItService, IOtDevice, ISupportAppsUI } from '@neo-edge-web/models';
+import { IItService, IOtDevice, ISupportApps, ISupportAppsUI } from '@neo-edge-web/models';
 import { FormatCountPipe } from '@neo-edge-web/pipes';
 
 type TITOT = 'it' | 'ot';
@@ -31,30 +31,45 @@ type Category = Record<string, ICategoryItem>;
 export class DashboardItOtComponent {
   type = input<TITOT>('it');
   dataTable = input<TITOTList>([]);
+  apps = input<ISupportApps[]>([]);
 
   dataTableLength = computed<number>(() => {
     return this.dataTable().length;
   });
 
+  supportAppsSetting = computed<ISupportAppsUI[]>(() => {
+    return this.type() === 'it' ? itServiceSupportApps : otDeviceSupportApps || [];
+  });
+
   category = computed<Category | null>(() => {
-    if (!this.dataTable().length) return null;
-    const data = this.dataTable();
+    if (!this.apps().length) return null;
+
+    // Init
     const result = {};
+    this.apps().forEach((item: ISupportApps) => {
+      const key = item.id;
+      result[key] = this.initCategory(item.name);
+    });
+
+    if (!this.dataTable().length) return result;
+
+    // Set Data
+    const data = this.dataTable();
     data.forEach((item: TITOTData) => {
       const key = item.appVersionId;
-      if (!result[key]) {
-        const supportAppsSetting = this.type() === 'it' ? itServiceSupportApps : otDeviceSupportApps || [];
-        const appName = item.appClass.toUpperCase();
-        const matchedApp = supportAppsSetting.find((item) => appName.includes(item.key));
-
-        result[key] = {
-          name: item.appClass,
-          setting: matchedApp,
-          list: []
-        };
-      }
-      result[key].list.push(item);
+      result[key]?.list.push(item);
     });
     return result;
   });
+
+  initCategory = (name: string): ICategoryItem => {
+    const appName = name.toUpperCase();
+    const matchedApp = this.supportAppsSetting().find((item) => appName.includes(item.key));
+
+    return {
+      name,
+      setting: matchedApp,
+      list: []
+    };
+  };
 }

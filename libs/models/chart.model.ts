@@ -1,34 +1,3 @@
-import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexLegend,
-  ApexNonAxisChartSeries,
-  ApexPlotOptions,
-  ApexResponsive,
-  ApexTitleSubtitle,
-  ApexTooltip,
-  ApexXAxis
-} from 'ng-apexcharts';
-
-export type TBarChartOptions = {
-  series: ApexAxisChartSeries;
-  chart: ApexChart;
-  xaxis: ApexXAxis;
-  title: ApexTitleSubtitle;
-};
-
-export type TPieChartOptions = {
-  title?: ApexTitleSubtitle;
-  colors?: any[];
-  chart: ApexChart;
-  series: ApexNonAxisChartSeries;
-  labels: any;
-  legend?: ApexLegend;
-  tooltip?: ApexTooltip;
-  responsive?: ApexResponsive[];
-  plotOptions?: ApexPlotOptions;
-};
-
 export interface IPieChartSetting {
   series: number[];
   labels: string[];

@@ -5,9 +5,10 @@ import {
   ItServiceService,
   OtDevicesService,
   ProjectsService,
+  SupportAppsService,
   UsersService
 } from '@neo-edge-web/global-services';
-import { DASHBOARD_LOADING, IDashboardState } from '@neo-edge-web/models';
+import { DASHBOARD_LOADING, IDashboardState, SUPPORT_APPS_FLOW_GROUPS } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -20,7 +21,9 @@ const initialState: IDashboardState = {
   usersList: [],
   gatewaysList: [],
   itList: [],
-  otList: []
+  itApps: [],
+  otList: [],
+  otApps: []
 };
 
 export type DashboardStore = InstanceType<typeof DashboardStore>;
@@ -34,7 +37,8 @@ export const DashboardStore = signalStore(
       projectsService = inject(ProjectsService),
       gatewaysService = inject(GatewaysService),
       itServiceService = inject(ItServiceService),
-      otDevicesService = inject(OtDevicesService)
+      otDevicesService = inject(OtDevicesService),
+      supportAppsService = inject(SupportAppsService)
     ) => ({
       getProjectDetail: rxMethod<void>(
         pipe(
@@ -90,12 +94,35 @@ export const DashboardStore = signalStore(
             )
           )
         )
+      ),
+      getSupportApps: rxMethod<void>(
+        pipe(
+          tap(() => patchState(store, { isLoading: DASHBOARD_LOADING.GET })),
+          switchMap(() =>
+            supportAppsService.getApps$(SUPPORT_APPS_FLOW_GROUPS.it_service).pipe(
+              tap((d) => {
+                patchState(store, { itApps: d.apps, isLoading: DASHBOARD_LOADING.NONE });
+              }),
+              catchError(() => EMPTY)
+            )
+          ),
+          switchMap(() =>
+            supportAppsService.getApps$(SUPPORT_APPS_FLOW_GROUPS.ot_device).pipe(
+              tap((d) => {
+                patchState(store, { otApps: d.apps, isLoading: DASHBOARD_LOADING.NONE });
+              }),
+              catchError(() => EMPTY)
+            )
+          )
+        )
       )
     })
   ),
   withHooks((store, globalStore = inject(Store)) => {
     return {
       onInit() {
+        store.getSupportApps();
+
         globalStore
           .select(selectCurrentProject)
           .pipe(

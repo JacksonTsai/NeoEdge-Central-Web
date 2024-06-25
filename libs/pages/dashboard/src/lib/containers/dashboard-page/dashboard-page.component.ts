@@ -12,7 +12,9 @@ import { DashboardStore } from '../../stores/dashboard.store';
       [projectDetail]="projectDetail()"
       [usersList]="usersList()"
       [itList]="itList()"
+      [itApps]="itApps()"
       [otList]="otList()"
+      [otApps]="otApps()"
       [gatewaysList]="gatewaysList()"
       (handleReload)="onReload()"
     ></ne-dashboard>
@@ -27,7 +29,9 @@ export class DashboardPageComponent {
   projectDetail = this.#dashboardStore.projectDetail;
   usersList = this.#dashboardStore.usersList;
   itList = this.#dashboardStore.itList;
+  itApps = this.#dashboardStore.itApps;
   otList = this.#dashboardStore.otList;
+  otApps = this.#dashboardStore.otApps;
   gatewaysList = this.#dashboardStore.gatewaysList;
 
   onReload(): void {

@@ -2,6 +2,7 @@ import { Gateway } from './gateways.model';
 import { IItService } from './it-service.model';
 import { IOtDevice } from './ot-devices.model';
 import { IProjectByIdResp } from './projects.model';
+import { ISupportApps } from './support-apps.model';
 import { User } from './users.model';
 
 export interface IDashboardState {
@@ -11,7 +12,9 @@ export interface IDashboardState {
   gatewaysList: Gateway[];
   usersList: User[];
   itList: IItService[];
+  itApps: ISupportApps[];
   otList: IOtDevice<any>[];
+  otApps: ISupportApps[];
   usageFee?: any;
   licenseConsumption?: any;
   activities?: any;
