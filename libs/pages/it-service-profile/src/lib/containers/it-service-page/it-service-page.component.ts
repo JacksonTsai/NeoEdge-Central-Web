@@ -62,8 +62,8 @@ export class ItServicePageComponent {
       restoreFocus: false,
       data: {
         type: 'it',
-        fromCopyOpts: [...this.#itServiceStore.dataTable().map((d) => ({ displayName: d.name, id: d.id }))],
-        deleteFn: this.#itServiceStore.copyItService
+        copyFrom: { displayName: event.name, id: event.id },
+        copyFn: this.#itServiceStore.copyItService
       }
     });
 
