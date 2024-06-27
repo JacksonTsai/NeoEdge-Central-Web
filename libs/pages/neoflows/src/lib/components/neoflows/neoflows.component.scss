@@ -1,0 +1,14 @@
+.neoflows-top-action {
+  display: flex;
+  justify-content: space-between;
+  &__left,
+  &__right {
+    display: flex;
+    gap: 8px;
+  }
+}
+.neoflows-card {
+  &__table {
+    width: 100%;
+  }
+}
