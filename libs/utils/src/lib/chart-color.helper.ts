@@ -19,7 +19,6 @@ export const statusColor = [
   STATUS_COLORS.Waiting,
   STATUS_COLORS.Connected,
   STATUS_COLORS.Disconnected,
-  STATUS_COLORS.Passive,
   STATUS_COLORS.Detach
 ];
 

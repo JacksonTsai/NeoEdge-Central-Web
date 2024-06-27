@@ -18,8 +18,8 @@ export enum CHART_COLORS {
 
 export enum STATUS_COLORS {
   Waiting = '#fdd16a',
-  Disconnected = '#96b0c6',
-  Connected = '#3077cb',
+  Connected = '#5CCB59',
+  Disconnected = '#F87A7A',
   Passive = '#1E282C',
-  Detach = '#A9B6C3'
+  Detach = '#C4D7E9'
 }
