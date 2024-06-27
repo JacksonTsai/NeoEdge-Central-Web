@@ -1,6 +1,19 @@
 <h3 class="dashboard-card__subtitle">Gateway Status</h3>
 <div class="dashboard-gateway-chart">
-  @if (chartOptions()) {
+  @if (chartOptions() && gatewaysStatusList()) {
+    <apx-chart
+      [colors]="chartOptions()?.colors"
+      [chart]="chartOptions()?.chart"
+      [series]="chartOptions()?.series"
+      [labels]="chartOptions()?.labels"
+      [dataLabels]="chartOptions()?.dataLabels"
+      [legend]="chartOptions()?.legend"
+      [states]="chartOptions()?.states"
+      [tooltip]="chartOptions()?.tooltip"
+      [responsive]="chartOptions()?.responsive"
+      [plotOptions]="chartOptions()?.plotOptions"
+    ></apx-chart>
+  } @else if (!gatewaysStatusList()) {
     <apx-chart
       [colors]="chartOptions()?.colors"
       [chart]="chartOptions()?.chart"
