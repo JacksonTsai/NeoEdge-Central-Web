@@ -1,11 +1,12 @@
-import { Injectable, NgZone, inject, signal } from '@angular/core';
+import { Injectable, NgZone, inject } from '@angular/core';
 import * as AuthStore from '@neo-edge-web/global-stores';
 import { Store, select } from '@ngrx/store';
+import { SessionStorageService } from 'ngx-webstorage';
 import { Subscription, fromEvent, interval, merge } from 'rxjs';
 import { debounceTime, tap } from 'rxjs/operators';
 
 const DEFAULT_TIMEOUT = 5; // Minute
-const CHECK_INTERVAL = 5000; // ms
+const CHECK_INTERVAL = 1000; // ms
 
 @Injectable()
 export class AutoLogoutService {
@@ -13,10 +14,9 @@ export class AutoLogoutService {
   private documentSub: Subscription;
   private isLoginSub: Subscription;
   private checkTimer: Subscription;
-
+  #storage = inject(SessionStorageService);
   ngZone = inject(NgZone);
   store = inject(Store);
-  lastOperationTime = signal<number>(0);
   timeout = DEFAULT_TIMEOUT;
 
   private initListener() {
@@ -45,8 +45,9 @@ export class AutoLogoutService {
     if (this.timeout === 0 || !this.isLoggedIn) {
       return;
     }
+    const lastOperationTime = this.#storage.retrieve('lastOperationTime');
     const now = Date.now();
-    const lastTime = this.lastOperationTime() + this.timeout * 60 * 1000;
+    const lastTime = lastOperationTime + this.timeout * 60 * 1000;
     const diff = lastTime - now;
     const isTimeout = diff < 0;
 
@@ -77,6 +78,6 @@ export class AutoLogoutService {
   }
 
   reset() {
-    this.lastOperationTime.set(Date.now());
+    this.#storage.store('lastOperationTime', Date.now());
   }
 }
