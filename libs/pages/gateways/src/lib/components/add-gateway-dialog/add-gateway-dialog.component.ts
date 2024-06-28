@@ -53,9 +53,10 @@ export class AddGatewayDialogComponent implements OnInit {
     if (!this.partnerIpcVendorNameCtrl.value || !this.partnerIpcModelNameCtrl.value || !this.isPartnerIpcCtrl.value) {
       return '/assets/images/default_gateway.png';
     }
+    console.log(this.partnerIpcModelNameCtrl.value);
 
     if (this.partnerIpcVendorNameCtrl.value && this.partnerIpcModelNameCtrl.value) {
-      return `/assets/images/default_${this.partnerIpcVendorNameCtrl.value.toLowerCase()}_${this.partnerIpcModelNameCtrl.value.seriesName}.png?timestamp=${Date.now()}`;
+      return `/assets/images/default_${this.partnerIpcVendorNameCtrl.value.toLowerCase()}_${this.partnerIpcModelNameCtrl.value.model}.png`;
     }
 
     return '/assets/images/default_gateway.png';

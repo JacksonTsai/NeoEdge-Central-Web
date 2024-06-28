@@ -243,19 +243,17 @@ export class GatewayProfileComponent implements OnInit {
     const { ipcVendorName, ipcModelSeriesName, gatewayIconPath, isPartnerIpc } = data;
 
     if (gatewayIconPath) {
-      this.logo.set(`${gatewayIconPath}?timestamp=${Date.now()}`);
+      this.logo.set(`${gatewayIconPath}`);
       return;
     }
 
     if (!ipcVendorName || !ipcModelSeriesName) {
-      this.logo.set(`/assets/images/default_gateway.png?timestamp=${Date.now()}`);
+      this.logo.set(`/assets/images/default_gateway.png`);
       return;
     }
 
     if (isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      this.logo.set(
-        `/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelSeriesName}.png?timestamp=${Date.now()}`
-      );
+      this.logo.set(`/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelSeriesName}`);
     } else {
       this.logo.set('/assets/images/default_gateway.png');
     }
