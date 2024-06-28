@@ -100,7 +100,7 @@ export class OtDeviceDetailPageComponent {
   setTcpProfile = () => {
     const tcpInstance: IInstancesTcp = this.otDevice().setting.Instances;
     const tcpDevice: IDevices = this.otDevice().setting.Instances.TCP[0].Devices[0];
-    const tcpDeviceCommands = tcpDevice?.Commands;
+
     const profileInfo = {
       slaveId: tcpDevice.SlaveID,
       deviceName: tcpDevice.Name,
@@ -116,6 +116,8 @@ export class OtDeviceDetailPageComponent {
       iconPath: this.otDevice().iconPath
     };
     this.deviceProfileCtrl.setValue(profileInfo);
+    const tcpDeviceCommands = tcpDevice?.Commands;
+
     this.otTagsCtrl.setValue({
       generateTagType: 'import-edit',
       tags: [
@@ -125,9 +127,9 @@ export class OtDeviceDetailPageComponent {
           trigger: tagOptions.tagTrigger.find((v) => v.value === d.Trigger),
           dataType: tagOptions.tagTypeOpts.find((v) => v.value === d.DataType),
           function: tagOptions.tagFunctionOpts.find((v) => v.value === d.Function),
-          quantity: 1,
-          startAddress: 0,
-          interval: 1000
+          quantity: d.Quantity,
+          startAddress: d.StartingAddress,
+          interval: d.Interval
         }))
       ]
     });
@@ -157,6 +159,7 @@ export class OtDeviceDetailPageComponent {
     this.deviceProfileCtrl.setValue(profileInfo);
     if (this.isRtuProfile) {
       const rtuDeviceCommands = rtuDevice?.Commands;
+
       this.otTagsCtrl.setValue({
         generateTagType: 'import-edit',
         tags: [
@@ -166,9 +169,9 @@ export class OtDeviceDetailPageComponent {
             trigger: tagOptions.tagTrigger.find((v) => v.value === d.Trigger),
             dataType: tagOptions.tagTypeOpts.find((v) => v.value === d.DataType),
             function: tagOptions.tagFunctionOpts.find((v) => v.value === d.Function),
-            quantity: 1,
-            startAddress: 0,
-            interval: 1000
+            quantity: d.Quantity,
+            startAddress: d.StartingAddress,
+            interval: d.Interval
           }))
         ]
       });
