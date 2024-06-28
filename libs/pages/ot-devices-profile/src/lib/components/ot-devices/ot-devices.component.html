@@ -48,7 +48,20 @@
         @if (element.iconPath) {
           <img [src]="element.iconPath" alt="" />
         } @else {
-          <mat-icon color="primary" svgIcon="icon:default_ot_device"></mat-icon>
+          @switch (element.appClass) {
+            @case ('TEXOL') {
+              <img src="/assets/images/texol_213mm2-r1.png" alt="texol" />
+            }
+            @case ('Modbus RTU') {
+              <img src="/assets/images/modbus.png" alt="" />
+            }
+            @case ('Modbus TCP') {
+              <img src="/assets/images/modbus.png" alt="" />
+            }
+            @default {
+              <mat-icon color="primary" svgIcon="icon:default_ot_device"></mat-icon>
+            }
+          }
         }
       </td>
     </ng-container>
