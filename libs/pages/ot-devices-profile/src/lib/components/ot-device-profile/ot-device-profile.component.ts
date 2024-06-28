@@ -13,6 +13,7 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { NeUploadPreviewImageComponent } from '@neo-edge-web/components';
 import { OT_DEVICE_LOADING, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
+import { pick } from '@neo-edge-web/utils';
 import { ModbusRtuProfileComponent } from '../modbus-rtu-profile/modbus-rtu-profile.component';
 import { ModbusTcpProfileComponent } from '../modbus-tcp-profile/modbus-tcp-profile.component';
 
@@ -76,12 +77,50 @@ export class OtDeviceProfileComponent implements OnInit, ControlValueAccessor, V
       if (v?.iconPath) {
         this.deviceIconCtrl.setValue(v.iconPath);
       }
+      if (!this.appName()) {
+        return;
+      }
       if (SUPPORT_APPS_OT_DEVICE.MODBUS_RTU === this.appName()) {
-        this.rtuProfileCtrl.setValue(v);
+        this.rtuProfileCtrl.setValue({
+          basic: pick(v, 'deviceName', 'slaveId', 'description'),
+          advanced: pick(
+            v,
+            'initialDelay',
+            'delayBetweenPolls',
+            'responseTimeout',
+            'pollingRetries',
+            'swapByte',
+            'swapWord'
+          ),
+          connectionSetting: pick(v, 'mode', 'baudRate', 'dataBits', 'parity', 'stopBit')
+        });
       } else if (SUPPORT_APPS_OT_DEVICE.MODBUS_TCP === this.appName()) {
-        this.tcpProfileCtrl.setValue(v);
+        this.tcpProfileCtrl.setValue({
+          basic: pick(v, 'deviceName', 'slaveId', 'description'),
+          advanced: pick(
+            v,
+            'initialDelay',
+            'delayBetweenPolls',
+            'responseTimeout',
+            'pollingRetries',
+            'swapByte',
+            'swapWord'
+          )
+        });
       } else {
-        this.texolProfileCtrl.setValue(v);
+        this.texolProfileCtrl.setValue({
+          basic: pick(v, 'deviceName', 'slaveId', 'description'),
+          advanced: pick(
+            v,
+            'initialDelay',
+            'delayBetweenPolls',
+            'responseTimeout',
+            'pollingRetries',
+            'swapByte',
+            'swapWord'
+          ),
+          connectionSetting: pick(v, 'mode', 'baudRate', 'dataBits', 'parity', 'stopBit')
+        });
       }
     }
   }

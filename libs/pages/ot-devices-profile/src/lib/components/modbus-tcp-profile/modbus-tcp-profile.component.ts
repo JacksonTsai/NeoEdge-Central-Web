@@ -132,17 +132,17 @@ export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, Control
 
   writeValue(v) {
     if (v) {
-      this.deviceNameCtrl.setValue(v.deviceName);
-      this.slaveIdCtrl.setValue(v.slaveId);
-      this.descriptionCtrl.setValue(v.description);
-      this.ipAddressCtrl.setValue(v.ip);
-      this.portCtrl.setValue(v.port);
-      this.initialDelayCtrl.setValue(v.initialDelay);
-      this.delayBetweenPollsCtrl.setValue(v.delayBetweenPolls);
-      this.responseTimeoutCtrl.setValue(v.responseTimeout);
-      this.pollingRetriesCtrl.setValue(v.pollingRetries);
-      this.swapByteCtrl.setValue(v.swapByte);
-      this.swapWordCtrl.setValue(v.swapWord);
+      this.deviceNameCtrl.setValue(v.basic.deviceName);
+      this.slaveIdCtrl.setValue(v.basic.slaveId);
+      this.descriptionCtrl.setValue(v.basic.description);
+      this.ipAddressCtrl.setValue(v.basic.ip);
+      this.portCtrl.setValue(v.basic.port);
+      this.initialDelayCtrl.setValue(v.advanced.initialDelay);
+      this.delayBetweenPollsCtrl.setValue(v.advanced.delayBetweenPolls);
+      this.responseTimeoutCtrl.setValue(v.advanced.responseTimeout);
+      this.pollingRetriesCtrl.setValue(v.advanced.pollingRetries);
+      this.swapByteCtrl.setValue(v.advanced.swapByte);
+      this.swapWordCtrl.setValue(v.advanced.swapWord);
     }
   }
 

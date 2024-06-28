@@ -63,6 +63,14 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
 
   constructor() {
     effect(() => {
+      if (SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.appName()) {
+        this.setTexolDefault();
+      } else {
+        this.setRtuDefault();
+      }
+    });
+
+    effect(() => {
       if (this.isEditMode()) {
         this.deviceNameCtrl.enable();
         this.slaveIdCtrl.enable();
@@ -155,20 +163,20 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
 
   writeValue(v) {
     if (v) {
-      this.deviceNameCtrl.setValue(v.deviceName);
-      this.slaveIdCtrl.setValue(v.slaveId);
-      this.descriptionCtrl.setValue(v.description);
-      this.initialDelayCtrl.setValue(v.initialDelay);
-      this.delayBetweenPollsCtrl.setValue(v.delayBetweenPolls);
-      this.responseTimeoutCtrl.setValue(v.responseTimeout);
-      this.pollingRetriesCtrl.setValue(v.pollingRetries);
-      this.swapByteCtrl.setValue(v.swapByte);
-      this.swapWordCtrl.setValue(v.swapWord);
-      this.modeCtrl.setValue(this.options().rtuModeOpts.find((d) => d.value === v.mode));
-      this.baudRateCtrl.setValue(v.baudRate);
-      this.dataBitsCtrl.setValue(v.dataBits);
-      this.parityCtrl.setValue(this.options().rtuParityOpts.find((d) => d.value === v.parity));
-      this.stopBitCtrl.setValue(this.options().rtuStopBitsOpts.find((d) => d === v.stopBit));
+      this.deviceNameCtrl.setValue(v.basic.deviceName);
+      this.slaveIdCtrl.setValue(v.basic.slaveId);
+      this.descriptionCtrl.setValue(v.basic.description);
+      this.initialDelayCtrl.setValue(v.advanced.initialDelay);
+      this.delayBetweenPollsCtrl.setValue(v.advanced.delayBetweenPolls);
+      this.responseTimeoutCtrl.setValue(v.advanced.responseTimeout);
+      this.pollingRetriesCtrl.setValue(v.advanced.pollingRetries);
+      this.swapByteCtrl.setValue(v.advanced.swapByte);
+      this.swapWordCtrl.setValue(v.advanced.swapWord);
+      this.modeCtrl.setValue(this.options().rtuModeOpts.find((d) => d.value === v.connectionSetting.mode));
+      this.baudRateCtrl.setValue(v.connectionSetting.baudRate);
+      this.dataBitsCtrl.setValue(v.connectionSetting.dataBits);
+      this.parityCtrl.setValue(this.options().rtuParityOpts.find((d) => d.value === v.connectionSetting.parity));
+      this.stopBitCtrl.setValue(this.options().rtuStopBitsOpts.find((d) => d === v.connectionSetting.stopBit));
     }
   }
 
@@ -212,7 +220,18 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
       parity: this.options().rtuParityOpts[0],
       stopBit: this.options().rtuStopBitsOpts[0]
     });
-    this.form.updateValueAndValidity();
+    // this.form.updateValueAndValidity();
+  };
+
+  setRtuDefault = () => {
+    this.form.patchValue({
+      mode: this.options().rtuModeOpts[0],
+      baudRate: 19200,
+      dataBits: 8,
+      parity: this.options().rtuParityOpts[0],
+      stopBit: '1'
+    });
+    // this.form.updateValueAndValidity();
   };
 
   ngOnInit() {

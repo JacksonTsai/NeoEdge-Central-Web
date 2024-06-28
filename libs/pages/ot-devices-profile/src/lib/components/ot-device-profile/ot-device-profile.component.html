@@ -5,9 +5,17 @@
         <ne-upload-preview-image [isEditMode]="isEditMode()" formControlName="deviceIcon"></ne-upload-preview-image>
       </div>
       @if (otDeviceType.MODBUS_RTU === appName()) {
-        <ne-modbus-rtu-profile [isEditMode]="isEditMode()" formControlName="rtuProfile"></ne-modbus-rtu-profile>
+        <ne-modbus-rtu-profile
+          [appName]="appName()"
+          [isEditMode]="isEditMode()"
+          formControlName="rtuProfile"
+        ></ne-modbus-rtu-profile>
       } @else if (otDeviceType.TEXOL213MM2R1 === appName()) {
-        <ne-modbus-rtu-profile [isEditMode]="isEditMode()" formControlName="texolProfile"></ne-modbus-rtu-profile>
+        <ne-modbus-rtu-profile
+          [appName]="appName()"
+          [isEditMode]="isEditMode()"
+          formControlName="texolProfile"
+        ></ne-modbus-rtu-profile>
       } @else if (otDeviceType.MODBUS_TCP === appName()) {
         <ne-modbus-tcp-profile [isEditMode]="isEditMode()" formControlName="tcpProfile"></ne-modbus-tcp-profile>
       }

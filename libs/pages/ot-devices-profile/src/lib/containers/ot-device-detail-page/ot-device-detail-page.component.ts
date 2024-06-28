@@ -17,14 +17,17 @@ import {
   IRtuProfileForUI,
   ITcpProfileForUI,
   OT_DEVICE_LOADING,
+  PERMISSION,
   SUPPORT_APPS_OT_DEVICE,
   TEXOL_TAG_TYPE
 } from '@neo-edge-web/models';
 import { downloadCSV, isSwapByte, isSwapWord, swapType } from '@neo-edge-web/utils';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { OtDeviceProfileComponent, OtTagsComponent, SelectCommandTemplateComponent } from '../../components';
 import { OtTexolTagComponent } from '../../components/ot-texol-tag/ot-texol-tag.component';
 import { rtuOptions, tagOptions } from '../../configs';
 import { OtDeviceDetailStore } from '../../stores/ot-device-detail.store';
+
 @Component({
   selector: 'ne-ot-device-detail-page',
   standalone: true,
@@ -44,7 +47,8 @@ import { OtDeviceDetailStore } from '../../stores/ot-device-detail.store';
     MatTabsModule,
     ReactiveFormsModule,
     SelectCommandTemplateComponent,
-    MatDividerModule
+    MatDividerModule,
+    NgxPermissionsModule
   ],
   templateUrl: './ot-device-detail-page.component.html',
   styleUrl: './ot-device-detail-page.component.scss',
@@ -61,6 +65,7 @@ export class OtDeviceDetailPageComponent {
   otTagsCtrl = new UntypedFormControl('');
   selectTexolTemplateCtrl = new UntypedFormControl('');
   texolTagDoc = this.#otDeviceDetailStore.texolTagDoc;
+  permission = PERMISSION;
 
   constructor() {
     effect(

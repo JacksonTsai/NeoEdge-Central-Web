@@ -16,6 +16,7 @@
   </div>
   <div class="ot-devices-top-action__right">
     <button
+      *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
       id="ot-devcies-create-device-btn"
       type="button"
       mat-stroked-button
@@ -109,7 +110,12 @@
             Detail
           </button>
 
-          <button id="ot-devices-more-{{ element.id }}-btn" mat-icon-button [matMenuTriggerFor]="menu">
+          <button
+            *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+            id="ot-devices-more-{{ element.id }}-btn"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+          >
             <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
           </button>
 
