@@ -28,7 +28,18 @@
   }
 
   &__title {
-    font-weight: 500;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      margin-right: 8px;
+      color: $primary;
+    }
+  }
+
+  &__sub-content {
+    padding-left: 32px;
   }
 }
 

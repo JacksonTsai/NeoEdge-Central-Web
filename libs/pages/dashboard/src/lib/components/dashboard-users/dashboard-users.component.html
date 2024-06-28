@@ -2,18 +2,27 @@
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <h2 class="dashboard-card__title">User List {{ currentUsersList().length | formatCount }}</h2>
+        <h2 class="dashboard-card__title">User List {{ userFilter().length | formatCount }}</h2>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <ul class="dashboard-list">
-      @for (user of currentUsersList(); track user.id; let i = $index) {
-        <li class="dashboard-list__item">
-          <p class="dashboard-list__content">
-            <span>{{ i + 1 }}.</span>
-            {{ user.account }}
-          </p>
-        </li>
-      }
-    </ul>
+    @if (currentUsersList()) {
+      <ul class="dashboard-list">
+        @for (group of currentUsersList() | keyvalue; track group.key) {
+          <li class="dashboard-list__item">
+            <div class="dashboard-list__title">
+              <mat-icon svgIcon="icon:users"></mat-icon>
+              {{ group.key }}
+            </div>
+            <ul class="dashboard-list">
+              @for (user of group.value.list; track user.id) {
+                <li class="dashboard-list__sub-content">
+                  {{ user.account }}
+                </li>
+              }
+            </ul>
+          </li>
+        }
+      </ul>
+    }
   </mat-expansion-panel>
 </mat-accordion>
