@@ -126,7 +126,7 @@ export class GatewaysComponent implements AfterViewInit {
     }
 
     if (element.gatewayIconPath) {
-      return `${element.gatewayIconPath}?timestamp=${Date.now()}`;
+      return `${element.gatewayIconPath}`;
     }
 
     if (!element.ipcVendorName || !element.ipcModelSeriesName) {
@@ -134,7 +134,7 @@ export class GatewaysComponent implements AfterViewInit {
     }
 
     if (element.isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelSeriesName}.png?timestamp=${Date.now()}`;
+      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelName}.png`;
     } else {
       return '/assets/images/default_gateway.png';
     }
