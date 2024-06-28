@@ -13,7 +13,7 @@
       [responsive]="chartOptions()?.responsive"
       [plotOptions]="chartOptions()?.plotOptions"
     ></apx-chart>
-  } @else if (!gatewaysStatusList()) {
+  } @else if (chartOptions() && !gatewaysStatusList()) {
     <apx-chart
       [colors]="chartOptions()?.colors"
       [chart]="chartOptions()?.chart"
