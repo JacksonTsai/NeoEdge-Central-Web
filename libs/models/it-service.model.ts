@@ -21,6 +21,7 @@ export interface IItServiceDetailState {
 export interface IItService {
   appClass: string;
   appVersionId: number;
+  appId: number;
   createdAt: number;
   createdBy: string;
   id: number;
@@ -32,6 +33,7 @@ export interface IItService {
 
 export interface IItServiceDetail {
   appVersionId: number;
+  appId: number;
   name: string;
   setting: any;
 }
@@ -53,11 +55,7 @@ export interface ICreateItServiceResp {
   id: number;
 }
 
-export interface IGetItServiceDetailResp {
-  appVersionId: number;
-  name: string;
-  setting: any;
-}
+export type IGetItServiceDetailResp = IItServiceDetail;
 
 export interface IUpdateItServiceDetailReq {
   name: string;
