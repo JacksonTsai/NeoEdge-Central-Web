@@ -63,6 +63,10 @@ export class NeMapMultipleMarkComponent {
         this.coordinateList().forEach((item) => {
           this.addMarker(item);
         });
+      } else if (this.map && !this.coordinateList().length) {
+        if (this.markerLayer.length) {
+          this.clearMarker();
+        }
       }
     });
   }

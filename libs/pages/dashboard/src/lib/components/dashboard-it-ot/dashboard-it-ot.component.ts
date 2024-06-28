@@ -56,7 +56,7 @@ export class DashboardItOtComponent {
     // Set Data
     const data = this.dataTable();
     data.forEach((item: TITOTData) => {
-      const key = item.appVersionId;
+      const key = item.appId;
       result[key]?.list.push(item);
     });
     return result;

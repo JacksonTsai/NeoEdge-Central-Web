@@ -26,13 +26,15 @@ export class DashboardGatewayLocationComponent {
   gatewayStatusIcon: Record<number, string> = {
     0: '/assets/images/waiting.svg',
     1: '/assets/images/connected.svg',
-    2: '/assets/images/disconnected.svg'
+    2: '/assets/images/disconnected.svg',
+    3: '/assets/images/detach.svg'
   };
 
   gatewayStatusColor: Record<number, STATUS_COLORS> = {
     0: STATUS_COLORS.Waiting,
     1: STATUS_COLORS.Connected,
-    2: STATUS_COLORS.Disconnected
+    2: STATUS_COLORS.Disconnected,
+    3: STATUS_COLORS.Detach
   };
 
   coordinateList = computed<TCategoryCoordinate[]>(() => {

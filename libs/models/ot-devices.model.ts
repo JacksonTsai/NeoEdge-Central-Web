@@ -19,6 +19,7 @@ export interface IOtDevice<T> {
   id: number;
   name: string;
   appVersionId: number;
+  appId: number;
   appClass: string;
   iconPath: string;
   setting: IInstances<T>;
@@ -111,6 +112,7 @@ interface IOtProfile<T> {
   name: string;
   setting: IInstances<T>;
   appVersionId?: number;
+  appId: number;
   appClass: string;
   iconPath: string;
 }
