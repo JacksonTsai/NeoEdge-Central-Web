@@ -22,7 +22,7 @@ export const tagOptions = {
   enableOpts: [true, false],
   tagTypeOpts: [
     { displayName: 'Boolean', value: 'Boolean', functionEnable: [1, 2, 3, 4, 5, 15, 16], quantity: 1 },
-    { displayName: 'Int16', value: 'Int16', functionEnable: [3, 4, 6, 16], quantity: 11 },
+    { displayName: 'Int16', value: 'Int16', functionEnable: [3, 4, 6, 16], quantity: 1 },
     { displayName: 'Int32', value: 'Int32', functionEnable: [3, 4, 16], quantity: 2 },
     { displayName: 'Int64', value: 'Int64', functionEnable: [3, 4, 16], quantity: 4 },
     { displayName: 'Uint16', value: 'Uint16', functionEnable: [3, 4, 6, 16], quantity: 1 },
