@@ -206,7 +206,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
   tagTypeChange = (i: number) => {
     const tagType = this.tagTypeCtrl(i)?.value;
     this.quantityCtrl(i).setValue(tagType?.quantity ?? '');
-    if (tagType?.quantity) {
+    if (tagType?.quantity || !tagType?.quantityEnable) {
       this.quantityCtrl(i).disable();
     } else {
       this.quantityCtrl(i).enable();
@@ -256,11 +256,10 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
           Validators.min(0),
           Validators.max(65535)
         ]),
-        quantity: new UntypedFormControl({ value: data?.quantity ?? 1, disabled: !this.isEditMode() }, [
-          Validators.required,
-          Validators.min(0),
-          Validators.max(65535)
-        ]),
+        quantity: new UntypedFormControl(
+          { value: data?.quantity ?? 1, disabled: (!this.isEditMode() || !data?.dataType?.quantityEnable) ?? false },
+          [Validators.required, Validators.min(0), Validators.max(65535)]
+        ),
         trigger: new UntypedFormControl({
           value: data?.trigger ?? tagOptions.tagTrigger[0],
           disabled: !this.isEditMode()
