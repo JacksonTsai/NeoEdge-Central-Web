@@ -1,0 +1,26 @@
+<h1 mat-dialog-title class="gl-h6">Import Tags From CSV</h1>
+<mat-dialog-content>
+  <div class="upload-file">
+    <ne-upload-file accept=".csv" maxSize="128KB" [formControl]="tagFileCtrl"></ne-upload-file>
+  </div>
+  @for (result of importCsvResult(); track result) {
+    <ul>
+      <li color="danger">
+        {{ result }}
+      </li>
+    </ul>
+  }
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    [disabled]="tagFileCtrl.invalid || importCsvResult().length > 0"
+    (click)="onImport()"
+  >
+    Import
+  </button>
+</mat-dialog-actions>

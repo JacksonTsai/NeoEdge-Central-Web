@@ -34,7 +34,8 @@ import { ICsvTag, IOtTag, SUPPORT_APPS_OT_DEVICE, TEXOL_TAG_TYPE } from '@neo-ed
 import { csvToObj } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { merge, tap } from 'rxjs';
-import { tagOptions, texolFieldValidators } from '../../configs';
+import { tagOptions } from '../../configs';
+import { checkCsvTagsFormat } from '../../utils/csv-tag-validator.helper';
 
 @UntilDestroy()
 @Component({
@@ -260,44 +261,6 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
     return Object.values(fg.value).some((d) => d) ? null : { texolGeneralFormInvalid: true };
   };
 
-  checkTexolFieldValidators = (data: ICsvTag) => {
-    try {
-      return {
-        tag_name: data.tag_name ? true : false,
-        enable: texolFieldValidators.enable.test(data.enable),
-        data_type: texolFieldValidators.data_type.test(data.data_type),
-        function: texolFieldValidators.function.test(data.function),
-        start_address: isNaN(Number(data.start_address)) ? false : true,
-        quantity: isNaN(Number(data.quantity)) ? false : true,
-        trigger: texolFieldValidators.trigger.test(data.trigger),
-        interval: isNaN(Number(data.interval)) ? false : true
-      };
-    } catch {
-      return { texolCsvError: 'Field is missing' };
-    }
-  };
-
-  checkCsvFormat = (csvContent: ICsvTag[]) => {
-    if (Object.keys(csvContent[0]).length !== 8) {
-      this.importCsvResult.set(['Field is missing']);
-      return this.importCsvResult();
-    }
-
-    csvContent.map((item, index) => {
-      const checkResult = this.checkTexolFieldValidators(item);
-
-      if (checkResult && Object.values(checkResult).findIndex((d) => !d) > -1) {
-        this.importCsvResult.update((value) => {
-          const errorItem = Object.keys(checkResult)
-            .filter((key) => checkResult[key] === false)
-            .join(', ');
-          return [...value, `[Row ${index + 1}] invalid (${errorItem})`];
-        });
-      }
-    });
-    return this.importCsvResult();
-  };
-
   downloadCsvTagTemplate = () => {
     this.handleDownloadTagTemplateCsv.emit();
   };
@@ -307,7 +270,7 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
       if (d?.content) {
         this.importCsvResult.set([]);
         const csvContent = csvToObj(d.content);
-        this.checkCsvFormat(csvContent);
+        this.importCsvResult.set(checkCsvTagsFormat(csvContent));
         this.csvContent.set(csvContent);
         this.onChange();
       }

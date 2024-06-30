@@ -1,14 +1,31 @@
 <div class="ot-tags-wrapper">
   <div class="ot-tags-wrapper__top">
     <h2 class="card__title">Tags</h2>
-    <div>
+    <div class="ot-tags-wrapper__top__action">
       @if (isEditMode()) {
-        <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
+        <button
+          *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+          id="ot-tags-create-tag-btn"
+          type="button"
+          mat-stroked-button
+          color="primary"
+          (click)="addTag()"
+        >
           <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
           Add Tag
         </button>
+        <button
+          *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+          id="ot-tags-import-tag-btn"
+          type="button"
+          mat-stroked-button
+          color="primary"
+          (click)="importTags()"
+        >
+          <mat-icon color="primary" svgIcon="icon:import"></mat-icon>
+          Import Tags
+        </button>
       }
-
       <button
         id="ot-tags-export-tag-btn"
         type="button"
