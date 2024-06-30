@@ -210,8 +210,13 @@
             mat-icon-button
             color="warn"
             (click)="onRemoveTag(i)"
+            [disabled]="!isEditMode()"
           >
-            <mat-icon svgIcon="icon:delete_red"></mat-icon>
+            @if (isEditMode()) {
+              <mat-icon svgIcon="icon:delete_red"></mat-icon>
+            } @else {
+              <mat-icon svgIcon="icon:delete_disabled"></mat-icon>
+            }
           </button>
         </td>
       </ng-container>
