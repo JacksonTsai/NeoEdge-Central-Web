@@ -28,7 +28,7 @@ import {
   IT_SERVICE_DETAIL_MODE,
   TItServiceAwsField
 } from '@neo-edge-web/models';
-import { whitespaceValidator } from '@neo-edge-web/validators';
+import { fqdnValidator, whitespaceValidator } from '@neo-edge-web/validators';
 
 const IT_SERVICE_AWS_SCHEMA = 'tls';
 
@@ -178,7 +178,7 @@ export class ItServiceAwsComponent implements OnInit, ControlValueAccessor, Vali
         { value: '', disabled: true },
         [Validators.required, whitespaceValidator, this.validatorsService.bTypeValidator()]
       ],
-      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator]],
+      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator, fqdnValidator]],
       connection: [{ value: null, disabled: true }, [Validators.required]],
       keepAlive: [{ value: 60, disabled: true }, [Validators.required, Validators.min(30), Validators.max(300)]],
       qoS: [{ value: 1, disabled: true }, [Validators.required]]
