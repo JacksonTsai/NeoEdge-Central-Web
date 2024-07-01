@@ -1,0 +1,34 @@
+<mat-card>
+  <mat-card-header>
+    <h2 class="dashboard-card__title">
+      {{ type() === 'it' ? 'IT Service' : 'OT Device' }} Profile
+      {{ dataTableLength() | formatCount }}
+    </h2>
+  </mat-card-header>
+  <mat-card-content>
+    @if (category()) {
+      <ul class="app-sum">
+        @for (item of category() | keyvalue; track item.key) {
+          <li class="app-sum__item">
+            <span class="app-sum__title">
+              <img class="app-sum__title__img" [src]="item.value.setting.img" [alt]="item.value.name" />
+              <span class="app-sum__title__text">{{ item.value.name }}</span>
+            </span>
+            <span class="app-sum__content">{{ item.value.list.length }}</span>
+          </li>
+        }
+      </ul>
+    }
+  </mat-card-content>
+  <mat-card-actions class="dashboard-action">
+    <a
+      [routerLink]="type() === 'it' ? ['/neoflow/it-service-profile'] : ['/neoflow/ot-device-profile']"
+      color="primary"
+      mat-stroked-button
+      [id]="'dashboard-see-more-' + type() + '-detail'"
+    >
+      <span>See more Detail</span>
+      <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
+    </a>
+  </mat-card-actions>
+</mat-card>

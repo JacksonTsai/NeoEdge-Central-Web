@@ -2,6 +2,10 @@
   &__top {
     display: flex;
     justify-content: space-between;
+    &__action {
+      display: flex;
+      gap: 8px;
+    }
   }
   form {
     height: calc(100vh - 375px);
@@ -29,7 +33,7 @@
         width: 120px;
       }
       .interval-field {
-        width: 100px;
+        width: 130px;
       }
     }
   }

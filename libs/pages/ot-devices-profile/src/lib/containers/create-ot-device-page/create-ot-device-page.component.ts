@@ -86,16 +86,13 @@ export class CreateOtDevicePageComponent implements OnInit {
     return this.form.get(ctrl) as UntypedFormControl;
   };
 
-  setRTUInstance = (
-    otProfile: IRtuProfileForUI,
-    otTags: IOtTagsForUI[] | { generateTagType: string; tags: any }
-  ): IInstances<any> => {
+  setRTUInstance = (otProfile: IRtuProfileForUI, otTags: { generateTagType: string; tags: any }): IInstances<any> => {
     const rtuInstancesDevices = {
       Name: otProfile.basic.deviceName,
       SlaveID: otProfile.basic.slaveId
     };
-    if (Array.isArray(otTags)) {
-      const tags = otTags
+    if (Array.isArray(otTags.tags)) {
+      const tags = otTags.tags
         .map((d) => ({
           Function: d.function.value,
           StartingAddress: d.startAddress,
@@ -152,8 +149,11 @@ export class CreateOtDevicePageComponent implements OnInit {
     };
   };
 
-  setTCPInstance = (otProfile: ITcpProfileForUI, otTags: IOtTagsForUI[]): IInstances<any> => {
-    const tags = otTags
+  setTCPInstance = (
+    otProfile: ITcpProfileForUI,
+    otTags: { generateTagType: string; tags: IOtTagsForUI[] }
+  ): IInstances<any> => {
+    const tags = otTags.tags
       .map((d) => {
         return {
           Function: d.function.value,
@@ -204,7 +204,8 @@ export class CreateOtDevicePageComponent implements OnInit {
       profile: IRtuProfileForUI & ITcpProfileForUI;
     };
 
-    const otTags = this.otTagsCtrl.value as IOtTagsForUI[];
+    const otTags = this.otTagsCtrl.value;
+
     let profile = {};
     if (this.form.valid) {
       if (

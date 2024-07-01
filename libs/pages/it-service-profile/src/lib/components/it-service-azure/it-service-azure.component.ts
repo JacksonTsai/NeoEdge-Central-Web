@@ -28,7 +28,7 @@ import {
   IT_SERVICE_DETAIL_MODE,
   TItServiceAzureField
 } from '@neo-edge-web/models';
-import { whitespaceValidator } from '@neo-edge-web/validators';
+import { fqdnValidator, whitespaceValidator } from '@neo-edge-web/validators';
 
 @Component({
   selector: 'ne-it-service-azure',
@@ -160,7 +160,7 @@ export class ItServiceAzureComponent implements OnInit, ControlValueAccessor, Va
         { value: '', disabled: true },
         [Validators.required, whitespaceValidator, this.validatorsService.bTypeValidator()]
       ],
-      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator]],
+      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator, fqdnValidator]],
       connection: [{ value: null, disabled: true }, [Validators.required]]
     });
 

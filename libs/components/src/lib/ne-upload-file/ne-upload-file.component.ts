@@ -43,10 +43,16 @@ export class NeUploadFileComponent implements ControlValueAccessor {
       .split(',')
       .map((ext) => ext.slice(1));
   });
+
   public acceptText = computed<string>(() => {
     if (!this.accept()) return '';
     const arr = this.acceptArr();
-    const result = arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
+    let result = '';
+    if (arr.length === 1) {
+      result = arr[0];
+    } else {
+      result = arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
+    }
     return result;
   });
 

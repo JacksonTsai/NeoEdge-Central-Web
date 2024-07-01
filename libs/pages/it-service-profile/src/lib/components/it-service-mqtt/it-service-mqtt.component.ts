@@ -35,7 +35,7 @@ import {
   TItServiceAwsField,
   TItServiceAzureProtocol
 } from '@neo-edge-web/models';
-import { whitespaceValidator } from '@neo-edge-web/validators';
+import { fqdnValidator, whitespaceValidator } from '@neo-edge-web/validators';
 
 @Component({
   selector: 'ne-it-service-mqtt',
@@ -257,7 +257,7 @@ export class ItServiceMqttComponent implements OnInit, ControlValueAccessor, Val
         { value: '', disabled: true },
         [Validators.required, whitespaceValidator, this.validatorsService.bTypeValidator()]
       ],
-      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator]],
+      host: [{ value: '', disabled: true }, [Validators.required, whitespaceValidator, fqdnValidator]],
       connection: [{ value: null, disabled: true }, [Validators.required]],
       connectionCustom: [{ value: '', disabled: true }, []],
       keepAlive: [{ value: 60, disabled: true }, [Validators.required, Validators.min(30), Validators.max(300)]],

@@ -1,0 +1,40 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+}
+
+.map-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .ne-map {
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
+
+    ::ng-deep {
+      .leaflet-popup-content {
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+
+        img {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+}
+
+.edit-disabled {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $primary-bg;
+}

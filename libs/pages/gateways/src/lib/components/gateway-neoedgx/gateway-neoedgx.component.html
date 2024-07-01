@@ -1,13 +1,6 @@
 <div class="gw-neoedgex-wrapper">
   <div class="gw-neoedgex-info">
     <div class="item">
-      <div class="label">OS</div>
-      <div class="value">
-        {{ neoedgexInfo()?.neoedgeXOsName ? neoedgexInfo().neoedgeXOsName : '-' }}
-      </div>
-    </div>
-
-    <div class="item">
       <div class="label">Version</div>
       <div class="value">
         {{ neoedgexInfo()?.gatewaySystemInfo?.agentVersion ? neoedgexInfo().gatewaySystemInfo.agentVersion : '-' }}
@@ -34,7 +27,8 @@
       </div>
     </div>
   </div>
-  <div class="neoedgex-actions">
+
+  <div class="neoedgex-actions" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
     <button
       id="gw-neoedgex-upgrade-neoedgex-btn"
       type="button"
@@ -45,7 +39,9 @@
     >
       Upgrade NeoEdge X
     </button>
-    <button
+
+    <!-- TODO: 經討論後,暫時拿掉switch running mode-->
+    <!-- <button
       id="gw-neoedgex-switch-mode-btn"
       type="button"
       mat-stroked-button
@@ -57,7 +53,7 @@
         <mat-icon svgIcon="icon:switch_primary"></mat-icon>
       }
       Switch Gateway to {{ switchRunningMode }} Mode
-    </button>
+    </button> -->
 
     <button
       id="gw-neoedgex-detach-mode-btn"

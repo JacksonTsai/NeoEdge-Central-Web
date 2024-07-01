@@ -68,7 +68,7 @@ export class UserProfileComponent implements OnInit {
   onEditPassword = (userInfo: IGetUserProfileResp) => {
     let editPasswordDialogRef = this.#dialog.open(EditPasswordDialogComponent, {
       panelClass: 'med-dialog',
-      disableClose: false,
+      disableClose: true,
       autoFocus: true,
       restoreFocus: false,
       data: {
@@ -87,7 +87,7 @@ export class UserProfileComponent implements OnInit {
   onAddMfa = (userInfo: IGetUserProfileResp) => {
     let addMfaDialogRef = this.#dialog.open(AddMfaDialogComponent, {
       panelClass: 'med-dialog',
-      disableClose: false,
+      disableClose: true,
       autoFocus: false,
       restoreFocus: false,
       data: {
@@ -112,7 +112,7 @@ export class UserProfileComponent implements OnInit {
   onDisableMfa = (userInfo: IGetUserProfileResp) => {
     let confirmMfaDialogRef = this.#dialog.open(AuthenticationCodeComponent, {
       panelClass: 'med-dialog',
-      disableClose: false,
+      disableClose: true,
       autoFocus: true,
       restoreFocus: false,
       data: {

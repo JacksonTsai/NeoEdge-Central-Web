@@ -12,7 +12,7 @@ const PROXY_CONFIG = {
     pathRewrite: {},
     secure: false,
     ws: true,
-    headers: { origin: process.env.HEADER_ORIGIN ? process.env.HEADER_ORIGIN : '' },
+    headers: { origin: process.env.HEADER_ORIGIN ? process.env.HEADER_ORIGIN : 'localhost:80' },
     cookieDomainRewrite: { '*': 'localhost' }
   },
   '/neoedgex/advanced_app/texol/device_profile/**': {

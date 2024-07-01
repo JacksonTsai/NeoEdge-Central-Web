@@ -1,3 +1,4 @@
+export * from './chart-color.helper';
 export * from './csv.helper';
 export * from './datetimeFormat.helper';
 export * from './generateImg2Base64.helper';

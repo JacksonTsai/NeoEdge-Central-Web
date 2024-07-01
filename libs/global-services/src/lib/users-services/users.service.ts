@@ -30,7 +30,7 @@ export class UsersService {
         params.set('size', queryStr.size.toString());
       }
       if (queryStr?.accounts) {
-        params.set('names', queryStr.accounts);
+        params.set('accounts', queryStr.accounts);
       }
     }
     return this.#http.get(`${this.USERS_PATH}?${params}`).pipe(

@@ -9,7 +9,7 @@
   >
     <mat-icon svgIcon="icon:arrow_left" color="primary" aria-hidden="false" aria-label="Back to IT service"></mat-icon>
   </a>
-  <h1 class="page-title">IT Service Profile - {{ itServiceDetail()?.name }}</h1>
+  <h1 class="page-title">{{ itServiceDetail()?.name }}</h1>
 </div>
 <mat-card class="card">
   <mat-card-content>
@@ -65,7 +65,7 @@
     </section>
   </mat-card-content>
 </mat-card>
-<mat-card-actions class="profile-action">
+<mat-card-actions class="profile-action" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
   @if (!isEditMode()) {
     <div class="edit-btn">
       <button type="button" mat-stroked-button color="primary" class="btn" (click)="onEdit()" id="user-info-btn-edit">

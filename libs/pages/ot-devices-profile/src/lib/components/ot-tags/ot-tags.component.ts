@@ -12,7 +12,6 @@ import {
   signal
 } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   NG_VALIDATORS,
@@ -26,16 +25,19 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { IOtTag } from '@neo-edge-web/models';
+import { ICsvTag, IOtTag, PERMISSION } from '@neo-edge-web/models';
 import { whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { tap } from 'rxjs';
 import { tagOptions } from '../../configs';
+import { ImportTagsFromCsvDialogComponent } from '../impot-tags-from-csv-dialog/import-tags-from-csv-dialog.component';
 
 @UntilDestroy()
 @Component({
@@ -50,7 +52,8 @@ import { tagOptions } from '../../configs';
     MatButtonModule,
     MatSelectModule,
     MatOptionModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPermissionsModule
   ],
   templateUrl: './ot-tags.component.html',
   styleUrl: './ot-tags.component.scss',
@@ -67,9 +70,12 @@ import { tagOptions } from '../../configs';
 export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator {
   @Output() handleExportTags = new EventEmitter();
   #fb = inject(FormBuilder);
+  #dialog = inject(MatDialog);
   isEditMode = input(false);
   form!: UntypedFormGroup;
   dataSource = new MatTableDataSource<any>([]);
+  permission = PERMISSION;
+
   change: (value) => void;
   touch: (value) => void;
   protected tagOptions = tagOptions;
@@ -157,7 +163,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     if (!v) {
       return;
     }
-
+    this.generateTagType.set(v.generateTagType);
     if (v.generateTagType === 'import-edit') {
       this.tagsArray.clear();
       this.dataSource.data = [];
@@ -168,7 +174,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     }
   }
 
-  validate(control: AbstractControl) {
+  validate() {
     return this.tagsArray.invalid ? { formError: 'error' } : null;
   }
 
@@ -182,7 +188,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
 
   onChange() {
     if (this.change) {
-      this.change(this.tagsArray.getRawValue());
+      this.change({ generateTagType: this.generateTagType(), tags: this.tagsArray?.getRawValue() });
     }
   }
 
@@ -199,7 +205,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
   tagTypeChange = (i: number) => {
     const tagType = this.tagTypeCtrl(i)?.value;
     this.quantityCtrl(i).setValue(tagType?.quantity ?? '');
-    if (tagType?.quantity) {
+    if (tagType?.quantity || !tagType?.quantityEnable) {
       this.quantityCtrl(i).disable();
     } else {
       this.quantityCtrl(i).enable();
@@ -249,17 +255,18 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
           Validators.min(0),
           Validators.max(65535)
         ]),
-        quantity: new UntypedFormControl({ value: data?.quantity ?? 1, disabled: !this.isEditMode() }, [
-          Validators.required,
-          Validators.min(0),
-          Validators.max(65535)
-        ]),
+        quantity: new UntypedFormControl(
+          { value: data?.quantity ?? 1, disabled: (!this.isEditMode() || !data?.dataType?.quantityEnable) ?? false },
+          [Validators.required, Validators.min(0), Validators.max(65535)]
+        ),
         trigger: new UntypedFormControl({
           value: data?.trigger ?? tagOptions.tagTrigger[0],
           disabled: !this.isEditMode()
         }),
         interval: new UntypedFormControl({ value: data?.interval ?? 1000, disabled: !this.isEditMode() }, [
-          (Validators.required, Validators.min(100), Validators.max(86400000))
+          Validators.required,
+          Validators.min(100),
+          Validators.max(86400000)
         ])
       })
     );
@@ -285,6 +292,41 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
 
   exportTags = () => {
     this.handleExportTags.emit(this.tagsArray.getRawValue());
+  };
+
+  importTags = () => {
+    let editRoleDialogRef = this.#dialog.open(ImportTagsFromCsvDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false
+    });
+
+    editRoleDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe((tags) => {
+        if (tags && tags.length) {
+          this.tagsArray.clear();
+          this.dataSource.data = [];
+          tags.map((tagItem) => {
+            const tag = tagItem as ICsvTag;
+            const tagContent = {
+              tagName: tag.tag_name.trim(),
+              enable: tag.enable.toLowerCase() === 'false' ? false : true,
+              trigger: tagOptions.tagTrigger.find((v) => v.value === tag.trigger),
+              dataType: tagOptions.tagTypeOpts.find((v) => v.value === tag.data_type),
+              function: tagOptions.tagFunctionOpts.find((v) => v.value === Number(tag.function)),
+              quantity: Number(tag.quantity),
+              startAddress: Number(tag.start_address),
+              interval: Number(tag.interval)
+            } as IOtTag;
+            this.addTag(tagContent);
+          });
+
+          editRoleDialogRef = undefined;
+        }
+      });
   };
 
   ngOnInit() {

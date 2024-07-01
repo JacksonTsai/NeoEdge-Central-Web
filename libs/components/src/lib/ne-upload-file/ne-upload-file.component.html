@@ -4,16 +4,12 @@
     Upload File
   </button>
 } @else {
-  <button
-    type="button"
-    mat-stroked-button
-    (click)="inputFile.click()"
-    [disabled]="isDisabled()"
-    class="upload-file--uploaded"
-  >
-    <mat-icon svgIcon="icon:description"></mat-icon>
-    {{ fileInfo()?.name }}
-  </button>
+  <div class="upload-file--uploaded">
+    <button type="button" mat-stroked-button (click)="inputFile.click()" [disabled]="isDisabled()">
+      <mat-icon svgIcon="icon:description"></mat-icon>
+      {{ fileInfo()?.name }}
+    </button>
+  </div>
 }
 <ul class="upload-file__tip">
   @if (accept()) {
