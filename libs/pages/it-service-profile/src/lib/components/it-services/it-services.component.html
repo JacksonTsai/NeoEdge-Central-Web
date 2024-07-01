@@ -16,7 +16,14 @@
   </div>
 
   <div class="top-action__right">
-    <button id="it-service-create-btn" type="button" mat-stroked-button color="primary" (click)="onCreate()">
+    <button
+      *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+      id="it-service-create-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onCreate()"
+    >
       <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
       Create IT Service
     </button>
@@ -77,7 +84,12 @@
             Detail
           </a>
 
-          <button id="it-service-more-btn-{{ element.id }}" mat-icon-button [matMenuTriggerFor]="menu">
+          <button
+            *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+            id="it-service-more-btn-{{ element.id }}"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+          >
             <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
           </button>
 
