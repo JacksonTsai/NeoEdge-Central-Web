@@ -1,0 +1,6 @@
+<span class="last-date">
+  Last data updated: <em>{{ timestamp() | dateTimeFormat }}</em>
+</span>
+<button type="button" mat-icon-button (click)="onReload()" id="update-dashboard-date-button">
+  <mat-icon svgIcon="icon:sync_primary" aria-hidden="false" aria-label="Reload"></mat-icon>
+</button>

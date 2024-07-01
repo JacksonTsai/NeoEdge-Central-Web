@@ -23,8 +23,10 @@ import {
   ISupportAppsWithVersion,
   IT_SERVICE_DETAIL_LOADING,
   IT_SERVICE_DETAIL_MODE,
-  IUpdateItServiceDetailReq
+  IUpdateItServiceDetailReq,
+  PERMISSION
 } from '@neo-edge-web/models';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { ItServiceAwsComponent } from '../it-service-aws/it-service-aws.component';
 import { ItServiceAzureComponent } from '../it-service-azure/it-service-azure.component';
 import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.component';
@@ -42,7 +44,8 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
     NeSupportAppItemComponent,
     ItServiceAwsComponent,
     ItServiceAzureComponent,
-    ItServiceMqttComponent
+    ItServiceMqttComponent,
+    NgxPermissionsModule
   ],
   templateUrl: './it-service-detail.component.html',
   styleUrl: './it-service-detail.component.scss',
@@ -56,6 +59,7 @@ export class ItServiceDetailComponent {
   isLoading = input<IT_SERVICE_DETAIL_LOADING>();
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
+  permission = PERMISSION;
 
   mode = signal<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.VEIW);
   isEditMode = computed<boolean>(() => this.mode() === IT_SERVICE_DETAIL_MODE.EDIT);

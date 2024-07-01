@@ -1,43 +1,45 @@
-<h1 mat-dialog-title>Delete IT service</h1>
+<h1 mat-dialog-title>Delete IT Service Profile</h1>
 <mat-dialog-content class="full-fields">
   <div class="dialog-desc">
     <p>
-      You are going to delete IT Service (
+      You are going to delete IT Service Profile (
       <span color="danger">
         {{ data?.itService?.name ? data.itService.name : '-' }}
       </span>
       ).
     </p>
-    <p>Please input IT service name to confirm this action.</p>
+    <p>Please input IT Service Profile name to confirm this action.</p>
   </div>
 
-  <mat-form-field appearance="outline"
-                  floatLabel="always">
-    <mat-label>Input IT service name</mat-label>
-    <input matInput
-           [formControl]="nameCtrl"
-           type="text"
-           maxlength="128"
-           autocomplete="off"
-           id="it-service-delete-dialog-input" />
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Input IT Service Profile name</mat-label>
+    <input
+      matInput
+      [formControl]="nameCtrl"
+      type="text"
+      maxlength="128"
+      autocomplete="off"
+      id="it-service-delete-dialog-input"
+    />
     @if (nameCtrl.hasError('required')) {
-    <mat-error>Required.</mat-error>
+      <mat-error>Required.</mat-error>
     } @else if (nameCtrl.hasError('isNotMatch')) {
-    <mat-error>The input verification content is incorrect.</mat-error>
+      <mat-error>The input verification content is incorrect.</mat-error>
     }
   </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog__action">
   <div class="gl-fill-remaining-space"></div>
-  <button type="button"
-          mat-stroked-button
-          mat-dialog-close
-          id="it-service-delete-dialog-btn-cancel">Cancel</button>
-  <button type="button"
-          mat-raised-button
-          color="warn"
-          [disabled]="nameCtrl.invalid"
-          (click)="onDelete()"
-          id="it-service-delete-dialog-btn-delete">Delete</button>
+  <button type="button" mat-stroked-button mat-dialog-close id="it-service-delete-dialog-btn-cancel">Cancel</button>
+  <button
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="nameCtrl.invalid"
+    (click)="onDelete()"
+    id="it-service-delete-dialog-btn-delete"
+  >
+    Delete
+  </button>
 </mat-dialog-actions>

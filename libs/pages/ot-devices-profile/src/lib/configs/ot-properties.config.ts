@@ -21,17 +21,23 @@ export const texolOptions = {
 export const tagOptions = {
   enableOpts: [true, false],
   tagTypeOpts: [
-    { displayName: 'Boolean', value: 'Boolean', functionEnable: [1, 2, 3, 4, 5, 15, 16], quantity: 1 },
-    { displayName: 'Int16', value: 'Int16', functionEnable: [3, 4, 6, 16], quantity: 11 },
-    { displayName: 'Int32', value: 'Int32', functionEnable: [3, 4, 16], quantity: 2 },
-    { displayName: 'Int64', value: 'Int64', functionEnable: [3, 4, 16], quantity: 4 },
-    { displayName: 'Uint16', value: 'Uint16', functionEnable: [3, 4, 6, 16], quantity: 1 },
-    { displayName: 'Uint32', value: 'Uint32', functionEnable: [3, 4, 16], quantity: 2 },
-    { displayName: 'Uint64', value: 'Uint64', functionEnable: [3, 4, 16], quantity: 4 },
-    { displayName: 'Float', value: 'Float', functionEnable: [3, 4, 16], quantity: 2 },
-    { displayName: 'Double', value: 'Double', functionEnable: [3, 4, 16], quantity: 4 },
-    { displayName: 'String', value: 'String', functionEnable: [3, 4, 6, 16] },
-    { displayName: 'Raw', value: 'Raw', functionEnable: [1, 2, 3, 4, 5, 6, 15, 16] }
+    {
+      displayName: 'Boolean',
+      value: 'Boolean',
+      functionEnable: [1, 2, 3, 4, 5, 15, 16],
+      quantity: 1,
+      quantityEnable: false
+    },
+    { displayName: 'Int16', value: 'Int16', functionEnable: [3, 4, 6, 16], quantity: 1, quantityEnable: false },
+    { displayName: 'Int32', value: 'Int32', functionEnable: [3, 4, 16], quantity: 2, quantityEnable: false },
+    { displayName: 'Int64', value: 'Int64', functionEnable: [3, 4, 16], quantity: 4, quantityEnable: false },
+    { displayName: 'Uint16', value: 'Uint16', functionEnable: [3, 4, 6, 16], quantity: 1, quantityEnable: false },
+    { displayName: 'Uint32', value: 'Uint32', functionEnable: [3, 4, 16], quantity: 2, quantityEnable: false },
+    { displayName: 'Uint64', value: 'Uint64', functionEnable: [3, 4, 16], quantity: 4, quantityEnable: false },
+    { displayName: 'Float', value: 'Float', functionEnable: [3, 4, 16], quantity: 2, quantityEnable: false },
+    { displayName: 'Double', value: 'Double', functionEnable: [3, 4, 16], quantity: 4, quantityEnable: false },
+    { displayName: 'String', value: 'String', functionEnable: [3, 4, 6, 16], quantityEnable: true },
+    { displayName: 'Raw', value: 'Raw', functionEnable: [1, 2, 3, 4, 5, 6, 15, 16], quantityEnable: true }
   ],
 
   tagFunctionOpts: [

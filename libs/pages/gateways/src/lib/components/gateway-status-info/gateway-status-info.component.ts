@@ -63,15 +63,15 @@ export class GatewayStatusInfoComponent {
     }
 
     if (this.gatewayStatusInfo()?.gatewayIconPath) {
-      return `${this.gatewayStatusInfo().gatewayIconPath}?timestamp=${Date.now()}`;
+      return `${this.gatewayStatusInfo().gatewayIconPath}`;
     }
 
-    if (!this.gatewayStatusInfo().ipcVendorName || !this.gatewayStatusInfo().ipcModelSeriesName) {
+    if (!this.gatewayStatusInfo().ipcVendorName || !this.gatewayStatusInfo().ipcModelName) {
       return '/assets/images/default_gateway.png';
     }
 
     if (this.gatewayStatusInfo().isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelSeriesName}.png?timestamp=${Date.now()}`;
+      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelName}.png`;
     } else {
       return '/assets/images/default_gateway.png';
     }

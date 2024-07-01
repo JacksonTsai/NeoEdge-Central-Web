@@ -19,9 +19,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DEVICE_TYPE, IInstancesRtu, IInstancesTcp, IOtDevice, OT_DEVICES_LOADING } from '@neo-edge-web/models';
+import {
+  DEVICE_TYPE,
+  IInstancesRtu,
+  IInstancesTcp,
+  IOtDevice,
+  OT_DEVICES_LOADING,
+  PERMISSION
+} from '@neo-edge-web/models';
 import { datetimeFormat } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { debounceTime, tap } from 'rxjs';
 
 @UntilDestroy()
@@ -39,7 +47,8 @@ import { debounceTime, tap } from 'rxjs';
     MatCardModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    NgxPermissionsModule
   ],
   templateUrl: './ot-devices.component.html',
   styleUrl: './ot-devices.component.scss',
@@ -56,6 +65,7 @@ export class OtDevicesComponent implements AfterViewInit {
   page = input<number>(0);
   size = input<number>(0);
   devicesLength = input<number>(0);
+  permission = PERMISSION;
   displayedColumns: string[] = [
     'no',
     'name',
@@ -148,7 +158,7 @@ export class OtDevicesComponent implements AfterViewInit {
       const deviceData = element as IOtDevice<IInstancesRtu>;
       if ('General.profile' === deviceData.setting?.Instances.RTU[0].Devices[0].Profile.Name) {
         if (deviceData.setting?.Instances.RTU[0].Devices[0]?.Profile?.Domains?.length > 0) {
-          return deviceData.setting?.Instances.RTU[0]?.Devices[0]?.Profile?.Domains?.json(',') ?? '-';
+          return deviceData.setting?.Instances.RTU[0]?.Devices[0]?.Profile?.Domains?.join(',') ?? '-';
         }
       } else {
         const texolProfileSplit = deviceData.setting?.Instances.RTU[0].Devices[0]?.Profile?.Name.split('.');

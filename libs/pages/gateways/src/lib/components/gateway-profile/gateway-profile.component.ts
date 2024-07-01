@@ -243,19 +243,17 @@ export class GatewayProfileComponent implements OnInit {
     const { ipcVendorName, ipcModelSeriesName, gatewayIconPath, isPartnerIpc } = data;
 
     if (gatewayIconPath) {
-      this.logo.set(`${gatewayIconPath}?timestamp=${Date.now()}`);
+      this.logo.set(`${gatewayIconPath}`);
       return;
     }
 
     if (!ipcVendorName || !ipcModelSeriesName) {
-      this.logo.set(`/assets/images/default_gateway.png?timestamp=${Date.now()}`);
+      this.logo.set(`/assets/images/default_gateway.png`);
       return;
     }
 
     if (isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      this.logo.set(
-        `/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelSeriesName}.png?timestamp=${Date.now()}`
-      );
+      this.logo.set(`/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelSeriesName}`);
     } else {
       this.logo.set('/assets/images/default_gateway.png');
     }
@@ -358,7 +356,7 @@ export class GatewayProfileComponent implements OnInit {
     return new UntypedFormGroup({
       id: new UntypedFormControl(data?.id ?? ''),
       name: new UntypedFormControl(data?.name ?? ''),
-      colorCode: new UntypedFormControl(data?.colorCode ?? ''),
+      colorCode: new UntypedFormControl(data?.colorType ?? ''),
       selected: new UntypedFormControl(selected)
     });
   };

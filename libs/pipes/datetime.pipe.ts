@@ -6,7 +6,7 @@ import { datetimeFormat } from '../utils/src';
   standalone: true
 })
 export class dateTimeFormatPipe implements PipeTransform {
-  transform(value: number): string {
-    return datetimeFormat(value);
+  transform(value: number, showTime: boolean = true): string {
+    return datetimeFormat(value, null, showTime);
   }
 }

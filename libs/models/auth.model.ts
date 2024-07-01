@@ -12,6 +12,7 @@ export interface IAuthState {
   userProjects: IProjectByIdResp[];
   currentProjectId: number;
   currentProjectName: string;
+  currentProjectShortName: string;
 }
 
 export interface ILoginReq {
@@ -80,6 +81,7 @@ export interface IGetUserProfileResp extends IUserProfile {
   account: string;
   timeZone: string;
   defaultProjectName: string;
+  defaultProjectShortName: string;
   role: IUserRole;
 }
 

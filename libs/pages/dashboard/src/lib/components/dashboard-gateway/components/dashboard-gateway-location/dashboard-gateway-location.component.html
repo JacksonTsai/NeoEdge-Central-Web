@@ -1,0 +1,20 @@
+<h3 class="dashboard-card__subtitle">Gateway Location</h3>
+<mat-chip-listbox aria-label="Status filter" [multiple]="true" (change)="onChangeFilter($event)">
+  @for (status of statusList(); track status.value) {
+    <mat-chip-option [value]="status.value" selected [id]="'dashboard-gateway-location-' + status.value">
+      <mat-icon class="status-filter__icon" matChipAvatar [svgIcon]="'icon:' + status.icon"></mat-icon>
+      {{ status.label }}
+    </mat-chip-option>
+  }
+</mat-chip-listbox>
+<div class="map-wrapper">
+  <ne-map-multiple-mark
+    [coordinateList]="coordinateList()"
+    width="100%"
+    height="300px"
+    [isEdit]="coordinateList().length"
+  ></ne-map-multiple-mark>
+  @if (!coordinateList().length) {
+    <p class="map-wrapper__tip">No Data</p>
+  }
+</div>

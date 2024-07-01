@@ -13,10 +13,10 @@
             type="text"
             maxlength="128"
           />
-          @if (deviceNameCtrl.hasError('required')) {
+          @if (deviceNameCtrl.hasError('required') || deviceNameCtrl.hasError('whitespace')) {
             <mat-error>Required.</mat-error>
-          } @else if (deviceNameCtrl.hasError('whitespace')) {
-            <mat-error>The value not allow whitespace.</mat-error>
+          } @else if (deviceNameCtrl.hasError('format')) {
+            <mat-error>Only allow A-Z, a-z, 0-9, -, _</mat-error>
           }
         </mat-form-field>
 
@@ -74,6 +74,8 @@
           <input id="ot-devcie-modbus-tcp-initial-delay-input" matInput formControlName="initialDelay" type="number" />
           @if (initialDelayCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
+          } @else if (initialDelayCtrl.hasError('max') || initialDelayCtrl.hasError('min')) {
+            <mat-error>0 ~ 30000.</mat-error>
           }
         </mat-form-field>
 
@@ -87,6 +89,8 @@
           />
           @if (delayBetweenPollsCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
+          } @else if (delayBetweenPollsCtrl.hasError('max') || delayBetweenPollsCtrl.hasError('min')) {
+            <mat-error>0 ~ 500.</mat-error>
           }
         </mat-form-field>
 
@@ -100,6 +104,8 @@
           />
           @if (responseTimeoutCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
+          } @else if (responseTimeoutCtrl.hasError('max') || responseTimeoutCtrl.hasError('min')) {
+            <mat-error>10 ~ 120000.</mat-error>
           }
         </mat-form-field>
 
@@ -113,6 +119,8 @@
           />
           @if (pollingRetriesCtrl.hasError('required')) {
             <mat-error>Required.</mat-error>
+          } @else if (pollingRetriesCtrl.hasError('max') || pollingRetriesCtrl.hasError('min')) {
+            <mat-error>0 ~ 5.</mat-error>
           }
         </mat-form-field>
 

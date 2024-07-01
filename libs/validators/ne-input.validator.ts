@@ -158,7 +158,7 @@ export const bTypeValidator = (control: AbstractControl): ValidationErrors | nul
  *                        if the value does not match the pattern, otherwise null.
  */
 export const fqdnValidator = (control: AbstractControl): ValidationErrors | null => {
-  const pattern = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  const pattern = /^(?=.{1,253}$)(([a-zA-Z0-9](-?[a-zA-Z0-9])*)\.)+[a-zA-Z]{2,}$/;
   const value = control.value;
 
   if (!value || typeof value !== 'string') {

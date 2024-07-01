@@ -183,7 +183,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     ])
       .pipe(
         untilDestroyed(this),
-        map(([{ userProfile }, { currentProjectName }, { userProjects }]) => {
+        map(([{ userProfile }, { currentProjectName, currentProjectShortName }, { userProjects }]) => {
           if (!userProfile) {
             return;
           }
@@ -199,7 +199,7 @@ export class ShellComponent implements OnInit, OnDestroy {
               return hasCurrentProject || hasUserPermission;
             });
             newMenu = newMenu.map((d) =>
-              d.displayName === '{USER_PROJECT_NAME}' ? { ...d, displayName: currentProjectName } : d
+              d.displayName === '{USER_PROJECT_NAME}' ? { ...d, displayName: currentProjectShortName } : d
             );
             this.#globalStore.dispatch(updateMenu({ menuTree: newMenu }));
           }

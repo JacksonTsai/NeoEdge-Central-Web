@@ -38,6 +38,8 @@ export interface Gateway {
   isPartnerIpc: number;
   ipcModelSeriesName: string;
   labels: IGatewayLabels[] | null;
+  latitude: number;
+  longitude: number;
 }
 
 export type TableQueryForGateways = ITableQuery & { names?: string; labelIds?: number };
@@ -58,7 +60,8 @@ export interface IAddGatewayResp {
 export enum GATEWAY_STATUE {
   Waiting = 0,
   Connected = 1,
-  Disconnected = 2
+  Disconnected = 2,
+  Detach = 3
 }
 
 export enum GATEWAY_SSH_MODE {

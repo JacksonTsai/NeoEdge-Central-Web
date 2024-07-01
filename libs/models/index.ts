@@ -1,6 +1,8 @@
 export * from './auth.model';
+export * from './chart.model';
 export * from './company.model';
 export * from './create-ot-devices.model';
+export * from './dashboard.model';
 export * from './dateFormat.model';
 export * from './gateway-detail.mode';
 export * from './gateways.model';
@@ -8,6 +10,7 @@ export * from './ipcs.model';
 export * from './it-service-setting.model';
 export * from './it-service.model';
 export * from './language.model';
+export * from './map.model';
 export * from './ne-menu.model';
 export * from './ot-device-detail.model';
 export * from './ot-devices.model';

@@ -11,7 +11,8 @@ export enum COMPANY_STATUS {
 }
 
 export interface IGatewayLabels {
-  colorCode: string;
+  colorCode?: string;
+  colorType?: string;
   name: string;
   id?: number;
 }

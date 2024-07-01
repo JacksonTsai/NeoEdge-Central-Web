@@ -16,6 +16,7 @@
   </div>
   <div class="ot-devices-top-action__right">
     <button
+      *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
       id="ot-devcies-create-device-btn"
       type="button"
       mat-stroked-button
@@ -47,7 +48,20 @@
         @if (element.iconPath) {
           <img [src]="element.iconPath" alt="" />
         } @else {
-          <mat-icon color="primary" svgIcon="icon:default_ot_device"></mat-icon>
+          @switch (element.appClass) {
+            @case ('TEXOL') {
+              <img src="/assets/images/texol_213mm2-r1.png" alt="texol" />
+            }
+            @case ('Modbus RTU') {
+              <img src="/assets/images/modbus.png" alt="" />
+            }
+            @case ('Modbus TCP') {
+              <img src="/assets/images/modbus.png" alt="" />
+            }
+            @default {
+              <mat-icon color="primary" svgIcon="icon:default_ot_device"></mat-icon>
+            }
+          }
         }
       </td>
     </ng-container>
@@ -82,7 +96,7 @@
     </ng-container>
 
     <ng-container matColumnDef="createdBy">
-      <th mat-header-cell *matHeaderCellDef>Creator</th>
+      <th mat-header-cell *matHeaderCellDef>Create By</th>
       <td mat-cell *matCellDef="let element">
         {{ element?.createdBy ? element?.createdBy : '-' }}
       </td>
@@ -109,7 +123,12 @@
             Detail
           </button>
 
-          <button id="ot-devices-more-{{ element.id }}-btn" mat-icon-button [matMenuTriggerFor]="menu">
+          <button
+            *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+            id="ot-devices-more-{{ element.id }}-btn"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+          >
             <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
           </button>
 

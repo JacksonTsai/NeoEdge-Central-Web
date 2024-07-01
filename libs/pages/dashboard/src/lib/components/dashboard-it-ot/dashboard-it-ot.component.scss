@@ -1,0 +1,46 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+}
+
+mat-card-content {
+  padding-top: 16px;
+}
+
+.app-sum {
+  padding: 0;
+  margin: 0;
+  margin-bottom: 16px;
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-radius: 4px;
+
+    &:hover {
+      background-color: $hover-gray;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+
+    &__img {
+      margin-right: 8px;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+  }
+
+  &__content {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 1;
+  }
+}

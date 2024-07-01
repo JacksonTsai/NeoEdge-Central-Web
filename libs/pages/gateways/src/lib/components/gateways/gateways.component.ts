@@ -30,11 +30,12 @@ import {
   Gateway,
   IGatewayLabels,
   NEED_SYNC_GATEWAYS,
+  PERMISSION,
   TableQueryForGateways
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { combineLatest, debounceTime, map, startWith, tap } from 'rxjs';
-
 @UntilDestroy()
 @Component({
   selector: 'ne-gateways',
@@ -54,7 +55,8 @@ import { combineLatest, debounceTime, map, startWith, tap } from 'rxjs';
     MatTooltipModule,
     MatSelectModule,
     SafePipe,
-    MatChipsModule
+    MatChipsModule,
+    NgxPermissionsModule
   ],
   templateUrl: './gateways.component.html',
   styleUrl: './gateways.component.scss',
@@ -66,6 +68,7 @@ export class GatewaysComponent implements AfterViewInit {
   @Output() handleManageLabels = new EventEmitter();
   @Output() handleGatewayDetail = new EventEmitter<Gateway>();
 
+  permission = PERMISSION;
   gatewayDataTable = input<Gateway[]>([]);
   page = input<number>(0);
   size = input<number>(0);
@@ -126,7 +129,7 @@ export class GatewaysComponent implements AfterViewInit {
     }
 
     if (element.gatewayIconPath) {
-      return `${element.gatewayIconPath}?timestamp=${Date.now()}`;
+      return `${element.gatewayIconPath}`;
     }
 
     if (!element.ipcVendorName || !element.ipcModelSeriesName) {
@@ -134,7 +137,7 @@ export class GatewaysComponent implements AfterViewInit {
     }
 
     if (element.isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelSeriesName}.png?timestamp=${Date.now()}`;
+      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelName}.png`;
     } else {
       return '/assets/images/default_gateway.png';
     }

@@ -1,14 +1,31 @@
 <div class="ot-tags-wrapper">
   <div class="ot-tags-wrapper__top">
     <h2 class="card__title">Tags</h2>
-    <div>
+    <div class="ot-tags-wrapper__top__action">
       @if (isEditMode()) {
-        <button id="ot-tags-create-tag-btn" type="button" mat-stroked-button color="primary" (click)="addTag()">
+        <button
+          *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+          id="ot-tags-create-tag-btn"
+          type="button"
+          mat-stroked-button
+          color="primary"
+          (click)="addTag()"
+        >
           <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
           Add Tag
         </button>
+        <button
+          *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+          id="ot-tags-import-tag-btn"
+          type="button"
+          mat-stroked-button
+          color="primary"
+          (click)="importTags()"
+        >
+          <mat-icon color="primary" svgIcon="icon:import"></mat-icon>
+          Import Tags
+        </button>
       }
-
       <button
         id="ot-tags-export-tag-btn"
         type="button"
@@ -44,10 +61,8 @@
               type="text"
               maxlength="64"
             />
-            @if (tagNameCtrl(i).hasError('required')) {
+            @if (tagNameCtrl(i).hasError('required') || tagNameCtrl(i).hasError('whitespace')) {
               <mat-error>Required.</mat-error>
-            } @else if (tagNameCtrl(i).hasError('whitespace')) {
-              <mat-error>The value not allow whitespace.</mat-error>
             }
           </mat-form-field>
         </td>
@@ -179,6 +194,8 @@
             />
             @if (intervalCtrl(i).hasError('required')) {
               <mat-error>Required.</mat-error>
+            } @else if (intervalCtrl(i).hasError('max') || intervalCtrl(i).hasError('min')) {
+              <mat-error> 0 ~ 86400000 </mat-error>
             }
           </mat-form-field>
         </td>
@@ -193,8 +210,13 @@
             mat-icon-button
             color="warn"
             (click)="onRemoveTag(i)"
+            [disabled]="!isEditMode()"
           >
-            <mat-icon svgIcon="icon:delete_red"></mat-icon>
+            @if (isEditMode()) {
+              <mat-icon svgIcon="icon:delete_red"></mat-icon>
+            } @else {
+              <mat-icon svgIcon="icon:delete_disabled"></mat-icon>
+            }
           </button>
         </td>
       </ng-container>
