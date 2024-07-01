@@ -356,7 +356,7 @@ export class GatewayProfileComponent implements OnInit {
     return new UntypedFormGroup({
       id: new UntypedFormControl(data?.id ?? ''),
       name: new UntypedFormControl(data?.name ?? ''),
-      colorCode: new UntypedFormControl(data?.colorCode ?? ''),
+      colorCode: new UntypedFormControl(data?.colorType ?? ''),
       selected: new UntypedFormControl(selected)
     });
   };
