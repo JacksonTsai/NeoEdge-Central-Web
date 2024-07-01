@@ -116,13 +116,6 @@ export class GatewaysComponent implements AfterViewInit {
     this.handleGatewayDetail.emit(row);
   };
 
-  getImagePath = (element) => {
-    if (!element.ipcVendorName || !element.ipcModelSeriesName) {
-      return '/assets/images/default_gateway.png';
-    }
-    return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelSeriesName}.png `;
-  };
-
   logo = (element) => {
     if (!element) {
       return '';
@@ -132,7 +125,7 @@ export class GatewaysComponent implements AfterViewInit {
       return `${element.gatewayIconPath}`;
     }
 
-    if (!element.ipcVendorName || !element.ipcModelSeriesName) {
+    if (!element.ipcVendorName || !element.ipcModelName) {
       return '/assets/images/default_gateway.png';
     }
 
