@@ -20,7 +20,7 @@
           App Service Name
         }
       </mat-label>
-      <input matInput formControlName="name" type="text" maxlength="128" />
+      <input matInput formControlName="name" type="text" maxlength="64" />
       @if (nameCtrl.hasError('required')) {
         <mat-error>Required.</mat-error>
       } @else if (nameCtrl.hasError('whitespace') || nameCtrl.hasError('format')) {
