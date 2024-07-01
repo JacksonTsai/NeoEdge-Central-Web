@@ -240,20 +240,20 @@ export class GatewayProfileComponent implements OnInit {
   };
 
   setDeviceImagePath = (data: TMetaData) => {
-    const { ipcVendorName, ipcModelSeriesName, gatewayIconPath, isPartnerIpc } = data;
+    const { ipcVendorName, ipcModelName, gatewayIconPath, isPartnerIpc } = data;
 
     if (gatewayIconPath) {
       this.logo.set(`${gatewayIconPath}`);
       return;
     }
 
-    if (!ipcVendorName || !ipcModelSeriesName) {
+    if (!ipcVendorName || !ipcModelName) {
       this.logo.set(`/assets/images/default_gateway.png`);
       return;
     }
 
     if (isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      this.logo.set(`/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelSeriesName}`);
+      this.logo.set(`/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelName}.png`);
     } else {
       this.logo.set('/assets/images/default_gateway.png');
     }
