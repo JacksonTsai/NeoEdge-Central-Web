@@ -12,7 +12,8 @@ const initialState: IAuthState = {
   userProfile: null,
   userProjects: [],
   currentProjectId: 0,
-  currentProjectName: ''
+  currentProjectName: '',
+  currentProjectShortName: ''
 };
 
 const decodeJWT = (jwt: string): IJwtInfo | null => {
@@ -47,7 +48,8 @@ export const authReducer = createReducer(
       userProfile,
       userProjects,
       currentProjectId: userProfile?.defaultProjectId,
-      currentProjectName: userProfile?.defaultProjectName
+      currentProjectName: userProfile?.defaultProjectName,
+      currentProjectShortName: userProfile?.defaultProjectShortName ?? userProfile?.defaultProjectName ?? ''
     };
   }),
   on(AuthAction.loginFail, (state) => ({ ...state, isLoginSuccess: false, isAuthVerifying: false })),
