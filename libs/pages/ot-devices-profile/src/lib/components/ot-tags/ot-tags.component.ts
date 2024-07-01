@@ -263,13 +263,13 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
           value: data?.trigger ?? tagOptions.tagTrigger[0],
           disabled: !this.isEditMode()
         }),
-        interval: new UntypedFormControl({ value: data?.interval ?? 1000, disabled: !this.isEditMode() }, [
-          Validators.required,
-          Validators.min(100),
-          Validators.max(86400000)
-        ])
+        interval: new UntypedFormControl(
+          { value: data?.interval ?? 1000, disabled: !this.isEditMode() || data.trigger.value === 'DataChange' },
+          [Validators.required, Validators.min(100), Validators.max(86400000)]
+        )
       })
     );
+
     this.dataSource.data = [
       ...this.dataSource.data,
       {
