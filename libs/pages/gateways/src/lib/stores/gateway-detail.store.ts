@@ -98,7 +98,10 @@ export const GatewayDetailStore = signalStore(
           tap(() => patchState(store, { isLoading: GATEWAY_LOADING.SWITCH_RUNNING_MODE })),
           switchMap(({ mode, name }) =>
             gwDetailService.switchRunningMode$(store.gatewayId(), mode, name).pipe(
-              tap(() => patchState(store, { isLoading: GATEWAY_LOADING.REFRESH_GATEWAY_DETAIL })),
+              tap(() => {
+                patchState(store, { isLoading: GATEWAY_LOADING.REFRESH_GATEWAY_DETAIL });
+                dialog.closeAll();
+              }),
               catchError(() => EMPTY)
             )
           )
