@@ -96,7 +96,7 @@ export class OtDeviceProfileComponent implements OnInit, ControlValueAccessor, V
         });
       } else if (SUPPORT_APPS_OT_DEVICE.MODBUS_TCP === this.appName()) {
         this.tcpProfileCtrl.setValue({
-          basic: pick(v, 'deviceName', 'slaveId', 'description'),
+          basic: pick(v, 'deviceName', 'slaveId', 'ip', 'port', 'description'),
           advanced: pick(
             v,
             'initialDelay',

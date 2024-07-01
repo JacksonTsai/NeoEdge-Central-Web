@@ -232,7 +232,7 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
         }
       } else {
         if ('create' === this.createTypeCtrl.value) {
-          this.change({ generateTagType: 'create', tags: {} });
+          this.change({ generateTagType: 'create', tags: [] });
         } else {
           this.change({
             generateTagType: 'import-edit',

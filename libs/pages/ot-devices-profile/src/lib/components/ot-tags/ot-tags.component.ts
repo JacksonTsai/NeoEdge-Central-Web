@@ -12,7 +12,6 @@ import {
   signal
 } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   NG_VALIDATORS,
@@ -164,7 +163,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     if (!v) {
       return;
     }
-
+    this.generateTagType.set(v.generateTagType);
     if (v.generateTagType === 'import-edit') {
       this.tagsArray.clear();
       this.dataSource.data = [];
@@ -175,7 +174,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
     }
   }
 
-  validate(control: AbstractControl) {
+  validate() {
     return this.tagsArray.invalid ? { formError: 'error' } : null;
   }
 
@@ -189,7 +188,7 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
 
   onChange() {
     if (this.change) {
-      this.change(this.tagsArray.getRawValue());
+      this.change({ generateTagType: this.generateTagType(), tags: this.tagsArray?.getRawValue() });
     }
   }
 

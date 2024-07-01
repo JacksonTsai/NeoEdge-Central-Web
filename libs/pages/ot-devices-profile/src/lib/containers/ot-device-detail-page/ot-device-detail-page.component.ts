@@ -215,7 +215,6 @@ export class OtDeviceDetailPageComponent {
           texolMode: TEXOL_TAG_TYPE.Dedicated,
           tags: { ...otTexol.tags }
         });
-        // this.texolTagType.set(otTexol);
       }
     }
   };
@@ -371,18 +370,18 @@ export class OtDeviceDetailPageComponent {
 
     if (this.deviceProfileCtrl.valid && this.otTagsCtrl.valid) {
       if (SUPPORT_APPS_OT_DEVICE.MODBUS_RTU === appName) {
-        const otTags = this.otTagsCtrl.value as IOtTagsForUI[];
+        const otTags = this.otTagsCtrl.value;
         profile = {
           name: deviceProfile.profile.basic.deviceName,
           description: deviceProfile.profile?.basic?.description ?? '',
-          setting: { ...this.setRTUInstance(deviceProfile.profile, otTags) }
+          setting: { ...this.setRTUInstance(deviceProfile.profile, otTags.tags) }
         };
       } else if (SUPPORT_APPS_OT_DEVICE.MODBUS_TCP === appName) {
-        const otTags = this.otTagsCtrl.value as IOtTagsForUI[];
+        const otTags = this.otTagsCtrl.value;
         profile = {
           name: deviceProfile.profile.basic.deviceName,
           description: deviceProfile.profile?.basic?.description ?? '',
-          setting: { ...this.setTCPInstance(deviceProfile.profile, otTags) }
+          setting: { ...this.setTCPInstance(deviceProfile.profile, otTags.tags) }
         };
       } else {
         if ('texol-dedicated' === this.selectTexolTemplateCtrl.value.generateTagType) {
