@@ -26,7 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { IRtuProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
-import { positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
+import { bTypeValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
 import { rtuOptions, texolOptions } from '../../configs';
@@ -220,7 +220,6 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
       parity: this.options().rtuParityOpts[0],
       stopBit: this.options().rtuStopBitsOpts[0]
     });
-    // this.form.updateValueAndValidity();
   };
 
   setRtuDefault = () => {
@@ -231,12 +230,11 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
       parity: this.options().rtuParityOpts[0],
       stopBit: '1'
     });
-    // this.form.updateValueAndValidity();
   };
 
   ngOnInit() {
     this.form = this.#fb.group({
-      deviceName: [{ value: '', disabled: false }, [Validators.required, whitespaceValidator]],
+      deviceName: [{ value: '', disabled: false }, [Validators.required, whitespaceValidator, bTypeValidator]],
       slaveId: [{ value: 1, disabled: false }, [Validators.required, positiveIntegerValidator]],
       description: [{ value: '', disabled: false }],
 

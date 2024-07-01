@@ -10,7 +10,6 @@ import {
   input
 } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   NG_VALIDATORS,
@@ -26,7 +25,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ITcpProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
-import { ipValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
+import { bTypeValidator, ipValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { tap } from 'rxjs';
 
@@ -146,7 +145,7 @@ export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, Control
     }
   }
 
-  validate(control: AbstractControl) {
+  validate() {
     return this.form.invalid ? { formError: 'error' } : null;
   }
 
@@ -179,7 +178,7 @@ export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, Control
 
   ngOnInit() {
     this.form = this.#fb.group({
-      deviceName: [{ value: '', disabled: false }, [Validators.required, whitespaceValidator]],
+      deviceName: [{ value: '', disabled: false }, [Validators.required, whitespaceValidator, bTypeValidator]],
       slaveId: [{ value: 1, disabled: false }, [Validators.required, positiveIntegerValidator]],
       description: [{ value: '', disabled: false }],
       ipAddress: [{ value: '', disabled: false }, [Validators.required, ipValidator]],

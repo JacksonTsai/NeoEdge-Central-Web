@@ -264,7 +264,9 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
           disabled: !this.isEditMode()
         }),
         interval: new UntypedFormControl({ value: data?.interval ?? 1000, disabled: !this.isEditMode() }, [
-          (Validators.required, Validators.min(100), Validators.max(86400000))
+          Validators.required,
+          Validators.min(100),
+          Validators.max(86400000)
         ])
       })
     );

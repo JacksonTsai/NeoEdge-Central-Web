@@ -61,10 +61,8 @@
               type="text"
               maxlength="64"
             />
-            @if (tagNameCtrl(i).hasError('required')) {
+            @if (tagNameCtrl(i).hasError('required') || tagNameCtrl(i).hasError('whitespace')) {
               <mat-error>Required.</mat-error>
-            } @else if (tagNameCtrl(i).hasError('whitespace')) {
-              <mat-error>The value not allow whitespace.</mat-error>
             }
           </mat-form-field>
         </td>
@@ -196,6 +194,8 @@
             />
             @if (intervalCtrl(i).hasError('required')) {
               <mat-error>Required.</mat-error>
+            } @else if (intervalCtrl(i).hasError('max') || intervalCtrl(i).hasError('min')) {
+              <mat-error> 0 ~ 86400000 </mat-error>
             }
           </mat-form-field>
         </td>
