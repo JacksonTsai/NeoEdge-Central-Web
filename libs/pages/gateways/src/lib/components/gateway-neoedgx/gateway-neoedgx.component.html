@@ -27,7 +27,8 @@
       </div>
     </div>
   </div>
-  <div class="neoedgex-actions">
+
+  <div class="neoedgex-actions" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
     <button
       id="gw-neoedgex-upgrade-neoedgex-btn"
       type="button"
