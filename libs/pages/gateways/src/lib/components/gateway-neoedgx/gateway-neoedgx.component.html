@@ -40,33 +40,34 @@
       Upgrade NeoEdge X
     </button>
 
-    <!-- TODO: 經討論後,暫時拿掉switch running mode-->
-    <!-- <button
-      id="gw-neoedgex-switch-mode-btn"
-      type="button"
-      mat-stroked-button
-      color="primary"
-      (click)="onSwitchRunMode()"
-      [disabled]="isDetachMode() || isWaitingOnBoard()"
-    >
-      @if (!isDetachMode) {
+    @if (isDetachOnDesired) {
+      <button
+        id="gw-neoedgex-switch-mode-btn"
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="onSwitchToActiveMode()"
+        [disabled]="isWaitingOnBoard()"
+      >
         <mat-icon svgIcon="icon:switch_primary"></mat-icon>
-      }
-      Switch Gateway to {{ switchRunningMode }} Mode
-    </button> -->
+        Switch Gateway to Active Mode
+      </button>
+    }
 
-    <button
-      id="gw-neoedgex-detach-mode-btn"
-      type="button"
-      mat-stroked-button
-      color="primary"
-      (click)="onDetachMode()"
-      [disabled]="isDetachMode() || isWaitingOnBoard()"
-    >
-      @if (!isDetachMode() && !isWaitingOnBoard()) {
-        <mat-icon svgIcon="icon:detach_primary"></mat-icon>
-      }
-      Detach Gateway
-    </button>
+    @if (isActiveOnDesired) {
+      <button
+        id="gw-neoedgex-detach-mode-btn"
+        type="button"
+        mat-stroked-button
+        color="primary"
+        [disabled]="isWaitingOnBoard()"
+        (click)="onDetachMode()"
+      >
+        @if (!isWaitingOnBoard()) {
+          <mat-icon svgIcon="icon:detach_primary"></mat-icon>
+        }
+        Detach Gateway
+      </button>
+    }
   </div>
 </div>

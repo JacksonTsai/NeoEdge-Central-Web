@@ -24,18 +24,20 @@ export class GatewayNeoedgxComponent {
   gwRunningMode = GW_RUNNING_MODE;
   permission = PERMISSION;
 
-  get switchRunningMode() {
-    return GW_RUNNING_MODE.Active === this.neoedgexInfo()?.desiredMode
-      ? GW_RUNNING_MODE[GW_RUNNING_MODE.Passive]
-      : GW_RUNNING_MODE[GW_RUNNING_MODE.Active];
+  get isActiveOnDesired() {
+    return GW_RUNNING_MODE.Active === this.neoedgexInfo()?.desiredMode;
+  }
+
+  get isDetachOnDesired() {
+    return GW_RUNNING_MODE.Detach === this.neoedgexInfo()?.desiredMode;
   }
 
   onUpgradeNeoedgex = () => {
     this.handleUpgradeNeoEdgeX.emit();
   };
 
-  onSwitchRunMode = () => {
-    this.handleSwitchRunningMode.emit(GW_RUNNING_MODE[this.switchRunningMode]);
+  onSwitchToActiveMode = () => {
+    this.handleSwitchRunningMode.emit(GW_RUNNING_MODE.Active);
   };
 
   onDetachMode = () => {

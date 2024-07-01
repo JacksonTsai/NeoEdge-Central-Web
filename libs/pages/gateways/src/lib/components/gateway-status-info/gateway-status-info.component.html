@@ -65,6 +65,7 @@
         Action
         <mat-icon svgIcon="icon:down_primary"></mat-icon>
       </button>
+
       <mat-menu #gwAction="matMenu">
         <button
           id="gw-status-info-action-rebooot"
@@ -74,14 +75,16 @@
         >
           <span>Reboot Gateway</span>
         </button>
+
         <button id="gw-status-info-action-delete" mat-menu-item (click)="onDeleteGateway()">
           <span>Delete Gateway</span>
         </button>
+
         <button
           id="gw-status-info-action-Detach"
           mat-menu-item
           (click)="onDetach()"
-          [disabled]="isDetachMode() || isWaitingOnBoard()"
+          [disabled]="isDetachOnDesired || isWaitingOnBoard()"
         >
           <span>Detach Gateway</span>
         </button>
@@ -90,10 +93,10 @@
           id="gw-status-info-action-switch-mode"
           type="button"
           mat-menu-item
-          (click)="onSwitchRunMode(switchRunningMode)"
-          [disabled]="isDetachMode() || isWaitingOnBoard()"
+          (click)="onSwitchActiveMode()"
+          [disabled]="isActiveOnDesired || isWaitingOnBoard()"
         >
-          Switch Gateway to {{ switchRunningMode }} Mode
+          Switch Gateway to Active Mode
         </button>
 
         <button

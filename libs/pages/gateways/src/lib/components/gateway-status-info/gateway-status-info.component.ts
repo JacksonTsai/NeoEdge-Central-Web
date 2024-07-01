@@ -51,10 +51,12 @@ export class GatewayStatusInfoComponent {
   booleanStatus = BOOLEAN_STATUS;
   permission = PERMISSION;
 
-  get switchRunningMode() {
-    return GW_RUNNING_MODE.Active === this.gatewayStatusInfo().currentMode
-      ? GW_RUNNING_MODE[GW_RUNNING_MODE.Passive]
-      : GW_RUNNING_MODE[GW_RUNNING_MODE.Active];
+  get isActiveOnDesired() {
+    return GW_RUNNING_MODE.Active === this.gatewayStatusInfo()?.desiredMode;
+  }
+
+  get isDetachOnDesired() {
+    return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.desiredMode;
   }
 
   logo = computed(() => {
@@ -106,8 +108,8 @@ export class GatewayStatusInfoComponent {
     this.handleDeleteGateway.emit();
   };
 
-  onSwitchRunMode = (mode: string) => {
-    this.handleSwitchRunningMode.emit({ mode: GW_RUNNING_MODE[mode] });
+  onSwitchActiveMode = () => {
+    this.handleSwitchRunningMode.emit({ mode: GW_RUNNING_MODE.Active });
   };
 
   onGetInstallCommand = () => {

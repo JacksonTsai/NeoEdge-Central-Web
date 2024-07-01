@@ -140,7 +140,8 @@ export class GatewayDetailPageComponent {
       ipcModelName,
       isPartnerIpc,
       ipcModelSeriesName,
-      connectionStatusUpdatedAt
+      connectionStatusUpdatedAt,
+      desiredMode
     } = this.gwDetailStore.gatewayDetail();
     return {
       name,
@@ -154,7 +155,8 @@ export class GatewayDetailPageComponent {
       gatewaySystemInfoUpdateAt,
       isPartnerIpc,
       ipcModelSeriesName,
-      connectionStatusUpdatedAt
+      connectionStatusUpdatedAt,
+      desiredMode
     };
   });
 

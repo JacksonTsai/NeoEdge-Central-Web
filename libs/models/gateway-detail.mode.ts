@@ -121,6 +121,7 @@ export type TGatewayStatusInfo = Pick<
   | 'isPartnerIpc'
   | 'ipcModelSeriesName'
   | 'connectionStatusUpdatedAt'
+  | 'desiredMode'
 >;
 
 export type TNeoEdgeXInfo = Pick<
