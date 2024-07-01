@@ -11,7 +11,7 @@
             matInput
             formControlName="deviceName"
             type="text"
-            maxlength="128"
+            maxlength="64"
           />
           @if (deviceNameCtrl.hasError('required') || deviceNameCtrl.hasError('whitespace')) {
             <mat-error>Required.</mat-error>
