@@ -29,11 +29,8 @@ import { UsersStore } from '../../stores/users.store';
         </div>
       } @else {
         <ul>
-          <li>The user won't be able to access this organization with NeoEdge</li>
-          <li>
-            All data of the suspended member will be retained. The member's account status will be labelled as
-            'Inactive'.
-          </li>
+          <li>The user will be able to access this organization with NeoEdge</li>
+          <li>The member's account status will be labelled as 'Active'.</li>
         </ul>
       }
     </mat-dialog-content>

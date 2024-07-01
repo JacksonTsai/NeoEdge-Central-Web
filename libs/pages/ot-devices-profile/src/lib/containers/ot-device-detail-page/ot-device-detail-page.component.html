@@ -40,7 +40,7 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="ot-detail-action">
+  <div *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]" class="ot-detail-action">
     @if (!isEditMode()) {
       <div class="edit-btn">
         <button id="ot-device-detail-edit-btn" type="button" mat-stroked-button color="primary" (click)="onEdit()">

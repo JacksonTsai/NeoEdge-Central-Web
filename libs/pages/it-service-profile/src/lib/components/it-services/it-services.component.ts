@@ -19,11 +19,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { IItService, IT_SERVICE_LOADING, TableQueryForItService } from '@neo-edge-web/models';
+import { IItService, IT_SERVICE_LOADING, PERMISSION, TableQueryForItService } from '@neo-edge-web/models';
 import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, tap } from 'rxjs';
 
+import { NgxPermissionsModule } from 'ngx-permissions';
 @UntilDestroy()
 @Component({
   selector: 'ne-it-services',
@@ -40,7 +41,8 @@ import { debounceTime, tap } from 'rxjs';
     MatTableModule,
     MatPaginatorModule,
     MatMenuModule,
-    dateTimeFormatPipe
+    dateTimeFormatPipe,
+    NgxPermissionsModule
   ],
   templateUrl: './it-services.component.html',
   styleUrl: './it-services.component.scss',
@@ -52,6 +54,7 @@ export class ItServicesComponent implements AfterViewInit {
   @Output() handleDelete = new EventEmitter<IItService>();
   @Output() handleCopy = new EventEmitter<IItService>();
 
+  permission = PERMISSION;
   dataTable = input<IItService[]>();
   dataLength = input<number>(0);
   page = input<number>(0);

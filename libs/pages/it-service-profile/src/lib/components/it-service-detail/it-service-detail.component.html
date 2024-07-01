@@ -65,7 +65,7 @@
     </section>
   </mat-card-content>
 </mat-card>
-<mat-card-actions class="profile-action">
+<mat-card-actions class="profile-action" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
   @if (!isEditMode()) {
     <div class="edit-btn">
       <button type="button" mat-stroked-button color="primary" class="btn" (click)="onEdit()" id="user-info-btn-edit">

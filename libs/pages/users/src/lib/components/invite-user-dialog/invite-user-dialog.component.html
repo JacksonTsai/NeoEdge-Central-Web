@@ -3,19 +3,20 @@
   <form [formGroup]="form">
     <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Email (Login ID)</mat-label>
-      <input matInput formControlName="account" type="text" maxlength="128" />
+      <input matInput formControlName="account" type="text" maxlength="64" />
       @if (form.get('account')?.hasError('required')) {
-      <mat-error>Required.</mat-error>
-      } @if (form.get('account')?.hasError('email') && !form.get('account')?.hasError('required')) {
-      <mat-error> Please enter a valid email address </mat-error>
+        <mat-error>Required.</mat-error>
+      }
+      @if (form.get('account')?.hasError('email') && !form.get('account')?.hasError('required')) {
+        <mat-error> Please enter a valid email address </mat-error>
       }
     </mat-form-field>
 
     <mat-form-field class="" appearance="outline" floatLabel="always">
       <mat-label>Role</mat-label>
       <mat-select formControlName="role">
-        @for (role of roleOpt ; track role.id) {
-        <mat-option [value]="role"> {{ role.name }} </mat-option>
+        @for (role of roleOpt; track role.id) {
+          <mat-option [value]="role"> {{ role.name }} </mat-option>
         }
       </mat-select>
     </mat-form-field>
