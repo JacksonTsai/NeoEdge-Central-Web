@@ -1,7 +1,12 @@
 <h1 mat-dialog-title class="gl-h6">Import Tags From CSV</h1>
 <mat-dialog-content>
   <div class="upload-file">
-    <ne-upload-file accept=".csv" maxSize="128KB" [formControl]="tagFileCtrl"></ne-upload-file>
+    <ne-upload-file
+      accept=".csv"
+      acceptDesc="Support CSV file format"
+      maxSize="128KB"
+      [formControl]="tagFileCtrl"
+    ></ne-upload-file>
   </div>
   @for (result of importCsvResult(); track result) {
     <ul>
