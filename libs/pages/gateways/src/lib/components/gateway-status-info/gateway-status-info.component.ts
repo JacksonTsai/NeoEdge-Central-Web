@@ -10,7 +10,6 @@ import {
   GATEWAY_SSH_MODE,
   GATEWAY_STATUE,
   GW_CURRENT_MODE,
-  GW_RUNNING_MODE,
   PERMISSION,
   TGatewayStatusInfo
 } from '@neo-edge-web/models';
@@ -35,7 +34,6 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 })
 export class GatewayStatusInfoComponent {
   @Output() handelFetchGwHwInfo = new EventEmitter();
-  @Output() handleSwitchRunningMode = new EventEmitter<{ mode: GW_RUNNING_MODE }>();
   @Output() handleDetachMode = new EventEmitter();
   @Output() handleDeleteGateway = new EventEmitter();
   @Output() handleGetInstallCommand = new EventEmitter();
@@ -50,12 +48,6 @@ export class GatewayStatusInfoComponent {
   gwStatus = GATEWAY_STATUE;
   booleanStatus = BOOLEAN_STATUS;
   permission = PERMISSION;
-
-  get switchRunningMode() {
-    return GW_RUNNING_MODE.Active === this.gatewayStatusInfo().currentMode
-      ? GW_RUNNING_MODE[GW_RUNNING_MODE.Passive]
-      : GW_RUNNING_MODE[GW_RUNNING_MODE.Active];
-  }
 
   logo = computed(() => {
     if (!this.gatewayStatusInfo()) {
@@ -104,10 +96,6 @@ export class GatewayStatusInfoComponent {
 
   onDeleteGateway = () => {
     this.handleDeleteGateway.emit();
-  };
-
-  onSwitchRunMode = (mode: string) => {
-    this.handleSwitchRunningMode.emit({ mode: GW_RUNNING_MODE[mode] });
   };
 
   onGetInstallCommand = () => {

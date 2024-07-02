@@ -15,7 +15,6 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 })
 export class GatewayNeoedgxComponent {
   @Output() handleUpgradeNeoEdgeX = new EventEmitter();
-  @Output() handleSwitchRunningMode = new EventEmitter<GW_RUNNING_MODE>();
   @Output() handleDetachMode = new EventEmitter();
   isDetachMode = input(false);
   isWaitingOnBoard = input(false);
@@ -32,10 +31,6 @@ export class GatewayNeoedgxComponent {
 
   onUpgradeNeoedgex = () => {
     this.handleUpgradeNeoEdgeX.emit();
-  };
-
-  onSwitchRunMode = () => {
-    this.handleSwitchRunningMode.emit(GW_RUNNING_MODE[this.switchRunningMode]);
   };
 
   onDetachMode = () => {
