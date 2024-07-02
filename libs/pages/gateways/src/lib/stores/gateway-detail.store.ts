@@ -5,10 +5,12 @@ import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } 
 import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-stores';
 import {
   GATEWAY_LOADING,
+  GATEWAY_SSH_STATUS,
   GW_RUNNING_MODE,
   GW_WS_TYPE,
   GatewayDetailState,
   IEditGatewayProfileReq,
+  IGatewaySSHWsResp,
   IGatewaySystemInfo,
   IRebootReq
 } from '@neo-edge-web/models';
@@ -23,6 +25,10 @@ const initialState: GatewayDetailState = {
   gatewayDetail: null,
   isLoading: GATEWAY_LOADING.NONE,
   labels: [],
+  sshStatus: {
+    current: null,
+    ws: null
+  },
   wsRoomName: ''
 };
 
@@ -151,6 +157,26 @@ export const GatewayDetailStore = signalStore(
             )
           )
         )
+      ),
+      getSSHStatus: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            gwDetailService.getGatewaySSH$(store.gatewayId()).pipe(
+              tap((d) => {
+                patchState(store, { sshStatus: { ...store.sshStatus(), current: d }, isLoading: GATEWAY_LOADING.NONE });
+              }),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      updateSSHStatus: rxMethod<{ enabled: GATEWAY_SSH_STATUS }>(
+        pipe(
+          tap(() => patchState(store, { isLoading: GATEWAY_LOADING.CONNECT_SSH })),
+          switchMap(({ enabled }) =>
+            gwDetailService.updateGatewaySSH$(store.gatewayId(), enabled).pipe(catchError(() => EMPTY))
+          )
+        )
       )
     })
   ),
@@ -180,7 +206,16 @@ export const GatewayDetailStore = signalStore(
               gatewaySystemInfo: { ...data.gatewaySystemInfo },
               gatewaySystemInfoUpdateAt: data.gatewaySystemInfoUpdateAt
             }
-          })
+          }),
+        ssh: (data: IGatewaySSHWsResp) => {
+          patchState(store, {
+            sshStatus: {
+              ...store.sshStatus(),
+              ws: { ...data }
+            },
+            isLoading: GATEWAY_LOADING.REFRESH_SSH
+          });
+        }
       };
 
       return {

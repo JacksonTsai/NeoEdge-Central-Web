@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  GATEWAY_SSH_STATUS,
   GW_RUNNING_MODE,
   IEditGatewayProfileReq,
   IGetGatewaysDetailResp,
@@ -155,6 +156,46 @@ export class GatewayDetailService {
       }),
       catchError((err) => {
         this.#snackBar.open('Setting failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  getGatewaySSH$ = (gatewayId: number) => {
+    return this.#http.get(`${this.GATEWAYS_PATH}/${gatewayId}/ssh-status`).pipe(
+      map((resp) => {
+        return resp;
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Get gateway SSH Satus failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  updateGatewaySSH$ = (gatewayId: number, enable: GATEWAY_SSH_STATUS) => {
+    return this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/command/ssh`, { enable }).pipe(
+      tap(() => {
+        this.#snackBar.open(
+          `Setting SSH Status: ${enable === GATEWAY_SSH_STATUS.ENABLED ? 'enabled' : 'disabled'} success.`,
+          'X',
+          {
+            horizontalPosition: 'end',
+            verticalPosition: 'bottom',
+            duration: 5000
+          }
+        );
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Setting SSH Status failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
