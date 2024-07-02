@@ -162,10 +162,6 @@ export class GatewayDetailPageComponent {
     // TODO: This part will be implemented in a later scope.
   };
 
-  onSwitchRunningMode = (event: GW_RUNNING_MODE) => {
-    this.gwDetailStore.switchRunningMode({ mode: event });
-  };
-
   onDetachMode = () => {
     if (!this.gwDetailStore?.gatewayDetail()?.name) {
       return;

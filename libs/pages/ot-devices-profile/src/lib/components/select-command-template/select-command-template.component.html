@@ -22,7 +22,12 @@
 
         @if ('import' === createTypeCtrl.value) {
           <div class="import-csv">
-            <ne-upload-file accept=".csv" maxSize="128KB" [formControl]="tagFileCtrl"></ne-upload-file>
+            <ne-upload-file
+              accept=".csv"
+              maxSize="128KB"
+              acceptDesc="Support CSV file format"
+              [formControl]="tagFileCtrl"
+            ></ne-upload-file>
           </div>
 
           @for (result of importCsvResult(); track result) {

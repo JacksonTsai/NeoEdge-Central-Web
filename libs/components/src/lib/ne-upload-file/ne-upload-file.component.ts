@@ -36,6 +36,7 @@ export class NeUploadFileComponent implements ControlValueAccessor {
   public accept = input<string | null>(null);
   public isDisabled = signal(false);
   public fileInfo = signal<IItServiceCaFile | null>(null);
+  public acceptDesc? = input<string>(null);
 
   private acceptArr = computed<string[]>(() => {
     if (!this.accept()) return [];
@@ -45,15 +46,18 @@ export class NeUploadFileComponent implements ControlValueAccessor {
   });
 
   public acceptText = computed<string>(() => {
+    if (this.acceptDesc()) {
+      return this.acceptDesc();
+    }
     if (!this.accept()) return '';
     const arr = this.acceptArr();
-    let result = '';
+    let result = 'Support ';
     if (arr.length === 1) {
-      result = arr[0];
+      result = result + arr[0];
     } else {
-      result = arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
+      result = result + arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1];
     }
-    return result;
+    return result + ' file format';
   });
 
   private parseSize = computed<number | null>(() => {

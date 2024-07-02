@@ -9,7 +9,6 @@
           [isWaitingOnBoard]="isWaitingOnBoard"
           [isConnected]="isConnected"
           (handelFetchGwHwInfo)="onFetchGwHwInfo()"
-          (handleSwitchRunningMode)="onSwitchRunningMode($event)"
           (handleDetachMode)="onDetachMode()"
           (handleDeleteGateway)="onDeleteGateway()"
           (handleGetInstallCommand)="onGetInstallCommand()"
@@ -56,7 +55,6 @@
                 [isWaitingOnBoard]="isWaitingOnBoard"
                 [isConnected]="isConnected"
                 (handleUpgradeNeoEdgeX)="onUpgradeNeoEdgeX()"
-                (handleSwitchRunningMode)="onSwitchRunningMode($event)"
                 (handleDetachMode)="onDetachMode()"
               ></ne-gateway-neoedgx>
             </fieldset>
