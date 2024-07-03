@@ -2,10 +2,16 @@
 
 :host {
   display: block;
+  height: 100%;
+}
+
+mat-card {
+  height: 100%;
 }
 
 mat-card-content {
   padding-top: 16px;
+  flex: 1 1 auto;
 }
 
 .app-sum {
