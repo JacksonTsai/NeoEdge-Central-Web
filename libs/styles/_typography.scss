@@ -1,5 +1,17 @@
+%link {
+  color: $primary;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
 p {
   a {
-    color: $primary;
+    @extend %link;
   }
+}
+
+a.text-link {
+  @extend %link;
 }
