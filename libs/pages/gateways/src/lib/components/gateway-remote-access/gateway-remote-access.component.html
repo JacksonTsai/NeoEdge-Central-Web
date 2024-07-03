@@ -15,7 +15,13 @@
   @if (!isWaiting() && sshStatus()?.current?.connectionStatus) {
     <p class="ssh-msg">
       Gateway ssh service is running and ready for connection, Click ssh to establish
-      <a [href]="sshStatus()?.current?.sshServer + '?token=' + sshStatus()?.current?.token" target="_blank">ssh</a>
+      <a
+        [href]="sshStatus()?.current?.sshServer + '?token=' + sshStatus()?.current?.token"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        ssh
+      </a>
       connection.
     </p>
   }
