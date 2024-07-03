@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject } 
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import * as AuthStore from '@neo-edge-web/auth-store';
 import { GatewayDetailService } from '@neo-edge-web/global-services';
 import {
   GATEWAY_LOADING,
@@ -10,10 +11,13 @@ import {
   GATEWAY_STATUE,
   GW_RUNNING_MODE,
   IEditGatewayProfileReq,
+  PERMISSION,
   TGatewayStatusInfo,
   TNeoEdgeXInfo
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Store } from '@ngrx/store';
+import { NgxPermissionsModule, NgxPermissionsService } from 'ngx-permissions';
 import { delay, of, tap } from 'rxjs';
 import {
   DeleteGatewayConfirmDialogComponent,
@@ -45,7 +49,8 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
     GatewayHwInfoComponent,
     GatewayNeoedgxComponent,
     GatewayRemoteAccessComponent,
-    GatewayApplicationsComponent
+    GatewayApplicationsComponent,
+    NgxPermissionsModule
   ],
 
   templateUrl: './gateway-detail-page.component.html',
@@ -54,6 +59,10 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
   providers: [GatewayDetailStore]
 })
 export class GatewayDetailPageComponent {
+  permission = PERMISSION;
+  permissionsService = inject(NgxPermissionsService);
+  #globalStore = inject(Store);
+  userProfile$ = this.#globalStore.select(AuthStore.selectUserProfile);
   #dialog = inject(MatDialog);
   gwDetailStore = inject(GatewayDetailStore);
   gwDetailService = inject(GatewayDetailService);
@@ -257,7 +266,13 @@ export class GatewayDetailPageComponent {
   onTabChange = (event: MatTabChangeEvent): void => {
     if (event.index === 1 && this.isConnected) {
       // Gateway Operation
-      this.gwDetailStore.getSSHStatus();
+      this.permissionsService
+        .hasPermission(this.permission[this.permission.APPLICATION_MANAGEMENT])
+        .then((hasPermission) => {
+          if (hasPermission) {
+            this.gwDetailStore.getSSHStatus();
+          }
+        });
     }
   };
 }

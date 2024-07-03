@@ -69,7 +69,7 @@
               <ne-gateway-applications (click)="onUpgradeNeoEdgeX()"></ne-gateway-applications>
             </fieldset>
 
-            <fieldset>
+            <fieldset *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
               <legend>Remote Access</legend>
               <ne-gateway-remote-access
                 [isLoading]="isLoading()"
