@@ -34,14 +34,16 @@ export class DashboardGatewayComponent {
     const data = this.gatewaysList();
     const result = {};
     data.forEach((item: Gateway) => {
-      const key = item.connectionStatus;
-      if (!result[key]) {
-        result[key] = {
-          name: this.gatewayStatus[key],
+      const id = item.connectionStatus;
+      const name = this.gatewayStatus[id];
+      if (!result[name]) {
+        result[name] = {
+          id,
+          name,
           list: []
         };
       }
-      result[key].list.push(item);
+      result[name].list.push(item);
     });
     return result;
   });
