@@ -18,6 +18,7 @@ export class DashboardGatewayStatusComponent {
   public chartOptions = signal<Partial<ApexOptions> | null>(null);
 
   colorArr = getChartColor(5, 'status');
+  colors: string[] = [];
 
   constructor() {
     effect(
@@ -38,9 +39,13 @@ export class DashboardGatewayStatusComponent {
       labels: []
     };
 
-    Object.entries(this.gatewaysStatusList()).forEach(([key, value]) => {
-      chartSetting.series[key] = value.list.length;
-      chartSetting.labels[key] = value.name;
+    const sortedData = Object.entries(this.gatewaysStatusList()).sort(([, a], [, b]) => a.id - b.id);
+
+    sortedData.forEach(([key, value]) => {
+      chartSetting.series.push(value.list.length);
+      chartSetting.labels.push(value.name);
+
+      this.colors.push(this.colorArr[value.id]);
     });
 
     this.chartOptions.set(this.getChartOption(chartSetting));
@@ -48,7 +53,7 @@ export class DashboardGatewayStatusComponent {
 
   getChartOption(setting: IPieChartSetting): ApexOptions {
     return {
-      colors: this.colorArr,
+      colors: this.colors,
       chart: {
         type: 'donut',
         parentHeightOffset: 0
@@ -67,7 +72,7 @@ export class DashboardGatewayStatusComponent {
           }
           const selected = series[seriesIndex];
           return `
-          <div style="color:white;background-color:${this.colorArr[seriesIndex]};font-size:12px;padding:4px 8px;">
+          <div style="color:white;background-color:${this.colors[seriesIndex]};font-size:12px;padding:4px 8px;">
             ${w.config.labels[seriesIndex]}: ${selected} (${((selected / total) * 100).toFixed(2)}%)
           </div>
           `;

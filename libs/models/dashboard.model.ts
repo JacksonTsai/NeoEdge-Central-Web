@@ -21,6 +21,7 @@ export interface IDashboardState {
 }
 
 export interface IDashboardGatewayStatusItem {
+  id: number;
   name: string;
   list: Gateway[];
 }
