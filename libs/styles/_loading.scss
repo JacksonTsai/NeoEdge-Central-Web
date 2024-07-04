@@ -1,0 +1,10 @@
+.loading-text {
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 8px;
+    color: $black-gary;
+    animation: animate-spin 1s infinite linear;
+  }
+}

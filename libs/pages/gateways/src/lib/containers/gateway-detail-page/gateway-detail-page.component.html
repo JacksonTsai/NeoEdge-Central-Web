@@ -17,7 +17,12 @@
       }
     </div>
     <div class="gateway-detail-wrapper__right">
-      <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab-group
+        animationDuration="0ms"
+        mat-stretch-tabs="false"
+        mat-align-tabs="start"
+        (selectedTabChange)="onTabChange($event)"
+      >
         <mat-tab label="Gateway Profile" id="gateway-detail-gateway-profile-tab">
           <div class="gw-tab">
             @if (gwDetailStore.gatewayDetail()) {
@@ -64,9 +69,14 @@
               <ne-gateway-applications (click)="onUpgradeNeoEdgeX()"></ne-gateway-applications>
             </fieldset>
 
-            <fieldset>
+            <fieldset *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
               <legend>Remote Access</legend>
-              <ne-gateway-remote-access></ne-gateway-remote-access>
+              <ne-gateway-remote-access
+                [isLoading]="isLoading()"
+                [isConnected]="isConnected"
+                [sshStatus]="sshStatus()"
+                (handleSwitchSSHMode)="onSwitchSSHMode($event)"
+              ></ne-gateway-remote-access>
             </fieldset>
           </div>
         </mat-tab>

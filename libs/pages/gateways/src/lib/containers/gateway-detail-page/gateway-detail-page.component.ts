@@ -2,17 +2,23 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import * as AuthStore from '@neo-edge-web/auth-store';
 import { GatewayDetailService } from '@neo-edge-web/global-services';
 import {
   GATEWAY_LOADING,
+  GATEWAY_SSH_STATUS,
   GATEWAY_STATUE,
   GW_RUNNING_MODE,
   IEditGatewayProfileReq,
+  PERMISSION,
   TGatewayStatusInfo,
   TNeoEdgeXInfo
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Store } from '@ngrx/store';
+import { NgxPermissionsModule, NgxPermissionsService } from 'ngx-permissions';
+import { delay, of, tap } from 'rxjs';
 import {
   DeleteGatewayConfirmDialogComponent,
   DetachGatewayConfirmDialogComponent,
@@ -43,7 +49,8 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
     GatewayHwInfoComponent,
     GatewayNeoedgxComponent,
     GatewayRemoteAccessComponent,
-    GatewayApplicationsComponent
+    GatewayApplicationsComponent,
+    NgxPermissionsModule
   ],
 
   templateUrl: './gateway-detail-page.component.html',
@@ -52,11 +59,16 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
   providers: [GatewayDetailStore]
 })
 export class GatewayDetailPageComponent {
+  permission = PERMISSION;
+  permissionsService = inject(NgxPermissionsService);
+  #globalStore = inject(Store);
+  userProfile$ = this.#globalStore.select(AuthStore.selectUserProfile);
   #dialog = inject(MatDialog);
   gwDetailStore = inject(GatewayDetailStore);
   gwDetailService = inject(GatewayDetailService);
   definedLabel = this.gwDetailStore.labels;
   isLoading = this.gwDetailStore.isLoading;
+  sshStatus = this.gwDetailStore.sshStatus;
 
   get isDetachMode() {
     return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.currentMode;
@@ -81,6 +93,17 @@ export class GatewayDetailPageComponent {
       () => {
         if (this.isLoading() === GATEWAY_LOADING.REFRESH_GATEWAY_DETAIL) {
           this.gwDetailStore.getGatewayDetail();
+        }
+
+        if (this.isLoading() === GATEWAY_LOADING.REFRESH_SSH) {
+          of(null)
+            .pipe(
+              delay(200),
+              tap(() => {
+                this.gwDetailStore.getSSHStatus();
+              })
+            )
+            .subscribe();
         }
       },
       { allowSignalWrites: true }
@@ -234,5 +257,22 @@ export class GatewayDetailPageComponent {
       .subscribe(() => {
         rebootDialogRef = undefined;
       });
+  };
+
+  onSwitchSSHMode = (enabled: GATEWAY_SSH_STATUS): void => {
+    this.gwDetailStore.updateSSHStatus({ enabled });
+  };
+
+  onTabChange = (event: MatTabChangeEvent): void => {
+    if (event.index === 1 && this.isConnected) {
+      // Gateway Operation
+      this.permissionsService
+        .hasPermission(this.permission[this.permission.APPLICATION_MANAGEMENT])
+        .then((hasPermission) => {
+          if (hasPermission) {
+            this.gwDetailStore.getSSHStatus();
+          }
+        });
+    }
   };
 }
