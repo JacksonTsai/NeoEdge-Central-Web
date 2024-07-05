@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   IEditProjectReq,
+  IGetProjectEventLogsReq,
   IGetProjectsResp,
   IProjectByIdResp,
   IProjectLabelsReqResp,
@@ -21,6 +22,7 @@ export class ProjectsService {
   private PROJECTS_PATH = '/projects';
   private SWITCH_PROJECT_PATH = (projectId: number) => `/project/${projectId}`;
   private LABEL_BY_PROJECT_ID_PATH = '/project/labels';
+  private EVENT_LOGS_BY_PROJECT_ID_PATH = '/project/events';
 
   private handleError(err: HttpErrorResponse): Observable<never> {
     return throwError(() => err);
@@ -160,4 +162,20 @@ export class ProjectsService {
         return this.handleError(err);
       })
     );
+
+  getProjectEventLogs$ = (eventLogsParams: IGetProjectEventLogsReq) => {
+    const params = new URLSearchParams(
+      Object.entries(eventLogsParams).map(([key, value]) => [key, typeof value === 'number' ? value.toString() : value])
+    );
+    return this.#http.get(`${this.EVENT_LOGS_BY_PROJECT_ID_PATH}?${params}`).pipe(
+      catchError((err) => {
+        this.#snackBar.open('Get project event logs failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
 }

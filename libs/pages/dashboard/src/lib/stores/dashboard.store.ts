@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { selectCurrentProject } from '@neo-edge-web/auth-store';
 import {
+  EventsService,
   GatewaysService,
   ItServiceService,
   OtDevicesService,
@@ -8,7 +9,15 @@ import {
   SupportAppsService,
   UsersService
 } from '@neo-edge-web/global-services';
-import { DASHBOARD_LOADING, IDashboardState, SUPPORT_APPS_FLOW_GROUPS } from '@neo-edge-web/models';
+import {
+  DASHBOARD_LOADING,
+  IDashboardState,
+  IGetEventDocResp,
+  IGetProjectEventLogsReq,
+  IGetProjectEventLogsResp,
+  SUPPORT_APPS_FLOW_GROUPS,
+  TUpdateProjectEventDataMode
+} from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -23,7 +32,10 @@ const initialState: IDashboardState = {
   itList: [],
   itApps: [],
   otList: [],
-  otApps: []
+  otApps: [],
+  eventsDoc: {},
+  activitiesList: null,
+  activitiesTime: null
 };
 
 export type DashboardStore = InstanceType<typeof DashboardStore>;
@@ -38,7 +50,8 @@ export const DashboardStore = signalStore(
       gatewaysService = inject(GatewaysService),
       itServiceService = inject(ItServiceService),
       otDevicesService = inject(OtDevicesService),
-      supportAppsService = inject(SupportAppsService)
+      supportAppsService = inject(SupportAppsService),
+      eventsService = inject(EventsService)
     ) => ({
       getProjectDetail: rxMethod<void>(
         pipe(
@@ -115,6 +128,51 @@ export const DashboardStore = signalStore(
             )
           )
         )
+      ),
+      getActivities: rxMethod<{ type: TUpdateProjectEventDataMode; params: IGetProjectEventLogsReq }>(
+        pipe(
+          tap(({ type }) =>
+            patchState(store, {
+              isLoading: type === 'GET' ? DASHBOARD_LOADING.GET : DASHBOARD_LOADING.UPDATE_ACTIVITIES
+            })
+          ),
+          switchMap(({ type, params }) => {
+            return projectsService.getProjectEventLogs$(params).pipe(
+              tap((d: IGetProjectEventLogsResp) =>
+                patchState(store, {
+                  activitiesList: {
+                    events: type === 'GET' ? d.events : [...store.activitiesList().events, ...d.events],
+                    lastEvaluatedKey: d.lastEvaluatedKey
+                  },
+                  isLoading: DASHBOARD_LOADING.NONE
+                })
+              ),
+              catchError(() => EMPTY)
+            );
+          })
+        )
+      ),
+      set24hoursStartEndTime: () => {
+        const now = new Date();
+        const past = new Date(now.getTime() - 24 * 60 * 60 * 1000 * 30);
+        patchState(store, {
+          activitiesTime: {
+            start: Math.floor(past.getTime() / 1000),
+            end: Math.floor(now.getTime() / 1000)
+          }
+        });
+      },
+      getEventsDoc: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            eventsService.getEventsDoc$().pipe(
+              tap((d: IGetEventDocResp) =>
+                patchState(store, { eventsDoc: d.events, isLoading: DASHBOARD_LOADING.NONE })
+              ),
+              catchError(() => EMPTY)
+            )
+          )
+        )
       )
     })
   ),
@@ -122,6 +180,8 @@ export const DashboardStore = signalStore(
     return {
       onInit() {
         store.getSupportApps();
+        store.getEventsDoc();
+        store.set24hoursStartEndTime();
 
         globalStore
           .select(selectCurrentProject)
@@ -134,6 +194,14 @@ export const DashboardStore = signalStore(
                 store.getAllItServiceProfiles();
                 store.getAllOtDeviceProfiles();
                 store.getAllGateways();
+
+                const activitiesParams: IGetProjectEventLogsReq = {
+                  size: 10,
+                  order: 'desc',
+                  timeGe: store.activitiesTime().start,
+                  timeLe: store.activitiesTime().end
+                };
+                store.getActivities({ type: 'GET', params: activitiesParams });
               }
             })
           )

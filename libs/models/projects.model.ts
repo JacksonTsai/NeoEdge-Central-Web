@@ -64,6 +64,38 @@ export interface IProjectLabel {
   id?: number;
 }
 
+export interface IGetProjectEventLogsReq {
+  lastRecord?: string;
+  order: string;
+  size: number;
+  timeGe: number;
+  timeLe: number;
+}
+
+export interface IGetProjectEventLogsResp {
+  events: IProjectEvents[];
+  lastEvaluatedKey: string;
+}
+
+export interface IProjectEvents {
+  projectId: number;
+  'timestamp:uuid': string;
+  gatewayId: number;
+  timestamp: number;
+  expireAt: number;
+  eventId: number;
+  eventData: IProjectEventData;
+}
+
+export interface IProjectEventData {
+  gatewayEnkey: string;
+  gatewayName: string;
+  userAccount: string;
+  userName: string;
+}
+
+export type TUpdateProjectEventDataMode = 'UPDATE' | 'GET';
+
 export type TableQueryForProjects = ITableQuery & { name?: string };
 
 export enum PROJECTS_LOADING {
