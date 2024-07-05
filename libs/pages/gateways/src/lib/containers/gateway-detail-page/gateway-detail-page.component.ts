@@ -13,6 +13,7 @@ import {
   IEditGatewayProfileReq,
   PERMISSION,
   TGatewayStatusInfo,
+  TGetGatewayEventLogsReq,
   TNeoEdgeXInfo
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -69,6 +70,8 @@ export class GatewayDetailPageComponent {
   definedLabel = this.gwDetailStore.labels;
   isLoading = this.gwDetailStore.isLoading;
   sshStatus = this.gwDetailStore.sshStatus;
+  eventDoc = this.gwDetailStore.eventDoc;
+  eventLogsList = this.gwDetailStore.eventLogsList;
 
   get isDetachMode() {
     return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.currentMode;
@@ -263,6 +266,13 @@ export class GatewayDetailPageComponent {
     this.gwDetailStore.updateSSHStatus({ enabled });
   };
 
+  onUpdateEventLogs = (event: TGetGatewayEventLogsReq): void => {
+    this.gwDetailStore.geteventLogsList({
+      type: event.type,
+      params: event.params
+    });
+  };
+
   onTabChange = (event: MatTabChangeEvent): void => {
     if (event.index === 1 && this.isConnected) {
       // Gateway Operation
@@ -273,6 +283,10 @@ export class GatewayDetailPageComponent {
             this.gwDetailStore.getSSHStatus();
           }
         });
+    } else if (event.index === 3) {
+      if (!this.eventDoc()) {
+        this.gwDetailStore.geteventDoc();
+      }
     }
   };
 }

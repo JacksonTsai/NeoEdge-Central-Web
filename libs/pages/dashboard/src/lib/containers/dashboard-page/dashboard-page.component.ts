@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { DASHBOARD_LOADING, IGetProjectEventLogsReq } from '@neo-edge-web/models';
+import { DASHBOARD_LOADING, TGetProjectEventLogsParams } from '@neo-edge-web/models';
 import { DashboardComponent } from '../../components';
 import { DashboardStore } from '../../stores/dashboard.store';
 
@@ -19,7 +19,7 @@ import { DashboardStore } from '../../stores/dashboard.store';
       [otApps]="otApps()"
       [gatewaysList]="gatewaysList()"
       [activitiesList]="activitiesList()"
-      [eventsDoc]="eventsDoc()"
+      [eventDoc]="eventDoc()"
       (handleReload)="onReload()"
       (handleActivitiesScrollEnd)="onActivitiesScrollEnd()"
     ></ne-dashboard>
@@ -40,7 +40,7 @@ export class DashboardPageComponent {
   otApps = this.#dashboardStore.otApps;
   gatewaysList = this.#dashboardStore.gatewaysList;
   activitiesList = this.#dashboardStore.activitiesList;
-  eventsDoc = this.#dashboardStore.eventsDoc;
+  eventDoc = this.#dashboardStore.eventDoc;
 
   onReload(): void {
     this.#dashboardStore.getProjectDetail();
@@ -52,7 +52,7 @@ export class DashboardPageComponent {
 
   onActivitiesScrollEnd(): void {
     if (this.activitiesList()?.lastEvaluatedKey && this.isLoading() !== DASHBOARD_LOADING.UPDATE_ACTIVITIES) {
-      const activitiesParams: IGetProjectEventLogsReq = {
+      const activitiesParams: TGetProjectEventLogsParams = {
         size: 10,
         order: 'desc',
         timeGe: this.#dashboardStore.activitiesTime().start,

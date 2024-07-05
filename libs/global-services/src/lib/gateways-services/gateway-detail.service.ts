@@ -7,7 +7,8 @@ import {
   IEditGatewayProfileReq,
   IGetGatewaysDetailResp,
   IGetInstallCommandResp,
-  IRebootReq
+  IRebootReq,
+  TGetGatewayEventLogsParams
 } from '@neo-edge-web/models';
 import { obj2FormData } from '@neo-edge-web/utils';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
@@ -196,6 +197,31 @@ export class GatewayDetailService {
       }),
       catchError((err) => {
         this.#snackBar.open('Setting SSH Status failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  getGatewayEventLogs$ = (gatewayId: number, eventLogsParams: TGetGatewayEventLogsParams) => {
+    const params = new URLSearchParams();
+    Object.entries(eventLogsParams).forEach(([key, value]) => {
+      if (typeof value === 'number') {
+        params.set(key, value.toString());
+      } else if (Array.isArray(value)) {
+        value.forEach((item) => {
+          params.append(key, item.toString());
+        });
+      } else {
+        params.set(key, value);
+      }
+    });
+    return this.#http.get(`${this.GATEWAYS_PATH}/${gatewayId}/events?${params}`).pipe(
+      catchError((err) => {
+        this.#snackBar.open('Get gateway event logs failure.', 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

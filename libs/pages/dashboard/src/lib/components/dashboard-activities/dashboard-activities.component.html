@@ -3,20 +3,20 @@
     <mat-expansion-panel-header>
       <mat-panel-title><h2 class="dashboard-card__title">24 Hours Activities</h2></mat-panel-title>
     </mat-expansion-panel-header>
-    @if (eventsDoc() && events().length) {
+    @if (eventDoc() && events().length) {
       <div class="event-log" (scroll)="onScroll($event)">
         <ul class="event-log__list no-bullet">
           @for (item of events(); track item['timestamp:uuid']) {
             <li class="event-log__item">
-              <span class="date">{{ item?.timestamp | dateTimeFormat }}</span>
+              <span class="date">{{ item.timestamp | dateTimeFormat }}</span>
               <mat-icon
                 matChipAvatar
-                [svgIcon]="eventsDoc()['' + item?.eventId]?.severity === 'Notice' ? 'icon:info' : 'icon:notifications'"
-                [matTooltip]="eventsDoc()['' + item?.eventId]?.severity"
+                [svgIcon]="eventDoc()['' + item.eventId]?.severity === 'Notice' ? 'icon:info' : 'icon:notifications'"
+                [matTooltip]="eventDoc()['' + item.eventId]?.severity"
               ></mat-icon>
-              <span>{{ eventsDoc()['' + item?.eventId]?.name }}</span>
+              <span>{{ eventDoc()['' + item.eventId]?.name }}</span>
               <span> - </span>
-              <span class="source">{{ item?.eventData.userName || item?.eventData.gatewayName }}</span>
+              <span class="source">{{ getEventSource(item) }}</span>
             </li>
           }
         </ul>

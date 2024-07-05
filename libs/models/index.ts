@@ -4,7 +4,7 @@ export * from './company.model';
 export * from './create-ot-devices.model';
 export * from './dashboard.model';
 export * from './dateFormat.model';
-export * from './events.model';
+export * from './event-logs.model';
 export * from './gateway-detail.mode';
 export * from './gateways.model';
 export * from './ipcs.model';

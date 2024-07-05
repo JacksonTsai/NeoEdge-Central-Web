@@ -3,10 +3,10 @@ import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   IEditProjectReq,
-  IGetProjectEventLogsReq,
   IGetProjectsResp,
   IProjectByIdResp,
   IProjectLabelsReqResp,
+  TGetProjectEventLogsParams,
   TableQueryForProjects
 } from '@neo-edge-web/models';
 import { Observable, catchError, tap, throwError } from 'rxjs';
@@ -163,7 +163,7 @@ export class ProjectsService {
       })
     );
 
-  getProjectEventLogs$ = (eventLogsParams: IGetProjectEventLogsReq) => {
+  getProjectEventLogs$ = (eventLogsParams: TGetProjectEventLogsParams) => {
     const params = new URLSearchParams(
       Object.entries(eventLogsParams).map(([key, value]) => [key, typeof value === 'number' ? value.toString() : value])
     );

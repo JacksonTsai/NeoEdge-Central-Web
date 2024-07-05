@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, input, Output } from '@angular/core';
 import {
   DASHBOARD_LOADING,
   Gateway,
   IDashboardActivitiesTime,
-  IEventsDoc,
+  IEventDoc,
   IItService,
   IOtDevice,
   IProjectByIdResp,
@@ -46,7 +46,7 @@ export class DashboardComponent {
   otApps = input<ISupportApps[]>([]);
   gatewaysList = input<Gateway[]>([]);
   activitiesList = input<IDashboardActivitiesTime>(null);
-  eventsDoc = input<IEventsDoc>(null);
+  eventDoc = input<IEventDoc>(null);
 
   onReload(): void {
     this.handleReload.emit();

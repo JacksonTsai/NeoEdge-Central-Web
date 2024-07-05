@@ -1,7 +1,13 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } from '@neo-edge-web/global-services';
+import {
+  EventsService,
+  GatewayDetailService,
+  ProjectsService,
+  REST_CONFIG,
+  WebSocketService
+} from '@neo-edge-web/global-services';
 import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-stores';
 import {
   GATEWAY_LOADING,
@@ -12,7 +18,10 @@ import {
   IEditGatewayProfileReq,
   IGatewaySSHWsResp,
   IGatewaySystemInfo,
-  IRebootReq
+  IGetEventDocResp,
+  IGetEventLogsResp,
+  IRebootReq,
+  TGetGatewayEventLogsReq
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -29,6 +38,8 @@ const initialState: GatewayDetailState = {
     current: null,
     ws: null
   },
+  eventDoc: null,
+  eventLogsList: null,
   wsRoomName: ''
 };
 
@@ -42,7 +53,8 @@ export const GatewayDetailStore = signalStore(
       dialog = inject(MatDialog),
       router = inject(Router),
       gwDetailService = inject(GatewayDetailService),
-      projectsService = inject(ProjectsService)
+      projectsService = inject(ProjectsService),
+      eventsService = inject(EventsService)
     ) => ({
       getGatewayDetail: rxMethod<void>(
         pipe(
@@ -175,6 +187,39 @@ export const GatewayDetailStore = signalStore(
           tap(() => patchState(store, { isLoading: GATEWAY_LOADING.CONNECT_SSH })),
           switchMap(({ enabled }) =>
             gwDetailService.updateGatewaySSH$(store.gatewayId(), enabled).pipe(catchError(() => EMPTY))
+          )
+        )
+      ),
+      geteventLogsList: rxMethod<TGetGatewayEventLogsReq>(
+        pipe(
+          tap(({ type }) =>
+            patchState(store, {
+              isLoading: type === 'GET' ? GATEWAY_LOADING.GET_LOG : GATEWAY_LOADING.UPDATE_LOG
+            })
+          ),
+          switchMap(({ type, params }) => {
+            return gwDetailService.getGatewayEventLogs$(store.gatewayId(), params).pipe(
+              tap((d: IGetEventLogsResp) =>
+                patchState(store, {
+                  eventLogsList: {
+                    events: type === 'GET' ? d.events : [...store.eventLogsList().events, ...d.events],
+                    lastEvaluatedKey: d.lastEvaluatedKey
+                  },
+                  isLoading: GATEWAY_LOADING.NONE
+                })
+              ),
+              catchError(() => EMPTY)
+            );
+          })
+        )
+      ),
+      geteventDoc: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            eventsService.geteventDoc$().pipe(
+              tap((d: IGetEventDocResp) => patchState(store, { eventDoc: d.events })),
+              catchError(() => EMPTY)
+            )
           )
         )
       )

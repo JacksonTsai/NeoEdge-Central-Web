@@ -1,3 +1,4 @@
+import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { IGatewayLabels } from './utils.model';
 
 export interface GatewayDetailState {
@@ -7,6 +8,8 @@ export interface GatewayDetailState {
   isLoading: GATEWAY_LOADING;
   labels: IGatewayLabels[];
   sshStatus: IGatewaySSHStatus;
+  eventDoc: IEventDoc;
+  eventLogsList: IGetEventLogsResp;
   wsRoomName: string;
 }
 
@@ -153,7 +156,9 @@ export enum GATEWAY_LOADING {
   UPGRADE_EDGE_X_AGENT,
   SWITCH_RUNNING_MODE,
   CONNECT_SSH,
-  REFRESH_SSH
+  REFRESH_SSH,
+  GET_LOG,
+  UPDATE_LOG
 }
 
 export enum GW_RUNNING_MODE {

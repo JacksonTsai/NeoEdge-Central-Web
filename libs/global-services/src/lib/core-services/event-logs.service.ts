@@ -18,7 +18,7 @@ export class EventsService {
 
   private EVENTS_DOC_PATH = '/codebooks/events';
 
-  getEventsDoc$ = (): Observable<IGetEventDocResp> => {
+  geteventDoc$ = (): Observable<IGetEventDocResp> => {
     return this.#http.get(this.EVENTS_DOC_PATH).pipe(
       catchError((err) => {
         this.#snackBar.open('Get Events document failure.', 'X', {

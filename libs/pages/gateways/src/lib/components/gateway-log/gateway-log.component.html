@@ -1,1 +1,50 @@
-<p>gateway-log works!</p>
+<div class="top-action">
+  <div class="top-action__left">
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Search</mat-label>
+      <input
+        id="it-service-search-name-input"
+        matInput
+        placeholder="Search name"
+        maxlength="128"
+        type="text"
+        [formControl]="searchNameCtrl"
+      />
+      <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+    </mat-form-field>
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Date range</mat-label>
+      <mat-date-range-input [formGroup]="searchDateRangeGroup" [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+        <input matStartDate formControlName="start" placeholder="Start date" />
+        <input matEndDate formControlName="end" placeholder="End date" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
+  <div class="top-action__right">
+    <button id="gateway-log-download-btn" type="button" mat-stroked-button color="primary">
+      <mat-icon svgIcon="icon:download"></mat-icon>
+      Download CSV
+    </button>
+    <button id="gateway-log-sort-btn" type="button" mat-stroked-button [matMenuTriggerFor]="menu" color="primary">
+      <mat-icon svgIcon="icon:sort" aria-hidden="false" aria-label="Sort the table data"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" xPosition="before">
+      @for (item of eventLogsSort | keyvalue; track item.key) {
+        <button mat-menu-item type="button" (click)="changeSort(item.value)">
+          @if (searchSort() === item.value) {
+            <mat-icon svgIcon="icon:check"></mat-icon>
+          }
+          <span>{{ item.key }}</span>
+        </button>
+      }
+    </mat-menu>
+  </div>
+</div>
+
+{{ eventLogsList() | json }}
+
+<!-- <div class="log-table">
+  <table mat-table [dataSource]="dataSource"></table>
+</div> -->

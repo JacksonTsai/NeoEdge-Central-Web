@@ -13,10 +13,10 @@ import {
   DASHBOARD_LOADING,
   IDashboardState,
   IGetEventDocResp,
-  IGetProjectEventLogsReq,
-  IGetProjectEventLogsResp,
+  IGetEventLogsResp,
   SUPPORT_APPS_FLOW_GROUPS,
-  TUpdateProjectEventDataMode
+  TGetProjectEventLogsParams,
+  TGetProjectEventLogsReq
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -33,7 +33,7 @@ const initialState: IDashboardState = {
   itApps: [],
   otList: [],
   otApps: [],
-  eventsDoc: {},
+  eventDoc: {},
   activitiesList: null,
   activitiesTime: null
 };
@@ -129,7 +129,7 @@ export const DashboardStore = signalStore(
           )
         )
       ),
-      getActivities: rxMethod<{ type: TUpdateProjectEventDataMode; params: IGetProjectEventLogsReq }>(
+      getActivities: rxMethod<TGetProjectEventLogsReq>(
         pipe(
           tap(({ type }) =>
             patchState(store, {
@@ -138,7 +138,7 @@ export const DashboardStore = signalStore(
           ),
           switchMap(({ type, params }) => {
             return projectsService.getProjectEventLogs$(params).pipe(
-              tap((d: IGetProjectEventLogsResp) =>
+              tap((d: IGetEventLogsResp) =>
                 patchState(store, {
                   activitiesList: {
                     events: type === 'GET' ? d.events : [...store.activitiesList().events, ...d.events],
@@ -162,12 +162,12 @@ export const DashboardStore = signalStore(
           }
         });
       },
-      getEventsDoc: rxMethod<void>(
+      geteventDoc: rxMethod<void>(
         pipe(
           switchMap(() =>
-            eventsService.getEventsDoc$().pipe(
+            eventsService.geteventDoc$().pipe(
               tap((d: IGetEventDocResp) =>
-                patchState(store, { eventsDoc: d.events, isLoading: DASHBOARD_LOADING.NONE })
+                patchState(store, { eventDoc: d.events, isLoading: DASHBOARD_LOADING.NONE })
               ),
               catchError(() => EMPTY)
             )
@@ -180,7 +180,7 @@ export const DashboardStore = signalStore(
     return {
       onInit() {
         store.getSupportApps();
-        store.getEventsDoc();
+        store.geteventDoc();
         store.set24hoursStartEndTime();
 
         globalStore
@@ -195,7 +195,7 @@ export const DashboardStore = signalStore(
                 store.getAllOtDeviceProfiles();
                 store.getAllGateways();
 
-                const activitiesParams: IGetProjectEventLogsReq = {
+                const activitiesParams: TGetProjectEventLogsParams = {
                   size: 10,
                   order: 'desc',
                   timeGe: store.activitiesTime().start,

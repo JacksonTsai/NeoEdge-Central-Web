@@ -87,7 +87,11 @@
         </mat-tab>
         <mat-tab label="Log And Alert" id="gateway-detail-gateway-log-tab">
           <div class="gw-tab">
-            <ne-gateway-log></ne-gateway-log>
+            <ne-gateway-log
+              [eventDoc]="eventDoc()"
+              [eventLogsList]="eventLogsList()"
+              (handleUpdateEventLogs)="onUpdateEventLogs($event)"
+            ></ne-gateway-log>
           </div>
         </mat-tab>
       </mat-tab-group>

@@ -1,8 +1,8 @@
-import { IEventsDoc } from './events.model';
+import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { Gateway } from './gateways.model';
 import { IItService } from './it-service.model';
 import { IOtDevice } from './ot-devices.model';
-import { IGetProjectEventLogsResp, IProjectByIdResp } from './projects.model';
+import { IProjectByIdResp } from './projects.model';
 import { ISupportApps } from './support-apps.model';
 import { User } from './users.model';
 
@@ -18,8 +18,8 @@ export interface IDashboardState {
   otApps: ISupportApps[];
   usageFee?: any;
   licenseConsumption?: any;
-  eventsDoc: IEventsDoc;
-  activitiesList: IGetProjectEventLogsResp;
+  eventDoc: IEventDoc;
+  activitiesList: IGetEventLogsResp;
   activitiesTime: IDashboardActivitiesTime;
 }
 

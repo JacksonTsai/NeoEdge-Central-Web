@@ -3,9 +3,9 @@ import { ChangeDetectionStrategy, Component, computed, EventEmitter, HostListene
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { IEventsDoc, IGetProjectEventLogsResp, IProjectEvents } from '@neo-edge-web/models';
+import { IEventDoc, IEventLog, IGetEventLogsResp } from '@neo-edge-web/models';
 import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
-
+import { getEventSource } from '@neo-edge-web/utils';
 @Component({
   selector: 'ne-dashboard-activities',
   standalone: true,
@@ -16,10 +16,11 @@ import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
 })
 export class DashboardActivitiesComponent {
   @Output() handleScrollEnd = new EventEmitter();
-  activitiesList = input<IGetProjectEventLogsResp>(null);
-  eventsDoc = input<IEventsDoc>(null);
+  activitiesList = input<IGetEventLogsResp>(null);
+  eventDoc = input<IEventDoc>(null);
+  events = computed<IEventLog[]>(() => this.activitiesList()?.events ?? []);
 
-  events = computed<IProjectEvents[]>(() => this.activitiesList()?.events ?? []);
+  getEventSource = getEventSource;
 
   @HostListener('window:scroll', ['$event'])
   onScroll($event) {
