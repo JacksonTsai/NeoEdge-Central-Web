@@ -1,3 +1,25 @@
+@use 'colors' as *;
+
 :host {
   display: block;
+}
+
+.log-table {
+  --border: 1px solid #{$border-color};
+  margin-bottom: 20px;
+  border-top: var(--border);
+  border-bottom: var(--border);
+
+  table {
+    th {
+      &:nth-child(1) {
+        width: 15%;
+      }
+
+      &:nth-child(3),
+      &:nth-child(7) {
+        width: 25%;
+      }
+    }
+  }
 }

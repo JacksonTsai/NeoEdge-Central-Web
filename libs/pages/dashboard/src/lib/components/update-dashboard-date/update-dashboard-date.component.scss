@@ -7,28 +7,8 @@
 
 .last-date {
   font-size: 14px;
-
-  em {
-    color: $primary;
-    font-style: normal;
-    font-weight: 500;
-  }
 }
 
 button {
   margin-left: 8px;
-  cursor: pointer;
-
-  &:hover {
-    animation: spin-reverse 1s infinite linear;
-  }
-}
-
-@keyframes spin-reverse {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
 }

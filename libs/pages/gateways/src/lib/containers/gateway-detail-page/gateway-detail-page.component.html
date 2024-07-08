@@ -88,6 +88,7 @@
         <mat-tab label="Log And Alert" id="gateway-detail-gateway-log-tab">
           <div class="gw-tab">
             <ne-gateway-log
+              [isActive]="tabIndex() === gatewayDetailTab.LOG"
               [eventDoc]="eventDoc()"
               [eventLogsList]="eventLogsList()"
               (handleUpdateEventLogs)="onUpdateEventLogs($event)"

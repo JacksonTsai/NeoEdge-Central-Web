@@ -209,6 +209,9 @@ export class GatewayDetailService {
   getGatewayEventLogs$ = (gatewayId: number, eventLogsParams: TGetGatewayEventLogsParams) => {
     const params = new URLSearchParams();
     Object.entries(eventLogsParams).forEach(([key, value]) => {
+      if (value === null || value === '') {
+        return;
+      }
       if (typeof value === 'number') {
         params.set(key, value.toString());
       } else if (Array.isArray(value)) {

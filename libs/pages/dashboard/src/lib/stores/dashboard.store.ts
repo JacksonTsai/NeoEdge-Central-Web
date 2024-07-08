@@ -154,7 +154,7 @@ export const DashboardStore = signalStore(
       ),
       set24hoursStartEndTime: () => {
         const now = new Date();
-        const past = new Date(now.getTime() - 24 * 60 * 60 * 1000 * 30);
+        const past = new Date(now.getTime() - 24 * 60 * 60 * 1000);
         patchState(store, {
           activitiesTime: {
             start: Math.floor(past.getTime() / 1000),

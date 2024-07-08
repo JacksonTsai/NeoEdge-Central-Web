@@ -1,3 +1,11 @@
+.hover-animate-spin-reverse {
+  cursor: pointer;
+
+  &:hover {
+    animation: animate-spin 1s reverse infinite linear;
+  }
+}
+
 @keyframes animate-spin {
   0% {
     transform: rotate(0);

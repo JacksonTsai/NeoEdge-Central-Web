@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
@@ -34,6 +34,13 @@ import { GatewayNeoflowComponent } from '../../components/gateway-neoflow/gatewa
 import { GatewayRebootDialogComponent } from '../../components/gateway-reboot-dialog/gateway-reboot-dialog.component';
 import { GatewayStatusInfoComponent } from '../../components/gateway-status-info/gateway-status-info.component';
 import { GatewayDetailStore } from '../../stores/gateway-detail.store';
+
+enum GATEWAY_DETAIL_TAB {
+  PROFILE,
+  OPERATION,
+  NEOFLOW,
+  LOG
+}
 
 @UntilDestroy()
 @Component({
@@ -72,6 +79,8 @@ export class GatewayDetailPageComponent {
   sshStatus = this.gwDetailStore.sshStatus;
   eventDoc = this.gwDetailStore.eventDoc;
   eventLogsList = this.gwDetailStore.eventLogsList;
+  tabIndex = signal<number>(0);
+  gatewayDetailTab = GATEWAY_DETAIL_TAB;
 
   get isDetachMode() {
     return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.currentMode;
@@ -274,7 +283,8 @@ export class GatewayDetailPageComponent {
   };
 
   onTabChange = (event: MatTabChangeEvent): void => {
-    if (event.index === 1 && this.isConnected) {
+    this.tabIndex.set(event.index);
+    if (event.index === GATEWAY_DETAIL_TAB.OPERATION && this.isConnected) {
       // Gateway Operation
       this.permissionsService
         .hasPermission(this.permission[this.permission.APPLICATION_MANAGEMENT])
@@ -283,7 +293,7 @@ export class GatewayDetailPageComponent {
             this.gwDetailStore.getSSHStatus();
           }
         });
-    } else if (event.index === 3) {
+    } else if (event.index === GATEWAY_DETAIL_TAB.LOG) {
       if (!this.eventDoc()) {
         this.gwDetailStore.geteventDoc();
       }
