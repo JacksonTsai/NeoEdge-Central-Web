@@ -1,7 +1,7 @@
 import { ITableQuery } from './table-query.model';
 
 export interface INeoFlowState {
-  neoflows: Neoflow[];
+  neoflows: INeoflow[];
   page: number;
   size: number;
   queryKey: string;
@@ -9,12 +9,12 @@ export interface INeoFlowState {
   isLoading: NEOFLOW_LOADING;
 }
 
-export interface INeoflowReq {
+export interface INeoflowResp {
   total: number;
-  neoflows: Neoflow[];
+  neoflows: INeoflow[];
 }
 
-interface Neoflow {
+export interface INeoflow {
   id: number;
   name: string;
   tagNumber: number;
@@ -30,7 +30,7 @@ interface Neoflow {
 
 export interface ISetting {}
 
-export type TableQueryForNeoFlows = ITableQuery & { name?: string };
+export type TTableQueryForNeoFlows = ITableQuery & { name?: string };
 
 export enum NEOFLOW_LOADING {
   NONE,

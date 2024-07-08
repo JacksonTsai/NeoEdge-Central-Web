@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NeoFlowsComponent } from './neoflows.component';
+import { NeoflowProfileComponent } from './neoflow-profile.component';
 
-describe('NeoFlowsComponent', () => {
-  let component: NeoFlowsComponent;
-  let fixture: ComponentFixture<NeoFlowsComponent>;
+describe('NeoflowProfileComponent', () => {
+  let component: NeoflowProfileComponent;
+  let fixture: ComponentFixture<NeoflowProfileComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NeoFlowsComponent]
+      imports: [NeoflowProfileComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NeoFlowsComponent);
+    fixture = TestBed.createComponent(NeoflowProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

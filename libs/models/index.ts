@@ -2,6 +2,7 @@ export * from './auth.model';
 export * from './billing.model';
 export * from './chart.model';
 export * from './company.model';
+export * from './create-neoflows.model';
 export * from './create-ot-devices.model';
 export * from './dashboard.model';
 export * from './dateFormat.model';

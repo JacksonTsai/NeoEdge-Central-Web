@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TableQueryForNeoFlows } from '@neo-edge-web/models';
+import { INeoflowResp, TTableQueryForNeoFlows } from '@neo-edge-web/models';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
 
@@ -18,7 +18,7 @@ export class NeoFlowsService {
     return throwError(() => err);
   }
 
-  neoFlowsTable$ = (queryStr?: TableQueryForNeoFlows): Observable<any> => {
+  neoFlowsTable$ = (queryStr?: TTableQueryForNeoFlows): Observable<INeoflowResp> => {
     const params = new URLSearchParams();
     if (queryStr) {
       if (queryStr?.page) {
@@ -31,7 +31,7 @@ export class NeoFlowsService {
         params.set('names', queryStr.name);
       }
     }
-    return this.#http.get(`${this.NEOFLOWS_PATH}${params}`).pipe(
+    return this.#http.get(`${this.NEOFLOWS_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get neoflows failure.', 'X', {
           horizontalPosition: 'end',
@@ -43,8 +43,28 @@ export class NeoFlowsService {
     );
   };
 
-  deleteNeoFlow$ = (projectId: number) => {
-    return this.#http.delete(`${this.NEOFLOWS_PATH}/${projectId}`).pipe(
+  copyNeoFlow$ = (neoflowId: number, name) => {
+    return this.#http.post(`${this.NEOFLOWS_PATH}/${neoflowId}/copy`, { name }).pipe(
+      tap(() => {
+        this.#snackBar.open('Copy success.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Copy failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  deleteNeoFlow$ = (neoflowId: number) => {
+    return this.#http.delete(`${this.NEOFLOWS_PATH}/${neoflowId}`).pipe(
       tap(() => {
         this.#snackBar.open('Delete success.', 'X', {
           horizontalPosition: 'end',

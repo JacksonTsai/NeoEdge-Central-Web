@@ -14,8 +14,14 @@
       <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
     </mat-form-field>
   </div>
-  <div class="neoflows-top-action__right">
-    <button id="neoflows-create-device-btn" type="button" mat-stroked-button color="primary" (click)="onCreate()">
+  <div class="neoflows-top-action__right" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
+    <button
+      id="neoflows-create-device-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onCreateNeoFlow()"
+    >
       <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
       Create NeoFlow
     </button>
@@ -38,37 +44,42 @@
 
     <ng-container matColumnDef="version">
       <th mat-header-cell *matHeaderCellDef>Version</th>
-      <td mat-cell *matCellDef="let element">version</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.version }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="tag">
       <th mat-header-cell *matHeaderCellDef>Tag#</th>
-      <td mat-cell *matCellDef="let element">tag</td>
-    </ng-container>
-
-    <ng-container matColumnDef="otDevice">
-      <th mat-header-cell *matHeaderCellDef>OT Device</th>
-      <td mat-cell *matCellDef="let element">OT Device</td>
-    </ng-container>
-
-    <ng-container matColumnDef="itService">
-      <th mat-header-cell *matHeaderCellDef>IT Service</th>
-      <td mat-cell *matCellDef="let element">IT Service</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.tagNumber }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="runInGateway">
       <th mat-header-cell *matHeaderCellDef>Run In Gateway</th>
-      <td mat-cell *matCellDef="let element">Run In Gateway</td>
+      <td mat-cell *matCellDef="let element">
+        @if (!element?.gateways && !element.gateways.length) {
+          <span>-</span>
+        }
+        @for (gateway of element.gateways; track gateway.id) {
+          <div>{{ gateway?.name }} ({{ element.version }})</div>
+        }
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="createdBy">
-      <th mat-header-cell *matHeaderCellDef>Creator</th>
-      <td mat-cell *matCellDef="let element">Create By</td>
+      <th mat-header-cell *matHeaderCellDef>Created By</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.createdBy?.name ?? '-' }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="createdAt">
       <th mat-header-cell *matHeaderCellDef>Create Date</th>
-      <td mat-cell *matCellDef="let element">Create Date</td>
+      <td mat-cell *matCellDef="let element">
+        {{ (element?.createdAt | dateTimeFormat) ?? '-' }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="action">
@@ -76,7 +87,7 @@
       <td mat-cell *matCellDef="let element">
         <div class="table-action">
           <button
-            id="ot-devices-detail-{{ element.id }}-btn"
+            id="neoflows-detail-{{ element.id }}-btn"
             type="button"
             mat-stroked-button
             color="primary"
@@ -85,25 +96,30 @@
             Detail
           </button>
 
-          <button id="ot-devices-more-{{ element.id }}-btn" mat-icon-button [matMenuTriggerFor]="menu">
+          <button
+            *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+            id="neoflows-detail-more-{{ element.id }}-btn"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+          >
             <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
           </button>
 
           <mat-menu #menu="matMenu">
             <button
               mat-menu-item
-              id="ot-device-detail-copy-{{ element.id }}-btn"
+              id="neoflows-detail-copy-{{ element.id }}-btn"
               type="button"
-              (click)="onCopyDevice(element)"
+              (click)="onCopyNeoFlow(element)"
             >
               <mat-icon svgIcon="icon:copy_gary"></mat-icon>
               <span> Duplicate </span>
             </button>
             <button
               mat-menu-item
-              id="ot-devices-detail-delete-{{ element.id }}-btn"
+              id="neoflows-detail-delete-{{ element.id }}-btn"
               type="button"
-              (click)="onDeleteDevice(element)"
+              (click)="onDeleteNeoFlow(element)"
             >
               <mat-icon svgIcon="icon:delete_red"></mat-icon>
               <span color="danger"> Delete </span>
@@ -117,10 +133,10 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
   <mat-paginator
-    id="ot-devices-pagination"
+    id="neoflow-pagination"
     [pageSizeOptions]="[10, 25, 50, 100]"
-    [length]="devicesLength()"
+    [length]="neoflowsLength()"
     showFirstLastButtons
-    aria-label="Select page of ot devices"
+    aria-label="Select page of neoflows"
   ></mat-paginator>
 </mat-card>

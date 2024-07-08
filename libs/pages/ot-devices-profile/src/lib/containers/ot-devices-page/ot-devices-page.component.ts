@@ -74,7 +74,7 @@ export class OtDevicesPageComponent {
   };
 
   onCopyDevice = (event: IOtDevice<any>) => {
-    let editRoleDialogRef = this.#dialog.open(CopyProfileDialogComponent, {
+    let copyProfileRef = this.#dialog.open(CopyProfileDialogComponent, {
       panelClass: 'med-dialog',
       disableClose: true,
       autoFocus: false,
@@ -86,11 +86,11 @@ export class OtDevicesPageComponent {
       }
     });
 
-    editRoleDialogRef
+    copyProfileRef
       .afterClosed()
       .pipe(untilDestroyed(this))
       .subscribe(() => {
-        editRoleDialogRef = undefined;
+        copyProfileRef = undefined;
       });
   };
 
