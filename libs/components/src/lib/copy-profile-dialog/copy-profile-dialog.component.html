@@ -1,8 +1,10 @@
 <h1 mat-dialog-title>
   @if (data.type === 'ot') {
     <span> Create OT Device From Copy </span>
-  } @else {
+  } @else if (data.type === 'it') {
     <span> Create IT App From Copy </span>
+  } @else {
+    <span> Create NeoFlow From Copy </span>
   }
 </h1>
 
@@ -16,14 +18,16 @@
       <mat-label>
         @if (data.type === 'ot') {
           Device Name
-        } @else {
+        } @else if (data.type === 'it') {
           App Service Name
+        } @else {
+          NeoFlow Name
         }
       </mat-label>
       <input matInput formControlName="name" type="text" maxlength="64" />
-      @if (nameCtrl.hasError('required')) {
+      @if (nameCtrl.hasError('required') || nameCtrl.hasError('whitespace')) {
         <mat-error>Required.</mat-error>
-      } @else if (nameCtrl.hasError('whitespace') || nameCtrl.hasError('format')) {
+      } @else if (nameCtrl.hasError('format')) {
         <mat-error>Only allow input of A-Z, a-z, 0-9, -, _</mat-error>
       }
     </mat-form-field>

@@ -19,10 +19,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { NEOFLOW_LOADING } from '@neo-edge-web/models';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { INeoflow, NEOFLOW_LOADING, PERMISSION, TTableQueryForNeoFlows } from '@neo-edge-web/models';
+import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { debounceTime, tap } from 'rxjs';
 
+@UntilDestroy()
 @Component({
   selector: 'ne-neoflows',
   standalone: true,
@@ -37,51 +40,49 @@ import { debounceTime, tap } from 'rxjs';
     MatCardModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    dateTimeFormatPipe,
+    NgxPermissionsModule
   ],
   templateUrl: './neoflows.component.html',
   styleUrl: './neoflows.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NeoflowsComponent implements AfterViewInit {
-  @Output() handlePageChange = new EventEmitter<any>();
-  @Output() handleCreateNeoFlow = new EventEmitter<any>();
+export class NeoFlowsComponent implements AfterViewInit {
+  @Output() handlePageChange = new EventEmitter<TTableQueryForNeoFlows>();
+  @Output() handleCreateNeoFlow = new EventEmitter();
+  @Output() handleDeleteNeoFlow = new EventEmitter();
+  @Output() handleCopyNeoFlow = new EventEmitter();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  neoflows = input<any[]>([]);
+  permission = PERMISSION;
+  neoflows = input<INeoflow[]>([]);
+  neoflowsLength = input<number>(0);
   page = input<number>(0);
   size = input<number>(0);
-  devicesLength = input<number>(0);
-  displayedColumns: string[] = [
-    'no',
-    'name',
-    'version',
-    'tag',
-    'otDevice',
-    'itService',
-    'runInGateway',
-    'createdBy',
-    'createdAt',
-    'action'
-  ];
-
   isLoading = input<NEOFLOW_LOADING>(NEOFLOW_LOADING.NONE);
+
+  displayedColumns: string[] = ['no', 'name', 'version', 'tag', 'runInGateway', 'createdBy', 'createdAt', 'action'];
+
   searchCtrl = new FormControl('');
   dataSource = new MatTableDataSource<any>([]);
 
   constructor() {
     effect(() => {
-      // this.dataSource.data = this.otDevices();
-      console.log(this.isLoading());
+      this.dataSource.data = this.neoflows();
     });
   }
 
-  onCreate = () => {
+  onCreateNeoFlow = () => {
     this.handleCreateNeoFlow.emit();
   };
 
-  onCopy = () => {
-    //
+  onDeleteNeoFlow = (element) => {
+    this.handleDeleteNeoFlow.emit(element);
+  };
+
+  onCopyNeoFlow = (element) => {
+    this.handleCopyNeoFlow.emit(element);
   };
 
   ngAfterViewInit() {
@@ -100,7 +101,7 @@ export class NeoflowsComponent implements AfterViewInit {
         debounceTime(300),
         tap((str) => {
           if (str) {
-            this.handlePageChange.emit({ page: 1, size: this.size(), names: str });
+            this.handlePageChange.emit({ page: 1, size: this.size(), name: str });
           } else {
             this.handlePageChange.emit({ page: 1, size: this.size() });
           }
