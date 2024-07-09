@@ -31,7 +31,14 @@
     </mat-form-field>
   </div>
   <div class="top-action__right">
-    <button id="gateway-log-download-btn" type="button" mat-stroked-button color="primary">
+    <button
+      id="gateway-log-download-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onDownload()"
+      [disabled]="!eventDoc()"
+    >
       <mat-icon svgIcon="icon:download"></mat-icon>
       Download CSV
     </button>

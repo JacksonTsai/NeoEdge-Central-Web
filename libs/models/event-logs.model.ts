@@ -66,6 +66,14 @@ export interface IEventLogData {
   userName: string;
 }
 
+export interface IDownloadGatewayEventLogsReq {
+  timeGe: number;
+  timeLe: number;
+  order: string;
+  eventIds?: number[];
+  timeZone: string;
+}
+
 export type TUpdateEventLogMode = 'UPDATE' | 'GET';
 
 export enum EVENT_LOG_SORT {

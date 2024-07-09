@@ -10,6 +10,7 @@ import {
   GATEWAY_SSH_STATUS,
   GATEWAY_STATUE,
   GW_RUNNING_MODE,
+  IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
   PERMISSION,
   TGatewayStatusInfo,
@@ -29,6 +30,7 @@ import {
   GatewayProfileComponent,
   GatewayRemoteAccessComponent
 } from '../../components';
+import { DownloadGatewayLogDialogComponent } from '../../components/download-gateway-log-dialog/download-gateway-log-dialog.component';
 import { GatewayLogComponent } from '../../components/gateway-log/gateway-log.component';
 import { GatewayNeoflowComponent } from '../../components/gateway-neoflow/gateway-neoflow.component';
 import { GatewayRebootDialogComponent } from '../../components/gateway-reboot-dialog/gateway-reboot-dialog.component';
@@ -276,10 +278,26 @@ export class GatewayDetailPageComponent {
   };
 
   onUpdateEventLogs = (event: TGetGatewayEventLogsReq): void => {
-    this.gwDetailStore.geteventLogsList({
+    this.gwDetailStore.getEventLogsList({
       type: event.type,
       params: event.params
     });
+  };
+
+  onDownloadEventLogs = (params: IDownloadGatewayEventLogsReq): void => {
+    let downloadGatewayEventLogsDialogRef = this.#dialog.open(DownloadGatewayLogDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false,
+      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDoc() , params}
+    });
+    downloadGatewayEventLogsDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        downloadGatewayEventLogsDialogRef = undefined;
+      });
   };
 
   onTabChange = (event: MatTabChangeEvent): void => {
@@ -295,7 +313,7 @@ export class GatewayDetailPageComponent {
         });
     } else if (event.index === GATEWAY_DETAIL_TAB.LOG) {
       if (!this.eventDoc()) {
-        this.gwDetailStore.geteventDoc();
+        this.gwDetailStore.getEventDoc();
       }
     }
   };

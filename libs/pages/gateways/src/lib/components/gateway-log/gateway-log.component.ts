@@ -22,6 +22,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   EVENT_LOG_SORT,
+  IDownloadGatewayEventLogsReq,
   IEventDoc,
   IEventLog,
   IGetEventLogsResp,
@@ -30,6 +31,7 @@ import {
   TUpdateEventLogMode
 } from '@neo-edge-web/models';
 import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
+import { getPastDay, getTimeZone } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, tap } from 'rxjs';
 
@@ -58,6 +60,7 @@ import { debounceTime, tap } from 'rxjs';
 })
 export class GatewayLogComponent implements AfterViewInit {
   @Output() handleUpdateEventLogs = new EventEmitter<TGetGatewayEventLogsReq>();
+  @Output() handleDownloadEventLogs = new EventEmitter<IDownloadGatewayEventLogsReq>();
   isActive = input<boolean>(false);
   eventDoc = input<IEventDoc>();
   eventLogsList = input<IGetEventLogsResp>();
@@ -74,8 +77,8 @@ export class GatewayLogComponent implements AfterViewInit {
   events = computed<IEventLog[]>(() => this.eventLogsList()?.events ?? []);
 
   private readonly now = new Date();
-  readonly minDate = this.getPastDay(90);
-  readonly maxDate = this.now;
+  readonly minDate: Date = getPastDay(90);
+  readonly maxDate: Date = this.now;
 
   get dateStartCtrl() {
     return this.searchDateRangeGroup.get('start') as FormControl<Date | null>;
@@ -86,7 +89,7 @@ export class GatewayLogComponent implements AfterViewInit {
   }
 
   constructor() {
-    this.dateStartCtrl.setValue(this.getPastDay(7));
+    this.dateStartCtrl.setValue(getPastDay(7));
     this.dateEndCtrl.setValue(this.now);
 
     effect(() => {
@@ -97,27 +100,23 @@ export class GatewayLogComponent implements AfterViewInit {
     });
   }
 
-  getPastDay(days: number): Date {
-    return new Date(this.now.getTime() - 24 * 60 * 60 * 1000 * days);
-  }
-
-  onCloseDatePicker(): void {
+  onCloseDatePicker = (): void => {
     if (!this.dateEndCtrl.value) {
       this.dateEndCtrl.setValue(this.now);
     }
     this.onUpdate('GET');
-  }
+  };
 
-  searchEventNames(keyword: string): number[] {
+  searchEventNames = (keyword: string): number[] => {
     if (!this.eventDoc()) return [];
     const lowerKeyword = keyword.toLowerCase();
     const result = Object.entries(this.eventDoc())
       .filter(([_, event]) => event.name.toLowerCase().includes(lowerKeyword))
       .map(([id, _]) => parseInt(id));
     return result.length ? result : [9999];
-  }
+  };
 
-  onUpdate(type: TUpdateEventLogMode) {
+  onUpdate = (type: TUpdateEventLogMode): void => {
     const params: TGetGatewayEventLogsParams = {
       timeGe: Math.round(this.dateStartCtrl.value.getTime() / 1000),
       timeLe: Math.round(this.dateEndCtrl.value.getTime() / 1000),
@@ -127,7 +126,18 @@ export class GatewayLogComponent implements AfterViewInit {
       eventIds: this.searchEventId()
     };
     this.handleUpdateEventLogs.emit({ type, params });
-  }
+  };
+
+  onDownload = (): void => {
+    const params: IDownloadGatewayEventLogsReq = {
+      timeGe: Math.round(this.dateStartCtrl.value.getTime() / 1000),
+      timeLe: Math.round(this.dateEndCtrl.value.getTime() / 1000),
+      order: this.searchSort.value,
+      eventIds: this.searchEventId(),
+      timeZone: getTimeZone()
+    };
+    this.handleDownloadEventLogs.emit(params);
+  };
 
   ngAfterViewInit(): void {
     this.dataSource.data = this.events();

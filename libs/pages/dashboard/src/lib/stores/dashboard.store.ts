@@ -162,10 +162,10 @@ export const DashboardStore = signalStore(
           }
         });
       },
-      geteventDoc: rxMethod<void>(
+      getEventDoc: rxMethod<void>(
         pipe(
           switchMap(() =>
-            eventsService.geteventDoc$().pipe(
+            eventsService.getEventDoc$().pipe(
               tap((d: IGetEventDocResp) =>
                 patchState(store, { eventDoc: d.events, isLoading: DASHBOARD_LOADING.NONE })
               ),
@@ -180,7 +180,7 @@ export const DashboardStore = signalStore(
     return {
       onInit() {
         store.getSupportApps();
-        store.geteventDoc();
+        store.getEventDoc();
         store.set24hoursStartEndTime();
 
         globalStore

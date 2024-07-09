@@ -15,6 +15,7 @@ import {
   GW_RUNNING_MODE,
   GW_WS_TYPE,
   GatewayDetailState,
+  IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
   IGatewaySSHWsResp,
   IGatewaySystemInfo,
@@ -23,6 +24,7 @@ import {
   IRebootReq,
   TGetGatewayEventLogsReq
 } from '@neo-edge-web/models';
+import { datetimeFormat, downloadCSV } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -190,7 +192,7 @@ export const GatewayDetailStore = signalStore(
           )
         )
       ),
-      geteventLogsList: rxMethod<TGetGatewayEventLogsReq>(
+      getEventLogsList: rxMethod<TGetGatewayEventLogsReq>(
         pipe(
           tap(({ type }) =>
             patchState(store, {
@@ -213,14 +215,30 @@ export const GatewayDetailStore = signalStore(
           })
         )
       ),
-      geteventDoc: rxMethod<void>(
+      getEventDoc: rxMethod<void>(
         pipe(
           switchMap(() =>
-            eventsService.geteventDoc$().pipe(
+            eventsService.getEventDoc$().pipe(
               tap((d: IGetEventDocResp) => patchState(store, { eventDoc: d.events })),
               catchError(() => EMPTY)
             )
           )
+        )
+      ),
+      downloadEventLogsCsv: rxMethod<IDownloadGatewayEventLogsReq>(
+        pipe(
+          tap(() => patchState(store, { isLoading: GATEWAY_LOADING.DOWNLOAD_LOG })),
+          switchMap((params) => {
+            return gwDetailService.downloadGatewayEventLogs$(store.gatewayId(), params).pipe(
+              tap((data: ArrayBuffer) => {
+                const start = datetimeFormat(params.timeGe, null, false);
+                const end = datetimeFormat(params.timeLe, null, false);
+                downloadCSV(data, `NeoEdge_Gateway[${[store.gatewayDetail().name]}]_Log_${start}-${end}.csv`, true);
+                patchState(store, { isLoading: GATEWAY_LOADING.NONE });
+              }),
+              catchError(() => EMPTY)
+            );
+          })
         )
       )
     })
