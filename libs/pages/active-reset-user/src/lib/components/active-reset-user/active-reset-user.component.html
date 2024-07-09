@@ -33,7 +33,13 @@
             maxlength="128"
             id="active-reset-user-password"
           />
-          <button id="login-password-toggle" type="button" mat-icon-button matSuffix (click)="formService.togglePasswordVisibility('activeUserNewPassword')">
+          <button
+            id="login-password-toggle"
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="formService.togglePasswordVisibility('activeUserNewPassword')"
+          >
             @if (formService.getPasswordVisibility('activeUserNewPassword')()) {
               <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
             } @else {
@@ -56,7 +62,13 @@
             maxlength="128"
             id="active-reset-user-password-confirm"
           />
-          <button id="" type="button" mat-icon-button matSuffix (click)="formService.togglePasswordVisibility('activeUserConfirmPassword')">
+          <button
+            id=""
+            type="button"
+            mat-icon-button
+            matSuffix
+            (click)="formService.togglePasswordVisibility('activeUserConfirmPassword')"
+          >
             @if (formService.getPasswordVisibility('activeUserConfirmPassword')()) {
               <mat-icon class="visibility-icon" svgIcon="icon:visibility_off"></mat-icon>
             } @else {
@@ -72,7 +84,14 @@
         }
         @if (activeResetAction.ACTIVE_USER === pageState().action) {
           <mat-checkbox color="primary" formControlName="eula">
-            I have carefully reviewed and consented to the End User License Agreement (EULA).
+            I have carefully reviewed and consented to the
+            <a
+              class="text-link"
+              href="https://docs.neoedgecentral.com/legal/NeoEdgeX_EULA_1.0.pdf"
+              target="_blank"
+              rel="noreferrer noopener"
+              >End User License Agreement (EULA)</a
+            >.
           </mat-checkbox>
         }
         <div>
