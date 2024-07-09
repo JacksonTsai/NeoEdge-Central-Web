@@ -5,15 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import {
-  CREATE_OT_STEP,
-  IInstances,
-  IOtTagsForUI,
-  IRtuProfileForUI,
-  ITcpProfileForUI,
-  TSupportAppVersionData
-} from '@neo-edge-web/models';
-import { downloadCSV, swapType } from '@neo-edge-web/utils';
+import { CREATE_OT_STEP, IRtuProfileForUI, ITcpProfileForUI, TSupportAppVersionData } from '@neo-edge-web/models';
+import { downloadCSV } from '@neo-edge-web/utils';
 import {
   OtDeviceProfileComponent,
   OtTagsComponent,
@@ -23,6 +16,7 @@ import {
 import { OtTexolTagComponent } from '../../components/ot-texol-tag/ot-texol-tag.component';
 import { tagCsvContentTemplate } from '../../configs';
 import { CreateOtDevicesStore } from '../../stores/create-ot-device.store';
+import { setRTUInstance, setTCPInstance } from '../../utils/ot-proflie.helper';
 
 @Component({
   selector: 'ne-create-ot-device-page',
@@ -86,146 +80,35 @@ export class CreateOtDevicePageComponent implements OnInit {
     return this.form.get(ctrl) as UntypedFormControl;
   };
 
-  setRTUInstance = (otProfile: IRtuProfileForUI, otTags: { generateTagType: string; tags: any }): IInstances<any> => {
-    const rtuInstancesDevices = {
-      Name: otProfile.basic.deviceName,
-      SlaveID: otProfile.basic.slaveId
-    };
-    if (Array.isArray(otTags.tags)) {
-      const tags = otTags.tags
-        .map((d) => ({
-          Function: d.function.value,
-          StartingAddress: d.startAddress,
-          Quantity: d.quantity,
-          Trigger: d.trigger.value,
-          Interval: d.interval,
-          Enable: d.enable,
-          Name: d.tagName,
-          DataType: d.tagType.value,
-          Swap: swapType(otProfile.advanced.swapByte, otProfile.advanced.swapWord)
-        }))
-        .reduce((acc, value, index) => {
-          acc[index] = value;
-          return acc;
-        }, {});
-      rtuInstancesDevices['Commands'] = tags;
-    } else {
-      let profile = '';
-      if (otTags.tags.level2 === otTags.tags.level3) {
-        profile = `${otTags.tags.component}.${otTags.tags.level2}.Axial.${otTags.tags.axial}.profile`;
-      } else {
-        profile = `${otTags.tags.component}.${otTags.tags.level2}.${otTags.tags.level3}.Axial.${otTags.tags.axial}.profile`;
-      }
-      if ('texol-general' === otTags.generateTagType) {
-        rtuInstancesDevices['Profile'] = {
-          Name: 'General.profile',
-          Domains: [...Object.keys(otTags.tags).filter((key) => otTags.tags[key])]
-        };
-      } else {
-        rtuInstancesDevices['Profile'] = { Name: profile };
-      }
-    }
-
-    return {
-      Instances: {
-        RTU: {
-          '0': {
-            Properties: {
-              BaudRate: otProfile.connectionSetting.baudRate,
-              DataBit: otProfile.connectionSetting.dataBits,
-              Parity: otProfile.connectionSetting.parity.value,
-              StopBit: otProfile.connectionSetting.stopBit.toString(),
-              InitialDelay: otProfile.advanced.initialDelay,
-              DelayBetweenPolls: otProfile.advanced.delayBetweenPolls,
-              ResponseTimeout: otProfile.advanced.responseTimeout,
-              PollingRetries: otProfile.advanced.pollingRetries
-            },
-            Devices: {
-              0: { ...rtuInstancesDevices }
-            }
-          }
-        }
-      }
-    };
-  };
-
-  setTCPInstance = (
-    otProfile: ITcpProfileForUI,
-    otTags: { generateTagType: string; tags: IOtTagsForUI[] }
-  ): IInstances<any> => {
-    const tags = otTags.tags
-      .map((d) => {
-        return {
-          Function: d.function.value,
-          StartingAddress: d.startAddress,
-          Quantity: d.quantity,
-          Trigger: d.trigger.value,
-          Interval: d.interval,
-          Enable: d.enable,
-          Name: d.tagName,
-          DataType: d.tagType.value,
-          Swap: swapType(otProfile.advanced.swapByte, otProfile.advanced.swapWord)
-        };
-      })
-      .reduce((acc, value, index) => {
-        acc[index] = value;
-        return acc;
-      }, {});
-
-    return {
-      Instances: {
-        TCP: {
-          '0': {
-            Properties: {
-              IP: otProfile.basic.ipAddress,
-              Port: otProfile.basic.port,
-              InitialDelay: otProfile.advanced.initialDelay,
-              DelayBetweenPolls: otProfile.advanced.delayBetweenPolls,
-              ResponseTimeout: otProfile.advanced.responseTimeout,
-              PollingRetries: otProfile.advanced.pollingRetries
-            },
-            Devices: {
-              0: {
-                Name: otProfile.basic.deviceName,
-                SlaveID: otProfile.basic.slaveId,
-                Commands: { ...tags }
-              }
-            }
-          }
-        }
-      }
-    };
-  };
-
   onCreateDevice = () => {
     const selectDeviceProtocol = this.selectDeviceProtocolCtrl.value as TSupportAppVersionData;
     const deviceProfile = this.deviceProfileCtrl.value as {
       deviceIcon: File;
       profile: IRtuProfileForUI & ITcpProfileForUI;
     };
-
     const otTags = this.otTagsCtrl.value;
 
-    let profile = {};
     if (this.form.valid) {
-      if (
-        'TEXOL 213MM2-R1' === this.selectDeviceProtocolCtrl.value.name ||
-        'Modbus RTU' === this.selectDeviceProtocolCtrl.value.name
-      ) {
-        profile = {
-          appVersionId: selectDeviceProtocol.version.id,
-          name: deviceProfile.profile.basic.deviceName,
-          description: deviceProfile.profile?.basic?.description ?? '',
-          setting: { ...this.setRTUInstance(deviceProfile.profile, otTags) }
-        };
-      } else if ('Modbus TCP' === this.selectDeviceProtocolCtrl.value.name) {
-        profile = {
-          appVersionId: selectDeviceProtocol.version.id,
-          name: deviceProfile.profile.basic.deviceName,
-          description: deviceProfile.profile?.basic?.description ?? '',
-          setting: { ...this.setTCPInstance(deviceProfile.profile, otTags) }
-        };
+      const { id: appVersionId } = selectDeviceProtocol.version;
+      const { deviceName: name, description = '' } = deviceProfile.profile.basic;
+      let setting = {};
+
+      switch (this.selectDeviceProtocolCtrl.value.name) {
+        case 'Modbus RTU':
+          setting = { ...setRTUInstance(deviceProfile.profile, otTags.tags) };
+          break;
+        case 'TEXOL 213MM2-R1':
+          setting = { ...setRTUInstance(deviceProfile.profile, otTags) };
+          break;
+        case 'Modbus TCP':
+          setting = { ...setTCPInstance(deviceProfile.profile, otTags.tags) };
+          break;
+        default:
+          return;
       }
+
+      const profile = { appVersionId, name, description, setting };
+
       this.#createOtDevicesStore.createOtDevice({ profile, deviceIcon: deviceProfile.deviceIcon });
     }
   };
