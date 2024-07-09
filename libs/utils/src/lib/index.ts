@@ -9,3 +9,4 @@ export * from './obj2FromData.helper';
 export * from './params.helper';
 export * from './pick.helper';
 export * from './swapType.helper';
+export * from './uuid.helper';

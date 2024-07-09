@@ -142,3 +142,9 @@ export enum CREATE_OT_STEP {
   selectCommandTemplate,
   otTags
 }
+
+export enum OT_DEVICES_TABLE_MODE {
+  SELECTION,
+  NEOFLOW_VIEW,
+  OT_DEVICE_VIEW
+}
