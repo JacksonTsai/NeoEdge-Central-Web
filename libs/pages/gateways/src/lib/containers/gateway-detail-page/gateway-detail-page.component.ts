@@ -229,7 +229,11 @@ export class GatewayDetailPageComponent {
       disableClose: true,
       autoFocus: false,
       restoreFocus: false,
-      data: { gwDetailStore: this.gwDetailStore, gatewayName: this.gwDetailStore.gatewayDetail().name }
+      data: {
+        gwDetailStore: this.gwDetailStore,
+        gatewayName: this.gwDetailStore.gatewayDetail().name,
+        isConnectedOrWaiting: this.isConnected || this.isWaitingOnBoard
+      }
     });
 
     deleteGatewayDialogRef
