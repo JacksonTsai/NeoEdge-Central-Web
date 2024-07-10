@@ -1,29 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { DASHBOARD_LOADING, TGetProjectEventLogsParams } from '@neo-edge-web/models';
-import { DashboardComponent } from '../../components';
+import {
+  DashboardActivitiesComponent,
+  DashboardGatewayComponent,
+  DashboardItOtComponent,
+  DashboardProjectComponent,
+  DashboardUsersComponent,
+  UpdateDashboardDateComponent
+} from '../../components';
 import { DashboardStore } from '../../stores/dashboard.store';
 
 @Component({
   selector: 'ne-dashboard-page',
   standalone: true,
-  imports: [CommonModule, DashboardComponent],
-  template: `
-    <ne-dashboard
-      [isLoading]="isLoading()"
-      [projectDetail]="projectDetail()"
-      [usersList]="usersList()"
-      [itList]="itList()"
-      [itApps]="itApps()"
-      [otList]="otList()"
-      [otApps]="otApps()"
-      [gatewaysList]="gatewaysList()"
-      [activitiesList]="activitiesList()"
-      [eventDoc]="eventDoc()"
-      (handleReload)="onReload()"
-      (handleActivitiesScrollEnd)="onActivitiesScrollEnd()"
-    ></ne-dashboard>
-  `,
+  imports: [
+    CommonModule,
+    DashboardActivitiesComponent,
+    DashboardProjectComponent,
+    DashboardUsersComponent,
+    DashboardItOtComponent,
+    DashboardGatewayComponent,
+    UpdateDashboardDateComponent
+  ],
+  templateUrl: './dashboard-page.component.html',
   styleUrl: './dashboard-page.component.scss',
   providers: [DashboardStore],
   changeDetection: ChangeDetectionStrategy.OnPush

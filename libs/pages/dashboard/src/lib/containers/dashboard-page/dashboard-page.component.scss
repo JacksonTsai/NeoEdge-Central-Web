@@ -1,0 +1,49 @@
+@use 'breakpoint' as *;
+
+:host {
+  display: block;
+  padding-bottom: 20px;
+}
+
+.page-title-box {
+  margin-top: -12px;
+  margin-bottom: 8px;
+}
+
+.dashboard {
+  &,
+  &__main__container {
+    display: grid;
+    gap: 20px;
+  }
+
+  &__aside {
+    & > * {
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  @include breakpoint(large up) {
+    display: flex;
+
+    &__aside {
+      width: 33.33%;
+      order: 2;
+    }
+
+    &__main {
+      width: 66.66%;
+      order: 1;
+
+      &__container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    ne-dashboard-gateway {
+      grid-column: span 2;
+    }
+  }
+}
