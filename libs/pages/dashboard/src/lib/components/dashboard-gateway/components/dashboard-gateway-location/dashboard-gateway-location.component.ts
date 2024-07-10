@@ -3,7 +3,14 @@ import { ChangeDetectionStrategy, Component, computed, input, OnInit, signal } f
 import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { NeMapMultipleMarkComponent } from '@neo-edge-web/components';
-import { Gateway, GATEWAY_STATUE, STATUS_COLORS, TCategoryCoordinate } from '@neo-edge-web/models';
+import {
+  DASHBOARD_GATEWAY_STATUE,
+  GATEWAY_STATUE,
+  ICategoryCoordinate,
+  STATUS_COLORS,
+  TDashboardGatewayStatus,
+  TICategoryCoordinate
+} from '@neo-edge-web/models';
 
 interface IStatusItem {
   value: any;
@@ -19,8 +26,8 @@ interface IStatusItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardGatewayLocationComponent implements OnInit {
-  gatewaysList = input<Gateway[]>([]);
-  gatewayStatus = GATEWAY_STATUE;
+  gatewaysStatusList = input<TDashboardGatewayStatus>(null);
+  dashboardGatewayStatue = DASHBOARD_GATEWAY_STATUE;
   gatewayStatusSelect = signal<number[]>([]);
 
   gatewayStatusIcon: Record<number, string> = {
@@ -37,36 +44,43 @@ export class DashboardGatewayLocationComponent implements OnInit {
     3: STATUS_COLORS.Detach
   };
 
-  coordinateList = computed<TCategoryCoordinate[]>(() => {
-    if (!this.gatewaysList().length) return [];
-
-    let result: TCategoryCoordinate[] = this.gatewaysList().map((gateway) => {
-      const status = gateway.connectionStatus;
-      const img = `<img src="${this.gatewayStatusIcon[status]}" width="24" height="24" alt="" />`;
-      const tag = `<span class="gateway-status-tag" style="--primary-color: ${this.gatewayStatusColor[status]}">${img}${this.gatewayStatus[status]}</span>`;
-      return {
-        tag: tag,
-        msg: gateway.name,
-        category: status,
-        lat: gateway.latitude,
-        lng: gateway.longitude,
-        color: this.gatewayStatusColor[status],
-        routerLink: `/project/gateways/${gateway.id}`
-      };
+  coordinateListAll = computed<TICategoryCoordinate>(() => {
+    if (!this.gatewaysStatusList()) return null;
+    const result = {};
+    Object.entries(this.gatewaysStatusList()).forEach(([key, value]) => {
+      result[key] = value.list.map((gateway) => {
+        const status = value.id;
+        const img = `<img src="${this.gatewayStatusIcon[status]}" width="24" height="24" alt="" />`;
+        const tag = `<span class="gateway-status-tag" style="--primary-color: ${this.gatewayStatusColor[status]}">${img}${this.dashboardGatewayStatue[status]}</span>`;
+        return {
+          tag: tag,
+          msg: gateway.name,
+          category: status,
+          lat: gateway.latitude,
+          lng: gateway.longitude,
+          color: this.gatewayStatusColor[status],
+          routerLink: `/project/gateways/${gateway.id}`
+        };
+      });
     });
+    return result;
+  });
 
-    if (this.gatewayStatusSelect().length > 0) {
-      return (result = result.filter((coordinate) => {
-        return this.gatewayStatusSelect().includes(coordinate.category);
-      }));
-    } else {
-      return [];
-    }
+  coordinateList = computed<ICategoryCoordinate[]>(() => {
+    if (!this.coordinateListAll() || !this.gatewayStatusSelect().length) return [];
+
+    return this.gatewayStatusSelect().reduce((acc, status) => {
+      const statusKey = DASHBOARD_GATEWAY_STATUE[status];
+      if (statusKey && this.coordinateListAll()[statusKey]) {
+        return acc.concat(this.coordinateListAll()[statusKey]);
+      }
+      return acc;
+    }, []);
   });
 
   statusList = computed<IStatusItem[]>(() => {
     const result: IStatusItem[] = [];
-    Object.entries(this.gatewayStatus).forEach(([key, value]) => {
+    Object.entries(this.dashboardGatewayStatue).forEach(([key, value]) => {
       if (typeof value !== 'number') {
         result.push({
           value: parseInt(key, 10),

@@ -4,9 +4,11 @@ export interface ICoordinate {
   lng: number;
 }
 
-export type TCategoryCoordinate = ICoordinate & {
+export interface ICategoryCoordinate extends ICoordinate {
   category?: any;
   tag?: string;
   color?: string;
   routerLink?: string;
-};
+}
+
+export type TICategoryCoordinate = Record<string, ICategoryCoordinate>;

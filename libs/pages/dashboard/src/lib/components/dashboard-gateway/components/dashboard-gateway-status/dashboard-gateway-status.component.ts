@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
-import { GATEWAY_STATUE, IPieChartSetting, TDashboardGatewayStatus } from '@neo-edge-web/models';
+import { IPieChartSetting, TDashboardGatewayStatus } from '@neo-edge-web/models';
 import { getChartColor } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 
@@ -14,9 +14,7 @@ import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 })
 export class DashboardGatewayStatusComponent {
   gatewaysStatusList = input<TDashboardGatewayStatus>(null);
-  gatewayStatus = GATEWAY_STATUE;
-  public chartOptions = signal<Partial<ApexOptions> | null>(null);
-
+  chartOptions = signal<Partial<ApexOptions> | null>(null);
   colorArr = getChartColor(5, 'status');
   colors: string[] = [];
 
