@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, OnInit, signal } from '@angular/core';
 import { MatChipListboxChange, MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { NeMapMultipleMarkComponent } from '@neo-edge-web/components';
-import { GATEWAY_STATUE, Gateway, STATUS_COLORS, TCategoryCoordinate } from '@neo-edge-web/models';
+import { Gateway, GATEWAY_STATUE, STATUS_COLORS, TCategoryCoordinate } from '@neo-edge-web/models';
 
 interface IStatusItem {
   value: any;
@@ -18,7 +18,7 @@ interface IStatusItem {
   styleUrl: './dashboard-gateway-location.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardGatewayLocationComponent {
+export class DashboardGatewayLocationComponent implements OnInit {
   gatewaysList = input<Gateway[]>([]);
   gatewayStatus = GATEWAY_STATUE;
   gatewayStatusSelect = signal<number[]>([]);
@@ -56,12 +56,12 @@ export class DashboardGatewayLocationComponent {
     });
 
     if (this.gatewayStatusSelect().length > 0) {
-      result = result.filter((coordinate) => {
+      return (result = result.filter((coordinate) => {
         return this.gatewayStatusSelect().includes(coordinate.category);
-      });
+      }));
+    } else {
+      return [];
     }
-
-    return result;
   });
 
   statusList = computed<IStatusItem[]>(() => {
@@ -80,5 +80,13 @@ export class DashboardGatewayLocationComponent {
 
   onChangeFilter(event: MatChipListboxChange): void {
     this.gatewayStatusSelect.set(event.value);
+  }
+
+  createEnumArray = (enumObj: any): number[] => {
+    return Object.values(enumObj).filter((value) => typeof value === 'number') as number[];
+  };
+
+  ngOnInit(): void {
+    this.gatewayStatusSelect.set(this.createEnumArray(GATEWAY_STATUE));
   }
 }
