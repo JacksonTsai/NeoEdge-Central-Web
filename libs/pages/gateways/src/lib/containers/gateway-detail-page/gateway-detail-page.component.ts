@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
@@ -10,9 +10,11 @@ import {
   GATEWAY_SSH_STATUS,
   GATEWAY_STATUE,
   GW_RUNNING_MODE,
+  IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
   PERMISSION,
   TGatewayStatusInfo,
+  TGetGatewayEventLogsReq,
   TNeoEdgeXInfo
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -28,11 +30,19 @@ import {
   GatewayProfileComponent,
   GatewayRemoteAccessComponent
 } from '../../components';
+import { DownloadGatewayLogDialogComponent } from '../../components/download-gateway-log-dialog/download-gateway-log-dialog.component';
 import { GatewayLogComponent } from '../../components/gateway-log/gateway-log.component';
 import { GatewayNeoflowComponent } from '../../components/gateway-neoflow/gateway-neoflow.component';
 import { GatewayRebootDialogComponent } from '../../components/gateway-reboot-dialog/gateway-reboot-dialog.component';
 import { GatewayStatusInfoComponent } from '../../components/gateway-status-info/gateway-status-info.component';
 import { GatewayDetailStore } from '../../stores/gateway-detail.store';
+
+enum GATEWAY_DETAIL_TAB {
+  PROFILE,
+  OPERATION,
+  NEOFLOW,
+  LOG
+}
 
 @UntilDestroy()
 @Component({
@@ -69,6 +79,10 @@ export class GatewayDetailPageComponent {
   definedLabel = this.gwDetailStore.labels;
   isLoading = this.gwDetailStore.isLoading;
   sshStatus = this.gwDetailStore.sshStatus;
+  eventDoc = this.gwDetailStore.eventDoc;
+  eventLogsList = this.gwDetailStore.eventLogsList;
+  tabIndex = signal<number>(0);
+  gatewayDetailTab = GATEWAY_DETAIL_TAB;
 
   get isDetachMode() {
     return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.currentMode;
@@ -263,8 +277,32 @@ export class GatewayDetailPageComponent {
     this.gwDetailStore.updateSSHStatus({ enabled });
   };
 
+  onUpdateEventLogs = (event: TGetGatewayEventLogsReq): void => {
+    this.gwDetailStore.getEventLogsList({
+      type: event.type,
+      params: event.params
+    });
+  };
+
+  onDownloadEventLogs = (params: IDownloadGatewayEventLogsReq): void => {
+    let downloadGatewayEventLogsDialogRef = this.#dialog.open(DownloadGatewayLogDialogComponent, {
+      panelClass: 'med-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false,
+      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDoc() , params}
+    });
+    downloadGatewayEventLogsDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        downloadGatewayEventLogsDialogRef = undefined;
+      });
+  };
+
   onTabChange = (event: MatTabChangeEvent): void => {
-    if (event.index === 1 && this.isConnected) {
+    this.tabIndex.set(event.index);
+    if (event.index === GATEWAY_DETAIL_TAB.OPERATION && this.isConnected) {
       // Gateway Operation
       this.permissionsService
         .hasPermission(this.permission[this.permission.APPLICATION_MANAGEMENT])
@@ -273,6 +311,10 @@ export class GatewayDetailPageComponent {
             this.gwDetailStore.getSSHStatus();
           }
         });
+    } else if (event.index === GATEWAY_DETAIL_TAB.LOG) {
+      if (!this.eventDoc()) {
+        this.gwDetailStore.getEventDoc();
+      }
     }
   };
 }

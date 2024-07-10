@@ -1,9 +1,12 @@
 .top-action {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
+
   &__left,
   &__right {
     display: flex;
+    align-items: center;
     gap: 8px;
   }
 }

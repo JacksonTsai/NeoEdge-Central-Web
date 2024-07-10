@@ -1,0 +1,37 @@
+<h1 mat-dialog-title class="gl-h6">Download Gateway Logs</h1>
+<mat-dialog-content class="add-gateway-wrapper">
+  <form [formGroup]="form">
+    <h3 class="dialog-title">Download Setting</h3>
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+        <input matStartDate formControlName="start" placeholder="Start date" />
+        <input matEndDate formControlName="end" placeholder="End date" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker (closed)="onCloseDatePicker()" #picker></mat-date-range-picker>
+    </mat-form-field>
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Sort</mat-label>
+      <mat-select formControlName="sort">
+        @for (item of eventLogsSort | keyvalue; track item.key) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <ne-multi-select-chips
+      [useSearch]="true"
+      [useSelectAll]="true"
+      resultView="COUNT"
+      label="Event Type"
+      formControlName="type"
+      [options]="eventList()"
+    ></ne-multi-select-chips>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <button id="add-gateway-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button id="add-gateway-dialog-submit-btn" type="button" mat-raised-button color="primary" (click)="onDownload()">
+    Download
+  </button>
+</mat-dialog-actions>

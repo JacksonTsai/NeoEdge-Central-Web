@@ -1,3 +1,29 @@
 mat-form-field {
   display: block;
 }
+
+::ng-deep {
+  .mat-mdc-select-panel {
+    &.has-search {
+      padding-top: 72 + 8px;
+    }
+  }
+}
+
+.multi-select-search {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  padding: 8px;
+  width: 100%;
+  background: #fff;
+}
+
+.select-all {
+  padding-left: 6px;
+
+  mat-checkbox {
+    width: 100%;
+  }
+}
