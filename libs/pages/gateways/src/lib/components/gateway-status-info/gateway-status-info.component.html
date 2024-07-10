@@ -26,26 +26,28 @@
       <div class="label">Status</div>
       <div class="value">
         @if (gwCurrentMode.PASSIVE === gatewayStatusInfo().currentMode) {
-          <div class="gateway-status gateway-status--passive" matTooltip="Passive" matTooltipPosition="below"></div>
+          <div class="gateway-status" [style.--color]="statusColors['Passive']">
+            <span class="text">Passive</span>
+          </div>
         }
         @if (gwCurrentMode.DETACH === gatewayStatusInfo().currentMode) {
-          <div class="gateway-status gateway-status--detach" matTooltip="Detach" matTooltipPosition="below"></div>
+          <div class="gateway-status" [style.--color]="statusColors['Detach']">
+            <span class="text">Detach</span>
+          </div>
         }
         @if (gwCurrentMode.ACTIVE === gatewayStatusInfo().currentMode) {
           @if (gwStatus.Waiting === gatewayStatusInfo().connectionStatus) {
-            <div class="gateway-status gateway-status--waiting" matTooltip="Waiting" matTooltipPosition="below"></div>
+            <div class="gateway-status" [style.--color]="statusColors['Waiting']">
+              <span class="text">Waiting</span>
+            </div>
           } @else if (gwStatus.Connected === gatewayStatusInfo().connectionStatus) {
-            <div
-              class="gateway-status gateway-status--connected"
-              matTooltip="Connected"
-              matTooltipPosition="below"
-            ></div>
+            <div class="gateway-status" [style.--color]="statusColors['Connected']">
+              <span class="text">Connected</span>
+            </div>
           } @else if (gwStatus.Disconnected === gatewayStatusInfo().connectionStatus) {
-            <div
-              class="gateway-status gateway-status--disconnected"
-              matTooltip="Disconnected"
-              matTooltipPosition="below"
-            ></div>
+            <div class="gateway-status" [style.--color]="statusColors['Disconnected']">
+              <span class="text">Disconnected</span>
+            </div>
           }
         }
       </div>

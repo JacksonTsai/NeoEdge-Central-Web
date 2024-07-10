@@ -68,26 +68,28 @@
       <th mat-header-cell *matHeaderCellDef>Status</th>
       <td mat-cell *matCellDef="let element">
         @if (gwCurrentMode.PASSIVE === element.currentMode) {
-          <div class="gateway-status gateway-status--passive" matTooltip="Passive" matTooltipPosition="below"></div>
+          <div class="gateway-status" [style.--color]="statusColors['Passive']">
+            <span class="text">Passive</span>
+          </div>
         }
         @if (gwCurrentMode.DETACH === element.currentMode) {
-          <div class="gateway-status gateway-status--detach" matTooltip="Detach" matTooltipPosition="below"></div>
+          <div class="gateway-status" [style.--color]="statusColors['Detach']">
+            <span class="text">Detach</span>
+          </div>
         }
         @if (gwCurrentMode.ACTIVE === element.currentMode) {
           @if (gwStatus.Waiting === element.connectionStatus) {
-            <div class="gateway-status gateway-status--waiting" matTooltip="Waiting" matTooltipPosition="below"></div>
+            <div class="gateway-status" [style.--color]="statusColors['Waiting']">
+              <span class="text">Waiting</span>
+            </div>
           } @else if (gwStatus.Connected === element.connectionStatus) {
-            <div
-              class="gateway-status gateway-status--connected"
-              matTooltip="Connected"
-              matTooltipPosition="below"
-            ></div>
+            <div class="gateway-status" [style.--color]="statusColors['Connected']">
+              <span class="text">Connected</span>
+            </div>
           } @else if (gwStatus.Disconnected === element.connectionStatus) {
-            <div
-              class="gateway-status gateway-status--disconnected"
-              matTooltip="Disconnected"
-              matTooltipPosition="below"
-            ></div>
+            <div class="gateway-status" [style.--color]="statusColors['Disconnected']">
+              <span class="text">Disconnected</span>
+            </div>
           }
         }
       </td>
