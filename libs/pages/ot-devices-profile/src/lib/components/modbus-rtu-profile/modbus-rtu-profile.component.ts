@@ -24,7 +24,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { IRtuProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
+import { IRtuProfileForUI, OT_DEVICE_PROFILE_MODE, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
 import { bTypeValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -49,6 +49,7 @@ import { rtuOptions, texolOptions } from '../../configs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, Validator, AfterViewInit {
+  otProfileMode = input<OT_DEVICE_PROFILE_MODE>(OT_DEVICE_PROFILE_MODE.OT_DEVICE_VIEW);
   appName = input<SUPPORT_APPS_OT_DEVICE>();
   isEditMode = input(false);
   form: FormGroup;
@@ -56,6 +57,7 @@ export class ModbusRtuProfileComponent implements OnInit, ControlValueAccessor, 
   change: (value) => void;
   touch: (value) => void;
 
+  otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
   otDeviceType = SUPPORT_APPS_OT_DEVICE.MODBUS_RTU;
   options = computed(() => {
     return SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1 === this.appName() ? { ...texolOptions } : { ...rtuOptions };

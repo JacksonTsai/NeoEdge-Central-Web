@@ -30,7 +30,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NeUploadFileComponent } from '@neo-edge-web/components';
-import { ICsvTag, IOtTag, SUPPORT_APPS_OT_DEVICE, TEXOL_TAG_TYPE } from '@neo-edge-web/models';
+import { ICsvTag, IOtTag, OT_DEVICE_PROFILE_MODE, SUPPORT_APPS_OT_DEVICE, TEXOL_TAG_TYPE } from '@neo-edge-web/models';
 import { csvToObj } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { merge, tap } from 'rxjs';
@@ -70,6 +70,8 @@ export class SelectCommandTemplateComponent implements OnInit, ControlValueAcces
   texolTagDoc = input<any>({});
   isEditMode = input(false);
   #fb = inject(FormBuilder);
+  otProfileMode = input<OT_DEVICE_PROFILE_MODE>(OT_DEVICE_PROFILE_MODE.OT_DEVICE_VIEW);
+  otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
   texolTagType = TEXOL_TAG_TYPE;
   createTypeOpts = ['create', 'import'];
   supportAppsOtDevice = SUPPORT_APPS_OT_DEVICE;

@@ -1,15 +1,11 @@
 @use 'colors' as *;
 
-mat-dialog-content {
-
-}
-
 h1[mat-dialog-title] {
   border-bottom: 1px solid $border-color;
 }
 
 .lg-dialog {
-  width: 75vw;
+  width: 95vw;
 }
 
 .med-dialog {

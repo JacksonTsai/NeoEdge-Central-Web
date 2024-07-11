@@ -1,7 +1,9 @@
 <div class="command-template-wrapper">
   @if (appName()) {
     <section class="card__sec">
-      <h3 class="card__sub-title">Select Modbus Command Template</h3>
+      @if (otDeviceProfileMode.OT_DEVICE_VIEW === otProfileMode()) {
+        <h3 class="card__sub-title">Select Modbus Command Template</h3>
+      }
       @if (supportAppsOtDevice.TEXOL213MM2R1 !== appName()) {
         <mat-radio-group class="create-type" [formControl]="createTypeCtrl">
           <mat-radio-button id="command-template-create-from-scratch" [value]="'create'" color="primary">

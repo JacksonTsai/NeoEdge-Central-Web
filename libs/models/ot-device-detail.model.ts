@@ -14,3 +14,8 @@ export enum OT_DEVICE_LOADING {
   EDIT,
   REFRESH
 }
+
+export enum OT_DEVICE_PROFILE_MODE {
+  NEOFLOW_VIEW,
+  OT_DEVICE_VIEW
+}

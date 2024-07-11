@@ -1,3 +1,44 @@
 <div class="data-provider-wrapper">
-  <div></div>
+  <div class="data-provider-wrapper__action">
+    <div class="data-provider-wrapper__action__right">
+      <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+        <mat-label>Search</mat-label>
+        <input
+          id="ot-devices-search"
+          matInput
+          placeholder="Search name"
+          [formControl]="searchCtrl"
+          maxlength="128"
+          type="text"
+        />
+        <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="data-provider-wrapper__action__left">
+      <button type="button" mat-stroked-button color="primary" color="primary" (click)="onAddNewDevice()">
+        <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+        Add OT Device
+      </button>
+      <button type="button" mat-stroked-button color="primary" color="primary" (click)="onAddDeviceFromProfile()">
+        <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+        Add OT Device from Profile
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <div class="data-provider-wrapper__ot-devices">
+      <ne-ot-devices
+        [tableMode]="otDeviceTableMode.NEOFLOW_VIEW"
+        [otDevices]="otDevices()"
+        [page]="pageNumber()"
+        [size]="pageSize()"
+        [devicesLength]="addedOtList().length"
+        (handleDetailDeviceFromNeoFlow)="onDetailDeviceFromNeoFlow($event)"
+        (handleRemoveDeviceFromNeoFlow)="onRemoveDeviceFromNeoFlow($event)"
+        (handlePageChange)="onPageChange($event)"
+      ></ne-ot-devices>
+    </div>
+  </div>
 </div>

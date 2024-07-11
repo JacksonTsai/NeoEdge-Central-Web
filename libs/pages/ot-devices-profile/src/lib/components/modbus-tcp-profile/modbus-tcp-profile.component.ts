@@ -23,7 +23,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ITcpProfileForUI, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
+import { ITcpProfileForUI, OT_DEVICE_PROFILE_MODE, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
 import { bTypeValidator, ipValidator, positiveIntegerValidator, whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -47,11 +47,13 @@ import { tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModbusTcpProfileComponent implements OnInit, AfterViewInit, ControlValueAccessor, Validator {
+  otProfileMode = input<OT_DEVICE_PROFILE_MODE>(OT_DEVICE_PROFILE_MODE.OT_DEVICE_VIEW);
   isEditMode = input(false);
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
   otDeviceType = SUPPORT_APPS_OT_DEVICE.MODBUS_RTU;
 
+  otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
   change: (value) => void;
   touch: (value) => void;
 

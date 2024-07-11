@@ -23,8 +23,8 @@ export const tcpProfile = (otDevice) => {
     pollingRetries: tcpInstance.TCP[0].Properties.PollingRetries,
     responseTimeout: tcpInstance.TCP[0].Properties.ResponseTimeout,
     delayBetweenPolls: tcpInstance.TCP[0].Properties.DelayBetweenPolls,
-    swapByte: isSwapByte(tcpDevice?.Commands[0].Swap) ?? false,
-    swapWord: isSwapWord(tcpDevice?.Commands[0].Swap) ?? false,
+    swapByte: tcpDevice?.Commands && tcpDevice?.Commands[0] ? isSwapByte(tcpDevice?.Commands[0]?.Swap) : false,
+    swapWord: tcpDevice?.Commands && tcpDevice?.Commands[0] ? isSwapWord(tcpDevice?.Commands[0]?.Swap) : false,
     iconPath: otDevice.iconPath
   };
 };
@@ -46,8 +46,8 @@ export const rtuProfile = (otDevice) => {
     pollingRetries: rtuInstance.RTU[0].Properties.PollingRetries,
     responseTimeout: rtuInstance.RTU[0].Properties.ResponseTimeout,
     delayBetweenPolls: rtuInstance.RTU[0].Properties.DelayBetweenPolls,
-    swapByte: rtuDevice?.Commands && rtuDevice.Commands[0] ? isSwapByte(rtuDevice.Commands[0].Swap) : false,
-    swapWord: rtuDevice?.Commands && rtuDevice.Commands[0] ? isSwapWord(rtuDevice?.Commands[0]?.Swap) : false,
+    swapByte: rtuDevice?.Commands && rtuDevice?.Commands[0] ? isSwapByte(rtuDevice.Commands[0].Swap) : false,
+    swapWord: rtuDevice?.Commands && rtuDevice?.Commands[0] ? isSwapWord(rtuDevice?.Commands[0]?.Swap) : false,
     iconPath: otDevice.iconPath
   };
 };
