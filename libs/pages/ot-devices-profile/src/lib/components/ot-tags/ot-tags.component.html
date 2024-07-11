@@ -1,6 +1,10 @@
 <div class="ot-tags-wrapper">
   <div class="ot-tags-wrapper__top">
-    <h2 class="card__title">Tags</h2>
+    <div>
+      @if (otDeviceProfileMode.OT_DEVICE_VIEW === otProfileMode()) {
+        <h2 class="card__title">Tags</h2>
+      }
+    </div>
     <div class="ot-tags-wrapper__top__action">
       @if (isEditMode()) {
         <button

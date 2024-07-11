@@ -1,10 +1,15 @@
 import { IItService } from './it-service.model';
 import { IOtDevice } from './ot-devices.model';
+import { ISupportApps } from './support-apps.model';
 
 export interface ICreateNeoFlowState {
   neoflowProcessorVers: { version: string; id: number }[];
+  supportApps: ISupportApps[];
   otProfileList: IOtDevice<any>[];
   itProfileList: IItService[];
+  addedOt: IOtDevice<any>[];
+  addedIt: IItService[];
+  texolTagDoc: any;
   isLoading: CREATE_NEOFLOW_LOADING;
 }
 

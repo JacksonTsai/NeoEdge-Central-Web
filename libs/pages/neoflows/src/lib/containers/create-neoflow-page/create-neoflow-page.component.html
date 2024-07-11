@@ -16,7 +16,13 @@
       <ng-template matStepLabel>Select Data Provider</ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-select-data-provider [otProfileList]="otProfileList()" formControlName="selectDataProvider">
+          <ne-select-data-provider
+            [addedOtList]="addedOt()"
+            (handleAddDeviceFromProfile)="onAddDeviceFromProfile()"
+            (handleRemoveDeviceFromNeoFlow)="onRemoveDeviceFromNeoFlow($event)"
+            (handleDetailDeviceFromNeoFlow)="onDetailDeviceFromNeoFlow($event)"
+            formControlName="selectDataProvider"
+          >
           </ne-select-data-provider>
         </mat-card-content>
       </mat-card>
@@ -26,7 +32,7 @@
       <ng-template matStepLabel>Select Message Destination</ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-select-message-destination [itProfileList]="itProfileList()"></ne-select-message-destination>
+          <ne-select-message-destination [itProfileList]="addedIt()"></ne-select-message-destination>
         </mat-card-content>
       </mat-card>
     </mat-step>

@@ -1,17 +1,33 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ItServiceService, NeoFlowsService, OtDevicesService, SupportAppsService } from '@neo-edge-web/global-services';
-import { CREATE_NEOFLOW_LOADING, ICreateNeoFlowState } from '@neo-edge-web/models';
+import {
+  ItServiceService,
+  NeoFlowsService,
+  OtDevicesService,
+  OtTexolService,
+  SupportAppsService
+} from '@neo-edge-web/global-services';
+import {
+  CREATE_NEOFLOW_LOADING,
+  ICreateNeoFlowState,
+  IItService,
+  IOtDevice,
+  SUPPORT_APPS_FLOW_GROUPS
+} from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { map, pipe, switchMap } from 'rxjs';
 
-const FLOW_GROUP = 2;
+const NEOFLOW_FLOW_GROUP = SUPPORT_APPS_FLOW_GROUPS.neoflow;
 
 const initialState: ICreateNeoFlowState = {
   neoflowProcessorVers: [],
+  supportApps: [],
   otProfileList: [],
   itProfileList: [],
+  addedOt: [],
+  addedIt: [],
+  texolTagDoc: null,
   isLoading: CREATE_NEOFLOW_LOADING.NONE
 };
 
@@ -26,12 +42,41 @@ export const CreateNeoFlowsStore = signalStore(
       nfService = inject(NeoFlowsService),
       otDevicesService = inject(OtDevicesService),
       itServiceService = inject(ItServiceService),
-      supportAppsService = inject(SupportAppsService)
+      supportAppsService = inject(SupportAppsService),
+      otTexolService = inject(OtTexolService)
     ) => ({
-      getApps: rxMethod<void>(
+      addOtDevice: rxMethod<IOtDevice<any>>(
+        pipe(
+          map((d) => {
+            patchState(store, { addedOt: [...store.addedOt(), d] });
+          })
+        )
+      ),
+      addItService: rxMethod<IItService>(
+        pipe(
+          map((d) => {
+            patchState(store, { addedIt: [...store.addedIt(), d] });
+          })
+        )
+      ),
+      removeOtDevice: rxMethod<{ otDeviceName: string }>(
+        pipe(
+          map(({ otDeviceName }) => {
+            patchState(store, { addedOt: [...store.addedOt().filter((ot) => otDeviceName !== ot.name)] });
+          })
+        )
+      ),
+      removeItService: rxMethod<{ index: number }>(
+        pipe(
+          map(({ index }) => {
+            patchState(store, { addedIt: [...store.addedIt().filter((_, i) => i !== index)] });
+          })
+        )
+      ),
+      getProcessorApps: rxMethod<void>(
         pipe(
           switchMap(() => {
-            return supportAppsService.getApps$(FLOW_GROUP).pipe(
+            return supportAppsService.getApps$(NEOFLOW_FLOW_GROUP).pipe(
               map(({ apps }) => {
                 patchState(store, {
                   neoflowProcessorVers: [...apps[0].appVersions]
@@ -41,7 +86,20 @@ export const CreateNeoFlowsStore = signalStore(
           })
         )
       ),
-      otProfileList: rxMethod<void>(
+      getSupportApps: rxMethod<void>(
+        pipe(
+          switchMap(() => {
+            return supportAppsService.getApps$().pipe(
+              map(({ apps }) => {
+                patchState(store, {
+                  supportApps: [...apps]
+                });
+              })
+            );
+          })
+        )
+      ),
+      getOtProfileList: rxMethod<void>(
         pipe(
           switchMap(() => {
             return otDevicesService.otDevices$().pipe(
@@ -54,7 +112,7 @@ export const CreateNeoFlowsStore = signalStore(
           })
         )
       ),
-      itProfileList: rxMethod<void>(
+      getItProfileList: rxMethod<void>(
         pipe(
           switchMap(() => {
             return itServiceService.getItService$().pipe(
@@ -66,15 +124,30 @@ export const CreateNeoFlowsStore = signalStore(
             );
           })
         )
+      ),
+      getTexolDoc: rxMethod<void>(
+        pipe(
+          switchMap(() => {
+            return otTexolService.getTexolDoc$().pipe(
+              map((texolDoc) => {
+                patchState(store, {
+                  texolTagDoc: texolDoc
+                });
+              })
+            );
+          })
+        )
       )
     })
   ),
   withHooks((store) => {
     return {
       onInit() {
-        store.getApps();
-        store.otProfileList();
-        store.itProfileList();
+        store.getProcessorApps();
+        store.getSupportApps();
+        store.getOtProfileList();
+        store.getItProfileList();
+        store.getTexolDoc();
       }
     };
   })
