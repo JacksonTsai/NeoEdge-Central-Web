@@ -155,10 +155,10 @@ export class CreateNeoflowPageComponent implements OnInit {
       data: { otDevice: event, appName, texolTagDoc: this.texolTagDoc() }
     });
 
-    // const componentInstance = addOtDeviceProfileDialogRef.componentInstance;
-    // componentInstance.handleAddOtDevice.pipe(untilDestroyed(this)).subscribe((otProfile) => {
-    //   this.#createNeoFlowStore.addOtDevice({ ...otProfile, name: `${otProfile.name}_${generateThreeCharUUID(3)} ` });
-    // });
+    const componentInstance = detailOtDeviceProfileDialogRef.componentInstance;
+    componentInstance.handleEditOtDevice.pipe(untilDestroyed(this)).subscribe((otProfile) => {
+      this.#createNeoFlowStore.editOtDevice(otProfile);
+    });
 
     detailOtDeviceProfileDialogRef
       .afterClosed()
