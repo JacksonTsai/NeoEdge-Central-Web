@@ -73,6 +73,15 @@ export const CreateNeoFlowsStore = signalStore(
           })
         )
       ),
+      editOtDevice: rxMethod<{ source: IOtDevice<any>; target: IOtDevice<any> }>(
+        pipe(
+          map(({ source, target }) => {
+            patchState(store, {
+              addedOt: [...store.addedOt().map((d) => (d.name === source.name ? { ...d, ...target } : d))]
+            });
+          })
+        )
+      ),
       getProcessorApps: rxMethod<void>(
         pipe(
           switchMap(() => {

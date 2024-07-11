@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -60,13 +60,14 @@ import { NgxPermissionsModule } from 'ngx-permissions';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OtDeviceDetailDialogComponent implements OnInit {
-  @Output() handleSave = new EventEmitter<any>();
+  @Output() handleEditOtDevice = new EventEmitter<any>();
   readonly dialogRef = inject(MatDialogRef<OtDeviceDetailDialogComponent>);
   data = inject<{ appName: string; otDevice: any; texolTagDoc: any }>(MAT_DIALOG_DATA);
   deviceProfileCtrl = new UntypedFormControl('');
   texolTemplateCtrl = new UntypedFormControl('');
   otTagsCtrl = new UntypedFormControl('');
   otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
+  sourceOtDevice = signal(null);
 
   get isRtuProfile() {
     return SUPPORT_APPS_OT_DEVICE.MODBUS_RTU === this.data.appName;
@@ -118,10 +119,10 @@ export class OtDeviceDetailDialogComponent implements OnInit {
           };
         }
       }
-      console.log(profile);
-
-      // this.#otDeviceDetailStore.editOtDevice({ profile, deviceIcon: deviceProfile.deviceIcon });
     }
+
+    this.handleEditOtDevice.emit({ source: this.sourceOtDevice(), target: profile });
+    this.onClose();
   };
 
   setTcpProfile = () => {
@@ -166,6 +167,7 @@ export class OtDeviceDetailDialogComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.sourceOtDevice.set(this.data.otDevice);
     this.setProfile[this.data.appName]();
   }
 }
