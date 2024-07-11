@@ -42,3 +42,10 @@ export enum DASHBOARD_LOADING {
   REFRESH,
   UPDATE_ACTIVITIES
 }
+
+export enum DASHBOARD_GATEWAY_STATUE {
+  Waiting = 0,
+  Connected = 1,
+  Disconnected = 2,
+  Detach = 3
+}

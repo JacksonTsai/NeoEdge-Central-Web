@@ -17,7 +17,9 @@ import { GatewayDetailStore } from '../../stores/gateway-detail.store';
 })
 export class DeleteGatewayConfirmDialogComponent {
   dialogRef!: MatDialogRef<DeleteGatewayConfirmDialogComponent>;
-  data = inject<{ gwDetailStore: GatewayDetailStore; gatewayName: string }>(MAT_DIALOG_DATA);
+  data = inject<{ gwDetailStore: GatewayDetailStore; gatewayName: string; isConnectedOrWaiting: boolean }>(
+    MAT_DIALOG_DATA
+  );
 
   get gatewayName() {
     return this.data?.gatewayName ?? '-';

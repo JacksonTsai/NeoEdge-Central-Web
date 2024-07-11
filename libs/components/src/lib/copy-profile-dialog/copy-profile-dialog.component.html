@@ -2,7 +2,7 @@
   @if (data.type === 'ot') {
     <span> Create OT Device From Copy </span>
   } @else {
-    <span> Create IT App From Copy </span>
+    <span> Create IT Service Profile From Copy </span>
   }
 </h1>
 
@@ -15,9 +15,9 @@
     <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>
         @if (data.type === 'ot') {
-          Device Name
+          OT Device Name
         } @else {
-          App Service Name
+          IT Service Profile Name
         }
       </mat-label>
       <input matInput formControlName="name" type="text" maxlength="64" />

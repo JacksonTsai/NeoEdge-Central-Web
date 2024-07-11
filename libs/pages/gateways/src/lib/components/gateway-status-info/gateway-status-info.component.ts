@@ -11,6 +11,7 @@ import {
   GATEWAY_STATUE,
   GW_CURRENT_MODE,
   PERMISSION,
+  STATUS_COLORS,
   TGatewayStatusInfo
 } from '@neo-edge-web/models';
 import { datetimeFormat } from '@neo-edge-web/utils';
@@ -48,6 +49,7 @@ export class GatewayStatusInfoComponent {
   gwStatus = GATEWAY_STATUE;
   booleanStatus = BOOLEAN_STATUS;
   permission = PERMISSION;
+  statusColors = STATUS_COLORS;
 
   logo = computed(() => {
     if (!this.gatewayStatusInfo()) {

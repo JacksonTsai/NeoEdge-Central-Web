@@ -60,8 +60,7 @@ export interface IAddGatewayResp {
 export enum GATEWAY_STATUE {
   Waiting = 0,
   Connected = 1,
-  Disconnected = 2,
-  Detach = 3
+  Disconnected = 2
 }
 
 export enum GATEWAY_SSH_MODE {

@@ -1,25 +1,22 @@
+@use 'colors' as *;
+
 .gateway-status {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  &--waiting {
-    background-color: #fdd16a;
-    color: #fdd16a;
+  --size: 12px;
+
+  position: relative;
+  color: $text-primary;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    width: var(--size);
+    height: var(--size);
+    background-color: var(--color, #ccc);
+    border-radius: 50%;
   }
-  &--connected {
-    background-color: #3077cb;
-    color: #3077cb;
-  }
-  &--disconnected {
-    background-color: #96b0c6;
-    color: #96b0c6;
-  }
-  &--passive {
-    background-color: #0fadb7;
-    color: #0fadb7;
-  }
-  &--detach {
-    background-color: #f87a7a;
-    color: #f87a7a;
+
+  .text {
+    padding-left: 8px;
+    font-size: 14px;
   }
 }
