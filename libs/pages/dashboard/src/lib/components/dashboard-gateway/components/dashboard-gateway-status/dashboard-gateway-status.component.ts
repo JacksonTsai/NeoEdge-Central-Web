@@ -15,6 +15,7 @@ import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 export class DashboardGatewayStatusComponent {
   gatewaysStatusList = input<TDashboardGatewayStatus>(null);
   chartOptions = signal<Partial<ApexOptions> | null>(null);
+
   colorArr = getChartColor(5, 'status');
   colors: string[] = [];
 

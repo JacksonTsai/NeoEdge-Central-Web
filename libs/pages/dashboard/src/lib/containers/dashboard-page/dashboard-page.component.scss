@@ -39,11 +39,11 @@
 
       &__container {
         grid-template-columns: repeat(2, 1fr);
-      }
-    }
 
-    ne-dashboard-gateway {
-      grid-column: span 2;
+        > * {
+          grid-column: span 2;
+        }
+      }
     }
   }
 }

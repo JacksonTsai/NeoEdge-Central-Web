@@ -1,0 +1,47 @@
+<mat-card>
+  <mat-card-header>
+    <h2 class="dashboard-card__title">Usage & Fee</h2>
+  </mat-card-header>
+  <mat-card-content class="dashboard-billing-content">
+    <div class="billing-total" [style.--primary]="chartColor[0]">
+      <h3 class="billing-total__title">Total Fee</h3>
+      <p class="billing-total__total">{{ total() | currency: projectFeeCurrency() }}</p>
+      <p class="billing-total__date">
+        @if (pastMonths().length > 0) {
+          {{ pastMonths()[0] }} - {{ pastMonths()[pastMonths().length - 1] }}
+        } @else {
+          <span class="text-gray">No data</span>
+        }
+      </p>
+    </div>
+    <div class="billing-chart">
+      @if (chartOptions()) {
+        <apx-chart
+          [series]="chartOptions()?.series"
+          [chart]="chartOptions()?.chart"
+          [yaxis]="chartOptions()?.yaxis"
+          [xaxis]="chartOptions()?.xaxis"
+          [labels]="chartOptions()?.labels"
+          [legend]="chartOptions()?.legend"
+          [stroke]="chartOptions()?.stroke"
+          [title]="chartOptions()?.title"
+          [dataLabels]="chartOptions()?.dataLabels"
+          [fill]="chartOptions()?.fill"
+          [tooltip]="chartOptions()?.tooltip"
+          [colors]="chartOptions()?.colors"
+        ></apx-chart>
+      }
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="dashboard-action">
+    <a
+      routerLink="/company-account/usage-billing"
+      color="primary"
+      mat-stroked-button
+      id="dashboard-see-more-billing-detail"
+    >
+      <span>See more Detail</span>
+      <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
+    </a>
+  </mat-card-actions>
+</mat-card>

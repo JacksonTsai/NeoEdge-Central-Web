@@ -1,3 +1,4 @@
+import { IProjectFeeResp } from './billing.model';
 import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { Gateway } from './gateways.model';
 import { IItService } from './it-service.model';
@@ -16,11 +17,11 @@ export interface IDashboardState {
   itApps: ISupportApps[];
   otList: IOtDevice<any>[];
   otApps: ISupportApps[];
-  usageFee?: any;
   licenseConsumption?: any;
   eventDoc: IEventDoc;
   activitiesList: IGetEventLogsResp;
-  activitiesTime: IDashboardActivitiesTime;
+  projectFee: IProjectFeeResp;
+  timeRecord: IDashboardTimeRecord;
 }
 
 export interface IDashboardGatewayStatusItem {
@@ -29,15 +30,27 @@ export interface IDashboardGatewayStatusItem {
   list: Gateway[];
 }
 
+export interface IDashboardTimeRecord {
+  activitiesTime: IDashboardActivitiesTime;
+  projectFeeTime: IDashboardProjectFeeTime;
+}
+
 export interface IDashboardActivitiesTime {
   start: number;
   end: number;
+}
+
+export interface IDashboardProjectFeeTime {
+  month: number;
+  start: Date;
+  end: Date;
 }
 
 export type TDashboardGatewayStatus = Record<string, IDashboardGatewayStatusItem>;
 
 export enum DASHBOARD_LOADING {
   NONE,
+  INIT,
   GET,
   REFRESH,
   UPDATE_ACTIVITIES

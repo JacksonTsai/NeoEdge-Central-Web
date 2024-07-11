@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { selectCurrentProject } from '@neo-edge-web/auth-store';
 import {
+  BillingService,
   EventsService,
   GatewaysService,
   ItServiceService,
@@ -11,13 +12,17 @@ import {
 } from '@neo-edge-web/global-services';
 import {
   DASHBOARD_LOADING,
+  IDashboardActivitiesTime,
+  IDashboardProjectFeeTime,
   IDashboardState,
   IGetEventDocResp,
   IGetEventLogsResp,
+  IProjectFeeReq,
+  IProjectFeeResp,
   SUPPORT_APPS_FLOW_GROUPS,
-  TGetProjectEventLogsParams,
   TGetProjectEventLogsReq
 } from '@neo-edge-web/models';
+import { getPastDay, getPastMonths } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -35,7 +40,11 @@ const initialState: IDashboardState = {
   otApps: [],
   eventDoc: {},
   activitiesList: null,
-  activitiesTime: null
+  projectFee: null,
+  timeRecord: {
+    activitiesTime: null,
+    projectFeeTime: null
+  }
 };
 
 export type DashboardStore = InstanceType<typeof DashboardStore>;
@@ -51,7 +60,8 @@ export const DashboardStore = signalStore(
       itServiceService = inject(ItServiceService),
       otDevicesService = inject(OtDevicesService),
       supportAppsService = inject(SupportAppsService),
-      eventsService = inject(EventsService)
+      eventsService = inject(EventsService),
+      billingService = inject(BillingService)
     ) => ({
       getProjectDetail: rxMethod<void>(
         pipe(
@@ -152,13 +162,24 @@ export const DashboardStore = signalStore(
           })
         )
       ),
-      set24hoursStartEndTime: () => {
+      set24hoursStartEndTime: (): void => {
         const now = new Date();
-        const past = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        const past24H: Date = getPastDay(1, now);
+        const pastMonths = 6;
+        const pastMonthsDate: Date = getPastMonths(6, now);
+        const activitiesTime: IDashboardActivitiesTime = {
+          start: Math.floor(past24H.getTime() / 1000),
+          end: Math.floor(now.getTime() / 1000)
+        };
+        const projectFeeTime: IDashboardProjectFeeTime = {
+          month: pastMonths,
+          start: pastMonthsDate,
+          end: now
+        };
         patchState(store, {
-          activitiesTime: {
-            start: Math.floor(past.getTime() / 1000),
-            end: Math.floor(now.getTime() / 1000)
+          timeRecord: {
+            activitiesTime,
+            projectFeeTime
           }
         });
       },
@@ -169,6 +190,21 @@ export const DashboardStore = signalStore(
               tap((d: IGetEventDocResp) =>
                 patchState(store, { eventDoc: d.events, isLoading: DASHBOARD_LOADING.NONE })
               ),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      getUsageFee: rxMethod<IProjectFeeReq>(
+        pipe(
+          tap(() =>
+            patchState(store, {
+              isLoading: DASHBOARD_LOADING.GET
+            })
+          ),
+          switchMap((params: IProjectFeeReq) =>
+            billingService.getProjectFee$(params).pipe(
+              tap((d: IProjectFeeResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
               catchError(() => EMPTY)
             )
           )
@@ -187,22 +223,7 @@ export const DashboardStore = signalStore(
           .select(selectCurrentProject)
           .pipe(
             tap(({ currentProjectId }) => {
-              patchState(store, { projectId: currentProjectId });
-              if (currentProjectId) {
-                store.getProjectDetail();
-                store.getAllUsers();
-                store.getAllItServiceProfiles();
-                store.getAllOtDeviceProfiles();
-                store.getAllGateways();
-
-                const activitiesParams: TGetProjectEventLogsParams = {
-                  size: 10,
-                  order: 'desc',
-                  timeGe: store.activitiesTime().start,
-                  timeLe: store.activitiesTime().end
-                };
-                store.getActivities({ type: 'GET', params: activitiesParams });
-              }
+              patchState(store, { projectId: currentProjectId, isLoading: DASHBOARD_LOADING.INIT });
             })
           )
           .subscribe();

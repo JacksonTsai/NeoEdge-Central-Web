@@ -1,4 +1,5 @@
 export * from './dashboard-activities/dashboard-activities.component';
+export * from './dashboard-billing/dashboard-billing.component';
 export * from './dashboard-gateway';
 export * from './dashboard-it-ot/dashboard-it-ot.component';
 export * from './dashboard-project/dashboard-project.component';

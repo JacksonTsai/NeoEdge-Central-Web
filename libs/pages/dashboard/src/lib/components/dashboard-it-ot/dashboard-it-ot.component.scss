@@ -1,8 +1,12 @@
 @use 'colors' as *;
+@use 'breakpoint' as *;
 
 :host {
   display: block;
   height: 100%;
+  @include breakpoint(large up) {
+    grid-column: span 1 !important;
+  }
 }
 
 mat-card {

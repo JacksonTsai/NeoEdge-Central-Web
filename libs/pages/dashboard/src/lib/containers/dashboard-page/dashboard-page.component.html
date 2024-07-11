@@ -17,6 +17,10 @@
       <ne-dashboard-gateway [gatewaysList]="gatewaysList()"></ne-dashboard-gateway>
       <ne-dashboard-it-ot type="it" [dataTable]="itList()" [apps]="itApps()"></ne-dashboard-it-ot>
       <ne-dashboard-it-ot type="ot" [dataTable]="otList()" [apps]="otApps()"></ne-dashboard-it-ot>
+      <ne-dashboard-billing
+        [projectFee]="projectFee()"
+        [timeRecord]="timeRecord()?.projectFeeTime"
+      ></ne-dashboard-billing>
     </div>
   </section>
 </div>
