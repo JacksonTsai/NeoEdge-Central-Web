@@ -8,13 +8,22 @@ export interface IBiilingState {
 
 export interface IBillingTimeRecord {
   days: number;
+  today: string;
   monthStart: string;
   monthEnd: string;
-  monthEndUTC: string;
+  monthEndUTC: number;
   pastMonths: number;
   pastStart: string;
 }
 
+export interface IBillingMonthInfo {
+  days: number;
+  today: string;
+  firstDayOfMonth: string;
+  lastDayOfMonth: string;
+  lastDayUTC: number;
+  twelveMonthsAgoFirstDay: string;
+}
 export interface IBillingReq {
   type: TGetBillingType;
   params: IBillingParamsReq;
@@ -64,14 +73,6 @@ export interface IBillingChart {
 export interface ICurrencyData {
   currency: string;
   unit: string;
-}
-
-export interface IMonthInfo {
-  days: number;
-  firstDayOfMonth: string;
-  lastDayOfMonth: string;
-  lastDayUTC: string;
-  twelveMonthsAgoFirstDay: string;
 }
 
 export type TBillingGroupBy = 'year' | 'month' | 'day';

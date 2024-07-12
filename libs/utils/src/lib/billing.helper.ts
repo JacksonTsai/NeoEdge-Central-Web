@@ -1,5 +1,11 @@
-import { IBillingChartSeries, IMonthInfo, IUsageAndFee } from '@neo-edge-web/models';
-import { datetimeFormat } from './datetimeFormat.helper';
+import { IBillingChartSeries, IBillingMonthInfo, IUsageAndFee } from '@neo-edge-web/models';
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+
+// Extend dayjs with the plugins
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const getChartUsageAndFee = (list: string[], usageAndFee: IUsageAndFee[]): IBillingChartSeries => {
   const result: IBillingChartSeries = {
@@ -16,33 +22,30 @@ export const getChartUsageAndFee = (list: string[], usageAndFee: IUsageAndFee[])
   return result;
 };
 
-export const getCurrentDateInfo = (currentDate: Date): IMonthInfo => {
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
+export const getCurrentDateInfo = (currentDate: Date): IBillingMonthInfo => {
+  const today = dayjs(currentDate);
+  const daysInMonth = today.daysInMonth();
+  const formatDate = 'YYYY-MM-DD';
+  const formatDateTime = 'YYYY-MM-DD HH:mm:ss';
 
-  // Format dates to YYYY-MM-DD
-  const firstDayOfMonthStr = firstDayOfMonth.toISOString().split('T')[0];
-  const lastDayOfMonthStr = lastDayOfMonth.toISOString().split('T')[0];
+  // Current month first day and last day
+  const firstDayOfMonth = today.startOf('month').hour(0).minute(0).second(0).millisecond(0);
+  const lastDayOfMonth = today.endOf('month').hour(23).minute(59).second(59).millisecond(999);
 
   // Last day of the month at 24:00:00 UTC+0, converting to local time
-  const lastDayUTC = new Date(
-    Date.UTC(lastDayOfMonth.getFullYear(), lastDayOfMonth.getMonth(), lastDayOfMonth.getDate(), 24)
-  );
-  // const lastDayUTCStr = lastDayUTC.toLocaleString(); // Local time representation
-  const lastDayUTCStr = datetimeFormat(Math.round(lastDayUTC.getTime() / 1000)); // Local time representation
+  const endOfMonthUTC = dayjs.utc().add(1, 'month').startOf('month').hour(0).minute(0).second(0).millisecond(0);
+  const endOfMonthLocal = endOfMonthUTC.local();
 
   // 12 months ago first day
-  const twelveMonthsAgoFirstDay = new Date(year, month - 12, 1);
-  const twelveMonthsAgoFirstDayStr = twelveMonthsAgoFirstDay.toISOString().split('T')[0];
+  const twelveMonthsAgo = today.subtract(12, 'months');
+  const twelveMonthsAgoFirstDay = twelveMonthsAgo.startOf('month');
 
   return {
     days: daysInMonth,
-    firstDayOfMonth: firstDayOfMonthStr,
-    lastDayOfMonth: lastDayOfMonthStr,
-    lastDayUTC: lastDayUTCStr,
-    twelveMonthsAgoFirstDay: twelveMonthsAgoFirstDayStr
+    today: today.format(formatDate),
+    firstDayOfMonth: firstDayOfMonth.format(formatDate),
+    lastDayOfMonth: lastDayOfMonth.format(formatDate),
+    lastDayUTC: endOfMonthLocal.unix(),
+    twelveMonthsAgoFirstDay: twelveMonthsAgoFirstDay.format(formatDate)
   };
 };

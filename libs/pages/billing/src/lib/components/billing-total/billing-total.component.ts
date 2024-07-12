@@ -30,11 +30,12 @@ export class BillingTotalComponent {
 
   currencyUnit = computed(() => this.estimate()?.currency ?? 'USD');
   contentData = computed<IBillingTotalContent>(() => {
+    if (!this.timeRecord()) return null;
     let result = null;
     if (BILLING_TOTAL_TYPE.CURRENT === this.type()) {
       result = {
         title: 'Month Statistics',
-        dayRange: `${this.timeRecord().monthStart} - 2024/07/12`,
+        dayRange: `${this.timeRecord().monthStart} - ${this.timeRecord().today}`,
         until: this.estimate()?.caculateAt ?? new Date().getTime(),
         usage: this.estimate()?.totalUsage ?? 0,
         fee: this.estimate()?.totalFee ?? 0
@@ -43,7 +44,7 @@ export class BillingTotalComponent {
       result = {
         title: 'Month Forecast',
         dayRange: `${this.timeRecord().monthStart} - ${this.timeRecord().monthEnd}`,
-        until: 1720766045,
+        until: this.timeRecord().monthEndUTC,
         usage: this.estimate()?.estimateUsage ?? 0,
         fee: this.estimate()?.estimateFee ?? 0
       };

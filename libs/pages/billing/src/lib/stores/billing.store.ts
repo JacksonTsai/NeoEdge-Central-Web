@@ -32,6 +32,7 @@ export const BillingdStore = signalStore(
       const pastMonths = 12;
       const timeRecord: IBillingTimeRecord = {
         days: monthInfo.days,
+        today: monthInfo.today,
         monthStart: monthInfo.firstDayOfMonth,
         monthEnd: monthInfo.lastDayOfMonth,
         pastMonths: pastMonths,

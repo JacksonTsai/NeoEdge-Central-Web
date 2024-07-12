@@ -36,7 +36,7 @@ export const getTimeZone = (): string => {
  * @param {Date} endDate - The end date from which to calculate the past years.
  * @param {number} years - The number of past years to include.
  * @returns {string[]} An array of strings representing the past years.
- *                     Ex: input: 2024/07/11 (Date format),
+ *                     Ex: Input: 2024/07/11 (Date format),
  *                     Output: ["2020", "2021", "2022", "2023", "2024"]
  */
 export const generatePastYears = (endDate: Date, years: number): string[] => {
@@ -55,7 +55,7 @@ export const generatePastYears = (endDate: Date, years: number): string[] => {
  * @param {Date} endDate - The end date from which to calculate the past months.
  * @param {number} months - The number of past months to include.
  * @returns {string[]} An array of strings representing the past months in 'YYYY-MM' format.
- *                     Ex: input: 2024/07/11 (Date format),
+ *                     Ex: Input: 2024/07/11 (Date format),
  *                     Output: ["2024-02", "2024-03", "2024-04", "2024-05", "2024-06", "2024-07"]
  */
 export const generatePastMonths = (endDate: Date, months: number): string[] => {
@@ -75,7 +75,7 @@ export const generatePastMonths = (endDate: Date, months: number): string[] => {
  *
  * @param {Date} endDate - The end date from which to calculate the month days.
  * @returns {string[]} An array of strings representing all days in the month in 'YYYY-MM-DD' format.
- *                     Ex: input: 2024/07/11 (Date format),
+ *                     Ex: Input: 2024/07/11 (Date format),
  *                     Output: ["2024-07-01", "2024-07-02", ..., "2024-07-31"]
  */
 export const generateMonthDays = (endDate: Date): string[] => {
