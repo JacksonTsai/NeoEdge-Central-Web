@@ -1,45 +1,45 @@
-import { CommonModule, CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { IBillingChart, IDashboardProjectFeeTime, IProjectFeeResp } from '@neo-edge-web/models';
-import { arraySum, generatePastMonths, getChartColor, getChartUsageAndFee } from '@neo-edge-web/utils';
+import { currencyCustomPipe } from '@neo-edge-web/pipes';
+import { arraySum, dateDashToSlash, generatePastMonths, getChartColor, getChartUsageAndFee } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
   selector: 'ne-dashboard-billing',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule, NgApexchartsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    NgApexchartsModule,
+    currencyCustomPipe
+  ],
   templateUrl: './dashboard-billing.component.html',
   styleUrl: './dashboard-billing.component.scss',
-  providers: [CurrencyPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardBillingComponent {
-  #currencyPipe = inject(CurrencyPipe);
   projectFee = input<IProjectFeeResp>(null);
   timeRecord = input<IDashboardProjectFeeTime>(null);
   chartOptions = signal<Partial<ApexOptions> | null>(null);
   chartColor: string[] = getChartColor(2);
   total = signal<number>(0);
 
-  projectFeeCurrency = computed<string>(() => {
-    if (!this.projectFee()?.currency) return 'USD';
-    if (this.projectFee()?.currency === 'NTD') {
-      return 'TWD';
-    }
-    return this.projectFee()?.currency;
-  });
-  currencyUnit = computed<string>(() => {
-    const result = this.#currencyPipe.transform(0, this.projectFeeCurrency());
-    console.log('currencyUnit result', result);
-    return result.replace(/\d|\./g, '');
-  });
+  currencyUnit = computed(() => this.projectFee()?.currency ?? 'USD');
   pastMonths = computed<string[]>(() => {
     if (!this.timeRecord()) return [];
     return generatePastMonths(this.timeRecord().end, 6);
+  });
+  dateRange = computed<string>(() => {
+    if (!this.pastMonths().length) return '';
+    return `${dateDashToSlash(this.pastMonths()[0])} - ${dateDashToSlash(this.pastMonths()[this.pastMonths().length - 1])}`;
   });
 
   constructor() {
@@ -60,7 +60,7 @@ export class DashboardBillingComponent {
         usage: usage,
         fee: fee
       },
-      labels: this.pastMonths().map((v) => v.replace(/-/, '/'))
+      labels: this.pastMonths().map((v) => dateDashToSlash(v))
     };
 
     this.chartOptions.set(this.getChartOption(chartSetting));

@@ -5,14 +5,8 @@
   <mat-card-content class="dashboard-billing-content">
     <div class="billing-total" [style.--primary]="chartColor[0]">
       <h3 class="billing-total__title">Total Fee</h3>
-      <p class="billing-total__total">{{ total() | currency: projectFeeCurrency() }}</p>
-      <p class="billing-total__date">
-        @if (pastMonths().length > 0) {
-          {{ pastMonths()[0] }} - {{ pastMonths()[pastMonths().length - 1] }}
-        } @else {
-          <span class="text-gray">No data</span>
-        }
-      </p>
+      <p class="billing-total__total">{{ total() | currencyCustom: currencyUnit() }}</p>
+      <p class="billing-total__date">{{ dateRange() }}</p>
     </div>
     <div class="billing-chart">
       @if (chartOptions()) {

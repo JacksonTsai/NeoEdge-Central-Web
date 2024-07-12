@@ -9,6 +9,8 @@ export const datetimeFormat = (timestamp: number, format?: DATE_FORMAT, showTime
   return isNaN(timestamp) ? '-' : dayjs(timestamp * 1000).format(useFormat);
 };
 
+export const dateDashToSlash = (date: string): string => date?.replace(/-/g, '/') || '';
+
 export const getPastDay = (days: number, now?: Date): Date => {
   const nowCurrent = now || new Date();
   return dayjs(nowCurrent).subtract(days, 'day').toDate();

@@ -28,3 +28,8 @@ export interface IBillingChart {
   series: IBillingChartSeries;
   labels: string[];
 }
+
+export interface ICurrencyData {
+  currency: string;
+  unit: string;
+}
