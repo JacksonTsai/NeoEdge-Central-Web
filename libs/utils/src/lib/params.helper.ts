@@ -1,3 +1,6 @@
+import { DATE_FORMAT } from '@neo-edge-web/models';
+import { datetimeFormat } from './datetimeFormat.helper';
+
 interface IParmas {
   [key: string]: any;
 }
@@ -8,7 +11,15 @@ export const setParamsArrayWithKey = (params: IParmas): URLSearchParams => {
     if (value === null || value === '') {
       return;
     }
-    if (typeof value === 'number') {
+
+    if (['dateGe', 'dateLe'].includes(key)) {
+      const date = datetimeFormat(
+        Math.round(value.getTime() / 1000),
+        DATE_FORMAT['YYYY-MM-DD HH:mm:ss'],
+        false
+      ).replace(/\//, '-');
+      paramsResult.set(key, date);
+    } else if (typeof value === 'number') {
       paramsResult.set(key, value.toString());
     } else if (Array.isArray(value)) {
       value.forEach((item) => {
@@ -18,5 +29,6 @@ export const setParamsArrayWithKey = (params: IParmas): URLSearchParams => {
       paramsResult.set(key, value);
     }
   });
+
   return paramsResult;
 };

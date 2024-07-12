@@ -18,6 +18,7 @@
     "paths": {
       "@neo-edge-web/active-reset-user": ["libs/pages/active-reset-user/src/index.ts"],
       "@neo-edge-web/auth-store": ["libs/global-stores/src/lib/auth-store/index.ts"],
+      "@neo-edge-web/billing": ["libs/pages/billing/src/index.ts"],
       "@neo-edge-web/company-info": ["libs/pages/company-info/src/index.ts"],
       "@neo-edge-web/components": ["libs/components/src/index.ts"],
       "@neo-edge-web/configs": ["libs/configs/index.ts"],

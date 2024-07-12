@@ -12,13 +12,13 @@ import {
 } from '@neo-edge-web/global-services';
 import {
   DASHBOARD_LOADING,
+  IBillingParamsReq,
+  IBillingResp,
   IDashboardActivitiesTime,
   IDashboardProjectFeeTime,
   IDashboardState,
   IGetEventDocResp,
   IGetEventLogsResp,
-  IProjectFeeReq,
-  IProjectFeeResp,
   SUPPORT_APPS_FLOW_GROUPS,
   TGetProjectEventLogsReq
 } from '@neo-edge-web/models';
@@ -162,11 +162,11 @@ export const DashboardStore = signalStore(
           })
         )
       ),
-      set24hoursStartEndTime: (): void => {
+      setTimeRecord: (): void => {
         const now = new Date();
         const past24H: Date = getPastDay(1, now);
         const pastMonths = 6;
-        const pastMonthsDate: Date = getPastMonths(6, now);
+        const pastMonthsDate: Date = getPastMonths(pastMonths, now);
         const activitiesTime: IDashboardActivitiesTime = {
           start: Math.floor(past24H.getTime() / 1000),
           end: Math.floor(now.getTime() / 1000)
@@ -195,16 +195,16 @@ export const DashboardStore = signalStore(
           )
         )
       ),
-      getUsageFee: rxMethod<IProjectFeeReq>(
+      getProjectUsageFee: rxMethod<IBillingParamsReq>(
         pipe(
           tap(() =>
             patchState(store, {
               isLoading: DASHBOARD_LOADING.GET
             })
           ),
-          switchMap((params: IProjectFeeReq) =>
+          switchMap((params: IBillingParamsReq) =>
             billingService.getProjectFee$(params).pipe(
-              tap((d: IProjectFeeResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
+              tap((d: IBillingResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
               catchError(() => EMPTY)
             )
           )
@@ -217,7 +217,7 @@ export const DashboardStore = signalStore(
       onInit() {
         store.getSupportApps();
         store.getEventDoc();
-        store.set24hoursStartEndTime();
+        store.setTimeRecord();
 
         globalStore
           .select(selectCurrentProject)

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
-import { DASHBOARD_LOADING, IProjectFeeReq, TGetProjectEventLogsParams } from '@neo-edge-web/models';
+import { DASHBOARD_LOADING, IBillingParamsReq, TGetProjectEventLogsParams } from '@neo-edge-web/models';
 import {
   DashboardActivitiesComponent,
   DashboardBillingComponent,
@@ -80,12 +80,12 @@ export class DashboardPageComponent {
     };
     this.#dashboardStore.getActivities({ type: 'GET', params: activitiesParams });
 
-    const billingParams: IProjectFeeReq = {
+    const billingParams: IBillingParamsReq = {
       dateGe: this.timeRecord().projectFeeTime?.start,
       dateLe: this.timeRecord().projectFeeTime?.end,
       groupBy: 'month'
     };
-    this.#dashboardStore.getUsageFee(billingParams);
+    this.#dashboardStore.getProjectUsageFee(billingParams);
   };
 
   onActivitiesScrollEnd(): void {

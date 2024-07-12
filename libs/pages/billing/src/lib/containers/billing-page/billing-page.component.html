@@ -1,0 +1,14 @@
+<h1 class="page-title">Usage & Billing Records</h1>
+<section class="billing-total">
+  <ne-billing-total
+    [type]="billingTotalType.CURRENT"
+    [timeRecord]="timeRecord()"
+    [estimate]="estimate()"
+  ></ne-billing-total>
+  <ne-billing-total
+    [type]="billingTotalType.ESTIMATE"
+    [timeRecord]="timeRecord()"
+    [estimate]="estimate()"
+  ></ne-billing-total>
+</section>
+<ne-billing></ne-billing>

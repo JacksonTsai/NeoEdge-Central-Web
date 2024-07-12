@@ -15,3 +15,7 @@ p {
 a.text-link {
   @extend %link;
 }
+
+.text-gray {
+  color: $text-gary;
+}

@@ -9,6 +9,11 @@ export const datetimeFormat = (timestamp: number, format?: DATE_FORMAT, showTime
   return isNaN(timestamp) ? '-' : dayjs(timestamp * 1000).format(useFormat);
 };
 
+export const dateFormat = (timestamp: number | Date): string => {
+  const currentTimestamp = typeof timestamp === 'number' ? timestamp : timestamp.getTime();
+  return datetimeFormat(currentTimestamp, DATE_FORMAT['YYYY-MM-DD HH:mm:ss'], false);
+};
+
 export const dateDashToSlash = (date: string): string => date?.replace(/-/g, '/') || '';
 
 export const getPastDay = (days: number, now?: Date): Date => {
@@ -17,8 +22,8 @@ export const getPastDay = (days: number, now?: Date): Date => {
 };
 
 export const getPastMonths = (months: number, now?: Date): Date => {
-  const nowCurrent = now || new Date();
-  return dayjs(nowCurrent).subtract(months, 'month').toDate();
+  const today = now || new Date();
+  return dayjs(today).subtract(months, 'month').toDate();
 };
 
 export const getTimeZone = (): string => {

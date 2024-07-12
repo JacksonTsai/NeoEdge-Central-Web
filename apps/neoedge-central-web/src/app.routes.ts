@@ -85,6 +85,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'company-account/usage-billing',
+        loadChildren: () => import('@neo-edge-web/billing').then((m) => m.billingRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: '',
         redirectTo: '/login',
         pathMatch: 'full'
