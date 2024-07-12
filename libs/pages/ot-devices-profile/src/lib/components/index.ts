@@ -1,3 +1,4 @@
+export * from './create-ot-profile/create-ot-profile.component';
 export * from './delete-ot-device-confirm-dialog/delete-ot-device-confirm-dialog.component';
 export * from './impot-tags-from-csv-dialog/import-tags-from-csv-dialog.component';
 export * from './modbus-rtu-profile/modbus-rtu-profile.component';
