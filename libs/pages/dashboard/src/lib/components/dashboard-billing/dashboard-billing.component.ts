@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { IBillingChart, IBillingResp, IDashboardProjectFeeTime } from '@neo-edge-web/models';
+import { IBillingChart, IDashboardProjectFeeTime, IGetBillingResp } from '@neo-edge-web/models';
 import { currencyCustomPipe } from '@neo-edge-web/pipes';
 import {
   arraySum,
@@ -33,7 +33,7 @@ import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardBillingComponent {
-  projectFee = input<IBillingResp>(null);
+  projectFee = input<IGetBillingResp>(null);
   timeRecord = input<IDashboardProjectFeeTime>(null);
   chartOptions = signal<Partial<ApexOptions> | null>(null);
   chartColor: string[] = getChartColor(2);

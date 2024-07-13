@@ -13,10 +13,10 @@ import {
 import {
   DASHBOARD_LOADING,
   IBillingParamsReq,
-  IBillingResp,
   IDashboardActivitiesTime,
   IDashboardProjectFeeTime,
   IDashboardState,
+  IGetBillingResp,
   IGetEventDocResp,
   IGetEventLogsResp,
   SUPPORT_APPS_FLOW_GROUPS,
@@ -204,7 +204,7 @@ export const DashboardStore = signalStore(
           ),
           switchMap((params: IBillingParamsReq) =>
             billingService.getProjectFee$(params).pipe(
-              tap((d: IBillingResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
+              tap((d: IGetBillingResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
               catchError(() => EMPTY)
             )
           )

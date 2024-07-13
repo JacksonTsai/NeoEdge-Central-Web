@@ -42,7 +42,7 @@ export class BillingTotalComponent {
       };
     } else {
       result = {
-        title: 'Month Forecast',
+        title: 'Month Estimate',
         dayRange: `${this.timeRecord().monthStart} - ${this.timeRecord().monthEnd}`,
         until: this.timeRecord().monthEndUTC,
         usage: this.estimate()?.estimateUsage ?? 0,

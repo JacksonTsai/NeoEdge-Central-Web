@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
-import { IBillingChart, IBillingResp, IBillingTimeRecord } from '@neo-edge-web/models';
+import { IBillingChart, IBillingTimeRecord, IGetBillingResp } from '@neo-edge-web/models';
 import { currencyCustomPipe } from '@neo-edge-web/pipes';
 import { dateDashToSlash, generateMonthDays, getChartOption, getChartUsageAndFee } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
@@ -14,7 +14,7 @@ import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BillingMonthComponent {
-  monthUsageFee = input<IBillingResp>(null);
+  monthUsageFee = input<IGetBillingResp>(null);
   timeRecord = input<IBillingTimeRecord>(null);
   chartOptions = signal<Partial<ApexOptions> | null>(null);
 

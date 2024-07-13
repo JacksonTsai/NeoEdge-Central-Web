@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
-import { IBillingChart, IBillingResp, IBillingTimeRecord } from '@neo-edge-web/models';
+import { IBillingChart, IBillingTimeRecord, IGetBillingResp } from '@neo-edge-web/models';
 import { dateDashToSlash, generatePastMonths, getChartOption, getChartUsageAndFee } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 
@@ -13,7 +13,7 @@ import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BillingHistoryComponent {
-  pastUsageFee = input<IBillingResp>(null);
+  pastUsageFee = input<IGetBillingResp>(null);
   timeRecord = input<IBillingTimeRecord>(null);
 
   chartOptions = signal<Partial<ApexOptions> | null>(null);

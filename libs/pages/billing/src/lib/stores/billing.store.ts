@@ -5,8 +5,8 @@ import {
   IBiilingState,
   IBillingEstimateResp,
   IBillingReq,
-  IBillingResp,
-  IBillingTimeRecord
+  IBillingTimeRecord,
+  IGetBillingResp
 } from '@neo-edge-web/models';
 import { getCurrentDateInfo } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
@@ -16,9 +16,10 @@ import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 const initialState: IBiilingState = {
   isLoading: BILLING_LOADING.NONE,
   timeRecord: null,
+  estimate: null,
   monthUsageFee: null,
   pastUsageFee: null,
-  estimate: null
+  billingRecords: null
 };
 
 export type BillingdStore = InstanceType<typeof BillingdStore>;
@@ -51,7 +52,7 @@ export const BillingdStore = signalStore(
         switchMap(({ type, params }) => {
           const storeKey = type === 'fullMonth' ? 'monthUsageFee' : 'pastUsageFee';
           return billingService.getCompanyFee$(params).pipe(
-            tap((d: IBillingResp) => patchState(store, { [storeKey]: d, isLoading: BILLING_LOADING.NONE })),
+            tap((d: IGetBillingResp) => patchState(store, { [storeKey]: d, isLoading: BILLING_LOADING.NONE })),
             catchError(() => EMPTY)
           );
         })

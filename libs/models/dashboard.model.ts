@@ -1,4 +1,4 @@
-import { IBillingResp } from './billing.model';
+import { IGetBillingResp } from './billing.model';
 import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { Gateway } from './gateways.model';
 import { IItService } from './it-service.model';
@@ -20,7 +20,7 @@ export interface IDashboardState {
   licenseConsumption?: any;
   eventDoc: IEventDoc;
   activitiesList: IGetEventLogsResp;
-  projectFee: IBillingResp;
+  projectFee: IGetBillingResp;
   timeRecord: IDashboardTimeRecord;
 }
 

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IBillingEstimateResp, IBillingParamsReq, IBillingResp } from '@neo-edge-web/models';
+import { IBillingEstimateResp, IBillingParamsReq, IGetBillingResp } from '@neo-edge-web/models';
 import { setParamsArrayWithKey } from '@neo-edge-web/utils';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
@@ -20,7 +20,7 @@ export class BillingService {
     return throwError(() => err);
   }
 
-  getProjectFee$ = (feeParams: IBillingParamsReq): Observable<IBillingResp> => {
+  getProjectFee$ = (feeParams: IBillingParamsReq): Observable<IGetBillingResp> => {
     const params = setParamsArrayWithKey(feeParams);
     return this.#http.get(`${this.BILLING_PROJECT_PATH}?${params}`).pipe(
       catchError((err) => {
@@ -34,7 +34,7 @@ export class BillingService {
     );
   };
 
-  getCompanyFee$ = (feeParams: IBillingParamsReq): Observable<IBillingResp> => {
+  getCompanyFee$ = (feeParams: IBillingParamsReq): Observable<IGetBillingResp> => {
     const params = setParamsArrayWithKey(feeParams);
     return this.#http.get(`${this.BILLING_COMPANY_PATH}?${params}`).pipe(
       catchError((err) => {
