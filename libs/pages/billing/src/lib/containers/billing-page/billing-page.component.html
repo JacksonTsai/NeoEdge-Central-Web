@@ -11,4 +11,10 @@
     [estimate]="estimate()"
   ></ne-billing-total>
 </section>
-<ne-billing></ne-billing>
+<ne-billing
+  [monthUsageFee]="monthUsageFee()"
+  [pastUsageFee]="pastUsageFee()"
+  [timeRecord]="timeRecord()"
+  (handleGetHistory)="onGetHistory()"
+  (handleGetRecordDownload)="onGetRecordDownload()"
+></ne-billing>

@@ -16,7 +16,7 @@ import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 const initialState: IBiilingState = {
   isLoading: BILLING_LOADING.NONE,
   timeRecord: null,
-  dayUsageFee: null,
+  monthUsageFee: null,
   pastUsageFee: null,
   estimate: null
 };
@@ -49,8 +49,8 @@ export const BillingdStore = signalStore(
           })
         ),
         switchMap(({ type, params }) => {
-          const storeKey = type === 'day' ? 'dayUsageFee' : 'pastUsageFee';
-          return billingService.getProjectFee$(params).pipe(
+          const storeKey = type === 'fullMonth' ? 'monthUsageFee' : 'pastUsageFee';
+          return billingService.getCompanyFee$(params).pipe(
             tap((d: IBillingResp) => patchState(store, { [storeKey]: d, isLoading: BILLING_LOADING.NONE })),
             catchError(() => EMPTY)
           );

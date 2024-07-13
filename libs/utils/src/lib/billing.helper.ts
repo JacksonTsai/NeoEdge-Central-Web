@@ -1,7 +1,15 @@
-import { IBillingChartSeries, IBillingMonthInfo, IUsageAndFee } from '@neo-edge-web/models';
+import {
+  IBillingChart,
+  IBillingChartSeries,
+  IBillingChartSeriesTitle,
+  IBillingMonthInfo,
+  IUsageAndFee
+} from '@neo-edge-web/models';
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import { ApexOptions } from 'ng-apexcharts';
+import { getChartColor } from './chart-color.helper';
 
 // Extend dayjs with the plugins
 dayjs.extend(utc);
@@ -26,7 +34,6 @@ export const getCurrentDateInfo = (currentDate: Date): IBillingMonthInfo => {
   const today = dayjs(currentDate);
   const daysInMonth = today.daysInMonth();
   const formatDate = 'YYYY-MM-DD';
-  const formatDateTime = 'YYYY-MM-DD HH:mm:ss';
 
   // Current month first day and last day
   const firstDayOfMonth = today.startOf('month').hour(0).minute(0).second(0).millisecond(0);
@@ -38,7 +45,7 @@ export const getCurrentDateInfo = (currentDate: Date): IBillingMonthInfo => {
 
   // 12 months ago first day
   const twelveMonthsAgo = today.subtract(12, 'months');
-  const twelveMonthsAgoFirstDay = twelveMonthsAgo.startOf('month');
+  // const twelveMonthsAgoFirstDay = twelveMonthsAgo.startOf('month');
 
   return {
     days: daysInMonth,
@@ -46,6 +53,62 @@ export const getCurrentDateInfo = (currentDate: Date): IBillingMonthInfo => {
     firstDayOfMonth: firstDayOfMonth.format(formatDate),
     lastDayOfMonth: lastDayOfMonth.format(formatDate),
     lastDayUTC: endOfMonthLocal.unix(),
-    twelveMonthsAgoFirstDay: twelveMonthsAgoFirstDay.format(formatDate)
+    twelveMonthsAgoFirstDay: twelveMonthsAgo.format(formatDate)
+  };
+};
+
+export const getChartOption = (setting: IBillingChart): ApexOptions => {
+  const title: IBillingChartSeriesTitle = {
+    usage: 'Usage',
+    fee: 'Fee'
+  };
+
+  const chartColor: string[] = getChartColor(2);
+
+  return {
+    colors: chartColor,
+    series: [
+      {
+        name: title.usage,
+        type: 'column',
+        data: setting.series.usage
+      },
+      {
+        name: `${title.fee} (${setting.currency})`,
+        type: 'line',
+        data: setting.series.fee
+      }
+    ],
+    chart: {
+      height: setting.height ?? 240,
+      type: 'line',
+      toolbar: {
+        show: false
+      }
+    },
+    stroke: {
+      width: [0, 1]
+    },
+    dataLabels: {
+      enabled: true,
+      enabledOnSeries: [1]
+    },
+    labels: setting.labels,
+    legend: {
+      position: 'top'
+    },
+    yaxis: [
+      {
+        title: {
+          text: title.usage
+        }
+      },
+      {
+        opposite: true,
+        title: {
+          text: `${title.fee} (${setting.currency})`
+        }
+      }
+    ]
   };
 };

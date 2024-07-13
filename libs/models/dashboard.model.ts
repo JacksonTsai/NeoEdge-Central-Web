@@ -42,8 +42,8 @@ export interface IDashboardActivitiesTime {
 
 export interface IDashboardProjectFeeTime {
   month: number;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
 }
 
 export type TDashboardGatewayStatus = Record<string, IDashboardGatewayStatusItem>;

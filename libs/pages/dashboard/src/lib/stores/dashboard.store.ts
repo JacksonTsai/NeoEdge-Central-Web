@@ -22,7 +22,7 @@ import {
   SUPPORT_APPS_FLOW_GROUPS,
   TGetProjectEventLogsReq
 } from '@neo-edge-web/models';
-import { getPastDay, getPastMonths } from '@neo-edge-web/utils';
+import { dateFormat, getPastDay, getPastMonths } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -173,8 +173,8 @@ export const DashboardStore = signalStore(
         };
         const projectFeeTime: IDashboardProjectFeeTime = {
           month: pastMonths,
-          start: pastMonthsDate,
-          end: now
+          start: dateFormat(pastMonthsDate),
+          end: dateFormat(now)
         };
         patchState(store, {
           timeRecord: {

@@ -1,7 +1,7 @@
 export interface IBiilingState {
   isLoading: BILLING_LOADING;
   timeRecord: IBillingTimeRecord;
-  dayUsageFee: IBillingResp;
+  monthUsageFee: IBillingResp;
   pastUsageFee: IBillingResp;
   estimate: IBillingEstimateResp;
 }
@@ -30,8 +30,8 @@ export interface IBillingReq {
 }
 
 export interface IBillingParamsReq {
-  dateGe: Date;
-  dateLe: Date;
+  dateGe: string;
+  dateLe: string;
   groupBy: TBillingGroupBy;
 }
 
@@ -53,6 +53,11 @@ export interface IBillingChartSeries {
   fee: number[];
 }
 
+export interface IBillingChartSeriesTitle {
+  usage: string;
+  fee: string;
+}
+
 export interface IBillingEstimateResp {
   baseFee: number;
   dailyRate: number;
@@ -68,6 +73,8 @@ export interface IBillingEstimateResp {
 export interface IBillingChart {
   series: IBillingChartSeries;
   labels: string[];
+  currency?: string;
+  height?: number;
 }
 
 export interface ICurrencyData {
@@ -77,7 +84,7 @@ export interface ICurrencyData {
 
 export type TBillingGroupBy = 'year' | 'month' | 'day';
 
-export type TGetBillingType = 'day' | 'month';
+export type TGetBillingType = 'fullMonth' | 'fullYear';
 
 export type TBillingTotalType = 'current' | 'estimate';
 

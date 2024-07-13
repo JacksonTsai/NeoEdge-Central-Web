@@ -10,7 +10,7 @@ export const datetimeFormat = (timestamp: number, format?: DATE_FORMAT, showTime
 };
 
 export const dateFormat = (timestamp: number | Date): string => {
-  const currentTimestamp = typeof timestamp === 'number' ? timestamp : timestamp.getTime();
+  const currentTimestamp = typeof timestamp === 'number' ? timestamp : timestamp.getTime() / 1000;
   return datetimeFormat(currentTimestamp, DATE_FORMAT['YYYY-MM-DD HH:mm:ss'], false);
 };
 
@@ -73,21 +73,18 @@ export const generatePastMonths = (endDate: Date, months: number): string[] => {
 /**
  * Generates an array of all the days in the month of the given `endDate`.
  *
- * @param {Date} endDate - The end date from which to calculate the month days.
+ * @param {Date} now - The date from which to calculate the month days.
  * @returns {string[]} An array of strings representing all days in the month in 'YYYY-MM-DD' format.
  *                     Ex: Input: 2024/07/11 (Date format),
  *                     Output: ["2024-07-01", "2024-07-02", ..., "2024-07-31"]
  */
-export const generateMonthDays = (endDate: Date): string[] => {
+export const generateMonthDays = (now: Date): string[] => {
   const daysArray: string[] = [];
-  const year = endDate.getFullYear();
-  const month = endDate.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-
-  for (let i = firstDay.getDate(); i <= lastDay.getDate(); i++) {
-    const day = new Date(year, month, i);
-    daysArray.push(day.toISOString().split('T')[0]);
+  const today = dayjs(now);
+  const firstDay = today.startOf('month');
+  const daysInMonth = today.daysInMonth();
+  for (let i = 0; i < daysInMonth; i++) {
+    daysArray.push(firstDay.add(i, 'day').format('YYYY-MM-DD'));
   }
   return daysArray;
 };

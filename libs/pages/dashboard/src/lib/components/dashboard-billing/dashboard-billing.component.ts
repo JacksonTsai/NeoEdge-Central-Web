@@ -6,7 +6,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { IBillingChart, IBillingResp, IDashboardProjectFeeTime } from '@neo-edge-web/models';
 import { currencyCustomPipe } from '@neo-edge-web/pipes';
-import { arraySum, dateDashToSlash, generatePastMonths, getChartColor, getChartUsageAndFee } from '@neo-edge-web/utils';
+import {
+  arraySum,
+  dateDashToSlash,
+  generatePastMonths,
+  getChartColor,
+  getChartOption,
+  getChartUsageAndFee
+} from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
@@ -35,7 +42,7 @@ export class DashboardBillingComponent {
   currencyUnit = computed(() => this.projectFee()?.currency ?? 'USD');
   pastMonths = computed<string[]>(() => {
     if (!this.timeRecord()) return [];
-    return generatePastMonths(this.timeRecord().end, 6);
+    return generatePastMonths(new Date(this.timeRecord().end), 6);
   });
   dateRange = computed<string>(() => {
     if (!this.pastMonths().length) return '';
@@ -60,59 +67,11 @@ export class DashboardBillingComponent {
         usage: usage,
         fee: fee
       },
-      labels: this.pastMonths().map((v) => dateDashToSlash(v))
+      labels: this.pastMonths().map((v) => dateDashToSlash(v)),
+      currency: this.currencyUnit()
     };
 
-    this.chartOptions.set(this.getChartOption(chartSetting));
+    this.chartOptions.set(getChartOption(chartSetting));
     this.total.set(arraySum(fee));
-  };
-
-  getChartOption = (setting: IBillingChart): ApexOptions => {
-    return {
-      colors: this.chartColor,
-      series: [
-        {
-          name: 'Usage',
-          type: 'column',
-          data: setting.series.usage
-        },
-        {
-          name: `Fee (${this.currencyUnit()})`,
-          type: 'line',
-          data: setting.series.fee
-        }
-      ],
-      chart: {
-        height: 240,
-        type: 'line',
-        toolbar: {
-          show: false
-        }
-      },
-      stroke: {
-        width: [0, 1]
-      },
-      dataLabels: {
-        enabled: true,
-        enabledOnSeries: [1]
-      },
-      labels: setting.labels,
-      legend: {
-        position: 'top'
-      },
-      yaxis: [
-        {
-          title: {
-            text: 'Usage'
-          }
-        },
-        {
-          opposite: true,
-          title: {
-            text: `Fee (${this.currencyUnit()})`
-          }
-        }
-      ]
-    };
   };
 }
