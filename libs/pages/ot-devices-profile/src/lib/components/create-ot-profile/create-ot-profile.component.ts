@@ -15,7 +15,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { CREATE_OT_STEP, IRtuProfileForUI, ITcpProfileForUI, TSupportAppVersionData } from '@neo-edge-web/models';
+import {
+  CREATE_OT_STEP,
+  IRtuProfileForUI,
+  ITcpProfileForUI,
+  OT_DEVICE_PROFILE_MODE,
+  TSupportAppVersionData
+} from '@neo-edge-web/models';
 import { downloadCSV } from '@neo-edge-web/utils';
 import { tagCsvContentTemplate } from '../../configs';
 import { setRTUInstance, setTCPInstance } from '../../utils';
@@ -48,12 +54,17 @@ import { SelectDeviceProtocolComponent } from '../select-device-protocol/select-
 })
 export class CreateOtProfileComponent implements OnInit {
   @Output() handleCreateOtDevice = new EventEmitter();
+  @Output() handleCreateAndSaveOtDevice = new EventEmitter();
+  @Output() handleCloseDialog = new EventEmitter();
+
+  otProfileMode = input<OT_DEVICE_PROFILE_MODE>(OT_DEVICE_PROFILE_MODE.OT_DEVICE_VIEW);
   supportDevices = input<any>([]);
   texolTagDoc = input<any>({});
   #cd = inject(ChangeDetectorRef);
   #fb = inject(FormBuilder);
   @ViewChild('stepper') stepper: MatStepper;
   form: FormGroup;
+  otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
 
   get nextBtnDisabled() {
     return this.getStepCtrl(CREATE_OT_STEP[this.currentStepperId]).invalid;
@@ -87,7 +98,15 @@ export class CreateOtProfileComponent implements OnInit {
     return this.form.get(ctrl) as UntypedFormControl;
   };
 
-  onCreateDevice = () => {
+  onNextStep = () => {
+    this.stepper.next();
+  };
+
+  onBackStep = () => {
+    this.stepper.previous();
+  };
+
+  createDevice = () => {
     const selectDeviceProtocol = this.selectDeviceProtocolCtrl.value as TSupportAppVersionData;
     const deviceProfile = this.deviceProfileCtrl.value as {
       deviceIcon: File;
@@ -95,37 +114,34 @@ export class CreateOtProfileComponent implements OnInit {
     };
     const otTags = this.otTagsCtrl.value;
 
+    const { id: appVersionId } = selectDeviceProtocol.version;
+    const { deviceName: name, description = '' } = deviceProfile.profile.basic;
+    let setting = {};
+
+    switch (selectDeviceProtocol.name) {
+      case 'Modbus RTU':
+        setting = { ...setRTUInstance(deviceProfile.profile, otTags.tags) };
+        break;
+      case 'TEXOL 213MM2-R1':
+        setting = { ...setRTUInstance(deviceProfile.profile, otTags) };
+        break;
+      case 'Modbus TCP':
+        setting = { ...setTCPInstance(deviceProfile.profile, otTags.tags) };
+        break;
+    }
+    return { profile: { appVersionId, name, description, setting }, deviceIcon: deviceProfile.deviceIcon };
+  };
+
+  onCreateDevice = () => {
     if (this.form.valid) {
-      const { id: appVersionId } = selectDeviceProtocol.version;
-      const { deviceName: name, description = '' } = deviceProfile.profile.basic;
-      let setting = {};
-
-      switch (this.selectDeviceProtocolCtrl.value.name) {
-        case 'Modbus RTU':
-          setting = { ...setRTUInstance(deviceProfile.profile, otTags.tags) };
-          break;
-        case 'TEXOL 213MM2-R1':
-          setting = { ...setRTUInstance(deviceProfile.profile, otTags) };
-          break;
-        case 'Modbus TCP':
-          setting = { ...setTCPInstance(deviceProfile.profile, otTags.tags) };
-          break;
-        default:
-          return;
-      }
-
-      const profile = { appVersionId, name, description, setting };
-
-      this.handleCreateOtDevice.emit({ profile, deviceIcon: deviceProfile.deviceIcon });
+      this.handleCreateOtDevice.emit(this.createDevice());
     }
   };
 
-  onNextStep = () => {
-    this.stepper.next();
-  };
-
-  onBackStep = () => {
-    this.stepper.previous();
+  onCreateAndSaveDevice = () => {
+    if (this.form.valid) {
+      this.handleCreateAndSaveOtDevice.emit(this.createDevice());
+    }
   };
 
   onDownloadTagTemplateCsv = () => {
@@ -150,6 +166,10 @@ export class CreateOtProfileComponent implements OnInit {
         `${this.deviceProfileCtrl.value.profile.basic.deviceName}_${this.selectDeviceProtocolCtrl.value.name}`
       );
     }
+  };
+
+  onCloseDialog = () => {
+    this.handleCloseDialog.emit();
   };
 
   ngOnInit() {

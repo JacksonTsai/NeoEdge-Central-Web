@@ -63,6 +63,7 @@ export class SelectDataProviderComponent implements OnInit, AfterViewInit, Contr
   @Output() handleAddDeviceFromProfile = new EventEmitter();
   @Output() handleRemoveDeviceFromNeoFlow = new EventEmitter<{ otDeviceName: string }>();
   @Output() handleDetailDeviceFromNeoFlow = new EventEmitter<IOtDevice<any>>();
+  @Output() handleAddNewDevice = new EventEmitter();
 
   addedOtList = input<IOtDevice<any>[]>([]);
   #fb = inject(FormBuilder);
@@ -116,7 +117,7 @@ export class SelectDataProviderComponent implements OnInit, AfterViewInit, Contr
   }
 
   onAddNewDevice = () => {
-    //
+    this.handleAddNewDevice.emit();
   };
 
   onDetailDeviceFromNeoFlow = (event) => {

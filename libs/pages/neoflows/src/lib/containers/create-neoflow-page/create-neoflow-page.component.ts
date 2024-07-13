@@ -6,10 +6,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { SupportAppsService } from '@neo-edge-web/global-services';
+import { OtDevicesService, SupportAppsService } from '@neo-edge-web/global-services';
 import { CREATE_NEOFLOW_STEP, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { generateThreeCharUUID } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { AddNewOtDeviceDialogComponent } from '../../components/add-new-ot-device-dialog/add-new-ot-device-dialog.component';
 import { AddOtDeviceProfileDialogComponent } from '../../components/add-ot-device-profile-dialog/add-ot-device-profile-dialog.component';
 import { CreateMessageSchemaComponent } from '../../components/create-message-schema/create-message-schema.component';
 import { MessageLinkDatasourceComponent } from '../../components/message-link-datasource/message-link-datasource.component';
@@ -45,11 +46,11 @@ import { CreateNeoFlowsStore } from '../../stores/create-neoflows.store';
 })
 export class CreateNeoflowPageComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper;
-  isStepperEditable = true;
   #fb = inject(FormBuilder);
   #createNeoFlowStore = inject(CreateNeoFlowsStore);
   #dialog = inject(MatDialog);
   #supportAppService = inject(SupportAppsService);
+  #otDevicesService = inject(OtDevicesService);
 
   form: UntypedFormGroup;
   processorVerOpt = this.#createNeoFlowStore.neoflowProcessorVers;
@@ -96,17 +97,20 @@ export class CreateNeoflowPageComponent implements OnInit {
     this.stepper.next();
   };
 
-  onAddDeviceFromProfile = () => {
-    let addOtDeviceProfileDialogRef = this.#dialog.open(AddOtDeviceProfileDialogComponent, {
-      panelClass: 'lg-dialog',
-      disableClose: true,
-      autoFocus: false,
-      restoreFocus: false
-    });
+  isExistAddedOtList = (otProfile) => {
+    return this.#createNeoFlowStore?.addedOt()?.findIndex((d) => d.name.trim() === otProfile.name.trim()) > -1
+      ? true
+      : false;
+  };
 
-    const componentInstance = addOtDeviceProfileDialogRef.componentInstance;
-    componentInstance.handleAddOtDevice.pipe(untilDestroyed(this)).subscribe((otProfile) => {
-      const otProfileTemp = { ...otProfile };
+  addNewDeviceToList = (otProfile) => {
+    const { name: appClass, id: appId } = this.#supportAppService.getAppVersionData(
+      otProfile.appVersionId,
+      this.#createNeoFlowStore.supportApps()
+    );
+
+    const otProfileTemp = { ...otProfile };
+    if (this.isExistAddedOtList(otProfileTemp)) {
       const rename = `${otProfileTemp.name}_${generateThreeCharUUID(3)}`;
       const { name: appName } = this.#supportAppService.getAppVersionData(
         otProfileTemp.appVersionId,
@@ -124,9 +128,59 @@ export class CreateNeoflowPageComponent implements OnInit {
           otProfileTemp.setting.Instances.RTU[0].Devices[0].Name = rename;
           break;
       }
-
       otProfileTemp.name = rename;
-      this.#createNeoFlowStore.addOtDevice({ ...otProfileTemp });
+    }
+
+    this.#createNeoFlowStore.addOtDevice({
+      ...otProfileTemp,
+      appClass,
+      appId,
+      createdAt: Date.now() / 1000,
+      createdBy: this.#createNeoFlowStore.userProfile().name
+    });
+  };
+
+  onAddNewDevice = () => {
+    let addNewOtDeviceDialogRef = this.#dialog.open(AddNewOtDeviceDialogComponent, {
+      panelClass: 'lg-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false
+    });
+
+    const componentInstance = addNewOtDeviceDialogRef.componentInstance;
+
+    componentInstance.createNewOtDevice.pipe(untilDestroyed(this)).subscribe((ot) => {
+      this.addNewDeviceToList(ot.profile);
+    });
+
+    componentInstance.createAndSaveOtDevice.pipe(untilDestroyed(this)).subscribe((ot) => {
+      this.#otDevicesService
+        .createOtDevice$({ profile: ot.profile, deviceIcon: ot?.deviceProfile?.deviceIcon })
+        .subscribe();
+
+      this.addNewDeviceToList(ot.profile);
+    });
+
+    addNewOtDeviceDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        addNewOtDeviceDialogRef = undefined;
+      });
+  };
+
+  onAddDeviceFromProfile = () => {
+    let addOtDeviceProfileDialogRef = this.#dialog.open(AddOtDeviceProfileDialogComponent, {
+      panelClass: 'lg-dialog',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false
+    });
+
+    const componentInstance = addOtDeviceProfileDialogRef.componentInstance;
+    componentInstance.handleAddOtDevice.pipe(untilDestroyed(this)).subscribe((otProfile) => {
+      this.addNewDeviceToList(otProfile);
     });
 
     addOtDeviceProfileDialogRef

@@ -1,3 +1,4 @@
+import { IGetUserProfileResp } from './auth.model';
 import { IItService } from './it-service.model';
 import { IOtDevice } from './ot-devices.model';
 import { ISupportApps } from './support-apps.model';
@@ -10,6 +11,7 @@ export interface ICreateNeoFlowState {
   addedOt: IOtDevice<any>[];
   addedIt: IItService[];
   texolTagDoc: any;
+  userProfile: IGetUserProfileResp;
   isLoading: CREATE_NEOFLOW_LOADING;
 }
 

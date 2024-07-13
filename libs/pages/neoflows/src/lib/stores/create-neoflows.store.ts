@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { selectUserProfile } from '@neo-edge-web/auth-store';
 import {
   ItServiceService,
   NeoFlowsService,
@@ -16,6 +17,7 @@ import {
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { map, pipe, switchMap } from 'rxjs';
 
 const NEOFLOW_FLOW_GROUP = SUPPORT_APPS_FLOW_GROUPS.neoflow;
@@ -28,6 +30,7 @@ const initialState: ICreateNeoFlowState = {
   addedOt: [],
   addedIt: [],
   texolTagDoc: null,
+  userProfile: null,
   isLoading: CREATE_NEOFLOW_LOADING.NONE
 };
 
@@ -149,7 +152,7 @@ export const CreateNeoFlowsStore = signalStore(
       )
     })
   ),
-  withHooks((store) => {
+  withHooks((store, globalStore = inject(Store)) => {
     return {
       onInit() {
         store.getProcessorApps();
@@ -157,6 +160,14 @@ export const CreateNeoFlowsStore = signalStore(
         store.getOtProfileList();
         store.getItProfileList();
         store.getTexolDoc();
+        globalStore
+          .select(selectUserProfile)
+          .pipe(
+            map(({ userProfile }) => {
+              patchState(store, { userProfile });
+            })
+          )
+          .subscribe();
       }
     };
   })

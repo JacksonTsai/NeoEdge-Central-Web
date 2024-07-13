@@ -3,7 +3,19 @@
   min-height: calc(100vh - 302px);
 }
 
+.card.inside-dialog {
+  min-height: 0;
+}
+
 .stepper-footer__action {
   display: flex;
-  gap: 8px;
+  justify-content: space-between;
+  &__step {
+    display: flex;
+    gap: 8px;
+  }
+  &__dialog {
+    display: flex;
+    gap: 8px;
+  }
 }
