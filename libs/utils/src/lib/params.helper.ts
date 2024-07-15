@@ -8,6 +8,7 @@ export const setParamsArrayWithKey = (params: IParmas): URLSearchParams => {
     if (value === null || value === '') {
       return;
     }
+
     if (typeof value === 'number') {
       paramsResult.set(key, value.toString());
     } else if (Array.isArray(value)) {
@@ -18,5 +19,6 @@ export const setParamsArrayWithKey = (params: IParmas): URLSearchParams => {
       paramsResult.set(key, value);
     }
   });
+
   return paramsResult;
 };

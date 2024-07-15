@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.billing-record-download-table {
+  th {
+    width: 25%;
+  }
+
+  th,
+  td {
+    &:nth-child(3),
+    &:nth-child(4) {
+      text-align: right;
+    }
+  }
+}

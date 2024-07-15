@@ -1,0 +1,36 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h2 class="dashboard-card__title">{{ contentData()?.title }}</h2>
+    </mat-card-title>
+    <p class="text-gray icon-text text-right icon-end">
+      <span>Daily Rate: {{ estimate()?.dailyRate ?? '-' }}</span>
+      <mat-icon
+        svgIcon="icon:info_gary"
+        [matTooltip]="'Cost per Gateway per day (' + estimate()?.currency + ')'"
+      ></mat-icon>
+    </p>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="text-gray">{{ contentData()?.dayRange }}</p>
+    <ul class="total-detail no-bullet">
+      <li class="total-detail__item">
+        <span class="total-detail__title">
+          <span class="total-detail__title__text">Usage Connection</span>
+        </span>
+        <span class="total-detail__content">{{ contentData()?.usage | number }} <span class="unit">days</span></span>
+      </li>
+      <li class="total-detail__item">
+        <span class="total-detail__title">
+          <span class="total-detail__title__text">Billing Cost</span>
+        </span>
+        <span class="total-detail__content">
+          {{ contentData()?.fee | number }} <span class="unit">{{ estimate()?.currency }}</span>
+        </span>
+      </li>
+    </ul>
+    <div class="text-gray text-right">
+      <p>Calculate until {{ contentData()?.until | dateTimeFormat }}</p>
+    </div>
+  </mat-card-content>
+</mat-card>

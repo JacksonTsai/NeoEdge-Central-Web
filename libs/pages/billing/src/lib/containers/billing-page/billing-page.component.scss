@@ -1,0 +1,17 @@
+@use 'breakpoint' as *;
+
+:host {
+  display: block;
+}
+
+.billing-total {
+  ne-billing-total {
+    margin-bottom: 20px;
+  }
+
+  @include breakpoint(medium up) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}

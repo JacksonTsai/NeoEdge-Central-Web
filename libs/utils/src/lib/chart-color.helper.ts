@@ -3,8 +3,8 @@ import { CHART_COLORS, STATUS_COLORS } from '@neo-edge-web/models';
 type TColor = 'normal' | 'status';
 
 export const chartColors = [
-  CHART_COLORS.LightOrange,
   CHART_COLORS.Teal,
+  CHART_COLORS.LightOrange,
   CHART_COLORS.MediumBlue,
   CHART_COLORS.LightPink,
   CHART_COLORS.LightYellow,
