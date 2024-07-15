@@ -1,0 +1,13 @@
+<h1 mat-dialog-title class="gl-h6">Add New OT Device</h1>
+<mat-dialog-content>
+  <div class="add-new-ot-content">
+    <ne-create-ot-profile
+      [otProfileMode]="otDeviceProfileMode.NEOFLOW_VIEW"
+      [supportDevices]="supportDevices()"
+      [texolTagDoc]="texolTagDoc()"
+      (handleCreateOtDevice)="createNewOtDevice.emit($event)"
+      (handleCloseDialog)="onClose()"
+      (handleCreateAndSaveOtDevice)="createAndSaveOtDevice.emit($event)"
+    ></ne-create-ot-profile>
+  </div>
+</mat-dialog-content>

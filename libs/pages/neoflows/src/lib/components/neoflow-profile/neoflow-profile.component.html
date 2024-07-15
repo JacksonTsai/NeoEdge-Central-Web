@@ -1,0 +1,56 @@
+<div class="neoflow-profile-wrapper">
+  <form [formGroup]="form">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>NeoFlow Name</mat-label>
+      <input matInput formControlName="neoFlowName" type="text" maxlength="64" />
+      @if (neoFlowNameCtrl.hasError('required') || neoFlowNameCtrl.hasError('whitespace')) {
+        <mat-error>Required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Encode</mat-label>
+      <mat-select formControlName="encode">
+        @for (encode of neoFlowProfileOptions.encode; track encode) {
+          <mat-option [value]="encode"> {{ encode }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Content Type</mat-label>
+      <mat-select formControlName="contentType">
+        @for (contentType of neoFlowProfileOptions.contentType; track contentType) {
+          <mat-option [value]="contentType"> {{ contentType }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Data Time Format</mat-label>
+      <mat-select formControlName="dateTimeFormat">
+        @for (dateTimeFormat of neoFlowProfileOptions.dateTimeFormat; track dateTimeFormat) {
+          <mat-option [value]="dateTimeFormat"> {{ dateTimeFormat }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Time Zone</mat-label>
+      <mat-select formControlName="timeZone">
+        @for (timeZone of neoFlowProfileOptions.timeZone; track timeZone) {
+          <mat-option [value]="timeZone"> {{ timeZone }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>NeoFlow Data Processor</mat-label>
+      <mat-select formControlName="neoFlowDataProcessorVer">
+        @for (processorVer of processorVerOpt(); track processorVer.id) {
+          <mat-option [value]="processorVer"> {{ processorVer.version }} </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>

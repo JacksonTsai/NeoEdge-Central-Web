@@ -1,0 +1,44 @@
+<h1 mat-dialog-title>Delete NeoFlow</h1>
+<mat-dialog-content>
+  <div>
+    You are going to delete NeoFlow (
+    <span color="danger">
+      {{ data?.neoflow?.name ? data.neoflow.name : '-' }}
+    </span>
+    ).
+  </div>
+  <div>Please input NeoFlow name to confirm this action.</div>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>NeoFlow Name</mat-label>
+    <input
+      id="neoflow-delete-confirm-dialog-name-input"
+      matInput
+      [formControl]="neoFlowNameCtrl"
+      type="text"
+      maxlength="64"
+    />
+    @if (neoFlowNameCtrl.hasError('required')) {
+      <mat-error>Required.</mat-error>
+    } @else if (neoFlowNameCtrl.hasError('isNotMatchName')) {
+      <mat-error>The input verification content is incorrect.</mat-error>
+    }
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button id="neoflow-delete-confirm-dialog-cancel-btn" type="button" mat-stroked-button mat-dialog-close>
+    Cancel
+  </button>
+
+  <button
+    id="neoflow-delete-confirm-dialog-delete-btn"
+    type="button"
+    mat-raised-button
+    color="warn"
+    [disabled]="neoFlowNameCtrl.invalid"
+    (click)="onDelete()"
+  >
+    Delete
+  </button>
+</mat-dialog-actions>

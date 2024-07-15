@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>IT Service</h1>
+<mat-dialog-content>
+  <ne-it-service-detail
+    [profileMode]="itProfileMode.NEOFLOW_VIEW"
+    [itServiceDetail]="data.itServiceDetail"
+    [appData]="appData()"
+    (handleSubmitItService)="handleSaveItServiceToNeoFlow.emit($event)"
+    (handleCloseDialog)="onClose()"
+  ></ne-it-service-detail>
+</mat-dialog-content>

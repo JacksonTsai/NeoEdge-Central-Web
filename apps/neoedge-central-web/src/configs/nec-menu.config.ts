@@ -33,7 +33,7 @@ export const MENU_TREE: MenuItem[] = [
         displayName: 'NeoFlow Settings',
         icon: 'dot',
         isActive: false,
-        path: '/neoflow/noeflow-info'
+        path: '/neoflow/noeflow-settings'
       },
       {
         displayName: 'OT Device Profile',

@@ -29,7 +29,7 @@ import { bTypeValidator, whitespaceValidator } from '@neo-edge-web/validators';
 export class CopyProfileDialogComponent {
   dialogRef!: MatDialogRef<CopyProfileDialogComponent>;
   data = inject<{
-    type: 'ot' | 'it';
+    type: 'ot' | 'it' | 'neoflow';
     copyFrom: { displayName: string; id: number };
     copyFn: ({ profileId, name }: { profileId: number; name: string }) => void;
   }>(MAT_DIALOG_DATA);

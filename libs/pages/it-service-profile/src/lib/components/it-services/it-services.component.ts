@@ -19,7 +19,13 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { IItService, IT_SERVICE_LOADING, PERMISSION, TableQueryForItService } from '@neo-edge-web/models';
+import {
+  IItService,
+  IT_SERVICE_LOADING,
+  IT_SERVICE_TABLE_MODE,
+  PERMISSION,
+  TableQueryForItService
+} from '@neo-edge-web/models';
 import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, tap } from 'rxjs';
@@ -53,7 +59,11 @@ export class ItServicesComponent implements AfterViewInit {
   @Output() handleCreate = new EventEmitter();
   @Output() handleDelete = new EventEmitter<IItService>();
   @Output() handleCopy = new EventEmitter<IItService>();
+  @Output() handleAddItServiceToNeoFlow = new EventEmitter<IItService>();
+  @Output() handleDetailItServiceFromNeoFlow = new EventEmitter<IItService>();
+  @Output() handleRemoveItServiceFromNeoFlow = new EventEmitter<{ otDeviceName: string }>();
 
+  tableMode = input<IT_SERVICE_TABLE_MODE>(IT_SERVICE_TABLE_MODE.IT_SERVICE_VIEW);
   permission = PERMISSION;
   dataTable = input<IItService[]>();
   dataLength = input<number>(0);
@@ -61,7 +71,17 @@ export class ItServicesComponent implements AfterViewInit {
   size = input<number>(0);
   isLoading = input<IT_SERVICE_LOADING>(IT_SERVICE_LOADING.NONE);
   searchCtrl = new FormControl('');
-  displayedColumns: string[] = ['no', 'name', 'type', 'connection', 'createdBy', 'createdAt', 'action'];
+  itServiceTableMode = IT_SERVICE_TABLE_MODE;
+
+  get displayedColumns() {
+    if (IT_SERVICE_TABLE_MODE.SELECTION === this.tableMode()) {
+      return ['no', 'name', 'type', 'connection', 'createdBy', 'createdAt', 'selectionModeAction'];
+    } else if (IT_SERVICE_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      return ['no', 'name', 'type', 'connection', 'createdBy', 'createdAt', 'neoFlowViewModeAction'];
+    } else {
+      return ['no', 'name', 'type', 'connection', 'createdBy', 'createdAt', 'action'];
+    }
+  }
 
   dataSource = new MatTableDataSource<any>([]);
 
@@ -83,6 +103,24 @@ export class ItServicesComponent implements AfterViewInit {
 
   onCopy = (row: IItService): void => {
     this.handleCopy.emit(row);
+  };
+
+  onAddItServiceToNeoFlow = (element) => {
+    if (IT_SERVICE_TABLE_MODE.SELECTION === this.tableMode()) {
+      this.handleAddItServiceToNeoFlow.emit(element);
+    }
+  };
+
+  onDetailItServiceFromNeoFlow = (element) => {
+    if (IT_SERVICE_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      this.handleDetailItServiceFromNeoFlow.emit(element);
+    }
+  };
+
+  onRemoveItServiceFromNeoFlow = (element) => {
+    if (IT_SERVICE_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      this.handleRemoveItServiceFromNeoFlow.emit(element);
+    }
   };
 
   ngAfterViewInit(): void {

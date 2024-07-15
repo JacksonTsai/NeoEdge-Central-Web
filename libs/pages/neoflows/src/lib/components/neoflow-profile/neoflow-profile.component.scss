@@ -1,0 +1,11 @@
+.neoflow-profile-wrapper {
+  width: 800px;
+  overflow: auto;
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    mat-form-field {
+      margin: 8px;
+    }
+  }
+}

@@ -39,6 +39,12 @@ export const whitespaceValidator = (control: FormControl): ValidationErrors | nu
   return (control.value || '').trim().length ? null : { whitespace: true };
 };
 
+export const confirmNameValidator = (matchStr: string): ValidatorFn => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    return control.value === matchStr ? null : { isNotMatchName: true };
+  };
+};
+
 /**
  * Validator function to check if the control value matches the value of another control.
  *
