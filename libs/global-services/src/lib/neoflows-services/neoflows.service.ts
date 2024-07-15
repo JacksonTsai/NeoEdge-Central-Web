@@ -28,7 +28,7 @@ export class NeoFlowsService {
         params.set('size', queryStr.size.toString());
       }
       if (queryStr?.name) {
-        params.set('names', queryStr.name);
+        params.set('name', queryStr.name);
       }
     }
     return this.#http.get(`${this.NEOFLOWS_PATH}?${params}`).pipe(
