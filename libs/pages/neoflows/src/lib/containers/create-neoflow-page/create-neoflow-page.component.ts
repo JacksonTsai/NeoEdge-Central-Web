@@ -96,8 +96,7 @@ export class CreateNeoflowPageComponent implements OnInit {
         case CREATE_NEOFLOW_STEP.selectMessageDestination:
           return this.#createNeoFlowStore.addedIt()?.length > 0 ? false : true;
       }
-
-      return this.form.get(this.stepperName).invalid;
+      // return this.form.get(this.stepperName).invalid;
     }
     return false;
   }

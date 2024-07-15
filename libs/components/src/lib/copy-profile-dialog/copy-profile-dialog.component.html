@@ -18,8 +18,10 @@
       <mat-label>
         @if (data.type === 'ot') {
           Device Name
-        } @else {
+        } @else if (data.type === 'it') {
           App Service Name
+        } @else {
+          <span> NeoFlow Name </span>
         }
       </mat-label>
       <input matInput formControlName="name" type="text" maxlength="64" />
