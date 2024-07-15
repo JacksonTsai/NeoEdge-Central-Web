@@ -9,6 +9,7 @@ import {
   TGetProjectEventLogsParams,
   TableQueryForProjects
 } from '@neo-edge-web/models';
+import { setParamsArrayWithKey } from '@neo-edge-web/utils';
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
 
@@ -164,9 +165,7 @@ export class ProjectsService {
     );
 
   getProjectEventLogs$ = (eventLogsParams: TGetProjectEventLogsParams) => {
-    const params = new URLSearchParams(
-      Object.entries(eventLogsParams).map(([key, value]) => [key, typeof value === 'number' ? value.toString() : value])
-    );
+    const params = setParamsArrayWithKey(eventLogsParams);
     return this.#http.get(`${this.EVENT_LOGS_BY_PROJECT_ID_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project event logs failure.', 'X', {

@@ -1,6 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
-import { DASHBOARD_LOADING, IBillingParamsReq, TGetProjectEventLogsParams } from '@neo-edge-web/models';
+import {
+  DASHBOARD_LOADING,
+  IBillingParamsReq,
+  TGetProjectEventLogsParams,
+  TUpdateEventLogMode
+} from '@neo-edge-web/models';
 import {
   DashboardActivitiesComponent,
   DashboardBillingComponent,
@@ -65,6 +70,17 @@ export class DashboardPageComponent {
     this.updateData();
   }
 
+  loadActivities = (type: TUpdateEventLogMode): void => {
+    const activitiesParams: TGetProjectEventLogsParams = {
+      size: 20,
+      order: 'desc',
+      timeGe: this.timeRecord().activitiesTime?.start,
+      timeLe: this.timeRecord().activitiesTime?.end,
+      lastRecord: type === 'UPDATE' ? this.activitiesList().lastEvaluatedKey : ''
+    };
+    this.#dashboardStore.getActivities({ type, params: activitiesParams });
+  };
+
   updateData = (): void => {
     this.#dashboardStore.getProjectDetail();
     this.#dashboardStore.getAllUsers();
@@ -72,13 +88,7 @@ export class DashboardPageComponent {
     this.#dashboardStore.getAllOtDeviceProfiles();
     this.#dashboardStore.getAllGateways();
 
-    const activitiesParams: TGetProjectEventLogsParams = {
-      size: 10,
-      order: 'desc',
-      timeGe: this.timeRecord().activitiesTime?.start,
-      timeLe: this.timeRecord().activitiesTime?.end
-    };
-    this.#dashboardStore.getActivities({ type: 'GET', params: activitiesParams });
+    this.loadActivities('GET');
 
     const billingParams: IBillingParamsReq = {
       dateGe: this.timeRecord().projectFeeTime?.start,
@@ -90,14 +100,7 @@ export class DashboardPageComponent {
 
   onActivitiesScrollEnd(): void {
     if (this.activitiesList()?.lastEvaluatedKey && this.isLoading() !== DASHBOARD_LOADING.UPDATE_ACTIVITIES) {
-      const activitiesParams: TGetProjectEventLogsParams = {
-        size: 10,
-        order: 'desc',
-        timeGe: this.timeRecord().activitiesTime?.start,
-        timeLe: this.timeRecord().activitiesTime?.end,
-        lastRecord: this.activitiesList().lastEvaluatedKey
-      };
-      this.#dashboardStore.getActivities({ type: 'UPDATE', params: activitiesParams });
+      this.loadActivities('UPDATE');
     }
   }
 }
