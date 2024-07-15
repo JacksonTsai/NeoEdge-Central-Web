@@ -62,6 +62,23 @@ const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 45;
               <span>Switch Project</span>
             </button>
           }
+          <a
+            mat-menu-item
+            href="https://docs.neoedgecentral.com/legal/NeoEdgeX_EULA_1.0.pdf"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <span>NeoEdge X EULA</span>
+          </a>
+          <a
+            mat-menu-item
+            href="https://docs.neoedgecentral.com/legal/NeoEdge_Central_EULA_1.0.pdf"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <span>NeoEdge Central EULA</span>
+          </a>
+          <a mat-menu-item href="mailto:NeoEdge_Service@ecloudvalley.com"><span>Help</span></a>
           <button mat-menu-item (click)="onLogout()">
             <span>Logout</span>
           </button>

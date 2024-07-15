@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Add New IT Service</h1>
+<mat-dialog-content>
+  <div class="add-new-It-content">
+    <ne-create-it-service
+      [itProfileMode]="itServiceTableMode.NEOFLOW_VIEW"
+      [supportApps]="supportItService()"
+      (handleSubmitItService)="createNewItService.emit($event)"
+      (handleCreateAndSaveItService)="createAndSaveItService.emit($event)"
+      (handleCloseDialog)="onClose()"
+    ></ne-create-it-service>
+  </div>
+</mat-dialog-content>

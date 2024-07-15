@@ -1,10 +1,12 @@
-<h1 class="page-title">Create IT Service</h1>
+@if (itProfileMode() === itServiceTableMode.IT_SERVICE_VIEW) {
+  <h1 class="page-title">Create IT Service</h1>
+}
 <mat-stepper [linear]="true" animationDuration="0" (selectionChange)="onSelectionChange($event)" #stepper>
   <mat-step label="Select Server Type">
     <ng-template matStepperIcon="edit">
       <mat-icon svgIcon="icon:ok"></mat-icon>
     </ng-template>
-    <mat-card class="card">
+    <mat-card class="card" [ngClass]="{ 'inside-dialog': itProfileMode() === itServiceTableMode.NEOFLOW_VIEW }">
       <mat-card-content>
         <h2 class="card__title">Select Server Type</h2>
         <section class="card__sec">
@@ -30,7 +32,7 @@
     </mat-card>
   </mat-step>
   <mat-step label="Settings">
-    <mat-card class="card">
+    <mat-card class="card" [ngClass]="{ 'inside-dialog': itProfileMode() === itServiceTableMode.NEOFLOW_VIEW }">
       <mat-card-content>
         <h2 class="card__title">Settings</h2>
         @if (selectedApp()) {
@@ -62,8 +64,13 @@
         }
       </mat-card-content>
     </mat-card>
-    <mat-card-actions class="profile-action">
-      <button type="button" color="primary" mat-stroked-button matStepperPrevious>Back</button>
+  </mat-step>
+</mat-stepper>
+
+<mat-card-actions class="stepper__action">
+  <div>
+    @if (currentStepperId > 0) {
+      <button type="button" color="primary" mat-stroked-button (click)="onBack()">Back</button>
       <button
         type="button"
         color="primary"
@@ -71,8 +78,26 @@
         [disabled]="form.invalid || form.pristine"
         (click)="onSubmit()"
       >
-        Submit
+        Create
       </button>
-    </mat-card-actions>
-  </mat-step>
-</mat-stepper>
+
+      @if (itProfileMode() === itServiceTableMode.NEOFLOW_VIEW) {
+        <button
+          id="create-it-service-create-save-btn"
+          mat-flat-button
+          color="primary"
+          (click)="onCreateAndSaveItService()"
+          [disabled]="form.invalid || form.pristine"
+        >
+          Create and Save as IT Service Profile
+        </button>
+      }
+    }
+  </div>
+
+  <div>
+    @if (itProfileMode() === itServiceTableMode.NEOFLOW_VIEW) {
+      <button id="create-it-service-close-btn" mat-stroked-button (click)="handleCloseDialog.emit()">Close</button>
+    }
+  </div>
+</mat-card-actions>

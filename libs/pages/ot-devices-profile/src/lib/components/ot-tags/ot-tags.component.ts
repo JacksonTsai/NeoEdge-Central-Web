@@ -31,7 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ICsvTag, IOtTag, PERMISSION } from '@neo-edge-web/models';
+import { ICsvTag, IOtTag, OT_DEVICE_PROFILE_MODE, PERMISSION } from '@neo-edge-web/models';
 import { whitespaceValidator } from '@neo-edge-web/validators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { NgxPermissionsModule } from 'ngx-permissions';
@@ -72,6 +72,8 @@ export class OtTagsComponent implements OnInit, ControlValueAccessor, Validator 
   #fb = inject(FormBuilder);
   #dialog = inject(MatDialog);
   isEditMode = input(false);
+  otProfileMode = input<OT_DEVICE_PROFILE_MODE>(OT_DEVICE_PROFILE_MODE.OT_DEVICE_VIEW);
+  otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
   form!: UntypedFormGroup;
   dataSource = new MatTableDataSource<any>([]);
   permission = PERMISSION;

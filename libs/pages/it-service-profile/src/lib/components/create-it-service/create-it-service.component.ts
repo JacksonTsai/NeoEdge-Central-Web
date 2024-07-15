@@ -23,7 +23,8 @@ import {
   ICreateItServiceReq,
   IItServiceDetailSelectedAppData,
   ISupportApps,
-  ISupportAppsWithVersion
+  ISupportAppsWithVersion,
+  IT_SERVICE_TABLE_MODE
 } from '@neo-edge-web/models';
 import { ItServiceAwsComponent } from '../it-service-aws/it-service-aws.component';
 import { ItServiceAzureComponent } from '../it-service-azure/it-service-azure.component';
@@ -50,13 +51,21 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
 })
 export class CreateItServiceComponent implements OnInit {
   @Output() handleSubmitItService = new EventEmitter<ICreateItServiceReq>();
+  @Output() handleCreateAndSaveItService = new EventEmitter<ICreateItServiceReq>();
+  @Output() handleCloseDialog = new EventEmitter();
   @ViewChild('stepper') private stepper: MatStepper;
+
   supportApps = input<ISupportApps[]>();
+  itProfileMode = input(IT_SERVICE_TABLE_MODE.IT_SERVICE_VIEW);
   itServiceDetailService = inject(ItServiceDetailService);
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
-
+  itServiceTableMode = IT_SERVICE_TABLE_MODE;
   selectedApp = signal<IItServiceDetailSelectedAppData | null>(null);
+
+  get currentStepperId() {
+    return this.stepper?.selectedIndex ?? 0;
+  }
 
   supportAppsAvailable = computed(() => {
     return this.supportApps()?.filter((v) => v.isAvailable);
@@ -86,8 +95,19 @@ export class CreateItServiceComponent implements OnInit {
     }
   };
 
+  onBack = () => {
+    this.stepper.previous();
+  };
+
   onSubmit = (): void => {
     const payload: ICreateItServiceReq = this.form.get('itServiceForm').value;
     this.handleSubmitItService.emit(payload);
+  };
+
+  onCreateAndSaveItService = (): void => {
+    if (this.form.valid) {
+      const payload: ICreateItServiceReq = this.form.get('itServiceForm').value;
+      this.handleCreateAndSaveItService.emit(payload);
+    }
   };
 }

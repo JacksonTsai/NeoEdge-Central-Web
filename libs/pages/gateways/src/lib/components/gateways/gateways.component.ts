@@ -31,6 +31,7 @@ import {
   IGatewayLabels,
   NEED_SYNC_GATEWAYS,
   PERMISSION,
+  STATUS_COLORS,
   TableQueryForGateways
 } from '@neo-edge-web/models';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -93,6 +94,7 @@ export class GatewaysComponent implements AfterViewInit {
     'labels',
     'action'
   ];
+  statusColors = STATUS_COLORS;
 
   dataSource = new MatTableDataSource<any>([]);
 

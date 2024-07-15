@@ -1,0 +1,120 @@
+<mat-stepper animationDuration="0" [linear]="true" #stepper>
+  <form [formGroup]="form">
+    <ng-template matStepperIcon="edit">
+      <mat-icon svgIcon="icon:ok"></mat-icon>
+    </ng-template>
+
+    <mat-step>
+      <ng-template matStepLabel>Select Device Protocol</ng-template>
+      <mat-card class="card" [ngClass]="{ 'inside-dialog': otProfileMode() === otDeviceProfileMode.NEOFLOW_VIEW }">
+        <mat-card-content>
+          <ne-select-device-protocol
+            [supportDevices]="supportDevices()"
+            formControlName="selectDeviceProtocol"
+          ></ne-select-device-protocol>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Device Profile</ng-template>
+      <mat-card class="card" [ngClass]="{ 'inside-dialog': otProfileMode() === otDeviceProfileMode.NEOFLOW_VIEW }">
+        <mat-card-content>
+          <ne-ot-device-profile
+            [otProfileMode]="otProfileMode()"
+            [isEditMode]="true"
+            [appName]="selectDeviceProtocolCtrl.value?.name"
+            formControlName="deviceProfile"
+          ></ne-ot-device-profile>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Select Command Template</ng-template>
+      <mat-card class="card" [ngClass]="{ 'inside-dialog': otProfileMode() === otDeviceProfileMode.NEOFLOW_VIEW }">
+        <mat-card-content>
+          <ne-select-command-template
+            [isEditMode]="true"
+            [appName]="selectDeviceProtocolCtrl.value?.name"
+            [texolTagDoc]="texolTagDoc()"
+            (handleDownloadTagTemplateCsv)="onDownloadTagTemplateCsv()"
+            formControlName="selectCommandTemplate"
+          >
+          </ne-select-command-template>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Tags</ng-template>
+      <mat-card class="card" [ngClass]="{ 'inside-dialog': otProfileMode() === otDeviceProfileMode.NEOFLOW_VIEW }">
+        <mat-card-content>
+          @if (
+            'create' === selectCommandTemplateCtrl.value?.generateTagType ||
+            'import-edit' === selectCommandTemplateCtrl.value?.generateTagType
+          ) {
+            <ne-ot-tags
+              [isEditMode]="true"
+              (handleExportTags)="onExportTags($event)"
+              formControlName="otTags"
+            ></ne-ot-tags>
+          } @else if (
+            'texol-general' === selectCommandTemplateCtrl.value?.generateTagType ||
+            'texol-dedicated' === selectCommandTemplateCtrl.value?.generateTagType
+          ) {
+            <ne-ot-texol-tag
+              [isEditMode]="true"
+              [texolTagsType]="selectCommandTemplateCtrl.value"
+              [texolTagDoc]="texolTagDoc()"
+            ></ne-ot-texol-tag>
+          }
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+  </form>
+</mat-stepper>
+
+<div class="stepper-footer__action">
+  <div class="stepper-footer__action__step">
+    @if (currentStepperId > 0) {
+      <button id="create-ot-device-steper-back-btn" mat-stroked-button (click)="onBackStep()">Back</button>
+      @if (currentStepperId < 3) {
+        <button
+          id="create-ot-device-steper-next-btn"
+          mat-stroked-button
+          (click)="onNextStep()"
+          [disabled]="nextBtnDisabled"
+        >
+          Next
+        </button>
+      } @else {
+        <button
+          id="create-ot-device-steper-create-btn"
+          mat-flat-button
+          color="primary"
+          (click)="onCreateDevice()"
+          [disabled]="createDisabled"
+        >
+          Create
+        </button>
+        @if (otProfileMode() === otDeviceProfileMode.NEOFLOW_VIEW) {
+          <button
+            id="create-ot-device-steper-create-save-btn"
+            mat-flat-button
+            color="primary"
+            (click)="onCreateAndSaveDevice()"
+            [disabled]="createDisabled"
+          >
+            Create and Save as OT Device Profile
+          </button>
+        }
+      }
+    }
+  </div>
+  <div class="stepper-footer__action__dialog">
+    @if (otProfileMode() === otDeviceProfileMode.NEOFLOW_VIEW) {
+      <button id="create-ot-device-steper-close-btn" mat-stroked-button (click)="onCloseDialog()">Close</button>
+    }
+  </div>
+</div>

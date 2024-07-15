@@ -1,0 +1,39 @@
+<h1 mat-dialog-title class="gl-h6">OT Device-{{ data.appName }}</h1>
+<mat-dialog-content>
+  <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab label="Profile">
+      <div class="ot-detail-content">
+        <ne-ot-device-profile
+          [otProfileMode]="otDeviceProfileMode.NEOFLOW_VIEW"
+          [isEditMode]="true"
+          [appName]="data.appName"
+          [formControl]="deviceProfileCtrl"
+        ></ne-ot-device-profile>
+      </div>
+    </mat-tab>
+    <mat-tab label="Tags">
+      <div class="ot-detail-content">
+        @if (isTexolProfile) {
+          <ne-select-command-template
+            [otProfileMode]="otDeviceProfileMode.NEOFLOW_VIEW"
+            [isEditMode]="true"
+            [appName]="data.appName"
+            [texolTagDoc]="data.texolTagDoc"
+            [formControl]="texolTemplateCtrl"
+          ></ne-select-command-template>
+        } @else {
+          <ne-ot-tags
+            [otProfileMode]="otDeviceProfileMode.NEOFLOW_VIEW"
+            [isEditMode]="true"
+            [formControl]="otTagsCtrl"
+          ></ne-ot-tags>
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <div class="gl-fill-remaining-space"></div>
+  <button type="button" mat-stroked-button mat-dialog-close>Cancel</button>
+  <button type="button" mat-raised-button color="primary" (click)="onSave()">save</button>
+</mat-dialog-actions>

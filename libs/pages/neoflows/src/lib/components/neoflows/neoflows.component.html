@@ -1,0 +1,142 @@
+<h1 class="page-title">NeoFlows</h1>
+<div class="neoflows-top-action">
+  <div class="neoflows-top-action__left">
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-label>Search</mat-label>
+      <input
+        id="neoflows-search"
+        matInput
+        placeholder="Search name"
+        [formControl]="searchCtrl"
+        maxlength="128"
+        type="text"
+      />
+      <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+    </mat-form-field>
+  </div>
+  <div class="neoflows-top-action__right" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
+    <button
+      id="neoflows-create-device-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onCreateNeoFlow()"
+    >
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Create NeoFlow
+    </button>
+  </div>
+</div>
+
+<mat-card class="neoflows-card">
+  <table [fixedLayout]="false" mat-table [dataSource]="dataSource" class="neoflows-card__table">
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element?.name ? element.name : '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="version">
+      <th mat-header-cell *matHeaderCellDef>Version</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.version }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tag">
+      <th mat-header-cell *matHeaderCellDef>Tag#</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.tagNumber }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="runInGateway">
+      <th mat-header-cell *matHeaderCellDef>Run In Gateway</th>
+      <td mat-cell *matCellDef="let element">
+        @if (!element?.gateways && !element.gateways.length) {
+          <span>-</span>
+        }
+        @for (gateway of element.gateways; track gateway.id) {
+          <div>{{ gateway?.name }} ({{ element.version }})</div>
+        }
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdBy">
+      <th mat-header-cell *matHeaderCellDef>Created By</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.createdBy?.name ?? '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef>Create Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ (element?.createdAt | dateTimeFormat) ?? '-' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="table-action">
+          <button
+            id="neoflows-detail-{{ element.id }}-btn"
+            type="button"
+            mat-stroked-button
+            color="primary"
+            (click)="onDetailDevice(element)"
+          >
+            Detail
+          </button>
+
+          <button
+            *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
+            id="neoflows-detail-more-{{ element.id }}-btn"
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+          >
+            <mat-icon svgIcon="icon:more_vert_blue"></mat-icon>
+          </button>
+
+          <mat-menu #menu="matMenu">
+            <button
+              mat-menu-item
+              id="neoflows-detail-copy-{{ element.id }}-btn"
+              type="button"
+              (click)="onCopyNeoFlow(element)"
+            >
+              <mat-icon svgIcon="icon:copy_gary"></mat-icon>
+              <span> Duplicate </span>
+            </button>
+            <button
+              mat-menu-item
+              id="neoflows-detail-delete-{{ element.id }}-btn"
+              type="button"
+              (click)="onDeleteNeoFlow(element)"
+            >
+              <mat-icon svgIcon="icon:delete_red"></mat-icon>
+              <span color="danger"> Delete </span>
+            </button>
+          </mat-menu>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <mat-paginator
+    id="neoflow-pagination"
+    [pageSizeOptions]="[10, 25, 50, 100]"
+    [length]="neoflowsLength()"
+    showFirstLastButtons
+    aria-label="Select page of neoflows"
+  ></mat-paginator>
+</mat-card>

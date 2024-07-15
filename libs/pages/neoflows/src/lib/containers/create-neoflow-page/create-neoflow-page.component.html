@@ -1,0 +1,97 @@
+<mat-stepper animationDuration="0" [linear]="true" #stepper>
+  <ng-template matStepperIcon="edit">
+    <mat-icon svgIcon="icon:ok"></mat-icon>
+  </ng-template>
+  <form [formGroup]="form">
+    <mat-step>
+      <ng-template matStepLabel>Profile</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-neoflow-profile
+            formControlName="neoflowProfile"
+            [processorVerOpt]="processorVerOpt()"
+          ></ne-neoflow-profile>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Select Data Provider</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-select-data-provider
+            [addedOtList]="addedOt()"
+            (handleAddDeviceFromProfile)="onAddDeviceFromProfile()"
+            (handleRemoveDeviceFromNeoFlow)="onRemoveDeviceFromNeoFlow($event)"
+            (handleDetailDeviceFromNeoFlow)="onDetailDeviceFromNeoFlow($event)"
+            (handleAddNewDevice)="onAddNewDevice()"
+          >
+          </ne-select-data-provider>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Select Message Destination</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-select-message-destination
+            [addedItList]="addedIt()"
+            (handleAddItServiceFromProfile)="onAddItServiceFromProfile()"
+            (handleRemoveItServiceFromNeoFlow)="onRemoveItServiceFromNeoFlow($event)"
+            (handleDetailItServiceFromNeoFlow)="onDetailItServiceFromNeoFlow($event)"
+            (handleAddNewItService)="onAddNewItService()"
+          ></ne-select-message-destination>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Create Message Schema</ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-create-message-schema></ne-create-message-schema>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel> Link Data Source </ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-message-link-datasource></ne-message-link-datasource>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel> Link Destination </ng-template>
+      <mat-card class="card">
+        <mat-card-content>
+          <ne-message-link-destination></ne-message-link-destination>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+  </form>
+</mat-stepper>
+
+<div class="stepper-footer__action">
+  @if (currentStepperId > 0) {
+    <button id="create-neoflow-steper-back-btn" mat-stroked-button (click)="onBackStep()">Back</button>
+  }
+  @if (currentStepperId < 5) {
+    <button id="create-neoflow-steper-next-btn" mat-stroked-button (click)="onNextStep()" [disabled]="nextBtnDisabled">
+      Next
+    </button>
+  } @else {
+    <button
+      id="create-neoflow-steper-create-btn"
+      mat-flat-button
+      color="primary"
+      (click)="onCreateNeoFlow()"
+      [disabled]="createDisabled"
+    >
+      Create
+    </button>
+  }
+</div>

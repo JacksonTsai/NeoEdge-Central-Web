@@ -34,19 +34,26 @@ const convertToCSV = (arr) => {
   return `${headers}\n${rows}`;
 };
 
-export const downloadCSV = (csv: any[], filename) => {
-  if (csv.length > 0) {
-    const csvConent = convertToCSV(csv);
-    const blob = new Blob([csvConent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', filename);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+export const downloadCSV = (csv: ArrayBuffer | any[], filename, isCsvFormat = false) => {
+  let csvContent: string | ArrayBuffer;
+
+  if (isCsvFormat) {
+    csvContent = csv as ArrayBuffer;
+  } else if (Array.isArray(csv) && csv.length > 0) {
+    csvContent = convertToCSV(csv);
+  } else {
+    return;
+  }
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 };

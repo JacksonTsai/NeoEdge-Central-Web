@@ -12,7 +12,7 @@ import {
 } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { NeUploadPreviewImageComponent } from '@neo-edge-web/components';
-import { OT_DEVICE_LOADING, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
+import { OT_DEVICE_LOADING, OT_DEVICE_PROFILE_MODE, SUPPORT_APPS_OT_DEVICE } from '@neo-edge-web/models';
 import { pick } from '@neo-edge-web/utils';
 import { ModbusRtuProfileComponent } from '../modbus-rtu-profile/modbus-rtu-profile.component';
 import { ModbusTcpProfileComponent } from '../modbus-tcp-profile/modbus-tcp-profile.component';
@@ -41,6 +41,7 @@ import { ModbusTcpProfileComponent } from '../modbus-tcp-profile/modbus-tcp-prof
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OtDeviceProfileComponent implements OnInit, ControlValueAccessor, Validator {
+  otProfileMode = input<OT_DEVICE_PROFILE_MODE>(OT_DEVICE_PROFILE_MODE.OT_DEVICE_VIEW);
   appName = input<SUPPORT_APPS_OT_DEVICE>();
   isEditMode = input(false);
   isLoading = input(OT_DEVICE_LOADING.NONE);
@@ -48,6 +49,7 @@ export class OtDeviceProfileComponent implements OnInit, ControlValueAccessor, V
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
 
+  otDeviceProfileMode = OT_DEVICE_PROFILE_MODE;
   change: (value) => void;
   touch: (value) => void;
   validatorChange: (value) => void;

@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,6 +9,20 @@ export interface RestConfig {
   wsPath: string;
   docPath: string;
 }
+
+interface IHttpGet {
+  config?: { basePath: string };
+  query?: HttpParams | { [param: string]: string | string[] };
+  params?: HttpParams | { [param: string]: string | string[] };
+  headers?: HttpHeaders | { [header: string]: string | string[] };
+  observe?: 'body';
+  reportProgress?: boolean;
+  withCredentials?: boolean;
+}
+
+type THttpGetArrayBuffer = IHttpGet & {
+  responseType: 'arraybuffer';
+};
 
 export const REST_CONFIG = new InjectionToken<RestConfig>('REST_CONFIG');
 
@@ -27,15 +41,19 @@ export class HttpService {
     return throwError(() => error);
   };
 
-  get(
-    url: string,
-    params?: {
-      query?: HttpParams | { [param: string]: string | string[] };
-      config?: { basePath: string };
-    }
-  ): Observable<any> {
+  get(url: string, params?: IHttpGet): Observable<any> {
     const basePath = params?.config && params.config?.basePath ? params.config.basePath : this.#restConfig.basePath;
     return this.#http.get(`${basePath}${url}`, { params: params?.query }).pipe(catchError(this.formatError));
+  }
+
+  getArrayBuffer(url: string, params?: IHttpGet): Observable<any> {
+    const basePath = params?.config && params.config?.basePath ? params.config.basePath : this.#restConfig.basePath;
+    const options: THttpGetArrayBuffer = {
+      params: params?.query,
+      headers: params?.headers,
+      responseType: 'arraybuffer'
+    };
+    return this.#http.get(`${basePath}${url}`, options).pipe(catchError(this.formatError));
   }
 
   put(url: string, payload = {}, config?: { basePath: string }): Observable<any> {

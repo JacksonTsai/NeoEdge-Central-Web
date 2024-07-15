@@ -27,11 +27,14 @@ export class SupportAppsService {
   private SUPPORT_APPS_PATH = '/apps';
 
   getApps$ = (
-    flowGroups: SUPPORT_APPS_FLOW_GROUPS,
+    flowGroups?: SUPPORT_APPS_FLOW_GROUPS,
     categories?: SUPPORT_APPS_CATEGORIES
   ): Observable<IGetSupportAppsResp> => {
     const params = new URLSearchParams();
-    params.set('flowGroups', flowGroups.toString());
+
+    if (typeof flowGroups !== 'undefined') {
+      params.set('flowGroups', flowGroups.toString());
+    }
     if (categories) {
       params.set('categories', categories.toString());
     }

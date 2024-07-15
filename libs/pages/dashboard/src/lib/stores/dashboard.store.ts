@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { selectCurrentProject } from '@neo-edge-web/auth-store';
 import {
+  BillingService,
+  EventsService,
   GatewaysService,
   ItServiceService,
   OtDevicesService,
@@ -8,7 +10,19 @@ import {
   SupportAppsService,
   UsersService
 } from '@neo-edge-web/global-services';
-import { DASHBOARD_LOADING, IDashboardState, SUPPORT_APPS_FLOW_GROUPS } from '@neo-edge-web/models';
+import {
+  DASHBOARD_LOADING,
+  IBillingParamsReq,
+  IDashboardActivitiesTime,
+  IDashboardProjectFeeTime,
+  IDashboardState,
+  IGetBillingResp,
+  IGetEventDocResp,
+  IGetEventLogsResp,
+  SUPPORT_APPS_FLOW_GROUPS,
+  TGetProjectEventLogsReq
+} from '@neo-edge-web/models';
+import { dateFormat, getPastDay, getPastMonths } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -23,7 +37,14 @@ const initialState: IDashboardState = {
   itList: [],
   itApps: [],
   otList: [],
-  otApps: []
+  otApps: [],
+  eventDoc: {},
+  activitiesList: null,
+  projectFee: null,
+  timeRecord: {
+    activitiesTime: null,
+    projectFeeTime: null
+  }
 };
 
 export type DashboardStore = InstanceType<typeof DashboardStore>;
@@ -38,7 +59,9 @@ export const DashboardStore = signalStore(
       gatewaysService = inject(GatewaysService),
       itServiceService = inject(ItServiceService),
       otDevicesService = inject(OtDevicesService),
-      supportAppsService = inject(SupportAppsService)
+      supportAppsService = inject(SupportAppsService),
+      eventsService = inject(EventsService),
+      billingService = inject(BillingService)
     ) => ({
       getProjectDetail: rxMethod<void>(
         pipe(
@@ -115,6 +138,77 @@ export const DashboardStore = signalStore(
             )
           )
         )
+      ),
+      getActivities: rxMethod<TGetProjectEventLogsReq>(
+        pipe(
+          tap(({ type }) =>
+            patchState(store, {
+              isLoading: type === 'GET' ? DASHBOARD_LOADING.GET : DASHBOARD_LOADING.UPDATE_ACTIVITIES
+            })
+          ),
+          switchMap(({ type, params }) => {
+            return projectsService.getProjectEventLogs$(params).pipe(
+              tap((d: IGetEventLogsResp) =>
+                patchState(store, {
+                  activitiesList: {
+                    events: type === 'GET' ? d.events : [...store.activitiesList().events, ...d.events],
+                    lastEvaluatedKey: d.lastEvaluatedKey
+                  },
+                  isLoading: DASHBOARD_LOADING.NONE
+                })
+              ),
+              catchError(() => EMPTY)
+            );
+          })
+        )
+      ),
+      setTimeRecord: (): void => {
+        const now = new Date();
+        const past24H: Date = getPastDay(1, now);
+        const pastMonths = 6;
+        const pastMonthsDate: Date = getPastMonths(pastMonths, now);
+        const activitiesTime: IDashboardActivitiesTime = {
+          start: Math.floor(past24H.getTime() / 1000),
+          end: Math.floor(now.getTime() / 1000)
+        };
+        const projectFeeTime: IDashboardProjectFeeTime = {
+          month: pastMonths,
+          start: dateFormat(pastMonthsDate),
+          end: dateFormat(now)
+        };
+        patchState(store, {
+          timeRecord: {
+            activitiesTime,
+            projectFeeTime
+          }
+        });
+      },
+      getEventDoc: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            eventsService.getEventDoc$().pipe(
+              tap((d: IGetEventDocResp) =>
+                patchState(store, { eventDoc: d.events, isLoading: DASHBOARD_LOADING.NONE })
+              ),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      getProjectUsageFee: rxMethod<IBillingParamsReq>(
+        pipe(
+          tap(() =>
+            patchState(store, {
+              isLoading: DASHBOARD_LOADING.GET
+            })
+          ),
+          switchMap((params: IBillingParamsReq) =>
+            billingService.getProjectFee$(params).pipe(
+              tap((d: IGetBillingResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
+              catchError(() => EMPTY)
+            )
+          )
+        )
       )
     })
   ),
@@ -122,19 +216,14 @@ export const DashboardStore = signalStore(
     return {
       onInit() {
         store.getSupportApps();
+        store.getEventDoc();
+        store.setTimeRecord();
 
         globalStore
           .select(selectCurrentProject)
           .pipe(
             tap(({ currentProjectId }) => {
-              patchState(store, { projectId: currentProjectId });
-              if (currentProjectId) {
-                store.getProjectDetail();
-                store.getAllUsers();
-                store.getAllItServiceProfiles();
-                store.getAllOtDeviceProfiles();
-                store.getAllGateways();
-              }
+              patchState(store, { projectId: currentProjectId, isLoading: DASHBOARD_LOADING.INIT });
             })
           )
           .subscribe();

@@ -1,15 +1,26 @@
 <h1 mat-dialog-title>Delete Gateway</h1>
 <mat-dialog-content>
-  <div class="delete-desc">
-    This operation will delete Gateway
-    <span color="danger">{{ gatewayName }}</span>
-    and associated data on both NeoEdge Central and Gateway. Please enter Gateway Name to confirm.
-  </div>
+  @if (data.isConnectedOrWaiting) {
+    <div class="delete-desc">
+      Performing the 'Delete Gateway' action is irreversible and cannot be recovered. All data, configurations, and
+      messages associated with the Gateway on both NeoEdge Central and the Gateway itself will be permanently deleted.
+    </div>
 
-  <div class="delete-desc">
-    Performing the 'Delete Gateway' action is irreversible and cannot be recovered. All data, configurations, and
-    messages associated with the Gateway on both NeoEdge Central and the Gateway itself will be permanently deleted.
-  </div>
+    <div class="delete-desc">
+      This operation will delete Gateway (<span color="danger">{{ gatewayName }}</span
+      >) and associated data on both NeoEdge Central and Gateway. Please enter Gateway Name to confirm.
+    </div>
+  } @else {
+    <div class="delete-desc">
+      Removing a Gateway will lead to the automatic revocation of the associated NeoEdge X License. To ensure compliance
+      with software license regulations, it is imperative for you to responsibly decommission this offline Gateway.
+    </div>
+
+    <div class="delete-desc">
+      This operation will delete Gateway (<span color="danger">{{ gatewayName }}</span
+      >) and associated data on both NeoEdge Central and Gateway. Please enter Gateway Name to confirm.
+    </div>
+  }
 
   <mat-form-field appearance="outline" floatLabel="always">
     <mat-label>Gateway Name</mat-label>

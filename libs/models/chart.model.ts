@@ -4,6 +4,7 @@ export interface IPieChartSetting {
 }
 
 export enum CHART_COLORS {
+  PrimaryBlue = '#1d50a2',
   LightOrange = '#FF9F5A',
   Teal = '#0FADB7',
   MediumBlue = '#3077CB',

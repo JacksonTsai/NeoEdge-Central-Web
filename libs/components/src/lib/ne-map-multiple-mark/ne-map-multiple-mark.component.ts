@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, effect, inject, input, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { TCategoryCoordinate } from '@neo-edge-web/models';
+import { ICategoryCoordinate } from '@neo-edge-web/models';
 import { Map, Util, divIcon, latLng, marker, tileLayer } from 'leaflet';
 interface IMarkerSvgIconSettings {
   mapIconUrl: string;
@@ -27,7 +27,7 @@ export class NeMapMultipleMarkComponent {
   #router = inject(Router);
   width = input<string>('435px');
   height = input<string>('150px');
-  coordinateList = input<TCategoryCoordinate[]>([]);
+  coordinateList = input<ICategoryCoordinate[]>([]);
   animation = input<boolean>(true);
   isEdit = input(true);
   map = signal(null);
@@ -80,7 +80,7 @@ export class NeMapMultipleMarkComponent {
     }
   }
 
-  addMarker({ lat, lng, msg, category, tag, color, routerLink }: TCategoryCoordinate) {
+  addMarker({ lat, lng, msg, category, tag, color, routerLink }: ICategoryCoordinate) {
     const markerIcon = this.getMarkIcon(category, color);
 
     let link = '';

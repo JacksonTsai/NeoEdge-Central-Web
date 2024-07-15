@@ -1,3 +1,5 @@
+import { IGetBillingResp } from './billing.model';
+import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { Gateway } from './gateways.model';
 import { IItService } from './it-service.model';
 import { IOtDevice } from './ot-devices.model';
@@ -15,20 +17,48 @@ export interface IDashboardState {
   itApps: ISupportApps[];
   otList: IOtDevice<any>[];
   otApps: ISupportApps[];
-  usageFee?: any;
   licenseConsumption?: any;
-  activities?: any;
+  eventDoc: IEventDoc;
+  activitiesList: IGetEventLogsResp;
+  projectFee: IGetBillingResp;
+  timeRecord: IDashboardTimeRecord;
 }
 
 export interface IDashboardGatewayStatusItem {
+  id: number;
   name: string;
   list: Gateway[];
+}
+
+export interface IDashboardTimeRecord {
+  activitiesTime: IDashboardActivitiesTime;
+  projectFeeTime: IDashboardProjectFeeTime;
+}
+
+export interface IDashboardActivitiesTime {
+  start: number;
+  end: number;
+}
+
+export interface IDashboardProjectFeeTime {
+  month: number;
+  start: string;
+  end: string;
 }
 
 export type TDashboardGatewayStatus = Record<string, IDashboardGatewayStatusItem>;
 
 export enum DASHBOARD_LOADING {
   NONE,
+  INIT,
   GET,
-  REFRESH
+  REFRESH,
+  UPDATE_ACTIVITIES
+}
+
+export enum DASHBOARD_GATEWAY_STATUE {
+  Waiting = 0,
+  Connected = 1,
+  Disconnected = 2,
+  Detach = 3
 }

@@ -12,6 +12,7 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -25,6 +26,7 @@ import {
   IInstancesTcp,
   IOtDevice,
   OT_DEVICES_LOADING,
+  OT_DEVICES_TABLE_MODE,
   PERMISSION
 } from '@neo-edge-web/models';
 import { datetimeFormat } from '@neo-edge-web/utils';
@@ -48,7 +50,8 @@ import { debounceTime, tap } from 'rxjs';
     MatPaginatorModule,
     MatTooltipModule,
     MatMenuModule,
-    NgxPermissionsModule
+    NgxPermissionsModule,
+    MatDialogModule
   ],
   templateUrl: './ot-devices.component.html',
   styleUrl: './ot-devices.component.scss',
@@ -60,23 +63,28 @@ export class OtDevicesComponent implements AfterViewInit {
   @Output() handleCopyDevice = new EventEmitter<any>();
   @Output() handleCreateDevice = new EventEmitter<any>();
   @Output() handlePageChange = new EventEmitter<any>();
+  @Output() handleAddOtDeviceToNeoFlow = new EventEmitter<IOtDevice<any>>();
+  @Output() handleDetailDeviceFromNeoFlow = new EventEmitter<IOtDevice<any>>();
+  @Output() handleRemoveDeviceFromNeoFlow = new EventEmitter<{ otDeviceName: string }>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  tableMode = input<OT_DEVICES_TABLE_MODE>(OT_DEVICES_TABLE_MODE.OT_DEVICE_VIEW);
   otDevices = input<IOtDevice<any>[]>([]);
   page = input<number>(0);
   size = input<number>(0);
   devicesLength = input<number>(0);
   permission = PERMISSION;
-  displayedColumns: string[] = [
-    'no',
-    'name',
-    'iconPath',
-    'type',
-    'connection',
-    'tag',
-    'createdBy',
-    'createdAt',
-    'action'
-  ];
+  otDeviceTableMode = OT_DEVICES_TABLE_MODE;
+
+  get displayedColumns() {
+    if (OT_DEVICES_TABLE_MODE.SELECTION === this.tableMode()) {
+      return ['name', 'iconPath', 'type', 'connection', 'tag', 'createdBy', 'createdAt', 'selectionModeAction'];
+    } else if (OT_DEVICES_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      return ['no', 'name', 'iconPath', 'type', 'connection', 'tag', 'createdBy', 'createdAt', 'neoFlowViewModeAction'];
+    } else {
+      return ['no', 'name', 'iconPath', 'type', 'connection', 'tag', 'createdBy', 'createdAt', 'action'];
+    }
+  }
 
   isLoading = input<OT_DEVICES_LOADING>(OT_DEVICES_LOADING.NONE);
   searchCtrl = new FormControl('');
@@ -167,6 +175,24 @@ export class OtDevicesComponent implements AfterViewInit {
       }
     }
     return '-';
+  };
+
+  onAddOtDeviceToNeoFlow = (element) => {
+    if (OT_DEVICES_TABLE_MODE.SELECTION === this.tableMode()) {
+      this.handleAddOtDeviceToNeoFlow.emit(element);
+    }
+  };
+
+  onDetailDeviceFromNeoFlow = (element) => {
+    if (OT_DEVICES_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      this.handleDetailDeviceFromNeoFlow.emit(element);
+    }
+  };
+
+  onRemoveDeviceFromNeoFlow = (element) => {
+    if (OT_DEVICES_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      this.handleRemoveDeviceFromNeoFlow.emit({ otDeviceName: element.name });
+    }
   };
 
   ngAfterViewInit() {

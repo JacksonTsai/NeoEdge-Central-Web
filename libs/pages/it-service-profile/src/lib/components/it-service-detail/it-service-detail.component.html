@@ -1,19 +1,28 @@
-<div class="page-title-box">
-  <a
-    type="button"
-    mat-icon-button
-    color="primary"
-    class="btn"
-    [routerLink]="['/neoflow/it-service-profile']"
-    id="it-service-detail-back"
-  >
-    <mat-icon svgIcon="icon:arrow_left" color="primary" aria-hidden="false" aria-label="Back to IT service"></mat-icon>
-  </a>
-  <h1 class="page-title">{{ itServiceDetail()?.name }}</h1>
-</div>
-<mat-card class="card">
+@if (itServiceProfileMode.IT_SERVICE_VIEW === profileMode()) {
+  <div class="page-title-box">
+    <a
+      type="button"
+      mat-icon-button
+      color="primary"
+      class="btn"
+      [routerLink]="['/neoflow/it-service-profile']"
+      id="it-service-detail-back"
+    >
+      <mat-icon
+        svgIcon="icon:arrow_left"
+        color="primary"
+        aria-hidden="false"
+        aria-label="Back to IT service"
+      ></mat-icon>
+    </a>
+    <h1 class="page-title">{{ itServiceDetail()?.name }}</h1>
+  </div>
+}
+<mat-card class="card" [ngClass]="{ 'inside-dialog': itServiceProfileMode.NEOFLOW_VIEW === profileMode() }">
   <mat-card-content>
-    <h2 class="card__title">IT Service Profile</h2>
+    @if (itServiceProfileMode.IT_SERVICE_VIEW === profileMode()) {
+      <h2 class="card__title">IT Service Profile</h2>
+    }
     <section class="card__sec">
       <h3 class="card__sub-title">Server Type</h3>
       @if (appData()) {
@@ -66,27 +75,53 @@
   </mat-card-content>
 </mat-card>
 <mat-card-actions class="profile-action" *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
-  @if (!isEditMode()) {
-    <div class="edit-btn">
-      <button type="button" mat-stroked-button color="primary" class="btn" (click)="onEdit()" id="user-info-btn-edit">
-        <mat-icon svgIcon="icon:edit_primary"></mat-icon>
-        Edit
+  @if (itServiceProfileMode.IT_SERVICE_VIEW === profileMode()) {
+    @if (!isEditMode()) {
+      <div class="edit-btn">
+        <button type="button" mat-stroked-button color="primary" class="btn" (click)="onEdit()" id="user-info-btn-edit">
+          <mat-icon svgIcon="icon:edit_primary"></mat-icon>
+          Edit
+        </button>
+      </div>
+    }
+    @if (isEditMode()) {
+      <button type="button" mat-stroked-button color="primary" (click)="onCancelEdit()" id="user-info-btn-cancel">
+        Cancel
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        (click)="onSave()"
+        [disabled]="form.invalid || form.pristine"
+        id="user-info-btn-save"
+      >
+        Save
+      </button>
+    }
+  }
+
+  @if (itServiceProfileMode.NEOFLOW_VIEW === profileMode()) {
+    <div class="dialog-action">
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="handleCloseDialog.emit()"
+        id="it-service-profile-dialog-cancel-btn"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        color="primary"
+        (click)="onSaveToNeoFlow()"
+        [disabled]="form.invalid"
+        id="it-service-profile-dialog-save-btn"
+      >
+        Save
       </button>
     </div>
-  }
-  @if (isEditMode()) {
-    <button type="button" mat-stroked-button color="primary" (click)="onCancelEdit()" id="user-info-btn-cancel">
-      Cancel
-    </button>
-    <button
-      type="button"
-      mat-flat-button
-      color="primary"
-      (click)="onSave()"
-      [disabled]="form.invalid || form.pristine"
-      id="user-info-btn-save"
-    >
-      Save
-    </button>
   }
 </mat-card-actions>

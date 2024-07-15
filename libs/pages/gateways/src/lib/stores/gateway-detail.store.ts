@@ -1,17 +1,30 @@
 import { inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { GatewayDetailService, ProjectsService, REST_CONFIG, WebSocketService } from '@neo-edge-web/global-services';
+import {
+  EventsService,
+  GatewayDetailService,
+  ProjectsService,
+  REST_CONFIG,
+  WebSocketService
+} from '@neo-edge-web/global-services';
 import { RouterStoreService, selectCurrentProject, selectLoginState } from '@neo-edge-web/global-stores';
 import {
   GATEWAY_LOADING,
+  GATEWAY_SSH_STATUS,
   GW_RUNNING_MODE,
   GW_WS_TYPE,
   GatewayDetailState,
+  IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
+  IGatewaySSHWsResp,
   IGatewaySystemInfo,
-  IRebootReq
+  IGetEventDocResp,
+  IGetEventLogsResp,
+  IRebootReq,
+  TGetGatewayEventLogsReq
 } from '@neo-edge-web/models';
+import { datetimeFormat, downloadCSV } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
@@ -23,6 +36,12 @@ const initialState: GatewayDetailState = {
   gatewayDetail: null,
   isLoading: GATEWAY_LOADING.NONE,
   labels: [],
+  sshStatus: {
+    current: null,
+    ws: null
+  },
+  eventDoc: null,
+  eventLogsList: null,
   wsRoomName: ''
 };
 
@@ -36,7 +55,8 @@ export const GatewayDetailStore = signalStore(
       dialog = inject(MatDialog),
       router = inject(Router),
       gwDetailService = inject(GatewayDetailService),
-      projectsService = inject(ProjectsService)
+      projectsService = inject(ProjectsService),
+      eventsService = inject(EventsService)
     ) => ({
       getGatewayDetail: rxMethod<void>(
         pipe(
@@ -151,6 +171,75 @@ export const GatewayDetailStore = signalStore(
             )
           )
         )
+      ),
+      getSSHStatus: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            gwDetailService.getGatewaySSH$(store.gatewayId()).pipe(
+              tap((d) => {
+                patchState(store, { sshStatus: { ...store.sshStatus(), current: d }, isLoading: GATEWAY_LOADING.NONE });
+              }),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      updateSSHStatus: rxMethod<{ enabled: GATEWAY_SSH_STATUS }>(
+        pipe(
+          tap(() => patchState(store, { isLoading: GATEWAY_LOADING.CONNECT_SSH })),
+          switchMap(({ enabled }) =>
+            gwDetailService.updateGatewaySSH$(store.gatewayId(), enabled).pipe(catchError(() => EMPTY))
+          )
+        )
+      ),
+      getEventLogsList: rxMethod<TGetGatewayEventLogsReq>(
+        pipe(
+          tap(({ type }) =>
+            patchState(store, {
+              isLoading: type === 'GET' ? GATEWAY_LOADING.GET_LOG : GATEWAY_LOADING.UPDATE_LOG
+            })
+          ),
+          switchMap(({ type, params }) => {
+            return gwDetailService.getGatewayEventLogs$(store.gatewayId(), params).pipe(
+              tap((d: IGetEventLogsResp) =>
+                patchState(store, {
+                  eventLogsList: {
+                    events: type === 'GET' ? d.events : [...store.eventLogsList().events, ...d.events],
+                    lastEvaluatedKey: d.lastEvaluatedKey
+                  },
+                  isLoading: GATEWAY_LOADING.NONE
+                })
+              ),
+              catchError(() => EMPTY)
+            );
+          })
+        )
+      ),
+      getEventDoc: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            eventsService.getEventDoc$().pipe(
+              tap((d: IGetEventDocResp) => patchState(store, { eventDoc: d.events })),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      downloadEventLogsCsv: rxMethod<IDownloadGatewayEventLogsReq>(
+        pipe(
+          tap(() => patchState(store, { isLoading: GATEWAY_LOADING.DOWNLOAD_LOG })),
+          switchMap((params) => {
+            return gwDetailService.downloadGatewayEventLogs$(store.gatewayId(), params).pipe(
+              tap((data: ArrayBuffer) => {
+                const start = datetimeFormat(params.timeGe, null, false);
+                const end = datetimeFormat(params.timeLe, null, false);
+                downloadCSV(data, `NeoEdge_Gateway[${[store.gatewayDetail().name]}]_Log_${start}-${end}.csv`, true);
+                patchState(store, { isLoading: GATEWAY_LOADING.NONE });
+              }),
+              catchError(() => EMPTY)
+            );
+          })
+        )
       )
     })
   ),
@@ -180,7 +269,16 @@ export const GatewayDetailStore = signalStore(
               gatewaySystemInfo: { ...data.gatewaySystemInfo },
               gatewaySystemInfoUpdateAt: data.gatewaySystemInfoUpdateAt
             }
-          })
+          }),
+        ssh: (data: IGatewaySSHWsResp) => {
+          patchState(store, {
+            sshStatus: {
+              ...store.sshStatus(),
+              ws: { ...data }
+            },
+            isLoading: GATEWAY_LOADING.REFRESH_SSH
+          });
+        }
       };
 
       return {

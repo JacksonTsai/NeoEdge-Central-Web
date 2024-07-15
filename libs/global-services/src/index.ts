@@ -1,4 +1,5 @@
 export * from './lib/auth-service';
+export * from './lib/billing.services';
 export * from './lib/company-services';
 export * from './lib/core-services';
 export * from './lib/core-services/auto-logout.service';
@@ -9,6 +10,7 @@ export * from './lib/http-interceptor';
 export * from './lib/http-service';
 export * from './lib/ipc-services';
 export * from './lib/it-service-services';
+export * from './lib/neoflows-services';
 export * from './lib/ot-devices-services';
 export * from './lib/projects-services';
 export * from './lib/roles-services/roles.service';

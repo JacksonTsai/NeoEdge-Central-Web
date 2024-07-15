@@ -1,0 +1,35 @@
+<mat-accordion class="dashboard-card">
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title><h2 class="dashboard-card__title">24 Hours Activities</h2></mat-panel-title>
+    </mat-expansion-panel-header>
+    @if (eventDoc() && events().length) {
+      <div class="event-log" (scroll)="onScroll($event)">
+        <ul class="event-log__list no-bullet">
+          @for (item of events(); track item['timestamp:uuid']) {
+            <li class="event-log__item">
+              <span class="date">{{ item.timestamp | dateTimeFormat }}</span>
+              <mat-icon
+                matChipAvatar
+                [svgIcon]="eventDoc()['' + item.eventId]?.severity === 'Notice' ? 'icon:info' : 'icon:notifications'"
+                [matTooltip]="eventDoc()['' + item.eventId]?.severity"
+              ></mat-icon>
+              <span>{{ eventDoc()['' + item.eventId]?.name }}</span>
+              <span> - </span>
+              <span class="source">{{ getEventSource(item) }}</span>
+            </li>
+          }
+        </ul>
+        <div class="event-log__footer text-center">
+          @if (!activitiesList().lastEvaluatedKey) {
+            <span class="text-gray">No more data available</span>
+          } @else {
+            <span>Loading...</span>
+          }
+        </div>
+      </div>
+    } @else {
+      <p class="no-data text-gray">No activity data within 24 hours.</p>
+    }
+  </mat-expansion-panel>
+</mat-accordion>

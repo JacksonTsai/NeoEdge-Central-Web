@@ -1,1 +1,109 @@
-<p>gateway-log works!</p>
+<div class="top-action">
+  <div class="top-action__left">
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always" subscriptSizing="dynamic">
+      <mat-label>Search</mat-label>
+      <input
+        id="it-service-search-name-input"
+        matInput
+        placeholder="Search name"
+        maxlength="128"
+        type="text"
+        [formControl]="searchNameCtrl"
+      />
+      <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+    </mat-form-field>
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always" subscriptSizing="dynamic">
+      <mat-label>Date range</mat-label>
+      <mat-date-range-input [formGroup]="searchDateRangeGroup" [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+        <input matStartDate formControlName="start" placeholder="Start date" />
+        <input matEndDate formControlName="end" placeholder="End date" />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker (closed)="onCloseDatePicker()" #picker></mat-date-range-picker>
+    </mat-form-field>
+    <mat-form-field class="search-input-field" appearance="outline" floatLabel="always" subscriptSizing="dynamic">
+      <mat-label>Sort</mat-label>
+      <mat-select [formControl]="searchSort" (selectionChange)="onUpdate('GET')">
+        @for (item of eventLogsSort | keyvalue; track item.key) {
+          <mat-option [value]="item.value">{{ item.key }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="top-action__right">
+    <button
+      id="gateway-log-download-btn"
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onDownload()"
+      [disabled]="!eventDoc()"
+    >
+      <mat-icon svgIcon="icon:download"></mat-icon>
+      Download CSV
+    </button>
+    <button
+      id="gateway-log-reload-btn"
+      class="hover-animate-spin-reverse"
+      type="button"
+      color="primary"
+      mat-icon-button
+      matTooltip="Reload"
+      (click)="onUpdate('GET')"
+    >
+      <mat-icon svgIcon="icon:sync_primary"></mat-icon>
+    </button>
+  </div>
+</div>
+
+<div class="log-table">
+  <table mat-table [dataSource]="dataSource" [fixedLayout]="true">
+    <ng-container matColumnDef="timestamp">
+      <th mat-header-cell *matHeaderCellDef>Datetime</th>
+      <td mat-cell *matCellDef="let element">{{ (element?.timestamp | dateTimeFormat) ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="eventId">
+      <th mat-header-cell *matHeaderCellDef>Event ID</th>
+      <td mat-cell *matCellDef="let element">{{ element?.eventId ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="eventName">
+      <th mat-header-cell *matHeaderCellDef>Event Name</th>
+      <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.name ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef>Group</th>
+      <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.group ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="srouce">
+      <th mat-header-cell *matHeaderCellDef>Srouce</th>
+      <td mat-cell *matCellDef="let element">{{ element?.eventSource ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="severity">
+      <th mat-header-cell *matHeaderCellDef>Severity</th>
+      <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.severity ?? '-' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="content">
+      <th mat-header-cell *matHeaderCellDef>Content</th>
+      <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.content ?? '-' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="dispalyedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: dispalyedColumns"></tr>
+  </table>
+</div>
+
+<div class="text-center">
+  @if (!events().length) {
+    <p class="text-gray">No Data</p>
+  } @else if (!eventLogsList()?.lastEvaluatedKey) {
+    <p class="text-gray">No more data available</p>
+  } @else {
+    <button type="button" mat-stroked-button color="primary" (click)="onUpdate('UPDATE')">Load More</button>
+  }
+</div>

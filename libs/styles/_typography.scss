@@ -1,0 +1,21 @@
+%link {
+  color: $primary;
+
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+p {
+  a {
+    @extend %link;
+  }
+}
+
+a.text-link {
+  @extend %link;
+}
+
+.text-gray {
+  color: $text-gary;
+}

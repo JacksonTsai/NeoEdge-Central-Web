@@ -1,0 +1,9 @@
+.data-provider-wrapper__action {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  &__left {
+    display: flex;
+    gap: 8px;
+  }
+}

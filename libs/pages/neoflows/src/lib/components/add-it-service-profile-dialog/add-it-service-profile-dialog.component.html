@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Add OT Device From Profile</h1>
+<mat-dialog-content>
+  <div class="add-ot-devices-dialog-content">
+    <ne-it-services
+      [tableMode]="itServiceTableMode.SELECTION"
+      [dataTable]="itServices()"
+      [page]="tablePage()"
+      [size]="tableSize()"
+      [dataLength]="itServiceLength()"
+      (handleAddItServiceToNeoFlow)="onAddItServiceToNeoFlow($event)"
+      (pageChange)="onPageChange($event)"
+    ></ne-it-services>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog__action">
+  <button type="button" mat-stroked-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

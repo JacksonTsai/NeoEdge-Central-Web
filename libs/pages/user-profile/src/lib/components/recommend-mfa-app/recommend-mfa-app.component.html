@@ -11,7 +11,7 @@
       <td mat-cell
           *matCellDef="let col">
         @for (item of col.list; track item.name) {
-        <a class="link" [href]="item.url" target="_blank">{{ item.name }}</a>
+        <a class="text-link" [href]="item.url" target="_blank">{{ item.name }}</a>
         @if ($index !== col.list.length - 1) {
         ,
         }

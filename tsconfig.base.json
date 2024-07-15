@@ -18,6 +18,7 @@
     "paths": {
       "@neo-edge-web/active-reset-user": ["libs/pages/active-reset-user/src/index.ts"],
       "@neo-edge-web/auth-store": ["libs/global-stores/src/lib/auth-store/index.ts"],
+      "@neo-edge-web/billing": ["libs/pages/billing/src/index.ts"],
       "@neo-edge-web/company-info": ["libs/pages/company-info/src/index.ts"],
       "@neo-edge-web/components": ["libs/components/src/index.ts"],
       "@neo-edge-web/configs": ["libs/configs/index.ts"],
@@ -34,6 +35,7 @@
       "@neo-edge-web/models": ["libs/models/index.ts"],
       "@neo-edge-web/neoedge-central": ["libs/environments/neoedge-central/src/index.ts"],
       "@neo-edge-web/neoedge-central-web/environment": ["libs/environments/neoedge-central-web/index.ts"],
+      "@neo-edge-web/neoflows": ["libs/pages/neoflows/src/index.ts"],
       "@neo-edge-web/ot-devices-profile": ["libs/pages/ot-devices-profile/src/index.ts"],
       "@neo-edge-web/package-json": ["./package.json"],
       "@neo-edge-web/pipes": ["libs/pipes/index.ts"],

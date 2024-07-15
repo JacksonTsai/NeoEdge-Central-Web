@@ -1,3 +1,4 @@
+import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { IGatewayLabels } from './utils.model';
 
 export interface GatewayDetailState {
@@ -6,6 +7,9 @@ export interface GatewayDetailState {
   gatewayDetail: IGetGatewaysDetailResp | null;
   isLoading: GATEWAY_LOADING;
   labels: IGatewayLabels[];
+  sshStatus: IGatewaySSHStatus;
+  eventDoc: IEventDoc;
+  eventLogsList: IGetEventLogsResp;
   wsRoomName: string;
 }
 
@@ -151,7 +155,11 @@ export enum GATEWAY_LOADING {
   SYNC_GW_PROFILE,
   UPGRADE_EDGE_X_AGENT,
   SWITCH_RUNNING_MODE,
-  SSH_CONTROL
+  CONNECT_SSH,
+  REFRESH_SSH,
+  GET_LOG,
+  UPDATE_LOG,
+  DOWNLOAD_LOG
 }
 
 export enum GW_RUNNING_MODE {
@@ -163,7 +171,8 @@ export enum GW_RUNNING_MODE {
 export enum GW_WS_TYPE {
   'connection-info' = 'connectionInfo',
   'running-mode' = 'runningMode',
-  'system-info' = 'systemInfo'
+  'system-info' = 'systemInfo',
+  'ssh' = 'ssh'
 }
 
 export interface IGWRebootSchedule {
@@ -180,4 +189,26 @@ export interface IGWRebootDays {
   thu: number;
   fri: number;
   sat: number;
+}
+
+export interface IGatewaySSHStatus {
+  current: IGetGatewaySSHResp;
+  ws: IGatewaySSHWsResp;
+}
+
+export interface IGetGatewaySSHResp {
+  connectionStatus: number;
+  sshServer: string;
+  token: string;
+}
+export interface IGatewaySSHWsResp {
+  enable: number;
+  sshServer: string;
+  token: string;
+  connected: number;
+}
+
+export enum GATEWAY_SSH_STATUS {
+  DISABLED = 0,
+  ENABLED = 1
 }

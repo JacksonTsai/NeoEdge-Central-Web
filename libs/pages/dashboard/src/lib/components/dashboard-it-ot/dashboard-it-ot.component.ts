@@ -42,21 +42,16 @@ export class DashboardItOtComponent {
   });
 
   category = computed<Category | null>(() => {
-    if (!this.apps().length) return null;
-
-    // Init
-    const result = {};
-    this.apps().forEach((item: ISupportApps) => {
-      const key = item.id;
-      result[key] = this.initCategory(item.name);
-    });
-
-    if (!this.dataTable().length) return result;
+    if (!this.dataTable().length) return null;
 
     // Set Data
     const data = this.dataTable();
+    const result = {};
     data.forEach((item: TITOTData) => {
       const key = item.appId;
+      if (!result[key]) {
+        result[key] = this.initCategory(item.appClass);
+      }
       result[key]?.list.push(item);
     });
     return result;

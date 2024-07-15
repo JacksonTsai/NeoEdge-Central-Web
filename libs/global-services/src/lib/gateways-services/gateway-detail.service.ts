@@ -1,14 +1,17 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
+  GATEWAY_SSH_STATUS,
   GW_RUNNING_MODE,
+  IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
   IGetGatewaysDetailResp,
   IGetInstallCommandResp,
-  IRebootReq
+  IRebootReq,
+  TGetGatewayEventLogsParams
 } from '@neo-edge-web/models';
-import { obj2FormData } from '@neo-edge-web/utils';
+import { obj2FormData, setParamsArrayWithKey } from '@neo-edge-web/utils';
 import { Observable, catchError, map, tap, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
 
@@ -159,6 +162,85 @@ export class GatewayDetailService {
           verticalPosition: 'bottom',
           duration: 5000
         });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  getGatewaySSH$ = (gatewayId: number) => {
+    return this.#http.get(`${this.GATEWAYS_PATH}/${gatewayId}/ssh-status`).pipe(
+      map((resp) => {
+        return resp;
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Get gateway SSH Satus failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  updateGatewaySSH$ = (gatewayId: number, enable: GATEWAY_SSH_STATUS) => {
+    return this.#http.post(`${this.GATEWAYS_PATH}/${gatewayId}/command/ssh`, { enable }).pipe(
+      tap(() => {
+        this.#snackBar.open(
+          `Setting SSH Status: ${enable === GATEWAY_SSH_STATUS.ENABLED ? 'enabled' : 'disabled'} success.`,
+          'X',
+          {
+            horizontalPosition: 'end',
+            verticalPosition: 'bottom',
+            duration: 5000
+          }
+        );
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Setting SSH Status failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  getGatewayEventLogs$ = (gatewayId: number, eventLogsParams: TGetGatewayEventLogsParams) => {
+    const params = setParamsArrayWithKey(eventLogsParams);
+    return this.#http.get(`${this.GATEWAYS_PATH}/${gatewayId}/events?${params}`).pipe(
+      catchError((err) => {
+        this.#snackBar.open('Get gateway event logs failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        return this.handleError(err);
+      })
+    );
+  };
+
+  downloadGatewayEventLogs$ = (gatewayId: number, eventLogsParams: IDownloadGatewayEventLogsReq) => {
+    const params = setParamsArrayWithKey(eventLogsParams);
+    const headers = new HttpHeaders({
+      Accept: 'text/csv'
+    });
+    return this.#http.getArrayBuffer(`${this.GATEWAYS_PATH}/${gatewayId}/events/csv?${params}`, { headers }).pipe(
+      tap(() => {
+        this.#snackBar.open(`Download gateway logs success.`, 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+      }),
+      catchError((err) => {
+        this.#snackBar.open('Download gateway logs failure.', 'X', {
+          horizontalPosition: 'end',
+          verticalPosition: 'bottom',
+          duration: 5000
+        });
+        console.log(err);
         return this.handleError(err);
       })
     );

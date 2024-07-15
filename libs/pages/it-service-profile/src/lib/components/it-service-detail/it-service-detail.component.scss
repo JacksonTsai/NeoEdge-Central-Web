@@ -6,7 +6,17 @@
   min-height: calc(100vh - 220px);
 }
 
+.card.inside-dialog {
+  min-height: 0;
+  margin-top: 8px;
+}
+
 .page-title-box {
   margin-top: -12px;
   margin-bottom: 8px;
+}
+
+.profile-action {
+  display: flex;
+  justify-content: flex-end;
 }
