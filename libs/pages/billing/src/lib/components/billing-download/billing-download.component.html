@@ -1,17 +1,17 @@
 <table mat-table [dataSource]="dataSource" class="billing-record-download-table">
-  <ng-container matColumnDef="date">
+  <ng-container matColumnDef="billingMonth">
     <th mat-header-cell *matHeaderCellDef>Date</th>
-    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.billingMonth }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="no">
+  <ng-container matColumnDef="billNo">
     <th mat-header-cell *matHeaderCellDef>Billing No.</th>
-    <td mat-cell *matCellDef="let element">{{ element.no }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.billNo }}</td>
   </ng-container>
 
-  <ng-container matColumnDef="fee">
-    <th mat-header-cell *matHeaderCellDef>Fee</th>
-    <td mat-cell *matCellDef="let element">{{ element.fee | currencyCustom: currencyUnit() }}</td>
+  <ng-container matColumnDef="amount">
+    <th mat-header-cell *matHeaderCellDef>Amount</th>
+    <td mat-cell *matCellDef="let element">{{ element.amount | currencyCustom: currencyUnit() }}</td>
   </ng-container>
 
   <ng-container matColumnDef="action">
@@ -34,4 +34,6 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
 
-<p class="text-gray">以上為假資料，尚未串接API</p>
+@if (!billingRecords()) {
+  <p class="text-gray text-center">No data</p>
+}
