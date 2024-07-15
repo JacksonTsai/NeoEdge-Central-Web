@@ -184,11 +184,15 @@ export class OtDevicesComponent implements AfterViewInit {
   };
 
   onDetailDeviceFromNeoFlow = (element) => {
-    this.handleDetailDeviceFromNeoFlow.emit(element);
+    if (OT_DEVICES_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      this.handleDetailDeviceFromNeoFlow.emit(element);
+    }
   };
 
   onRemoveDeviceFromNeoFlow = (element) => {
-    this.handleRemoveDeviceFromNeoFlow.emit({ otDeviceName: element.name });
+    if (OT_DEVICES_TABLE_MODE.NEOFLOW_VIEW === this.tableMode()) {
+      this.handleRemoveDeviceFromNeoFlow.emit({ otDeviceName: element.name });
+    }
   };
 
   ngAfterViewInit() {

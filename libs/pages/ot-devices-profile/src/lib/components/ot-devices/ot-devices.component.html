@@ -127,7 +127,7 @@
             color="primary"
             (click)="onDetailDeviceFromNeoFlow(element)"
           >
-            Detail
+            Edit
           </button>
 
           <button
@@ -159,7 +159,7 @@
       <td mat-cell *matCellDef="let element">
         <div *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]" class="table-action">
           <button
-            id="ot-devices-selection-mode-edit-{{ element.id }}-btn"
+            id="ot-devices-selection-mode-add-{{ element.id }}-btn"
             type="button"
             mat-stroked-button
             color="primary"

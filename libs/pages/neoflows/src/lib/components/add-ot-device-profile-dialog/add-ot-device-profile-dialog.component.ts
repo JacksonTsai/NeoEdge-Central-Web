@@ -6,7 +6,6 @@ import { IOtDevice, OT_DEVICES_TABLE_MODE, TTableQueryForOtDevices } from '@neo-
 import { OtDevicesComponent, OtDevicesStore } from '@neo-edge-web/ot-devices-profile';
 
 @Component({
-  selector: 'ne-add-ot-device-profile-dialog',
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, OtDevicesComponent],
   templateUrl: './add-ot-device-profile-dialog.component.html',
@@ -17,13 +16,9 @@ import { OtDevicesComponent, OtDevicesStore } from '@neo-edge-web/ot-devices-pro
 export class AddOtDeviceProfileDialogComponent {
   @Output() handleAddOtDevice = new EventEmitter();
   readonly dialogRef = inject(MatDialogRef<AddOtDeviceProfileDialogComponent>);
-
   #otDevicesStore = inject(OtDevicesStore);
-
   otDeviceTableMode = OT_DEVICES_TABLE_MODE;
-
   otDevices = this.#otDevicesStore.otDevices;
-
   tablePage = this.#otDevicesStore.page;
   tableSize = this.#otDevicesStore.size;
   otDevicesLength = this.#otDevicesStore.otDevicesLength;

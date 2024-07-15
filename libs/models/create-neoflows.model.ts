@@ -4,7 +4,7 @@ import { IOtDevice } from './ot-devices.model';
 import { ISupportApps } from './support-apps.model';
 
 export interface ICreateNeoFlowState {
-  neoflowProcessorVers: { version: string; id: number }[];
+  neoflowProfile: any;
   supportApps: ISupportApps[];
   otProfileList: IOtDevice<any>[];
   itProfileList: IItService[];
@@ -12,6 +12,7 @@ export interface ICreateNeoFlowState {
   addedIt: IItService[];
   texolTagDoc: any;
   userProfile: IGetUserProfileResp;
+  neoflowProcessorVers: { version: string; id: number }[];
   isLoading: CREATE_NEOFLOW_LOADING;
 }
 
@@ -21,7 +22,7 @@ export enum CREATE_NEOFLOW_LOADING {
 }
 
 export enum CREATE_NEOFLOW_STEP {
-  profile,
+  neoflowProfile,
   selectDataProvider,
   selectMessageDestination,
   createMessageSchema,

@@ -7,7 +7,10 @@
       <ng-template matStepLabel>Profile</ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-neoflow-profile formControlName="profile" [processorVerOpt]="processorVerOpt()"></ne-neoflow-profile>
+          <ne-neoflow-profile
+            formControlName="neoflowProfile"
+            [processorVerOpt]="processorVerOpt()"
+          ></ne-neoflow-profile>
         </mat-card-content>
       </mat-card>
     </mat-step>
@@ -22,7 +25,6 @@
             (handleRemoveDeviceFromNeoFlow)="onRemoveDeviceFromNeoFlow($event)"
             (handleDetailDeviceFromNeoFlow)="onDetailDeviceFromNeoFlow($event)"
             (handleAddNewDevice)="onAddNewDevice()"
-            formControlName="selectDataProvider"
           >
           </ne-select-data-provider>
         </mat-card-content>
@@ -33,7 +35,13 @@
       <ng-template matStepLabel>Select Message Destination</ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-select-message-destination [itProfileList]="addedIt()"></ne-select-message-destination>
+          <ne-select-message-destination
+            [addedItList]="addedIt()"
+            (handleAddItServiceFromProfile)="onAddItServiceFromProfile()"
+            (handleRemoveItServiceFromNeoFlow)="onRemoveItServiceFromNeoFlow($event)"
+            (handleDetailItServiceFromNeoFlow)="onDetailItServiceFromNeoFlow($event)"
+            (handleAddNewItService)="onAddNewItService()"
+          ></ne-select-message-destination>
         </mat-card-content>
       </mat-card>
     </mat-step>

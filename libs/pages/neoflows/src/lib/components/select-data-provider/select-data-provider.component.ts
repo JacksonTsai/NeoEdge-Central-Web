@@ -1,28 +1,16 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   OnInit,
   Output,
   computed,
-  forwardRef,
   inject,
   input,
   signal
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormBuilder,
-  FormGroup,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
-  UntypedFormControl,
-  Validator,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -47,19 +35,9 @@ import { debounceTime, tap } from 'rxjs';
   ],
   templateUrl: './select-data-provider.component.html',
   styleUrl: './select-data-provider.component.scss',
-
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectDataProviderComponent),
-      multi: true
-    },
-    { provide: NG_VALIDATORS, useExisting: forwardRef(() => SelectDataProviderComponent), multi: true }
-  ],
-
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectDataProviderComponent implements OnInit, AfterViewInit, ControlValueAccessor, Validator {
+export class SelectDataProviderComponent implements OnInit {
   @Output() handleAddDeviceFromProfile = new EventEmitter();
   @Output() handleRemoveDeviceFromNeoFlow = new EventEmitter<{ otDeviceName: string }>();
   @Output() handleDetailDeviceFromNeoFlow = new EventEmitter<IOtDevice<any>>();
@@ -84,22 +62,6 @@ export class SelectDataProviderComponent implements OnInit, AfterViewInit, Contr
     return addedOtBySearch.slice(startIndex, endIndex);
   });
 
-  writeValue(v) {
-    console.log(v);
-  }
-
-  validate() {
-    return this.form.invalid ? { formError: 'error' } : null;
-  }
-
-  registerOnChange(fn: any) {
-    this.change = fn;
-  }
-
-  registerOnTouched(fn) {
-    this.touch = fn;
-  }
-
   onPageChange = (event: ITableQuery) => {
     if (event?.page) {
       this.pageNumber.set(event.page);
@@ -109,12 +71,6 @@ export class SelectDataProviderComponent implements OnInit, AfterViewInit, Contr
       this.pageSize.set(event.size);
     }
   };
-
-  onChange() {
-    if (this.change) {
-      this.change(this.form.value);
-    }
-  }
 
   onAddNewDevice = () => {
     this.handleAddNewDevice.emit();
@@ -133,14 +89,6 @@ export class SelectDataProviderComponent implements OnInit, AfterViewInit, Contr
   };
 
   ngOnInit() {
-    this.form = this.#fb.group({
-      otDevices: [[], [Validators.required]]
-    });
-
-    this.form.valueChanges.subscribe(() => {
-      this.onChange();
-    });
-
     this.searchCtrl.valueChanges
       .pipe(
         untilDestroyed(this),
@@ -150,9 +98,5 @@ export class SelectDataProviderComponent implements OnInit, AfterViewInit, Contr
         })
       )
       .subscribe();
-  }
-
-  ngAfterViewInit() {
-    this.onChange();
   }
 }

@@ -167,3 +167,14 @@ export enum IT_SERVICE_CA_TYPE {
   Public = 'public',
   Private = 'private'
 }
+
+export enum IT_SERVICE_TABLE_MODE {
+  SELECTION,
+  NEOFLOW_VIEW,
+  IT_SERVICE_VIEW
+}
+
+export enum IT_SERVICE_PROFILE_MODE {
+  NEOFLOW_VIEW,
+  IT_SERVICE_VIEW
+}

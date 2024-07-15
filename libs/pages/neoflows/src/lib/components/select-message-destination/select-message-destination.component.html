@@ -1,1 +1,43 @@
-<p>select-message-destination works!</p>
+<div class="it-service-wrapper">
+  <div class="it-service-wrapper__action">
+    <div class="it-service-wrapper__action__right">
+      <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+        <mat-label>Search</mat-label>
+        <input
+          id="ot-devices-search"
+          matInput
+          placeholder="Search name"
+          [formControl]="searchCtrl"
+          maxlength="128"
+          type="text"
+        />
+        <mat-icon matSuffix svgIcon="icon:search"></mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="it-service-wrapper__action__left">
+      <button type="button" mat-stroked-button color="primary" color="primary" (click)="onAddNewItService()">
+        <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+        Create IT Service
+      </button>
+      <button type="button" mat-stroked-button color="primary" color="primary" (click)="onAddItServiceFromProfile()">
+        <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+        Add IT Service from Profile
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <div class="it-service-wrapper__ot-devices">
+      <ne-it-services
+        [tableMode]="itServiceTableMode.NEOFLOW_VIEW"
+        [dataTable]="addedItList()"
+        [dataLength]="addedItList().length"
+        [page]="pageNumber()"
+        [size]="pageSize()"
+        (handleDetailItServiceFromNeoFlow)="onDetailItServiceFromNeoFlow($event)"
+        (handleRemoveItServiceFromNeoFlow)="onRemoveItServiceFromNeoFlow($event)"
+      ></ne-it-services>
+    </div>
+  </div>
+</div>

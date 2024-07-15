@@ -23,6 +23,7 @@ import { map, pipe, switchMap } from 'rxjs';
 const NEOFLOW_FLOW_GROUP = SUPPORT_APPS_FLOW_GROUPS.neoflow;
 
 const initialState: ICreateNeoFlowState = {
+  neoflowProfile: null,
   neoflowProcessorVers: [],
   supportApps: [],
   otProfileList: [],
@@ -48,6 +49,13 @@ export const CreateNeoFlowsStore = signalStore(
       supportAppsService = inject(SupportAppsService),
       otTexolService = inject(OtTexolService)
     ) => ({
+      updateNeoFlowProfile: rxMethod<any>(
+        pipe(
+          map((neoflowProfile) => {
+            patchState(store, { neoflowProfile });
+          })
+        )
+      ),
       addOtDevice: rxMethod<IOtDevice<any>>(
         pipe(
           map((d) => {
@@ -69,10 +77,10 @@ export const CreateNeoFlowsStore = signalStore(
           })
         )
       ),
-      removeItService: rxMethod<{ index: number }>(
+      removeItService: rxMethod<{ itServiceName: string }>(
         pipe(
-          map(({ index }) => {
-            patchState(store, { addedIt: [...store.addedIt().filter((_, i) => i !== index)] });
+          map(({ itServiceName }) => {
+            patchState(store, { addedIt: [...store.addedIt().filter((it) => itServiceName !== it.name)] });
           })
         )
       ),
@@ -81,6 +89,15 @@ export const CreateNeoFlowsStore = signalStore(
           map(({ source, target }) => {
             patchState(store, {
               addedOt: [...store.addedOt().map((d) => (d.name === source.name ? { ...d, ...target } : d))]
+            });
+          })
+        )
+      ),
+      editItService: rxMethod<{ source: IItService; target: IItService }>(
+        pipe(
+          map(({ source, target }) => {
+            patchState(store, {
+              addedIt: [...store.addedIt().map((d) => (d.name === source.name ? { ...d, ...target } : d))]
             });
           })
         )

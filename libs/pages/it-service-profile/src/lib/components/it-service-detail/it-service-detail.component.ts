@@ -23,6 +23,7 @@ import {
   ISupportAppsWithVersion,
   IT_SERVICE_DETAIL_LOADING,
   IT_SERVICE_DETAIL_MODE,
+  IT_SERVICE_PROFILE_MODE,
   IUpdateItServiceDetailReq,
   PERMISSION
 } from '@neo-edge-web/models';
@@ -53,14 +54,16 @@ import { ItServiceMqttComponent } from '../it-service-mqtt/it-service-mqtt.compo
 })
 export class ItServiceDetailComponent {
   @Output() handleSubmitItService = new EventEmitter<IUpdateItServiceDetailReq>();
+  @Output() handleCloseDialog = new EventEmitter();
   itServiceDetailService = inject(ItServiceDetailService);
   itServiceDetail = input<IItServiceDetail>();
   appData = input<ISupportAppsWithVersion>();
   isLoading = input<IT_SERVICE_DETAIL_LOADING>();
+  profileMode = input(IT_SERVICE_PROFILE_MODE.IT_SERVICE_VIEW);
   #fb = inject(FormBuilder);
   form: UntypedFormGroup;
   permission = PERMISSION;
-
+  itServiceProfileMode = IT_SERVICE_PROFILE_MODE;
   mode = signal<IT_SERVICE_DETAIL_MODE>(IT_SERVICE_DETAIL_MODE.VEIW);
   isEditMode = computed<boolean>(() => this.mode() === IT_SERVICE_DETAIL_MODE.EDIT);
   selectedApp = signal<IItServiceDetailSelectedAppData | null>(null);
@@ -74,6 +77,9 @@ export class ItServiceDetailComponent {
       () => {
         if (this.appData()) {
           this.selectedApp.set(this.itServiceDetailService.getSelectedAppSetting(this.appData()));
+        }
+        if (IT_SERVICE_PROFILE_MODE.NEOFLOW_VIEW === this.profileMode()) {
+          this.onEdit();
         }
       },
       { allowSignalWrites: true }
@@ -90,6 +96,14 @@ export class ItServiceDetailComponent {
 
   onSave = (): void => {
     this.mode.set(IT_SERVICE_DETAIL_MODE.VEIW);
+    const payload: IUpdateItServiceDetailReq = this.form.get('itServiceForm').value;
+    this.handleSubmitItService.emit({
+      name: payload.name,
+      setting: payload.setting
+    });
+  };
+
+  onSaveToNeoFlow = () => {
     const payload: IUpdateItServiceDetailReq = this.form.get('itServiceForm').value;
     this.handleSubmitItService.emit({
       name: payload.name,
