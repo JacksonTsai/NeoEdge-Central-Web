@@ -57,7 +57,7 @@
 </div>
 
 <div class="log-table">
-  <table mat-table [dataSource]="dataSource" [fixedLayout]="false">
+  <table mat-table [dataSource]="dataSource" [fixedLayout]="true">
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef>Datetime</th>
       <td mat-cell *matCellDef="let element">{{ (element?.timestamp | dateTimeFormat) ?? '-' }}</td>
