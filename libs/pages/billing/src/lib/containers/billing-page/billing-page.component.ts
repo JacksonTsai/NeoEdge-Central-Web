@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { BILLING_TOTAL_TYPE, IBillingParamsReq, IBillingRecord } from '@neo-edge-web/models';
+import { BILLING_TOTAL_TYPE, IBillingParamsReq, IBillingRecord, IDownloadBillingRecordReq } from '@neo-edge-web/models';
 import { BillingComponent } from '../../components';
 import { BillingTotalComponent } from '../../components/billing-total/billing-total.component';
 import { BillingdStore } from '../../stores';
@@ -45,12 +45,15 @@ export class BillingPageComponent implements AfterViewInit {
     this.getYearRecord();
   };
 
-  onGetRecordDownload = (): void => {
-    // TODO 讀取 Records
+  onGetBillingRecord = (): void => {
+    this.#billingdStore.getCompanyBillingRecords();
   };
 
   onDownload = (item: IBillingRecord): void => {
-    // TODO 下載 費用PDF
+    const params: IDownloadBillingRecordReq = {
+      billingMonth: item.billingMonth
+    };
+    this.#billingdStore.downloadCompanyBilingRecord(params);
   };
 
   ngAfterViewInit(): void {

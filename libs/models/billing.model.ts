@@ -84,14 +84,19 @@ export interface ICurrencyData {
 }
 
 export interface IGetBillingRecordResp {
-  records: IBillingRecord;
-  currency: string;
+  total: number;
+  billingRecords: IBillingRecord[];
 }
 
 export interface IBillingRecord {
-  date: string;
-  no: number;
-  fee: number;
+  billingMonth: string;
+  billNo: string;
+  amount: number;
+  currency: string;
+}
+
+export interface IDownloadBillingRecordReq {
+  billingMonth: string;
 }
 
 export type TBillingGroupBy = 'year' | 'month' | 'day';
@@ -103,7 +108,8 @@ export type TBillingTotalType = 'current' | 'estimate';
 export enum BILLING_LOADING {
   NONE,
   GET,
-  REFRESH
+  REFRESH,
+  DOWNLOAD
 }
 
 export enum BILLING_TOTAL_TYPE {

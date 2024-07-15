@@ -6,6 +6,8 @@ import {
   IBillingEstimateResp,
   IBillingReq,
   IBillingTimeRecord,
+  IDownloadBillingRecordReq,
+  IGetBillingRecordResp,
   IGetBillingResp
 } from '@neo-edge-web/models';
 import { getCurrentDateInfo } from '@neo-edge-web/utils';
@@ -68,6 +70,38 @@ export const BillingdStore = signalStore(
         switchMap(() =>
           billingService.getCompanyFeeEstimate$().pipe(
             tap((d: IBillingEstimateResp) => patchState(store, { estimate: d, isLoading: BILLING_LOADING.NONE })),
+            catchError(() => EMPTY)
+          )
+        )
+      )
+    ),
+    getCompanyBillingRecords: rxMethod<void>(
+      pipe(
+        tap(() =>
+          patchState(store, {
+            isLoading: BILLING_LOADING.GET
+          })
+        ),
+        switchMap(() =>
+          billingService.getCompanyBillingRecords$().pipe(
+            tap((d: IGetBillingRecordResp) =>
+              patchState(store, { billingRecords: d, isLoading: BILLING_LOADING.NONE })
+            ),
+            catchError(() => EMPTY)
+          )
+        )
+      )
+    ),
+    downloadCompanyBilingRecord: rxMethod<IDownloadBillingRecordReq>(
+      pipe(
+        tap(() =>
+          patchState(store, {
+            isLoading: BILLING_LOADING.DOWNLOAD
+          })
+        ),
+        switchMap((params) =>
+          billingService.downloadBillingRecordPDF$(params).pipe(
+            tap(() => patchState(store, { isLoading: BILLING_LOADING.NONE })),
             catchError(() => EMPTY)
           )
         )
