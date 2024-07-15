@@ -51,7 +51,7 @@ export class GatewayRemoteAccessComponent {
 
       if (this.isWaiting()) {
         this.isEnabledCtrl.disable();
-      } else {
+      } else if (!this.isWaiting() && this.isConnected()) {
         this.isEnabledCtrl.enable();
       }
 
