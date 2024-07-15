@@ -10,7 +10,7 @@ import {
   IGetBillingRecordResp,
   IGetBillingResp
 } from '@neo-edge-web/models';
-import { getCurrentDateInfo } from '@neo-edge-web/utils';
+import { downloadFile, getCurrentDateInfo } from '@neo-edge-web/utils';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
@@ -101,7 +101,10 @@ export const BillingdStore = signalStore(
         ),
         switchMap((params) =>
           billingService.downloadBillingRecordPDF$(params).pipe(
-            tap(() => patchState(store, { isLoading: BILLING_LOADING.NONE })),
+            tap((data: ArrayBuffer) => {
+              downloadFile(data, `NeoEdge_Billing-record_[${[params.billingMonth]}].pdf`, 'application/pdf');
+              patchState(store, { isLoading: BILLING_LOADING.NONE });
+            }),
             catchError(() => EMPTY)
           )
         )

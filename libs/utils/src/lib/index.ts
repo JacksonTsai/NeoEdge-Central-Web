@@ -2,6 +2,7 @@ export * from './billing.helper';
 export * from './chart-color.helper';
 export * from './csv.helper';
 export * from './datetimeFormat.helper';
+export * from './download-file.helper';
 export * from './event.helper';
 export * from './generateImg2Base64.helper';
 export * from './math.helper';
