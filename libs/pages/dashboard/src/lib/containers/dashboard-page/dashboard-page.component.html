@@ -4,12 +4,12 @@
 </div>
 <div class="dashboard">
   <aside class="dashboard__aside">
+    <ne-dashboard-project [projectDetail]="projectDetail()"></ne-dashboard-project>
     <ne-dashboard-activities
       [activitiesList]="activitiesList()"
       [eventDoc]="eventDoc()"
       (handleScrollEnd)="onActivitiesScrollEnd()"
     ></ne-dashboard-activities>
-    <ne-dashboard-project [projectDetail]="projectDetail()"></ne-dashboard-project>
     <ne-dashboard-users [projectDetail]="projectDetail()" [usersList]="usersList()"></ne-dashboard-users>
   </aside>
   <section class="dashboard__main">

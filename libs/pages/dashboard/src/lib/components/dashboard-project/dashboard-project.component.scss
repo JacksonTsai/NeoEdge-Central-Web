@@ -1,4 +1,13 @@
+@use 'breakpoint' as *;
+
 :host {
   display: block;
   width: 100%;
+}
+
+.db-proj-content {
+  @include breakpoint(large up) {
+    height: 445px;
+    overflow-y: auto;
+  }
 }

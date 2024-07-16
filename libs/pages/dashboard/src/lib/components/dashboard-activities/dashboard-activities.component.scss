@@ -1,14 +1,25 @@
 @use 'colors' as *;
+@use 'breakpoint' as *;
 
 :host {
   display: block;
 }
 
+.db-event-log-content {
+  @include breakpoint(large up) {
+    height: 249px;
+  }
+}
+
 .event-log {
   width: 100%;
-  height: 445px;
+  height: 50vh;
   font-size: 14px;
   overflow-y: auto;
+
+  @include breakpoint(large up) {
+    height: 100%;
+  }
 
   &__item {
     padding-top: 8px;
