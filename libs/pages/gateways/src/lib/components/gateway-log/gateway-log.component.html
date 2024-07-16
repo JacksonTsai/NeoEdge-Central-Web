@@ -85,7 +85,15 @@
 
     <ng-container matColumnDef="severity">
       <th mat-header-cell *matHeaderCellDef>Severity</th>
-      <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.severity ?? '-' }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span class="icon-text">
+          <mat-icon
+            [ngClass]="eventDoc()['' + element.eventId]?.severity === 'Notice' ? 'text-gray' : 'text-warning'"
+            [svgIcon]="eventDoc()['' + element.eventId]?.severity === 'Notice' ? 'icon:info' : 'icon:notifications'"
+          ></mat-icon>
+          {{ eventDoc()?.[element?.eventId]?.severity ?? '-' }}
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="content">

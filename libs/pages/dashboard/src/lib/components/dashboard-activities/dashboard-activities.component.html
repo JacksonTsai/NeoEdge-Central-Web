@@ -10,7 +10,7 @@
             <li class="event-log__item">
               <span class="date">{{ item.timestamp | dateTimeFormat }}</span>
               <mat-icon
-                matChipAvatar
+                [ngClass]="eventDoc()['' + item.eventId]?.severity === 'Notice' ? 'text-gray' : 'text-warning'"
                 [svgIcon]="eventDoc()['' + item.eventId]?.severity === 'Notice' ? 'icon:info' : 'icon:notifications'"
                 [matTooltip]="eventDoc()['' + item.eventId]?.severity"
               ></mat-icon>

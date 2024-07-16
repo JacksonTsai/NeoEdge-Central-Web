@@ -40,12 +40,7 @@
     margin-right: 8px;
     width: 18px;
     height: 18px;
-    color: $black-gary;
     transform: translateY(4px);
-
-    &[svgicon='icon:notifications'] {
-      color: $warning;
-    }
   }
 
   .mat-mdc-standard-chip {
