@@ -109,8 +109,12 @@ export class ProjectsService {
           duration: 5000
         });
       }),
-      catchError((err) => {
-        this.#snackBar.open('Delete failure.', 'X', {
+      catchError((err: HttpErrorResponse) => {
+        const errorMessage =
+          err.error?.status === 'ProjectNotEmpty'
+            ? `Before deleting the project (${name}), you must first delete all Gateways under this project.`
+            : 'Delete failure.';
+        this.#snackBar.open(errorMessage, 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000

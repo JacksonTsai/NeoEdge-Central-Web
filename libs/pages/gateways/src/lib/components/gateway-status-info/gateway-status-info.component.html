@@ -24,7 +24,7 @@
     </div>
     <div class="item item__first">
       <div class="label">Status</div>
-      <div class="value">
+      <div class="value status-value">
         @if (gwCurrentMode.PASSIVE === gatewayStatusInfo().currentMode) {
           <div class="gateway-status" [style.--color]="statusColors['Passive']">
             <span class="text">Passive</span>
@@ -49,6 +49,18 @@
               <span class="text">Disconnected</span>
             </div>
           }
+        }
+        @if (!gatewayStatusInfo()?.gatewaySystemInfo || gatewayStatusInfo()?.gatewaySystemInfo.hasTPM === false) {
+          <div class="icon-text" matTooltip="This Gateway does not have TPM protection">
+            <mat-icon svgIcon="icon:security_danger"></mat-icon>
+            <span class="text">No TPM</span>
+          </div>
+        }
+        @if (sshStatus().current?.connectionStatus) {
+          <div class="icon-text" matTooltip="This Gateway currently has SSH Service enabled">
+            <mat-icon svgIcon="icon:lock" color="primary"></mat-icon>
+            <span class="text">SSH enabled</span>
+          </div>
         }
       </div>
     </div>

@@ -6,21 +6,23 @@
     </h2>
   </mat-card-header>
   <mat-card-content>
-    @if (category()) {
-      <ul class="app-sum">
-        @for (item of category() | keyvalue; track item.key) {
-          <li class="app-sum__item">
-            <span class="app-sum__title">
-              <img class="app-sum__title__img" [src]="item.value.setting.img" [alt]="item.value.name" />
-              <span class="app-sum__title__text">{{ item.value.name }}</span>
-            </span>
-            <span class="app-sum__content">{{ item.value.list.length }}</span>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="text-gray">No data</p>
-    }
+    <div class="db-it-ot-content">
+      @if (category()) {
+        <ul class="app-sum">
+          @for (item of category() | keyvalue; track item.key) {
+            <li class="app-sum__item">
+              <span class="app-sum__title">
+                <img class="app-sum__title__img" [src]="item.value.setting.img" [alt]="item.value.name" />
+                <span class="app-sum__title__text">{{ item.value.name }}</span>
+              </span>
+              <span class="app-sum__content">{{ item.value.list.length }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="text-gray">No data</p>
+      }
+    </div>
   </mat-card-content>
   <mat-card-actions class="dashboard-action">
     <a

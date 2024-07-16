@@ -3,31 +3,47 @@
     <mat-expansion-panel-header>
       <mat-panel-title><h2 class="dashboard-card__title">Project Detail</h2></mat-panel-title>
     </mat-expansion-panel-header>
-    <ul class="dashboard-list">
-      <li class="dashboard-list__item">
-        <h3 class="dashboard-list__title">Name</h3>
-        <p class="dashboard-list__content">{{ projectDetail()?.name ?? '-' }}</p>
-      </li>
-      <li class="dashboard-list__item">
-        <h3 class="dashboard-list__title">Project short name</h3>
-        <p class="dashboard-list__content">{{ projectDetail()?.shortName ?? '-' }}</p>
-      </li>
-      <li class="dashboard-list__item">
-        <h3 class="dashboard-list__title">Customer</h3>
-        <p class="dashboard-list__content">{{ projectDetail()?.customer ?? '-' }}</p>
-      </li>
-      <li class="dashboard-list__item">
-        <h3 class="dashboard-list__title">Description</h3>
-        <p class="dashboard-list__content">{{ projectDetail()?.description ?? '-' }}</p>
-      </li>
-      <li class="dashboard-list__item">
-        <h3 class="dashboard-list__title">Create by</h3>
-        <p class="dashboard-list__content">{{ projectDetail()?.createdBy ?? '-' }}</p>
-      </li>
-      <li class="dashboard-list__item">
-        <h3 class="dashboard-list__title">Create date</h3>
-        <p class="dashboard-list__content">{{ (projectDetail()?.createdAt | dateTimeFormat: false) ?? '-' }}</p>
-      </li>
-    </ul>
+    <div class="db-proj-content">
+      <ul class="dashboard-list">
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Name</h3>
+          <p class="dashboard-list__content">{{ projectDetail()?.name ?? '-' }}</p>
+        </li>
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Project short name</h3>
+          <p class="dashboard-list__content">{{ projectDetail()?.shortName ?? '-' }}</p>
+        </li>
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Customer</h3>
+          <p class="dashboard-list__content">{{ projectDetail()?.customer || '-' }}</p>
+        </li>
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Description</h3>
+          <p class="dashboard-list__content">{{ projectDetail()?.description || '-' }}</p>
+        </li>
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Create by</h3>
+          <p class="dashboard-list__content">{{ projectDetail()?.createdBy ?? '-' }}</p>
+        </li>
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Create date</h3>
+          <p class="dashboard-list__content">{{ (projectDetail()?.createdAt | dateTimeFormat: false) ?? '-' }}</p>
+        </li>
+        <li class="dashboard-list__item">
+          <h3 class="dashboard-list__title">Customize field name</h3>
+          <p class="dashboard-list__content">
+            @if (projectDetail()?.projectFields?.length) {
+              <ul>
+                @for (item of projectDetail()?.projectFields; track item.id) {
+                  <li>Name: {{ item.name }} | Value: {{ item.value }}</li>
+                }
+              </ul>
+            } @else {
+              -
+            }
+          </p>
+        </li>
+      </ul>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>

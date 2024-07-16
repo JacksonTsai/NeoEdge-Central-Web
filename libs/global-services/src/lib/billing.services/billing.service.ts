@@ -75,9 +75,9 @@ export class BillingService {
     );
   };
 
-  downloadBillingRecordPDF$ = (downloadBillingRecordParams): Observable<void> => {
+  downloadBillingRecordPDF$ = (downloadBillingRecordParams): Observable<ArrayBuffer> => {
     const params = setParamsArrayWithKey(downloadBillingRecordParams);
-    return this.#http.get(`${this.BILLING_RECORDS_PATH}/download?${params}`).pipe(
+    return this.#http.getArrayBuffer(`${this.BILLING_RECORDS_PATH}/download?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Download company billing record failure', 'X', {
           horizontalPosition: 'end',

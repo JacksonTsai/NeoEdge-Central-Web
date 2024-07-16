@@ -10,6 +10,7 @@
         type="number"
         class="text-center"
         autocomplete="off"
+        class="hide-input-number-arrow"
         (keypress)="formService.restrictToNumbers($event, 6)"
         (keyup)="onInputChange($event.target.value)"
         id="authentication-mfa-code-code"
