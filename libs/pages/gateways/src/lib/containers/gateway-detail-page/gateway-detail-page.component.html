@@ -5,6 +5,7 @@
       @if (gatewayStatusInfo()) {
         <ne-gateway-status-info
           [gatewayStatusInfo]="gatewayStatusInfo()"
+          [sshStatus]="sshStatus()"
           [isDetachMode]="isDetachMode"
           [isWaitingOnBoard]="isWaitingOnBoard"
           [isConnected]="isConnected"

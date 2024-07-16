@@ -10,6 +10,7 @@ import {
   GATEWAY_SSH_MODE,
   GATEWAY_STATUE,
   GW_CURRENT_MODE,
+  IGatewaySSHStatus,
   PERMISSION,
   STATUS_COLORS,
   TGatewayStatusInfo
@@ -26,6 +27,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     SafePipe,
     MatMenuModule,
     MatButtonModule,
+    MatIconModule,
     NgxPermissionsModule,
     MatTooltipModule
   ],
@@ -41,6 +43,7 @@ export class GatewayStatusInfoComponent {
   @Output() handleRebootGw = new EventEmitter();
 
   gatewayStatusInfo = input<TGatewayStatusInfo | null>(null);
+  sshStatus = input<IGatewaySSHStatus | null>(null);
   isDetachMode = input(false);
   isWaitingOnBoard = input(false);
   isConnected = input(false);

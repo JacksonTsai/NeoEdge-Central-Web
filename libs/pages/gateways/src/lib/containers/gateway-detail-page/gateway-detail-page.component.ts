@@ -119,6 +119,10 @@ export class GatewayDetailPageComponent {
             )
             .subscribe();
         }
+
+        if (this.isConnected) {
+          this.gwDetailStore.getSSHStatus();
+        }
       },
       { allowSignalWrites: true }
     );
@@ -173,6 +177,7 @@ export class GatewayDetailPageComponent {
       currentMode,
       sshMode,
       tpmEnabled,
+      gatewaySystemInfo,
       gatewaySystemInfoUpdateAt,
       ipcModelName,
       isPartnerIpc,
@@ -188,6 +193,7 @@ export class GatewayDetailPageComponent {
       currentMode,
       sshMode,
       tpmEnabled,
+      gatewaySystemInfo,
       gatewaySystemInfoUpdateAt,
       isPartnerIpc,
       ipcModelSeriesName,
@@ -294,7 +300,7 @@ export class GatewayDetailPageComponent {
       disableClose: true,
       autoFocus: false,
       restoreFocus: false,
-      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDoc() , params}
+      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDoc(), params }
     });
     downloadGatewayEventLogsDialogRef
       .afterClosed()

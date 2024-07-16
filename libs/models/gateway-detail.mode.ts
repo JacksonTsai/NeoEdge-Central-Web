@@ -121,6 +121,7 @@ export type TGatewayStatusInfo = Pick<
   | 'currentMode'
   | 'sshMode'
   | 'tpmEnabled'
+  | 'gatewaySystemInfo'
   | 'gatewaySystemInfoUpdateAt'
   | 'isPartnerIpc'
   | 'ipcModelSeriesName'
