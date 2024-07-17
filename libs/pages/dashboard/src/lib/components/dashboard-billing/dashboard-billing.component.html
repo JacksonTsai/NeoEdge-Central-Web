@@ -1,33 +1,37 @@
-<mat-card>
+<mat-card class="sm-absolute-parent">
   <mat-card-header>
     <h2 class="dashboard-card__title">Usage & Fee</h2>
   </mat-card-header>
-  <mat-card-content class="dashboard-billing-content">
-    <div class="billing-total" [style.--primary]="chartColor[0]">
-      <h3 class="billing-total__title">Total Fee</h3>
-      <p class="billing-total__total">{{ total() | currencyCustom: currencyUnit() }}</p>
-      <p class="billing-total__date">{{ dateRange() }}</p>
+  <mat-card-content class="dashboard-card__lr-content">
+    <div class="dashboard-card__l sm-absolute-sibling">
+      <div class="dashboard-total" [style.--primary]="chartColor[0]">
+        <h3 class="dashboard-total__title">Total Fee</h3>
+        <p class="dashboard-total__em-item">{{ total() | currencyCustom: currencyUnit() }}</p>
+        <p class="dashboard-total__tip">{{ dateRange() }}</p>
+      </div>
     </div>
-    <div class="billing-chart">
-      @if (chartOptions()) {
-        <apx-chart
-          [series]="chartOptions()?.series"
-          [chart]="chartOptions()?.chart"
-          [yaxis]="chartOptions()?.yaxis"
-          [xaxis]="chartOptions()?.xaxis"
-          [labels]="chartOptions()?.labels"
-          [legend]="chartOptions()?.legend"
-          [stroke]="chartOptions()?.stroke"
-          [title]="chartOptions()?.title"
-          [dataLabels]="chartOptions()?.dataLabels"
-          [fill]="chartOptions()?.fill"
-          [tooltip]="chartOptions()?.tooltip"
-          [colors]="chartOptions()?.colors"
-        ></apx-chart>
-      }
+    <div class="dashboard-card__r">
+      <div class="billing-chart">
+        @if (chartOptions()) {
+          <apx-chart
+            [series]="chartOptions()?.series"
+            [chart]="chartOptions()?.chart"
+            [yaxis]="chartOptions()?.yaxis"
+            [xaxis]="chartOptions()?.xaxis"
+            [labels]="chartOptions()?.labels"
+            [legend]="chartOptions()?.legend"
+            [stroke]="chartOptions()?.stroke"
+            [title]="chartOptions()?.title"
+            [dataLabels]="chartOptions()?.dataLabels"
+            [fill]="chartOptions()?.fill"
+            [tooltip]="chartOptions()?.tooltip"
+            [colors]="chartOptions()?.colors"
+          ></apx-chart>
+        }
+      </div>
     </div>
   </mat-card-content>
-  <mat-card-actions class="dashboard-action">
+  <mat-card-actions class="dashboard-action sm-absolute">
     <a
       routerLink="/company-account/usage-billing"
       color="primary"

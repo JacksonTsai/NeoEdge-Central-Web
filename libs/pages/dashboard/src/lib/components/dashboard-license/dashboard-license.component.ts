@@ -108,7 +108,7 @@ export class DashboardLicenseComponent {
       ],
       chart: {
         type: 'bar',
-        height: 240,
+        height: 224,
         stacked: true,
         stackType: '100%',
         toolbar: {
