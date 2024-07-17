@@ -5,6 +5,7 @@ import {
   EventsService,
   GatewaysService,
   ItServiceService,
+  LicenseService,
   OtDevicesService,
   ProjectsService,
   SupportAppsService,
@@ -19,6 +20,7 @@ import {
   IGetBillingResp,
   IGetEventDocResp,
   IGetEventLogsResp,
+  IProjectLicense,
   SUPPORT_APPS_FLOW_GROUPS,
   TGetProjectEventLogsReq
 } from '@neo-edge-web/models';
@@ -41,6 +43,7 @@ const initialState: IDashboardState = {
   eventDoc: {},
   activitiesList: null,
   projectFee: null,
+  projectLicenses: [],
   timeRecord: {
     activitiesTime: null,
     projectFeeTime: null
@@ -61,7 +64,8 @@ export const DashboardStore = signalStore(
       otDevicesService = inject(OtDevicesService),
       supportAppsService = inject(SupportAppsService),
       eventsService = inject(EventsService),
-      billingService = inject(BillingService)
+      billingService = inject(BillingService),
+      licenseService = inject(LicenseService)
     ) => ({
       getProjectDetail: rxMethod<void>(
         pipe(
@@ -205,6 +209,23 @@ export const DashboardStore = signalStore(
           switchMap((params: IBillingParamsReq) =>
             billingService.getProjectFee$(params).pipe(
               tap((d: IGetBillingResp) => patchState(store, { projectFee: d, isLoading: DASHBOARD_LOADING.NONE })),
+              catchError(() => EMPTY)
+            )
+          )
+        )
+      ),
+      getProjectLicense: rxMethod<void>(
+        pipe(
+          tap(() =>
+            patchState(store, {
+              isLoading: DASHBOARD_LOADING.GET
+            })
+          ),
+          switchMap(() =>
+            licenseService.getProjectLicense$().pipe(
+              tap((d: IProjectLicense[]) =>
+                patchState(store, { projectLicenses: d, isLoading: DASHBOARD_LOADING.NONE })
+              ),
               catchError(() => EMPTY)
             )
           )

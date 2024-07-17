@@ -1,0 +1,45 @@
+<mat-card>
+  <mat-card-header>
+    <h2 class="dashboard-card__title">License Consumption</h2>
+  </mat-card-header>
+  <mat-card-content class="dashboard-license-content">
+    <div class="license-total" [style.--primary]="defaultColors[0]">
+      <h3 class="license-total__title">Project usage</h3>
+      @if (projectLicenseMock().length) {
+        @for (item of projectLicenseMock(); track item.name) {
+          <p class="license-total__item">
+            <span class="name">{{ item.name }}</span>
+            <span class="count">{{ item.projectQuantity }}</span>
+          </p>
+        }
+      }
+    </div>
+    <div class="license-chart">
+      @if (chartOptions()) {
+        <apx-chart
+          [colors]="chartOptions()?.colors"
+          [series]="chartOptions()?.series"
+          [chart]="chartOptions()?.chart"
+          [dataLabels]="chartOptions()?.dataLabels"
+          [plotOptions]="chartOptions()?.plotOptions"
+          [responsive]="chartOptions()?.responsive"
+          [xaxis]="chartOptions()?.xaxis"
+          [legend]="chartOptions()?.legend"
+          [fill]="chartOptions()?.fill"
+          [tooltip]="chartOptions()?.tooltip"
+        ></apx-chart>
+      }
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="dashboard-action">
+    <a
+      routerLink="/company-account/neoedgex-license"
+      color="primary"
+      mat-stroked-button
+      id="dashboard-see-more-license-detail"
+    >
+      <span>See more Detail</span>
+      <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
+    </a>
+  </mat-card-actions>
+</mat-card>
