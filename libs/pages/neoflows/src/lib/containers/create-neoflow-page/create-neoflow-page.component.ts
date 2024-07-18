@@ -107,8 +107,8 @@ export class CreateNeoflowPageComponent implements OnInit {
     return this.form.get('neoflowProfile') as UntypedFormControl;
   }
 
-  get messageSchemaCtrl() {
-    return this.form.get('messageSchema') as UntypedFormControl;
+  get createMessageSchemaCtrl() {
+    return this.form.get('createMessageSchema') as UntypedFormControl;
   }
 
   isRtuProfile(appName) {
@@ -396,7 +396,7 @@ export class CreateNeoflowPageComponent implements OnInit {
       )
       .subscribe();
 
-    this.messageSchemaCtrl.valueChanges
+    this.createMessageSchemaCtrl.valueChanges
       .pipe(
         untilDestroyed(this),
         map((messageSchema) => {
