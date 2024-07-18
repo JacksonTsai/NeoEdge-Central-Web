@@ -1,7 +1,11 @@
 import { ITableQuery } from './table-query.model';
 
-export interface IGetLicenseOrderReq extends ITableQuery {
-  sort?: TLicenseSort;
+export interface ILicenseState {
+  isLoading: LICENSE_LOADING;
+  companyLicense: ICompanyLicense[];
+  companyOrders: ICompanyOrder[];
+  page: number;
+  size: number;
 }
 
 export interface IProjectLicense {
@@ -23,7 +27,11 @@ export interface ICompanyLicenseProject {
   createdBy: string;
 }
 
-export interface ICompanyLicenseOrders {
+export interface IGetCompanyOrderReq extends ITableQuery {
+  sort?: TLicenseSort;
+}
+
+export interface IGetCompanyOrdersResp {
   total: number;
   orders: ICompanyOrder[];
 }
@@ -45,4 +53,10 @@ export interface ICompanyOrderItem {
   quantity: number;
 }
 
-export type TLicenseSort = 'date';
+export type TLicenseSort = '' | 'date';
+
+export enum LICENSE_LOADING {
+  NONE,
+  GET,
+  REFRESH
+}

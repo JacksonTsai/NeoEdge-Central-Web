@@ -31,6 +31,7 @@
       "@neo-edge-web/global-stores": ["libs/global-stores/src/index.ts"],
       "@neo-edge-web/icons": ["libs/pages/icons/src/index.ts"],
       "@neo-edge-web/it-service-profile": ["libs/pages/it-service-profile/src/index.ts"],
+      "@neo-edge-web/license": ["libs/pages/license/src/index.ts"],
       "@neo-edge-web/login": ["libs/pages/login/src/index.ts"],
       "@neo-edge-web/models": ["libs/models/index.ts"],
       "@neo-edge-web/neoedge-central": ["libs/environments/neoedge-central/src/index.ts"],

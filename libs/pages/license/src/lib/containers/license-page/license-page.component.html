@@ -1,0 +1,13 @@
+<h1 class="page-title">NeoEdge X License</h1>
+<mat-card appearance="outlined">
+  <mat-card-content>
+    <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab label="Overview">
+        <ne-license-overview></ne-license-overview>
+      </mat-tab>
+      <mat-tab label="Purchased Records">
+        <ne-license-orders [companyOrders]="companyOrders()"></ne-license-orders>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

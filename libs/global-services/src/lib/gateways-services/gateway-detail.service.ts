@@ -207,8 +207,8 @@ export class GatewayDetailService {
     );
   };
 
-  getGatewayEventLogs$ = (gatewayId: number, eventLogsParams: TGetGatewayEventLogsParams) => {
-    const params = setParamsArrayWithKey(eventLogsParams);
+  getGatewayEventLogs$ = (gatewayId: number, queryStr: TGetGatewayEventLogsParams) => {
+    const params = setParamsArrayWithKey(queryStr);
     return this.#http.get(`${this.GATEWAYS_PATH}/${gatewayId}/events?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get gateway event logs failure.', 'X', {
@@ -221,8 +221,8 @@ export class GatewayDetailService {
     );
   };
 
-  downloadGatewayEventLogs$ = (gatewayId: number, eventLogsParams: IDownloadGatewayEventLogsReq) => {
-    const params = setParamsArrayWithKey(eventLogsParams);
+  downloadGatewayEventLogs$ = (gatewayId: number, queryStr: IDownloadGatewayEventLogsReq) => {
+    const params = setParamsArrayWithKey(queryStr);
     const headers = new HttpHeaders({
       Accept: 'text/csv'
     });

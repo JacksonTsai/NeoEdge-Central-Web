@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, input, signal } f
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 import { IProjectLicense } from '@neo-edge-web/models';
 import { getChartColor } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
@@ -37,7 +38,7 @@ const PROJECT_LICENSE: IProjectLicense[] = [
 @Component({
   selector: 'ne-dashboard-license',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, NgApexchartsModule],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule, NgApexchartsModule],
   templateUrl: './dashboard-license.component.html',
   styleUrl: './dashboard-license.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
