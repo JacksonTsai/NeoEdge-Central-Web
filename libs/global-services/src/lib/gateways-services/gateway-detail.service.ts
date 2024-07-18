@@ -240,7 +240,6 @@ export class GatewayDetailService {
           verticalPosition: 'bottom',
           duration: 5000
         });
-        console.log(err);
         return this.handleError(err);
       })
     );

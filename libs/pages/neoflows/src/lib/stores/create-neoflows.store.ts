@@ -30,6 +30,7 @@ const initialState: ICreateNeoFlowState = {
   itProfileList: [],
   addedOt: [],
   addedIt: [],
+  addedMessageSchema: [],
   texolTagDoc: null,
   userProfile: null,
   isLoading: CREATE_NEOFLOW_LOADING.NONE
@@ -102,6 +103,16 @@ export const CreateNeoFlowsStore = signalStore(
           })
         )
       ),
+      updateMessageSchema: rxMethod<any>(
+        pipe(
+          map((messageSchema) => {
+            patchState(store, {
+              addedMessageSchema: [...messageSchema]
+            });
+          })
+        )
+      ),
+
       getProcessorApps: rxMethod<void>(
         pipe(
           switchMap(() => {

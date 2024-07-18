@@ -1,1 +1,122 @@
-<p>create-message-schema works!</p>
+<div class="message-schema-wrapper">
+  <div class="message-schema-wrapper__top-action">
+    <button type="button" mat-stroked-button color="primary" (click)="onCreateMessageSchema()">
+      <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+      Create Message
+    </button>
+  </div>
+  <div class="message-schema-wrapper__message-group">
+    <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+      @for (fg of formArray.value; let messageId = $index; track fg.messageId) {
+        <mat-tab [label]="tabName(messageId)">
+          <div class="message-content">
+            <form [formGroup]="messageGroup(messageId)">
+              <div class="display-flex">
+                <ne-message-setting formControlName="messageInfoSetting"></ne-message-setting>
+                <div class="message-delete">
+                  <button
+                    type="button"
+                    mat-stroked-button
+                    color="danger"
+                    (click)="onRemoveMessageSchema(messageId)"
+                    [disabled]="!isEditMode()"
+                  >
+                    @if (isEditMode()) {
+                      <mat-icon svgIcon="icon:delete_red"></mat-icon>
+                    } @else {
+                      <mat-icon svgIcon="icon:delete_disabled"></mat-icon>
+                    }
+                    <span color="danger">Delete Message</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="add-tag-action">
+                <button type="button" mat-stroked-button class="" color="primary" (click)="addNewTag(messageId)">
+                  <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+                  Add Tag
+                </button>
+                <button
+                  type="button"
+                  mat-stroked-button
+                  class=""
+                  color="primary"
+                  (click)="addTagFromOtDevice(messageId)"
+                >
+                  <mat-icon svgIcon="icon:add_primary_stroked"></mat-icon>
+                  Add Tags from OT Device
+                </button>
+              </div>
+
+              <div class="message-tags">
+                @for (tags of getTagsArrayByMessageId(messageId).controls; let tagIndex = $index; track tagIndex) {
+                  <div class="message-tag">
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Tag Name</mat-label>
+                      <input matInput [formControl]="tagNameCtrl(messageId, tagIndex)" type="text" maxlength="64" />
+                      @if (
+                        tagNameCtrl(messageId, tagIndex).hasError('required') ||
+                        tagNameCtrl(messageId, tagIndex).hasError('whitespace')
+                      ) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field class="" appearance="outline" floatLabel="always">
+                      <mat-label>Data Class</mat-label>
+                      <mat-select
+                        [formControl]="dataClassCtrl(messageId, tagIndex)"
+                        (selectionChange)="changeDefaultValueValidation(messageId, tagIndex)"
+                      >
+                        <mat-option [value]="'attribute'"> Attribute </mat-option>
+                        <mat-option [value]="'tag'"> Tag </mat-option>
+                        <mat-option [value]="'static'"> Static </mat-option>
+                      </mat-select>
+
+                      @if (
+                        dataClassCtrl(messageId, tagIndex).hasError('required') ||
+                        dataClassCtrl(messageId, tagIndex).hasError('whitespace')
+                      ) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Default Value</mat-label>
+                      <input
+                        matInput
+                        [formControl]="defaultValueCtrl(messageId, tagIndex)"
+                        type="text"
+                        maxlength="64"
+                      />
+                      @if (
+                        defaultValueCtrl(messageId, tagIndex).hasError('required') ||
+                        defaultValueCtrl(messageId, tagIndex).hasError('whitespace')
+                      ) {
+                        <mat-error>Required.</mat-error>
+                      }
+                    </mat-form-field>
+
+                    <button
+                      type="button"
+                      mat-icon-button
+                      color="warn"
+                      (click)="onRemoveMessageTag(messageId, tagIndex)"
+                      [disabled]="!isEditMode()"
+                    >
+                      @if (isEditMode()) {
+                        <mat-icon svgIcon="icon:delete_red"></mat-icon>
+                      } @else {
+                        <mat-icon svgIcon="icon:delete_disabled"></mat-icon>
+                      }
+                    </button>
+                  </div>
+                }
+              </div>
+            </form>
+          </div>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </div>
+</div>

@@ -10,10 +10,20 @@ export interface ICreateNeoFlowState {
   itProfileList: IItService[];
   addedOt: IOtDevice<any>[];
   addedIt: IItService[];
+  addedMessageSchema: IMessageSchema[];
   texolTagDoc: any;
   userProfile: IGetUserProfileResp;
   neoflowProcessorVers: { version: string; id: number }[];
   isLoading: CREATE_NEOFLOW_LOADING;
+}
+
+export interface IMessageSchema {
+  messageName: string;
+  messagePublishMode: string;
+  publishInterval: string;
+  messageContains: string;
+  messagePayloadSize: string;
+  tags: [];
 }
 
 export enum CREATE_NEOFLOW_LOADING {

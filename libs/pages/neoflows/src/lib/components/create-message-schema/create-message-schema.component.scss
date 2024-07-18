@@ -1,0 +1,42 @@
+.message-schema-wrapper {
+  &__top-action {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .message-content {
+    padding: 16px 0;
+  }
+}
+
+.display-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.message-delete {
+  min-width: 190px;
+}
+
+.message-content {
+  .add-tag-action {
+    button + button {
+      margin-left: 8px;
+    }
+  }
+  .message-tags {
+    min-width: 900px;
+    height: 500px;
+    overflow: auto;
+    margin-top: 8px;
+    .message-tag {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      mat-form-field {
+        width: 320px;
+      }
+    }
+  }
+}
