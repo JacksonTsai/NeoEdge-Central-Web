@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, ViewChild } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { NeExpansionTableComponent } from '@neo-edge-web/components';
 import { ICompanyOrder } from '@neo-edge-web/models';
@@ -18,28 +19,14 @@ import { ICompanyOrder } from '@neo-edge-web/models';
         <td mat-cell *matCellDef="let element">{{ element.name }}</td>
       </ng-container>
 
-      <!-- Position Column -->
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
-        <td mat-cell *matCellDef="let element">{{ element.position }}</td>
-      </ng-container>
+      <!-- Custom row definitions to be provided to the wrapper table. -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-      <!-- Weight Column -->
-      <ng-container matColumnDef="weight">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Weight</th>
-        <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
-      </ng-container>
-
-      <!-- Color Column -->
-      <ng-container matColumnDef="symbol">
-        <th mat-header-cell *matHeaderCellDef>Symbol</th>
-        <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
-      </ng-container>
-
-      <ng-template let-data>
-        <p>123456789</p>
-        <div>{{ data | json }}</div>
-      </ng-template>
+      <!-- Row shown when there is no matching data that will be provided to the wrapper table. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">No data</td>
+      </tr>
     </ne-expansion-table>
   `,
   styleUrl: './license-orders.component.scss',
@@ -49,4 +36,18 @@ export class LicenseOrdersComponent {
   companyOrders = input<ICompanyOrder[]>([]);
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = new MatTableDataSource<any>(this.companyOrders());
+
+  @ViewChild('sort') sort: MatSort;
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
+  clearTable() {
+    this.dataSource.data = [];
+  }
+
+  addData() {
+    this.dataSource.data = this.companyOrders();
+  }
 }
