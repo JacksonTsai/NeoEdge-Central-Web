@@ -1,0 +1,47 @@
+<form [formGroup]="messageSettingForm">
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Message Name</mat-label>
+    <input matInput formControlName="messageName" type="text" maxlength="64" />
+    @if (messageNameCtrl.hasError('required') || messageNameCtrl.hasError('whitespace')) {
+      <mat-error>Required.</mat-error>
+    } @else if (messageNameCtrl.hasError('format')) {
+      <mat-error>Only allow A-Z, a-z, 0-9, -, _</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Message Publish Mode</mat-label>
+    <mat-select formControlName="messagePublishMode">
+      <mat-option [value]="'interval'"> Time </mat-option>
+      <mat-option [value]="'immediate'"> Condition </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  @if ('interval' === messagePublishModeCtrl.value) {
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Publish Interval</mat-label>
+      <input matInput formControlName="publishInterval" type="number" maxlength="5" />
+      @if (publishIntervalCtrl.hasError('required') || messageNameCtrl.hasError('whitespace')) {
+        <mat-error>Required.</mat-error>
+      }
+    </mat-form-field>
+  }
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label>Message Contains</mat-label>
+    <mat-select formControlName="messageContains">
+      <mat-option [value]="'all'"> All </mat-option>
+      <mat-option [value]="'latest'"> Last Data </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" floatLabel="always">
+    <mat-label> Message Payload Size(K)</mat-label>
+    <input matInput formControlName="messagePayloadSize" type="number" maxlength="3" />
+    <div class="message-payload-size" matSuffix>K</div>
+    @if (messagePayloadSizeCtrl.hasError('required')) {
+      <mat-error>Required.</mat-error>
+    } @else if (messagePayloadSizeCtrl.hasError('max') || messagePayloadSizeCtrl.hasError('min')) {
+      <mat-error>1 ~ 128</mat-error>
+    }
+  </mat-form-field>
+</form>

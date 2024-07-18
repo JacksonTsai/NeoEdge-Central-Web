@@ -72,6 +72,7 @@ export class CreateNeoflowPageComponent implements OnInit {
   processorVerOpt = this.#createNeoFlowStore.neoflowProcessorVers;
   addedOt = this.#createNeoFlowStore.addedOt;
   addedIt = this.#createNeoFlowStore.addedIt;
+  addedMessageSchema = this.#createNeoFlowStore.addedMessageSchema;
   texolTagDoc = this.#createNeoFlowStore.texolTagDoc;
 
   get currentStepperId() {
@@ -95,14 +96,19 @@ export class CreateNeoflowPageComponent implements OnInit {
           return this.#createNeoFlowStore.addedOt()?.length > 0 ? false : true;
         case CREATE_NEOFLOW_STEP.selectMessageDestination:
           return this.#createNeoFlowStore.addedIt()?.length > 0 ? false : true;
+        case CREATE_NEOFLOW_STEP.createMessageSchema:
+          return this.form.get(this.stepperName).invalid;
       }
-      // return this.form.get(this.stepperName).invalid;
     }
     return false;
   }
 
   get neoflowProfileCtrl() {
     return this.form.get('neoflowProfile') as UntypedFormControl;
+  }
+
+  get messageSchemaCtrl() {
+    return this.form.get('messageSchema') as UntypedFormControl;
   }
 
   isRtuProfile(appName) {
@@ -377,7 +383,8 @@ export class CreateNeoflowPageComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.#fb.group({
-      neoflowProfile: []
+      neoflowProfile: [],
+      createMessageSchema: []
     });
 
     this.neoflowProfileCtrl.valueChanges
@@ -385,6 +392,15 @@ export class CreateNeoflowPageComponent implements OnInit {
         untilDestroyed(this),
         map((neoflowProfile) => {
           this.#createNeoFlowStore.updateNeoFlowProfile(neoflowProfile);
+        })
+      )
+      .subscribe();
+
+    this.messageSchemaCtrl.valueChanges
+      .pipe(
+        untilDestroyed(this),
+        map((messageSchema) => {
+          this.#createNeoFlowStore.updateMessageSchema(messageSchema);
         })
       )
       .subscribe();
