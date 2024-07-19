@@ -1,7 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ICompanyLicense, IGetCompanyOrderReq, IGetCompanyOrdersResp, IProjectLicense } from '@neo-edge-web/models';
+import {
+  ICompanyLicense,
+  IGetCompanyOrdersResp,
+  IProjectLicense,
+  TableQueryForCompanyOrder
+} from '@neo-edge-web/models';
 import { setParamsArrayWithKey } from '@neo-edge-web/utils';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
@@ -47,7 +52,7 @@ export class LicenseService {
     );
   };
 
-  getCompanyOrders$ = (queryStr: IGetCompanyOrderReq): Observable<IGetCompanyOrdersResp> => {
+  getCompanyOrders$ = (queryStr: TableQueryForCompanyOrder): Observable<IGetCompanyOrdersResp> => {
     const params = setParamsArrayWithKey(queryStr);
     return this.#http.get(`${this.LICENSE_COMPANY_ORDER_PATH}?${params}`).pipe(
       catchError((err) => {

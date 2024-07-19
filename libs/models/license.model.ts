@@ -6,6 +6,7 @@ export interface ILicenseState {
   companyOrders: ICompanyOrder[];
   page: number;
   size: number;
+  dataLength: number;
 }
 
 export interface IProjectLicense {
@@ -27,7 +28,7 @@ export interface ICompanyLicenseProject {
   createdBy: string;
 }
 
-export interface IGetCompanyOrderReq extends ITableQuery {
+export interface TableQueryForCompanyOrder extends ITableQuery {
   sort?: TLicenseSort;
 }
 

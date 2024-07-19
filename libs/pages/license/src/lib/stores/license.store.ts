@@ -2,10 +2,10 @@ import { inject } from '@angular/core';
 import { LicenseService } from '@neo-edge-web/global-services';
 import {
   ICompanyLicense,
-  IGetCompanyOrderReq,
   IGetCompanyOrdersResp,
   ILicenseState,
-  LICENSE_LOADING
+  LICENSE_LOADING,
+  TableQueryForCompanyOrder
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -20,7 +20,8 @@ const initialState: ILicenseState = {
   companyLicense: [],
   companyOrders: [],
   page: INIT_ORDER_PAGE,
-  size: INIT_ORDER_SIZE
+  size: INIT_ORDER_SIZE,
+  dataLength: 0
 };
 
 export type LicenseStore = InstanceType<typeof LicenseStore>;
@@ -43,7 +44,7 @@ export const LicenseStore = signalStore(
         })
       )
     ),
-    getCompanyOrders: rxMethod<IGetCompanyOrderReq>(
+    getCompanyOrders: rxMethod<TableQueryForCompanyOrder>(
       pipe(
         tap(() =>
           patchState(store, {
@@ -59,7 +60,7 @@ export const LicenseStore = signalStore(
             })
             .pipe(
               tap((d: IGetCompanyOrdersResp) =>
-                patchState(store, { companyOrders: d.orders, isLoading: LICENSE_LOADING.NONE })
+                patchState(store, { companyOrders: d.orders, dataLength: d.total, isLoading: LICENSE_LOADING.NONE })
               ),
               catchError(() => EMPTY)
             );

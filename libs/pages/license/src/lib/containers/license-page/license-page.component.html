@@ -6,7 +6,13 @@
         <ne-license-overview></ne-license-overview>
       </mat-tab>
       <mat-tab label="Purchased Records">
-        <ne-license-orders [companyOrders]="companyOrders()"></ne-license-orders>
+        <ne-license-orders
+          [companyOrders]="companyOrders()"
+          [page]="page()"
+          [size]="size()"
+          [dataLength]="dataLength()"
+          (pageChange)="onOrderPageChange($event)"
+        ></ne-license-orders>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>

@@ -28,8 +28,14 @@
   </ng-container>
 
   <ng-template let-data #detail>
-    <div class="order-detail-content">
-      <ne-license-order-detail [dataTable]="data.items"></ne-license-order-detail>
-    </div>
+    <ne-license-order-detail [dataTable]="data.items"></ne-license-order-detail>
   </ng-template>
 </ne-expansion-table>
+
+<mat-paginator
+  id="company-order-pagination"
+  [pageSizeOptions]="[10, 25, 50, 100]"
+  [length]="dataLength()"
+  showFirstLastButtons
+  aria-label="Select page of it service profile"
+></mat-paginator>
