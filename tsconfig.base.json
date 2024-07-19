@@ -40,6 +40,7 @@
       "@neo-edge-web/ot-devices-profile": ["libs/pages/ot-devices-profile/src/index.ts"],
       "@neo-edge-web/package-json": ["./package.json"],
       "@neo-edge-web/pipes": ["libs/pipes/index.ts"],
+      "@neo-edge-web/processor-1.0.0": ["libs/processor-1.0.0/src/index.ts"],
       "@neo-edge-web/projects": ["libs/pages/projects/src/index.ts"],
       "@neo-edge-web/request-new-password": ["libs/pages/request-new-password/src/index.ts"],
       "@neo-edge-web/roles": ["libs/pages/roles/src/index.ts"],
