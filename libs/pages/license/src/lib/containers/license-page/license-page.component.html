@@ -1,7 +1,12 @@
 <h1 class="page-title">NeoEdge X License</h1>
 <mat-card appearance="outlined">
   <mat-card-content>
-    <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab-group
+      animationDuration="0ms"
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      (selectedTabChange)="onTabChange($event)"
+    >
       <mat-tab label="Overview">
         <ne-license-overview [companyLicenses]="companyLicenseMock"></ne-license-overview>
       </mat-tab>

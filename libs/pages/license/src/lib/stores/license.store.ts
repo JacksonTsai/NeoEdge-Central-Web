@@ -71,7 +71,6 @@ export const LicenseStore = signalStore(
   withHooks((store) => {
     return {
       onInit() {
-        store.getCompanyOrders({ page: INIT_ORDER_PAGE, size: INIT_ORDER_SIZE });
         // store.getCompanyLicense();
       }
     };

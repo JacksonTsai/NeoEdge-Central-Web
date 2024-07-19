@@ -1,10 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { ICompanyLicense, TableQueryForCompanyOrder } from '@neo-edge-web/models';
 import { LicenseOrdersComponent, LicenseOverviewComponent } from '../../components';
 import { LicenseStore } from '../../stores';
+
+enum LICENSE_TAB {
+  OVERVIEW,
+  PURCHASED_RECORDS
+}
 
 const COMPANY_LICENSE: ICompanyLicense[] = [
   {
@@ -62,8 +67,18 @@ export class LicensePageComponent {
   dataLength = this.#licenseStore.dataLength;
   companyLicenses = this.#licenseStore.companyLicenses;
   companyOrders = this.#licenseStore.companyOrders;
+  tabIndex = signal<number>(0);
 
   companyLicenseMock = COMPANY_LICENSE;
+
+  onTabChange = (event: MatTabChangeEvent): void => {
+    this.tabIndex.set(event.index);
+    if (event.index === LICENSE_TAB.PURCHASED_RECORDS) {
+      if (!this.companyOrders().length) {
+        this.#licenseStore.getCompanyOrders({ page: this.page(), size: this.size() });
+      }
+    }
+  };
 
   onOrderPageChange = (event: TableQueryForCompanyOrder): void => {
     this.#licenseStore.getCompanyOrders(event);
