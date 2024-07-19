@@ -2,6 +2,7 @@ import { IGetBillingResp } from './billing.model';
 import { IEventDoc, IGetEventLogsResp } from './event-logs.model';
 import { Gateway } from './gateways.model';
 import { IItService } from './it-service.model';
+import { IProjectLicense } from './license.model';
 import { IOtDevice } from './ot-devices.model';
 import { IProjectByIdResp } from './projects.model';
 import { ISupportApps } from './support-apps.model';
@@ -17,10 +18,10 @@ export interface IDashboardState {
   itApps: ISupportApps[];
   otList: IOtDevice<any>[];
   otApps: ISupportApps[];
-  licenseConsumption?: any;
   eventDoc: IEventDoc;
   activitiesList: IGetEventLogsResp;
   projectFee: IGetBillingResp;
+  projectLicenses: IProjectLicense[];
   timeRecord: IDashboardTimeRecord;
 }
 

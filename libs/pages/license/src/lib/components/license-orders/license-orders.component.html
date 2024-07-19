@@ -1,0 +1,44 @@
+<h2 class="card__title">Purchased Records</h2>
+
+<ne-expansion-table [dataSource]="dataSource" [columns]="displayedColumns">
+  <ng-container matColumnDef="orderNumber">
+    <th mat-header-cell *matHeaderCellDef>Order No.</th>
+    <td mat-cell *matCellDef="let element">
+      <span class="text-underline cursor-pointer">{{ element.orderNumber }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="orderDate">
+    <th mat-header-cell *matHeaderCellDef>Order Date</th>
+    <td mat-cell *matCellDef="let element">{{ element.orderDate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="customerContact">
+    <th mat-header-cell *matHeaderCellDef>Contact</th>
+    <td mat-cell *matCellDef="let element">
+      <div>{{ element.customerContactName }}</div>
+      <a [href]="'mailto:' + element.customerContactEmail">{{ element.customerContactEmail }}</a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="ecvContact">
+    <th mat-header-cell *matHeaderCellDef>ECV Contact</th>
+    <td mat-cell *matCellDef="let element">
+      <div>{{ element.ecvContactName }}</div>
+      <a [href]="'mailto:' + element.ecvContactEmail">{{ element.ecvContactEmail }}</a>
+    </td>
+  </ng-container>
+
+  <ng-template let-data #detail>
+    <h3 class="card__sub-title">Order Detail - {{ data.orderNumber }}</h3>
+    <ne-license-order-detail [dataTable]="data.items"></ne-license-order-detail>
+  </ng-template>
+</ne-expansion-table>
+
+<mat-paginator
+  id="company-order-pagination"
+  [pageSizeOptions]="[10, 25, 50, 100]"
+  [length]="dataLength()"
+  showFirstLastButtons
+  aria-label="Select page of it service profile"
+></mat-paginator>

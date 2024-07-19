@@ -92,6 +92,13 @@ export const appRoutes: Route[] = [
         }
       },
       {
+        path: 'company-account/neoedgex-license',
+        loadChildren: () => import('@neo-edge-web/license').then((m) => m.licenseRoutes),
+        data: {
+          preload: true
+        }
+      },
+      {
         path: 'company-account/usage-billing',
         loadChildren: () => import('@neo-edge-web/billing').then((m) => m.billingRoutes),
         data: {

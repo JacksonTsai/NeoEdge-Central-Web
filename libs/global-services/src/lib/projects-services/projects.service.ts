@@ -168,8 +168,8 @@ export class ProjectsService {
       })
     );
 
-  getProjectEventLogs$ = (eventLogsParams: TGetProjectEventLogsParams) => {
-    const params = setParamsArrayWithKey(eventLogsParams);
+  getProjectEventLogs$ = (queryStr: TGetProjectEventLogsParams) => {
+    const params = setParamsArrayWithKey(queryStr);
     return this.#http.get(`${this.EVENT_LOGS_BY_PROJECT_ID_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project event logs failure.', 'X', {

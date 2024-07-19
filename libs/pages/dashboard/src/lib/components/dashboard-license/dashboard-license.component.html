@@ -1,0 +1,49 @@
+<mat-card class="sm-absolute-parent">
+  <mat-card-header>
+    <h2 class="dashboard-card__title">License Consumption</h2>
+  </mat-card-header>
+  <mat-card-content class="dashboard-card__lr-content">
+    <div class="dashboard-card__l sm-absolute-sibling">
+      <div class="dashboard-total" [style.--primary]="defaultColors[0]">
+        <h3 class="dashboard-total__title">Project usage</h3>
+        @if (projectLicenseMock().length) {
+          @for (item of projectLicenseMock(); track item.name) {
+            <p class="dashboard-total__count-item">
+              <span class="name">{{ item.name }}</span>
+              <span class="count">{{ item.projectQuantity }}</span>
+            </p>
+          }
+        }
+      </div>
+    </div>
+    <div class="dashboard-card__r">
+      <div class="license-chart">
+        @if (chartOptions()) {
+          <apx-chart
+            [colors]="chartOptions()?.colors"
+            [series]="chartOptions()?.series"
+            [chart]="chartOptions()?.chart"
+            [dataLabels]="chartOptions()?.dataLabels"
+            [plotOptions]="chartOptions()?.plotOptions"
+            [responsive]="chartOptions()?.responsive"
+            [xaxis]="chartOptions()?.xaxis"
+            [legend]="chartOptions()?.legend"
+            [fill]="chartOptions()?.fill"
+            [tooltip]="chartOptions()?.tooltip"
+          ></apx-chart>
+        }
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="dashboard-action sm-absolute">
+    <a
+      routerLink="/company-account/neoedgex-license"
+      color="primary"
+      mat-stroked-button
+      id="dashboard-see-more-license-detail"
+    >
+      <span>See more Detail</span>
+      <mat-icon svgIcon="icon:arrow_right" color="primary" iconPositionEnd></mat-icon>
+    </a>
+  </mat-card-actions>
+</mat-card>

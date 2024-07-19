@@ -80,7 +80,7 @@ export const getChartOption = (setting: IBillingChart): ApexOptions => {
       }
     ],
     chart: {
-      height: setting.height ?? 240,
+      height: setting.height ?? 224,
       type: 'line',
       toolbar: {
         show: false
