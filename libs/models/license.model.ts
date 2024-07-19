@@ -2,7 +2,7 @@ import { ITableQuery } from './table-query.model';
 
 export interface ILicenseState {
   isLoading: LICENSE_LOADING;
-  companyLicense: ICompanyLicense[];
+  companyLicenses: ICompanyLicense[];
   companyOrders: ICompanyOrder[];
   page: number;
   size: number;

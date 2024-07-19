@@ -3,7 +3,7 @@
   <mat-card-content>
     <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
       <mat-tab label="Overview">
-        <ne-license-overview></ne-license-overview>
+        <ne-license-overview [companyLicenses]="companyLicenseMock"></ne-license-overview>
       </mat-tab>
       <mat-tab label="Purchased Records">
         <ne-license-orders

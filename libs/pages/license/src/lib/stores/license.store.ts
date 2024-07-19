@@ -17,7 +17,7 @@ const INIT_ORDER_SORT = 'date';
 
 const initialState: ILicenseState = {
   isLoading: LICENSE_LOADING.NONE,
-  companyLicense: [],
+  companyLicenses: [],
   companyOrders: [],
   page: INIT_ORDER_PAGE,
   size: INIT_ORDER_SIZE,
@@ -38,7 +38,7 @@ export const LicenseStore = signalStore(
         ),
         switchMap(() => {
           return licenseService.getCompanyLicense$().pipe(
-            tap((d: ICompanyLicense[]) => patchState(store, { companyLicense: d, isLoading: LICENSE_LOADING.NONE })),
+            tap((d: ICompanyLicense[]) => patchState(store, { companyLicenses: d, isLoading: LICENSE_LOADING.NONE })),
             catchError(() => EMPTY)
           );
         })

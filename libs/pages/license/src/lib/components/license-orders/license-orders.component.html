@@ -1,13 +1,15 @@
+<h2 class="card__title">Purchased Records</h2>
+
 <ne-expansion-table [dataSource]="dataSource" [columns]="displayedColumns">
   <ng-container matColumnDef="orderNumber">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Order No.</th>
+    <th mat-header-cell *matHeaderCellDef>Order No.</th>
     <td mat-cell *matCellDef="let element">
       <span class="text-underline cursor-pointer">{{ element.orderNumber }}</span>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="orderDate">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Date</th>
+    <th mat-header-cell *matHeaderCellDef>Order Date</th>
     <td mat-cell *matCellDef="let element">{{ element.orderDate }}</td>
   </ng-container>
 
@@ -28,6 +30,7 @@
   </ng-container>
 
   <ng-template let-data #detail>
+    <h3 class="card__sub-title">Order Detail - {{ data.orderNumber }}</h3>
     <ne-license-order-detail [dataTable]="data.items"></ne-license-order-detail>
   </ng-template>
 </ne-expansion-table>

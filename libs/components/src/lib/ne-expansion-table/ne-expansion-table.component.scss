@@ -39,6 +39,12 @@ tr.element-row:not(.expanded-row):active {
     padding: 16px;
     background: $hover-gray;
   }
+
+  &::ng-deep {
+    .mdc-data-table__row:not(:last-child) .mat-mdc-cell {
+      border-bottom: 1px solid $border-color !important;
+    }
+  }
 }
 
 .expand-arrow {
