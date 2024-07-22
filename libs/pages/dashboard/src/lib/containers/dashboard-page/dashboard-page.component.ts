@@ -70,6 +70,7 @@ export class DashboardPageComponent {
   }
 
   onReload(): void {
+    this.#dashboardStore.setTimeRecord();
     this.updateData();
   }
 

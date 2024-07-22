@@ -16,6 +16,18 @@ export const dateFormat = (timestamp: number | Date): string => {
 
 export const dateDashToSlash = (date: string): string => date?.replace(/-/g, '/') || '';
 
+export const setTimeToStartOfDay = (date: Date): Date => {
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  return startOfDay;
+};
+
+export const setTimeToEndOfDay = (date: Date): Date => {
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 0);
+  return endOfDay;
+};
+
 export const getPastDay = (days: number, now?: Date): Date => {
   const nowCurrent = now || new Date();
   return dayjs(nowCurrent).subtract(days, 'day').toDate();

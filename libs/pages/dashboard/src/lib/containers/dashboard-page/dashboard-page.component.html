@@ -1,6 +1,6 @@
 <div class="page-title-box justify-between">
   <h1 class="page-title">Dashboard</h1>
-  <ne-update-dashboard-date (handleReload)="onReload()"></ne-update-dashboard-date>
+  <ne-update-dashboard-date [timeRecord]="timeRecord()" (handleReload)="onReload()"></ne-update-dashboard-date>
 </div>
 <div class="dashboard">
   <aside class="dashboard__aside">
