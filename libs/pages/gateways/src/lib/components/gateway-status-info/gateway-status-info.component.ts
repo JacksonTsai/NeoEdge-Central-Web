@@ -8,6 +8,7 @@ import { SafePipe } from '@neo-edge-web/directives';
 import {
   BOOLEAN_STATUS,
   GATEWAY_SSH_MODE,
+  GATEWAY_SSH_STATUS,
   GATEWAY_STATUE,
   GW_CURRENT_MODE,
   IGatewaySSHStatus,
@@ -41,6 +42,7 @@ export class GatewayStatusInfoComponent {
   @Output() handleDeleteGateway = new EventEmitter();
   @Output() handleGetInstallCommand = new EventEmitter();
   @Output() handleRebootGw = new EventEmitter();
+  @Output() handleSwitchSSHMode = new EventEmitter();
 
   gatewayStatusInfo = input<TGatewayStatusInfo | null>(null);
   sshStatus = input<IGatewaySSHStatus | null>(null);
@@ -109,5 +111,10 @@ export class GatewayStatusInfoComponent {
 
   onReboot = () => {
     this.handleRebootGw.emit();
+  };
+
+  onSwitchSSHMode = () => {
+    const currentStatus = this.sshStatus()?.current?.connectionStatus || false;
+    this.handleSwitchSSHMode.emit(!currentStatus ? GATEWAY_SSH_STATUS.ENABLED : GATEWAY_SSH_STATUS.DISABLED);
   };
 }

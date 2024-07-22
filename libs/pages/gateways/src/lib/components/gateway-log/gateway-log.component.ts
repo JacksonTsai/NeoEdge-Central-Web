@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NeExpansionTableComponent } from '@neo-edge-web/components';
 import {
   EVENT_LOG_SORT,
   IDownloadGatewayEventLogsReq,
@@ -31,7 +32,7 @@ import {
   TUpdateEventLogMode
 } from '@neo-edge-web/models';
 import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
-import { getPastDay, getTimeZone } from '@neo-edge-web/utils';
+import { getPastDay, getTimeZone, setTimeToEndOfDay, setTimeToStartOfDay } from '@neo-edge-web/utils';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime, tap } from 'rxjs';
 
@@ -51,6 +52,7 @@ import { debounceTime, tap } from 'rxjs';
     MatIconModule,
     MatTableModule,
     MatTooltipModule,
+    NeExpansionTableComponent,
     dateTimeFormatPipe
   ],
   templateUrl: './gateway-log.component.html',
@@ -72,11 +74,11 @@ export class GatewayLogComponent implements AfterViewInit {
   });
   searchSort = new FormControl<EVENT_LOG_SORT>(EVENT_LOG_SORT.Descend);
   eventLogsSort = EVENT_LOG_SORT;
-  dispalyedColumns: string[] = ['timestamp', 'eventId', 'eventName', 'group', 'srouce', 'severity', 'content'];
+  displayedColumns: string[] = ['timestamp', 'eventId', 'eventName', 'group', 'srouce', 'severity'];
   dataSource = new MatTableDataSource<any>([]);
   events = computed<IEventLog[]>(() => this.eventLogsList()?.events ?? []);
 
-  private readonly now = new Date();
+  private now = new Date();
   readonly minDate: Date = getPastDay(90);
   readonly maxDate: Date = this.now;
 
@@ -89,7 +91,9 @@ export class GatewayLogComponent implements AfterViewInit {
   }
 
   constructor() {
-    this.dateStartCtrl.setValue(getPastDay(7));
+    this.now = setTimeToEndOfDay(new Date());
+
+    this.dateStartCtrl.setValue(setTimeToStartOfDay(getPastDay(7)));
     this.dateEndCtrl.setValue(this.now);
 
     effect(() => {
@@ -101,9 +105,8 @@ export class GatewayLogComponent implements AfterViewInit {
   }
 
   onCloseDatePicker = (): void => {
-    if (!this.dateEndCtrl.value) {
-      this.dateEndCtrl.setValue(this.now);
-    }
+    this.dateStartCtrl.setValue(setTimeToStartOfDay(this.dateStartCtrl.value));
+    this.dateEndCtrl.setValue(setTimeToEndOfDay(this.dateEndCtrl.value || this.now));
     this.onUpdate('GET');
   };
 
