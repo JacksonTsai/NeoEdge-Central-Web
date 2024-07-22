@@ -84,6 +84,9 @@ export const getChartOption = (setting: IBillingChart): ApexOptions => {
       type: 'line',
       toolbar: {
         show: false
+      },
+      zoom: {
+        enabled: false
       }
     },
     stroke: {
