@@ -46,6 +46,7 @@ export class NeExpansionTableComponent<T> implements AfterContentInit {
 
   @Input() columns: string[];
   @Input() dataSource: DataSource<T>;
+  @Input() fixedLayout = false;
 
   expandedElement: any;
 

@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NeExpansionTableComponent } from '@neo-edge-web/components';
 import {
   EVENT_LOG_SORT,
   IDownloadGatewayEventLogsReq,
@@ -51,6 +52,7 @@ import { debounceTime, tap } from 'rxjs';
     MatIconModule,
     MatTableModule,
     MatTooltipModule,
+    NeExpansionTableComponent,
     dateTimeFormatPipe
   ],
   templateUrl: './gateway-log.component.html',
@@ -72,7 +74,7 @@ export class GatewayLogComponent implements AfterViewInit {
   });
   searchSort = new FormControl<EVENT_LOG_SORT>(EVENT_LOG_SORT.Descend);
   eventLogsSort = EVENT_LOG_SORT;
-  dispalyedColumns: string[] = ['timestamp', 'eventId', 'eventName', 'group', 'srouce', 'severity', 'content'];
+  displayedColumns: string[] = ['timestamp', 'eventId', 'eventName', 'group', 'srouce', 'severity'];
   dataSource = new MatTableDataSource<any>([]);
   events = computed<IEventLog[]>(() => this.eventLogsList()?.events ?? []);
 

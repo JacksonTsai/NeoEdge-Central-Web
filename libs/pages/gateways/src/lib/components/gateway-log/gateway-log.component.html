@@ -57,7 +57,7 @@
 </div>
 
 <div class="log-table">
-  <table mat-table [dataSource]="dataSource" [fixedLayout]="true">
+  <ne-expansion-table mat-table [dataSource]="dataSource" [columns]="displayedColumns" [fixedLayout]="true">
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef>Datetime</th>
       <td mat-cell *matCellDef="let element">{{ (element?.timestamp | dateTimeFormat) ?? '-' }}</td>
@@ -101,9 +101,15 @@
       <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.content ?? '-' }}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="dispalyedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: dispalyedColumns"></tr>
-  </table>
+    <ng-template let-data #detail>
+      <h3 class="card__sub-title">Content</h3>
+      <div>{{ eventDoc()?.[data?.eventId]?.content ?? '-' }}</div>
+      <div>"eventData": {{ data.eventData | json }}</div>
+    </ng-template>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </ne-expansion-table>
 </div>
 
 <div class="text-center">
