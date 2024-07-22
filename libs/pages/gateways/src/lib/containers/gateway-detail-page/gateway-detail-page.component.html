@@ -91,7 +91,7 @@
           <div class="gw-tab">
             <ne-gateway-log
               [isActive]="tabIndex() === gatewayDetailTab.LOG"
-              [eventDoc]="eventDoc()"
+              [eventDoc]="eventDocFilter()"
               [eventLogsList]="eventLogsList()"
               (handleUpdateEventLogs)="onUpdateEventLogs($event)"
               (handleDownloadEventLogs)="onDownloadEventLogs($event)"

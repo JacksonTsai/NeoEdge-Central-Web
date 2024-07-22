@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import * as AuthStore from '@neo-edge-web/auth-store';
+import { eventLogExcludeConfig } from '@neo-edge-web/configs';
 import { GatewayDetailService } from '@neo-edge-web/global-services';
 import {
   GATEWAY_LOADING,
@@ -12,6 +13,7 @@ import {
   GW_RUNNING_MODE,
   IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
+  IEventDoc,
   PERMISSION,
   TGatewayStatusInfo,
   TGetGatewayEventLogsReq,
@@ -83,6 +85,13 @@ export class GatewayDetailPageComponent {
   eventLogsList = this.gwDetailStore.eventLogsList;
   tabIndex = signal<number>(0);
   gatewayDetailTab = GATEWAY_DETAIL_TAB;
+
+  eventDocFilter = computed<IEventDoc>(() => {
+    if (!this.eventDoc()) return null;
+    return Object.fromEntries(
+      Object.entries(this.eventDoc()).filter(([key]) => !eventLogExcludeConfig.gateway.includes(Number(key)))
+    );
+  });
 
   get isDetachMode() {
     return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.currentMode;
@@ -300,7 +309,7 @@ export class GatewayDetailPageComponent {
       disableClose: true,
       autoFocus: false,
       restoreFocus: false,
-      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDoc(), params }
+      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDocFilter(), params }
     });
     downloadGatewayEventLogsDialogRef
       .afterClosed()
