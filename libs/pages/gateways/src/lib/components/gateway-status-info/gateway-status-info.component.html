@@ -111,7 +111,12 @@
         <button id="gw-status-info-action-upgarde-neoedgex" mat-menu-item mat-menu-item [disabled]="!isConnected()">
           <span>Upgrade NeoEdge X Agent</span>
         </button>
-        <button id="gw-status-info-action-enable-remote-access" mat-menu-item [disabled]="!isConnected()">
+        <button
+          id="gw-status-info-action-enable-remote-access"
+          mat-menu-item
+          [disabled]="!isConnected()"
+          (click)="onSwitchSSHMode()"
+        >
           <span>Enable/Disable Remote Access</span>
         </button>
         <button

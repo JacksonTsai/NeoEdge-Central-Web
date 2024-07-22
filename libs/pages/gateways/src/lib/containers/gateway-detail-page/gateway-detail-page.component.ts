@@ -312,16 +312,7 @@ export class GatewayDetailPageComponent {
 
   onTabChange = (event: MatTabChangeEvent): void => {
     this.tabIndex.set(event.index);
-    if (event.index === GATEWAY_DETAIL_TAB.OPERATION && this.isConnected) {
-      // Gateway Operation
-      this.permissionsService
-        .hasPermission(this.permission[this.permission.APPLICATION_MANAGEMENT])
-        .then((hasPermission) => {
-          if (hasPermission) {
-            this.gwDetailStore.getSSHStatus();
-          }
-        });
-    } else if (event.index === GATEWAY_DETAIL_TAB.LOG) {
+    if (GATEWAY_DETAIL_TAB.LOG === event.index) {
       if (!this.eventDoc()) {
         this.gwDetailStore.getEventDoc();
       }
