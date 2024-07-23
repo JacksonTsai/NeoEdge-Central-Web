@@ -9,10 +9,18 @@ export interface ILicenseState {
   dataLength: number;
 }
 
+export interface IGetProjectLicenseResp {
+  licenses: IProjectLicense[];
+}
+
 export interface IProjectLicense {
   name: string;
   companyQuantity: number;
   projectQuantity: number;
+}
+
+export interface IGetCompanyLicenseResp {
+  licenses: ICompanyLicense[];
 }
 
 export interface ICompanyLicense {

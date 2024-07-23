@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { LicenseService } from '@neo-edge-web/global-services';
 import {
-  ICompanyLicense,
+  IGetCompanyLicenseResp,
   IGetCompanyOrdersResp,
   ILicenseState,
   LICENSE_LOADING,
@@ -38,7 +38,9 @@ export const LicenseStore = signalStore(
         ),
         switchMap(() => {
           return licenseService.getCompanyLicense$().pipe(
-            tap((d: ICompanyLicense[]) => patchState(store, { companyLicenses: d, isLoading: LICENSE_LOADING.NONE })),
+            tap((d: IGetCompanyLicenseResp) =>
+              patchState(store, { companyLicenses: d.licenses, isLoading: LICENSE_LOADING.NONE })
+            ),
             catchError(() => EMPTY)
           );
         })

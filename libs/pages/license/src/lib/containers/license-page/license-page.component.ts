@@ -47,6 +47,11 @@ const COMPANY_LICENSE: ICompanyLicense[] = [
         createdBy: 'may.jhao@ecloudvalley.com'
       }
     ]
+  },
+  {
+    name: 'TEXOL 213MM2-R1 License',
+    quantity: 10,
+    projects: []
   }
 ];
 
