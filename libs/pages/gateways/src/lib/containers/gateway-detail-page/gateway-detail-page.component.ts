@@ -40,6 +40,7 @@ import { GatewayLogComponent } from '../../components/gateway-log/gateway-log.co
 import { GatewayNeoflowComponent } from '../../components/gateway-neoflow/gateway-neoflow.component';
 import { GatewayRebootDialogComponent } from '../../components/gateway-reboot-dialog/gateway-reboot-dialog.component';
 import { GatewayStatusInfoComponent } from '../../components/gateway-status-info/gateway-status-info.component';
+import { LiveMonitorDialogComponent } from '../../components/live-monitor-dialog';
 import { GatewayDetailStore } from '../../stores/gateway-detail.store';
 
 enum GATEWAY_DETAIL_TAB {
@@ -300,6 +301,30 @@ export class GatewayDetailPageComponent {
 
   onSwitchSSHMode = (enabled: GATEWAY_SSH_STATUS): void => {
     this.gwDetailStore.updateSSHStatus({ enabled });
+  };
+
+  onOpenLiveMonitor = (event: any): void => {
+    let liveMonitorDialogRef = this.#dialog.open(LiveMonitorDialogComponent, {
+      backdropClass: 'live-monitor-bg',
+      panelClass: 'live-monitor-panel',
+      disableClose: true,
+      autoFocus: false,
+      restoreFocus: false,
+      // width: window.innerWidth * 0.8 + 'px',
+      data: {
+        gwDetailStore: this.gwDetailStore,
+        gwDetailService: this.gwDetailService,
+        eventDoc: this.eventDoc(),
+        neoflow: event
+      }
+    });
+
+    liveMonitorDialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        liveMonitorDialogRef = undefined;
+      });
   };
 
   onUpdateEventLogs = (event: TGetGatewayEventLogsReq): void => {

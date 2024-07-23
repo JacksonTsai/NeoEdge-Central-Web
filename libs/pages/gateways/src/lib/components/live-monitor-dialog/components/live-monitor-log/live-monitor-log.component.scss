@@ -1,0 +1,21 @@
+:host {
+  --mat-expansion-header-text-size: 14px;
+
+  display: block;
+  height: 100%;
+}
+
+mat-card {
+  height: 100%;
+}
+
+.lm-log {
+  &-wrapper {
+    height: 300px;
+    overflow-y: auto;
+  }
+
+  &__detail {
+    font-size: 12px;
+  }
+}

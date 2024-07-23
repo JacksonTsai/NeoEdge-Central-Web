@@ -5,6 +5,7 @@ export * from './datetimeFormat.helper';
 export * from './download-file.helper';
 export * from './event.helper';
 export * from './generateImg2Base64.helper';
+export * from './live-monitor.helper';
 export * from './math.helper';
 export * from './neoflow-link.helper';
 export * from './obj2FromData.helper';

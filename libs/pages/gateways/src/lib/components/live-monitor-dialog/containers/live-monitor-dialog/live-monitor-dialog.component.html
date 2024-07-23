@@ -1,0 +1,20 @@
+<h1 mat-dialog-title class="gl-h6">Live Monitor</h1>
+<mat-dialog-content class="live-monitor-wrapper">
+  <div class="live-monitor__block flex-2">
+    <ne-live-monitor-schema></ne-live-monitor-schema>
+    <div class="live-monitor__sub-block">
+      <ne-live-monitor-cpu></ne-live-monitor-cpu>
+      <ne-live-monitor-ram></ne-live-monitor-ram>
+    </div>
+  </div>
+  <div class="live-monitor__block">
+    <ne-live-monitor-status></ne-live-monitor-status>
+  </div>
+  <div class="live-monitor__block">
+    <ne-live-monitor-log [eventDoc]="data.eventDoc"></ne-live-monitor-log>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog__action">
+  <button id="live-monitor-dialog-close-btn" type="button" mat-stroked-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

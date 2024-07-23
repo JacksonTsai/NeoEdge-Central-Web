@@ -1,0 +1,54 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+}
+
+::ng-deep {
+  .live-monitor-bg {
+    background-color: rgba($white, 0.3);
+    backdrop-filter: blur(5px);
+  }
+
+  .live-monitor-panel {
+    width: 90vw;
+
+    .mat-mdc-dialog-container {
+      .mdc-dialog__surface {
+        background-color: rgba($primary, 0.1);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba($bg-gary, 0.3);
+      }
+    }
+  }
+}
+
+.live-monitor {
+  &-wrapper {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__block {
+    flex: 1;
+
+    &.flex-2 {
+      flex: 2;
+    }
+  }
+
+  &__sub-block {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 10px;
+
+    ne-live-monitor-cpu,
+    ne-live-monitor-ram {
+      flex: 1;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal } from '@angular/core';
 import { IBillingChart, IBillingTimeRecord, IGetBillingResp } from '@neo-edge-web/models';
-import { dateDashToSlash, generatePastMonths, getChartOption, getChartUsageAndFee } from '@neo-edge-web/utils';
+import { dateDashToSlash, generatePastMonths, getBillingChartOption, getChartUsageAndFee } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
@@ -47,6 +47,6 @@ export class BillingHistoryComponent {
       height: 300
     };
 
-    this.chartOptions.set(getChartOption(chartSetting));
+    this.chartOptions.set(getBillingChartOption(chartSetting));
   };
 }

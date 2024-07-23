@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-header>
+    <h2>RAM Usage</h2>
+  </mat-card-header>
+  <mat-card-content>
+    <div id="ram-chart">
+      @if (chartOptions()) {
+        <apx-chart
+          [series]="chartOptions()?.series"
+          [chart]="chartOptions()?.chart"
+          [xaxis]="chartOptions()?.xaxis"
+          [yaxis]="chartOptions()?.yaxis"
+          [dataLabels]="chartOptions()?.dataLabels"
+          [grid]="chartOptions()?.grid"
+          [stroke]="chartOptions()?.stroke"
+          [title]="chartOptions()?.title"
+          [colors]="chartOptions()?.colors"
+        ></apx-chart>
+      }
+    </div>
+  </mat-card-content>
+</mat-card>
