@@ -2,9 +2,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  ICompanyLicense,
+  IGetCompanyLicenseResp,
   IGetCompanyOrdersResp,
-  IProjectLicense,
+  IGetProjectLicenseResp,
   TableQueryForCompanyOrder
 } from '@neo-edge-web/models';
 import { setParamsArrayWithKey } from '@neo-edge-web/utils';
@@ -26,7 +26,7 @@ export class LicenseService {
     return throwError(() => err);
   }
 
-  getProjectLicense$ = (): Observable<IProjectLicense[]> => {
+  getProjectLicense$ = (): Observable<IGetProjectLicenseResp> => {
     return this.#http.get(`${this.LICENSE_PROJECT_PATH}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project licenses failure', 'X', {
@@ -39,7 +39,7 @@ export class LicenseService {
     );
   };
 
-  getCompanyLicense$ = (): Observable<ICompanyLicense[]> => {
+  getCompanyLicense$ = (): Observable<IGetCompanyLicenseResp> => {
     return this.#http.get(`${this.LICENSE_COMPANY_PATH}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get company licenses failure', 'X', {

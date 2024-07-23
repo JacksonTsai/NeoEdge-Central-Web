@@ -22,7 +22,7 @@ interface ILicenseChartSetting {
   categories: string[];
 }
 
-const PROJECT_LICENSE: IProjectLicense[] = [
+const PROJECT_LICENSE_MOCK: IProjectLicense[] = [
   {
     name: 'NeoEdge X Tag License',
     companyQuantity: 10,
@@ -46,7 +46,7 @@ const PROJECT_LICENSE: IProjectLicense[] = [
 export class DashboardLicenseComponent {
   // TODO 等 License API 可以串接後，把 projectLicenseMock 改為 projectLicenses，並移除相關假資料
   projectLicenses = input<IProjectLicense[]>([]);
-  projectLicenseMock = signal<IProjectLicense[]>(PROJECT_LICENSE);
+  projectLicenseMock = signal<IProjectLicense[]>(PROJECT_LICENSE_MOCK);
   chartOptions = signal<Partial<ApexOptions> | null>(null);
   defaultColors: string[] = [...getChartColor(1), '#C4D7E9'];
   warningColor = '#F87A7A';

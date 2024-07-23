@@ -20,7 +20,7 @@ import {
   IGetBillingResp,
   IGetEventDocResp,
   IGetEventLogsResp,
-  IProjectLicense,
+  IGetProjectLicenseResp,
   SUPPORT_APPS_FLOW_GROUPS,
   TGetProjectEventLogsReq
 } from '@neo-edge-web/models';
@@ -223,8 +223,8 @@ export const DashboardStore = signalStore(
           ),
           switchMap(() =>
             licenseService.getProjectLicense$().pipe(
-              tap((d: IProjectLicense[]) =>
-                patchState(store, { projectLicenses: d, isLoading: DASHBOARD_LOADING.NONE })
+              tap((d: IGetProjectLicenseResp) =>
+                patchState(store, { projectLicenses: d.licenses, isLoading: DASHBOARD_LOADING.NONE })
               ),
               catchError(() => EMPTY)
             )
