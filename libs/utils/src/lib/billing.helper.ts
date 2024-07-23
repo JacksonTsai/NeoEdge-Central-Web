@@ -30,6 +30,12 @@ export const getChartUsageAndFee = (list: string[], usageAndFee: IUsageAndFee[])
   return result;
 };
 
+export const setUTCToLocal = (date: string): number => {
+  const utcDate = dayjs.utc(date).add(1, 'day').startOf('day');
+  const localDate = utcDate.local();
+  return localDate.unix();
+};
+
 export const getCurrentDateInfo = (currentDate: Date): IBillingMonthInfo => {
   const today = dayjs(currentDate);
   const daysInMonth = today.daysInMonth();

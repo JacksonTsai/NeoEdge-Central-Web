@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BILLING_TOTAL_TYPE, IBillingEstimateResp, IBillingTimeRecord } from '@neo-edge-web/models';
 import { currencyCustomPipe, dateTimeFormatPipe } from '@neo-edge-web/pipes';
+import { getUTCOffset, setUTCToLocal } from '@neo-edge-web/utils';
 
 interface IBillingTotalContent {
   title: string;
@@ -27,15 +28,16 @@ export class BillingTotalComponent {
   timeRecord = input<IBillingTimeRecord>(null);
   estimate = input<IBillingEstimateResp>(null);
   billingTotalType = BILLING_TOTAL_TYPE;
+  UTCOffset = getUTCOffset();
 
   currencyUnit = computed(() => this.estimate()?.currency ?? 'USD');
   contentData = computed<IBillingTotalContent>(() => {
-    if (!this.timeRecord()) return null;
+    if (!this.timeRecord() || !this.estimate()) return null;
     let result = null;
     if (BILLING_TOTAL_TYPE.CURRENT === this.type()) {
       result = {
         title: 'Month Statistics',
-        dayRange: `${this.timeRecord().monthStart} - ${this.timeRecord().today}`,
+        dayRange: `${this.estimate().billBegin} - ${this.timeRecord().today}`,
         until: this.estimate()?.caculateAt ?? new Date().getTime(),
         usage: this.estimate()?.totalUsage ?? 0,
         fee: this.estimate()?.totalFee ?? 0
@@ -43,8 +45,8 @@ export class BillingTotalComponent {
     } else {
       result = {
         title: 'Month Estimate',
-        dayRange: `${this.timeRecord().monthStart} - ${this.timeRecord().monthEnd}`,
-        until: this.timeRecord().monthEndUTC,
+        dayRange: `${this.estimate().billBegin} - ${this.estimate().billEnd}`,
+        until: setUTCToLocal(this.estimate().billEnd),
         usage: this.estimate()?.estimateUsage ?? 0,
         fee: this.estimate()?.estimateFee ?? 0
       };

@@ -42,6 +42,16 @@ export const getTimeZone = (): string => {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 };
 
+export const getUTCOffset = () => {
+  const date = new Date();
+  const offset = date.getTimezoneOffset();
+  const absoluteOffset = Math.abs(offset);
+  const hours = Math.floor(absoluteOffset / 60);
+  const minutes = absoluteOffset % 60;
+  const sign = offset > 0 ? '-' : '+';
+  return `UTC${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+};
+
 /**
  * Generates an array of the past `years` years, including the current year.
  *
