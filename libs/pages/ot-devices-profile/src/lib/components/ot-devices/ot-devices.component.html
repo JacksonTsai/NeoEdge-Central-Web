@@ -1,10 +1,10 @@
 @if (otDeviceTableMode.OT_DEVICE_VIEW === tableMode()) {
-  <h1 class="page-title">OT Device</h1>
+  <h1 class="page-title">OT Device Profile</h1>
 }
-<div class="ot-devices-top-action">
-  <div class="ot-devices-top-action__left">
+<div class="top-action">
+  <div class="top-action__left">
     @if (otDeviceTableMode.OT_DEVICE_VIEW === tableMode() || otDeviceTableMode.SELECTION === tableMode()) {
-      <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-form-field class="search-input-field" appearance="outline" floatLabel="always" subscriptSizing="dynamic">
         <mat-label>Search</mat-label>
         <input
           id="ot-devices-search"
@@ -18,7 +18,7 @@
       </mat-form-field>
     }
   </div>
-  <div class="ot-devices-top-action__right">
+  <div class="top-action__right">
     @if (otDeviceTableMode.OT_DEVICE_VIEW === tableMode()) {
       <button
         *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]"
@@ -45,7 +45,13 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let element">
-        {{ element?.name ? element.name : '-' }}
+        @if (otDeviceTableMode.OT_DEVICE_VIEW === tableMode()) {
+          <a [routerLink]="['/neoflow/ot-device-profile/' + element.id]">
+            {{ element?.name ? element.name : '-' }}
+          </a>
+        } @else {
+          {{ element?.name ? element.name : '-' }}
+        }
       </td>
     </ng-container>
 

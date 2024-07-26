@@ -20,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterModule } from '@angular/router';
 import {
   DEVICE_TYPE,
   IInstancesRtu,
@@ -40,6 +41,7 @@ import { debounceTime, tap } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatTableModule,
     MatFormFieldModule,
     ReactiveFormsModule,
