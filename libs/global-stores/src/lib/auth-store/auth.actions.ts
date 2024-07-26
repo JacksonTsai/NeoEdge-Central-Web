@@ -40,5 +40,6 @@ export const changeCurrentProjectIdAction = createAction(
   props<{
     currentProjectId: number;
     currentProjectName: string;
+    currentProjectShortName: string;
   }>()
 );
