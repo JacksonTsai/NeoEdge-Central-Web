@@ -73,7 +73,7 @@ export const LicenseStore = signalStore(
   withHooks((store) => {
     return {
       onInit() {
-        // store.getCompanyLicense();
+        store.getCompanyLicense();
       }
     };
   })

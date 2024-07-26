@@ -92,8 +92,7 @@ export class DashboardPageComponent {
     this.#dashboardStore.getAllOtDeviceProfiles();
     this.#dashboardStore.getAllGateways();
 
-    // TODO 等 License API 可以串接後，執行此function
-    // this.#dashboardStore.getProjectLicense();
+    this.#dashboardStore.getProjectLicense();
 
     this.loadActivities('GET');
 
