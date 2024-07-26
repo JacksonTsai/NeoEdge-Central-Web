@@ -154,17 +154,17 @@
             <div class="gw-map">
               <div class="gw-map__field">
                 <mat-form-field appearance="outline" floatLabel="always">
-                  <mat-label> Longitude</mat-label>
-                  <input id="gw-profile-longitude" matInput formControlName="longitude" type="number" maxlength="64" />
-                  @if (longitudeCtrl.hasError('required')) {
+                  <mat-label> Latitude</mat-label>
+                  <input id="gw-profile-latitude" matInput formControlName="latitude" type="number" maxlength="64" />
+                  @if (latitudeCtrl.hasError('required')) {
                     <mat-error>Required.</mat-error>
                   }
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" floatLabel="always">
-                  <mat-label> Latitude</mat-label>
-                  <input id="gw-profile-latitude" matInput formControlName="latitude" type="number" maxlength="64" />
-                  @if (latitudeCtrl.hasError('required')) {
+                  <mat-label> Longitude</mat-label>
+                  <input id="gw-profile-longitude" matInput formControlName="longitude" type="number" maxlength="64" />
+                  @if (longitudeCtrl.hasError('required')) {
                     <mat-error>Required.</mat-error>
                   }
                 </mat-form-field>
