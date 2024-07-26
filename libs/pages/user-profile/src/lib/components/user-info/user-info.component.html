@@ -3,7 +3,7 @@
   <form [formGroup]="form">
     <div class="user-info-wrapper">
       <div class="user-info-wrapper__left">
-        <h2><strong>{{ userInfo()?.name ?? '-' }}</strong></h2>
+        <h2 class="user-info__name"><strong>{{ userInfo()?.name ?? '-' }}</strong></h2>
         <div class="item">
           <div class="label">Email (Login ID)</div>
           <div class="value">{{ userInfo()?.account ?? '-' }}</div>
