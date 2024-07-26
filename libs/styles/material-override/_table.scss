@@ -22,12 +22,17 @@
   a {
     &:not(.mdc-button) {
       color: $primary;
-      text-decoration: none;
 
       &:hover,
       &:focus {
-        text-decoration: underline;
+        color: $primary-hover;
       }
     }
+  }
+}
+
+.mat-mdc-no-data-row {
+  td {
+    height: 52px;
   }
 }

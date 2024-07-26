@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
-import { ICompanyLicense, TableQueryForCompanyOrder } from '@neo-edge-web/models';
+import { TableQueryForCompanyOrder } from '@neo-edge-web/models';
 import { LicenseOrdersComponent, LicenseOverviewComponent } from '../../components';
 import { LicenseStore } from '../../stores';
 
@@ -10,45 +10,6 @@ enum LICENSE_TAB {
   OVERVIEW,
   PURCHASED_RECORDS
 }
-
-const COMPANY_LICENSE: ICompanyLicense[] = [
-  {
-    name: 'NeoEdge X License', //license's name
-    quantity: 10, // company's all purchased quantity
-    projects: [
-      {
-        id: 1,
-        name: 'projectA',
-        quantity: 4, //project's used quantity
-        createdBy: 'may.jhao@ecloudvalley.com'
-      },
-      {
-        id: 2,
-        name: 'projectB',
-        quantity: 4,
-        createdBy: 'may.jhao@ecloudvalley.com'
-      }
-    ]
-  },
-  {
-    name: 'NeoEdge Tag X Licese',
-    quantity: 10,
-    projects: [
-      {
-        id: 1,
-        name: 'projectA',
-        quantity: 4,
-        createdBy: 'may.jhao@ecloudvalley.com'
-      },
-      {
-        id: 2,
-        name: 'projectB',
-        quantity: 4,
-        createdBy: 'may.jhao@ecloudvalley.com'
-      }
-    ]
-  }
-];
 
 @Component({
   selector: 'ne-license-page',
@@ -68,8 +29,6 @@ export class LicensePageComponent {
   companyLicenses = this.#licenseStore.companyLicenses;
   companyOrders = this.#licenseStore.companyOrders;
   tabIndex = signal<number>(0);
-
-  companyLicenseMock = COMPANY_LICENSE;
 
   onTabChange = (event: MatTabChangeEvent): void => {
     this.tabIndex.set(event.index);

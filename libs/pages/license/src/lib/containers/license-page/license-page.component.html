@@ -8,7 +8,7 @@
       (selectedTabChange)="onTabChange($event)"
     >
       <mat-tab label="Overview">
-        <ne-license-overview [companyLicenses]="companyLicenseMock"></ne-license-overview>
+        <ne-license-overview [companyLicenses]="companyLicenses()"></ne-license-overview>
       </mat-tab>
       <mat-tab label="Purchased Records">
         <ne-license-orders
