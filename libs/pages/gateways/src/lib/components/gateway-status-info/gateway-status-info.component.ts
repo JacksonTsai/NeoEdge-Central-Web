@@ -70,7 +70,7 @@ export class GatewayStatusInfoComponent {
     }
 
     if (this.gatewayStatusInfo().isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelName}.png`;
+      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelName.replace(/\s+/g, '_')}.png`;
     } else {
       return '/assets/images/default_gateway.png';
     }
