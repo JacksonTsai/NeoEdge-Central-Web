@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, computed, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { NeoFlowNodeComponent } from '@neo-edge-web/components';
 import {
   ItServiceDetailService,
   ItServiceService,
@@ -27,13 +28,14 @@ import { AddNewOtDeviceDialogComponent } from '../../components/add-new-ot-devic
 import { AddOtDeviceProfileDialogComponent } from '../../components/add-ot-device-profile-dialog/add-ot-device-profile-dialog.component';
 import { CreateMessageSchemaComponent } from '../../components/create-message-schema/create-message-schema.component';
 import { ItServiceDetailDialogComponent } from '../../components/it-service-detail-dialog/it-service-detail-dialog.component';
-import { MessageLinkDatasourceComponent } from '../../components/message-link-datasource/message-link-datasource.component';
+import { MessageLinkDataSourceComponent } from '../../components/message-link-datasource/message-link-datasource.component';
 import { MessageLinkDestinationComponent } from '../../components/message-link-destination/message-link-destination.component';
 import { NeoflowProfileComponent } from '../../components/neoflow-profile/neoflow-profile.component';
 import { OtDeviceDetailDialogComponent } from '../../components/ot-device-detail-dialog/ot-device-detail-dialog.component';
 import { SelectDataProviderComponent } from '../../components/select-data-provider/select-data-provider.component';
 import { SelectMessageDestinationComponent } from '../../components/select-message-destination/select-message-destination.component';
 import { CreateNeoFlowsStore } from '../../stores/create-neoflows.store';
+import { MessageLinkDataSourcePageComponent } from '../message-link-datasource-page/message-link-datasource-page.component';
 
 @UntilDestroy()
 @Component({
@@ -46,12 +48,14 @@ import { CreateNeoFlowsStore } from '../../stores/create-neoflows.store';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    CreateMessageSchemaComponent,
-    MessageLinkDatasourceComponent,
-    MessageLinkDestinationComponent,
     NeoflowProfileComponent,
-    SelectMessageDestinationComponent,
-    SelectDataProviderComponent
+    SelectDataProviderComponent,
+    NeoFlowNodeComponent,
+    CreateMessageSchemaComponent,
+    MessageLinkDataSourceComponent,
+    MessageLinkDestinationComponent,
+    MessageLinkDataSourcePageComponent,
+    SelectMessageDestinationComponent
   ],
   templateUrl: './create-neoflow-page.component.html',
   styleUrl: './create-neoflow-page.component.scss',
@@ -67,6 +71,10 @@ export class CreateNeoflowPageComponent implements OnInit {
   #otDevicesService = inject(OtDevicesService);
   #itServiceDetailService = inject(ItServiceDetailService);
   #itServiceService = inject(ItServiceService);
+
+  processorVer = computed(() => {
+    return this.#createNeoFlowStore?.neoflowProfile()?.neoFlowDataProcessorVer?.version ?? 'default';
+  });
 
   form: UntypedFormGroup;
   processorVerOpt = this.#createNeoFlowStore.neoflowProcessorVers;
@@ -405,4 +413,65 @@ export class CreateNeoflowPageComponent implements OnInit {
       )
       .subscribe();
   }
+
+  // constructor() {
+  //   Object.keys(window).forEach((key) => {
+  //     if (/^on/.test(key)) {
+  //       window.addEventListener(key.slice(2), (event) => {
+  //         console.log(this.#createNeoFlowStore.connection());
+  //         this.#createNeoFlowStore.connection().forEach((line) => {
+  //           line.position();
+  //         });
+  //       });
+  //     }
+  //   });
+  // }
+
+  // selectedNode = signal<INeoFlowNode[]>([]);
+  // otDevices: INeoFlowNode[] = [
+  //   {
+  //     id: 'OT_DEVICE-ABC/Tag/myTag1',
+  //     name: 'myTag1',
+  //     socket: NEOFLOW_SOCKET.OUTPUT,
+  //     dataClass: NEOFLOW_DATA_CLASS.TAG
+  //   },
+  //   {
+  //     id: 'OT_DEVICE-ABC/Tag/myTag2',
+  //     name: 'tag2',
+  //     socket: NEOFLOW_SOCKET.OUTPUT,
+  //     dataClass: NEOFLOW_DATA_CLASS.TAG
+  //   }
+  // ];
+
+  // message: INeoFlowNode[] = [
+  //   {
+  //     id: 'message/Tag/messageTag1',
+  //     name: 'messageTag1',
+  //     socket: NEOFLOW_SOCKET.INPUT,
+  //     dataClass: NEOFLOW_DATA_CLASS.TAG
+  //   },
+  //   {
+  //     id: 'message/Tag/messageTag2',
+  //     name: 'messageTag2',
+  //     socket: NEOFLOW_SOCKET.INPUT,
+  //     dataClass: NEOFLOW_DATA_CLASS.TAG
+  //   }
+  // ];
+
+  // line: LeaderLine;
+
+  // onSelectedNode = (event: INeoFlowNode) => {
+  //   this.selectedNode().push(event);
+  //   if (this.selectedNode().length === 2) {
+  //     this.line = new LeaderLine(
+  //       document.getElementById(this.selectedNode()[0].id),
+  //       document.getElementById(this.selectedNode()[1].id),
+  //       { startPlug: 'disc', endPlug: 'disc', size: 1 }
+  //     );
+
+  //     this.#createNeoFlowStore.updateConnection(this.line);
+  //     this.selectedNode.set([]);
+  //     console.log(this.line);
+  //   }
+  // };
 }

@@ -1,3 +1,23 @@
+<!-- <div class="message-link-datasource-wrapper">
+  <div style="display: flex; justify-content: space-between">
+    <div style="width: 300px">
+      <ne-neoflow-node
+        [nodes]="otDevices"
+        [headerTitle]="'OT_DEVICE-ABC'"
+        (handleSelectedNode)="onSelectedNode($event)"
+      ></ne-neoflow-node>
+    </div>
+
+    <div style="width: 300px">
+      <ne-neoflow-node
+        [nodes]="message"
+        [headerTitle]="'Message-ABC'"
+        (handleSelectedNode)="onSelectedNode($event)"
+      ></ne-neoflow-node>
+    </div>
+  </div>
+</div> -->
+
 <mat-stepper animationDuration="0" [linear]="true" #stepper>
   <ng-template matStepperIcon="edit">
     <mat-icon svgIcon="icon:ok"></mat-icon>
@@ -47,7 +67,7 @@
     </mat-step>
 
     <mat-step>
-      <ng-template matStepLabel>Create NeoFlow Message </ng-template>
+      <ng-template matStepLabel> Create NeoFlow Message </ng-template>
       <mat-card class="card">
         <mat-card-content>
           <ne-create-message-schema formControlName="createMessageSchema"></ne-create-message-schema>
@@ -59,13 +79,18 @@
       <ng-template matStepLabel> Link Data Source </ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-message-link-datasource></ne-message-link-datasource>
+          <ne-message-link-datasource-page
+            [processorVer]="processorVer()"
+            [otDevices]="addedOt()"
+            [messageSchema]="addedMessageSchema()"
+          ></ne-message-link-datasource-page>
         </mat-card-content>
       </mat-card>
     </mat-step>
 
     <mat-step>
       <ng-template matStepLabel> Link Destination </ng-template>
+
       <mat-card class="card">
         <mat-card-content>
           <ne-message-link-destination></ne-message-link-destination>

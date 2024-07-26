@@ -14,6 +14,7 @@ export interface ICreateNeoFlowState {
   texolTagDoc: any;
   userProfile: IGetUserProfileResp;
   neoflowProcessorVers: { version: string; id: number }[];
+  nodeConnection: any[];
   isLoading: CREATE_NEOFLOW_LOADING;
 }
 

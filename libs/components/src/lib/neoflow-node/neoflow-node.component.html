@@ -1,0 +1,37 @@
+<div class="neoflow-node-wrapper">
+  @if (nodeGroup()) {
+    <div class="group">
+      <div class="header-title" (click)="changeExpand()">{{ nodeGroup().name }}</div>
+      @for (node of nodeGroup().nodes; track node.name) {
+        <div
+          class="node"
+          [ngClass]="{
+            node__collapse: !isExpanded(),
+            'socket-input': node.socket === neoflowSocket.INPUT,
+            'socket-output': node.socket === neoflowSocket.OUTPUT
+          }"
+        >
+          <div class="node__name">
+            {{ node.name }}
+          </div>
+          <div class="node__data-class">
+            {{ node.dataClass }}
+          </div>
+          <div class="node__socket">
+            <div
+              class="socket"
+              [id]="node.id"
+              (click)="onSelectedNode(node)"
+              [ngClass]="{
+                selected: isSelected(node),
+                tag: node.dataClass === neoflowDataClass.TAG,
+                attribute: node.dataClass === neoflowDataClass.ATTRIBUTE,
+                static: node.dataClass === neoflowDataClass.STATIC
+              }"
+            ></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

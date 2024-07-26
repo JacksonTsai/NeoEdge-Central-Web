@@ -1,18 +1,18 @@
-// .process-unit {
-//   width: 150px;
-//   height: 150px;
-//   border: 1px solid #000;
-// }
-
 @use 'colors' as *;
 
-.math-unit {
+.addition-unit {
+  cursor: move;
+  border: 1px solid gray;
+  display: flex;
+  padding: 4px;
+  width: 150px;
+  height: 100px;
+  border-radius: 4px;
   display: flex;
   justify-content: space-between;
-  padding: 4px;
-  width: 120px;
-  height: 100px;
+  align-items: center;
 }
+
 mat-form-field {
   width: 100px;
 }

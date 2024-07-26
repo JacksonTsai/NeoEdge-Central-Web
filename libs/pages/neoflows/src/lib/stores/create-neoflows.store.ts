@@ -31,6 +31,7 @@ const initialState: ICreateNeoFlowState = {
   addedOt: [],
   addedIt: [],
   addedMessageSchema: [],
+  nodeConnection: [],
   texolTagDoc: null,
   userProfile: null,
   isLoading: CREATE_NEOFLOW_LOADING.NONE
@@ -175,6 +176,15 @@ export const CreateNeoFlowsStore = signalStore(
                 });
               })
             );
+          })
+        )
+      ),
+      updateConnection: rxMethod<LeaderLine>(
+        pipe(
+          map((line) => {
+            patchState(store, {
+              nodeConnection: [...store.nodeConnection(), line]
+            });
           })
         )
       )

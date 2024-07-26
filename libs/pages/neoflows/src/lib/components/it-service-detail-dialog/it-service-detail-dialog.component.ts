@@ -35,6 +35,11 @@ export class ItServiceDetailDialogComponent {
 
   form: UntypedFormGroup;
 
+  onSaveItServiceToNeoFlow(event) {
+    this.handleSaveItServiceToNeoFlow.emit(event);
+    this.onClose();
+  }
+
   onClose = () => {
     this.dialogRef.close();
   };

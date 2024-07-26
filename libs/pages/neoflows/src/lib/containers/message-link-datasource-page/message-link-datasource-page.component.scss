@@ -1,0 +1,74 @@
+@use 'colors' as *;
+
+.message-link-datasource {
+  height: calc(100vh - 302px);
+  display: flex;
+  overflow: auto;
+  justify-content: space-between;
+  &__source {
+    height: 100%;
+    width: 300px;
+  }
+  &__process {
+    position: relative;
+    flex-grow: 1;
+    height: 100%;
+  }
+
+  &__destination {
+    width: 300px;
+
+    height: 100%;
+  }
+
+  // .processor-container {
+  //   position: relative;
+  //   width: 100%;
+  //   height: 100%;
+  // }
+}
+
+#processor-wrapper {
+  width: 0;
+  height: 0;
+  position: relative;
+}
+
+.processor-list {
+  overflow: auto;
+  padding-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid $black-gary;
+  gap: 8px;
+  width: 100%;
+}
+
+// .example-box {
+//   width: 200px;
+//   height: 200px;
+//   border: solid 1px #ccc;
+//   color: rgba(0, 0, 0, 0.87);
+//   cursor: move;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   text-align: center;
+//   background: #fff;
+//   border-radius: 4px;
+//   position: absolute;
+//   z-index: 1;
+//   transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
+//   box-shadow:
+//     0 3px 1px -2px rgba(0, 0, 0, 0.2),
+//     0 2px 2px 0 rgba(0, 0, 0, 0.14),
+//     0 1px 5px 0 rgba(0, 0, 0, 0.12);
+// }
+
+// .example-box:active {
+//   box-shadow:
+//     0 5px 5px -3px rgba(0, 0, 0, 0.2),
+//     0 8px 10px 1px rgba(0, 0, 0, 0.14),
+//     0 3px 14px 2px rgba(0, 0, 0, 0.12);
+// }

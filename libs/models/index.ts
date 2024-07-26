@@ -16,6 +16,8 @@ export * from './language.model';
 export * from './license.model';
 export * from './map.model';
 export * from './ne-menu.model';
+export * from './neoflow-connection.model';
+export * from './neoflow-node.model';
 export * from './neoflows.model';
 export * from './ot-device-detail.model';
 export * from './ot-devices.model';

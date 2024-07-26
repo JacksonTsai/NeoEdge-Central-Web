@@ -153,18 +153,18 @@ export class CreateMessageSchemaComponent implements OnInit, AfterViewInit, Cont
       tagName: new UntypedFormControl({ value: tagName, disabled: false }, [Validators.required]),
       dataClass: new UntypedFormControl({ value: dataClass, disabled: false }, [Validators.required]),
       defaultValue:
-        dataClass === 'static'
+        dataClass === 'Static'
           ? new UntypedFormControl({ value: defaultValue, disabled: false }, [Validators.required])
-          : new UntypedFormControl({ value: defaultValue, disabled: false })
+          : dataClass === 'Tag'
+            ? new UntypedFormControl({ value: '', disabled: true })
+            : new UntypedFormControl({ value: defaultValue, disabled: false })
     });
   };
 
   getTagsFromRtuDevice(otDevice: IOtDevice<any>) {
     const deviceCommand = otDevice.setting?.Instances?.RTU[0]?.Devices[0]?.Commands;
     if (deviceCommand) {
-      return Object.values(deviceCommand).map((d: any) =>
-        this.setMessageTagFg(`${otDevice.name}.${d.Name}`, 'tag', '')
-      );
+      return Object.values(deviceCommand).map((d: any) => this.setMessageTagFg(`${d.Name}`, 'Tag', ''));
     }
     return [];
   }
@@ -172,9 +172,7 @@ export class CreateMessageSchemaComponent implements OnInit, AfterViewInit, Cont
   getTagsFromTcpDevice(otDevice: IOtDevice<any>) {
     const deviceCommand = otDevice.setting?.Instances?.TCP[0]?.Devices[0]?.Commands;
     if (deviceCommand) {
-      return Object.values(deviceCommand).map((d: any) =>
-        this.setMessageTagFg(`${otDevice.name}.${d.Name}`, 'tag', '')
-      );
+      return Object.values(deviceCommand).map((d: any) => this.setMessageTagFg(`${d.Name}`, 'Tag', ''));
     }
     return [];
   }
@@ -185,11 +183,7 @@ export class CreateMessageSchemaComponent implements OnInit, AfterViewInit, Cont
       const domains = deviceCommand.Profile.Domains;
       const tags = [];
       domains.forEach((d) => {
-        tags.push(
-          ...this.texolTagDoc()['General'][d].map((v) =>
-            this.setMessageTagFg(`${otDevice.name}.${v.TagName}`, 'tag', '')
-          )
-        );
+        tags.push(...this.texolTagDoc()['General'][d].map((v) => this.setMessageTagFg(`${v.TagName}`, 'Tag', '')));
       });
       return tags;
     } else {
@@ -200,7 +194,7 @@ export class CreateMessageSchemaComponent implements OnInit, AfterViewInit, Cont
       }
 
       return this.texolTagDoc()[profileName[0]][profileName[1]][profileName[2]][profileName[4]].map((v) =>
-        this.setMessageTagFg(`${otDevice.name}.${v.TagName}`, 'tag', '')
+        this.setMessageTagFg(`${v.TagName}`, 'Tag', '')
       );
     }
   }
