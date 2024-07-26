@@ -253,7 +253,7 @@ export class GatewayProfileComponent implements OnInit {
     }
 
     if (isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      this.logo.set(`/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelName}.png`);
+      this.logo.set(`/assets/images/default_${ipcVendorName.toLowerCase()}_${ipcModelName.replace(/\s+/g, '_')}.png`);
     } else {
       this.logo.set('/assets/images/default_gateway.png');
     }
