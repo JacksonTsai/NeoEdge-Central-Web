@@ -76,8 +76,12 @@ export class ActiveResetUserComponent implements OnInit {
     return this.form.get('verifyToken') as UntypedFormControl;
   }
 
-  get eulaCtrl() {
-    return this.form.get('eula') as UntypedFormControl;
+  get eulaXCtrl() {
+    return this.form.get('eulaX') as UntypedFormControl;
+  }
+
+  get eulaCentralCtrl() {
+    return this.form.get('eulaCentral') as UntypedFormControl;
   }
 
   activeResetUser = () => {
@@ -117,7 +121,12 @@ export class ActiveResetUserComponent implements OnInit {
   };
 
   onSubmit = () => {
-    if (this.form.invalid || !this.eulaCtrl.value || this.confirmPasswordCtrl.hasError('isNotMatch')) {
+    if (
+      this.form.invalid ||
+      !this.eulaXCtrl.value ||
+      !this.eulaCentralCtrl.value ||
+      this.confirmPasswordCtrl.hasError('isNotMatch')
+    ) {
       return;
     }
     this.activeResetUser();
@@ -127,11 +136,13 @@ export class ActiveResetUserComponent implements OnInit {
     if (isEnable) {
       this.passwordCtrl.enable();
       this.confirmPasswordCtrl.enable();
-      this.eulaCtrl.enable();
+      this.eulaXCtrl.enable();
+      this.eulaCentralCtrl.enable();
     } else {
       this.passwordCtrl.disable();
       this.confirmPasswordCtrl.disable();
-      this.eulaCtrl.disable();
+      this.eulaXCtrl.disable();
+      this.eulaCentralCtrl.disable();
     }
   };
 
@@ -180,7 +191,8 @@ export class ActiveResetUserComponent implements OnInit {
           { value: '', disabled: true },
           [Validators.required, this.validatorsService.matchValidator('password')]
         ],
-        eula: [{ value: false, disabled: true }],
+        eulaX: [{ value: false, disabled: true }],
+        eulaCentral: [{ value: false, disabled: true }],
         eulaVersion: [this.envVariable.eulaVersion],
         verifyToken: ['', Validators.required]
       },
@@ -204,7 +216,8 @@ export class ActiveResetUserComponent implements OnInit {
 
               action: ACTIVE_RESET_ACTION.FORGOT_PASSWORD
             }));
-            this.eulaCtrl.setValue(true);
+            this.eulaXCtrl.setValue(true);
+            this.eulaCentralCtrl.setValue(true);
           }
 
           this.activeResetUserAction();

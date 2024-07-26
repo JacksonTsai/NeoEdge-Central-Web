@@ -42,7 +42,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 32px;
-    height: 650px;
+    height: 710px;
     width: 543px;
     min-width: 375px;
     min-height: 530px;
@@ -84,5 +84,13 @@
     padding-left: 16px;
     font-size: 12px;
     transform: translateY(-15px);
+  }
+}
+
+mat-checkbox {
+  --mdc-form-field-label-text-size: 14px;
+
+  + mat-checkbox {
+    margin-top: 16px;
   }
 }

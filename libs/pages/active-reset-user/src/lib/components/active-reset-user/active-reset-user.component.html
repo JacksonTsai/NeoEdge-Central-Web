@@ -83,14 +83,24 @@
           <mat-error class="not-match-error">Password don't match.</mat-error>
         }
         @if (activeResetAction.ACTIVE_USER === pageState().action) {
-          <mat-checkbox color="primary" formControlName="eula">
+          <mat-checkbox color="primary" formControlName="eulaX">
             I have carefully reviewed and consented to the
             <a
               class="text-link"
               href="https://docs.neoedgecentral.com/legal/NeoEdgeX_EULA_1.0.pdf"
               target="_blank"
               rel="noreferrer noopener"
-              >End User License Agreement (EULA)</a
+              >NeoEdge X End User License Agreement (EULA)</a
+            >.
+          </mat-checkbox>
+          <mat-checkbox color="primary" formControlName="eulaCentral">
+            I have carefully reviewed and consented to the
+            <a
+              class="text-link"
+              href="https://docs.neoedgecentral.com/legal/NeoEdge_Central_EULA_1.0.pdf"
+              target="_blank"
+              rel="noreferrer noopener"
+              >NeoEdge Central End User License Agreement (EULA)</a
             >.
           </mat-checkbox>
         }
@@ -101,7 +111,9 @@
             mat-flat-button
             color="primary"
             (click)="onSubmit()"
-            [disabled]="form.invalid || !eulaCtrl.value || confirmPasswordCtrl.hasError('isNotMatch')"
+            [disabled]="
+              form.invalid || !eulaXCtrl.value || !eulaCentralCtrl.value || confirmPasswordCtrl.hasError('isNotMatch')
+            "
             id="active-reset-user-submit"
           >
             Submit
