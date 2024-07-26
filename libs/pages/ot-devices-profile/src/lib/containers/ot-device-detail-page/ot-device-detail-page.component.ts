@@ -7,6 +7,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import { RouterModule } from '@angular/router';
 import { NeSupportAppItemComponent } from '@neo-edge-web/components';
 import {
   IRtuProfileForUI,
@@ -35,6 +36,7 @@ import {
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     OtDeviceProfileComponent,
     OtTagsComponent,
     NeSupportAppItemComponent,

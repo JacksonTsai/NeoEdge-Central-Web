@@ -59,6 +59,11 @@ body {
   align-items: center;
   margin-bottom: 20px;
 
+  &.shift-up {
+    margin-top: -12px;
+    margin-bottom: 8px;
+  }
+
   .page-title {
     margin-bottom: 0;
   }
