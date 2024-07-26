@@ -100,6 +100,7 @@ export class NeMapComponent {
     this.initMap();
     this.onMapResize();
     map.on('click', (event: LatLng) => {
+      if (!this.isEdit()) return;
       this.handelCoordinate.emit(event.latlng);
       this.updateMarker({
         lat: event.latlng.lat,

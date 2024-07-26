@@ -25,6 +25,7 @@
     padding-top: 8px;
     padding-bottom: 8px;
     border-bottom: 1px solid $border-color;
+    word-break: break-word;
 
     &:hover {
       background-color: $hover-gray;

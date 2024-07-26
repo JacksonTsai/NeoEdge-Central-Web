@@ -1,5 +1,17 @@
-<h1 class="page-title">Gateway View - Profile</h1>
-<mat-card class="gateway-detail-wrapper">
+<div class="page-title-box shift-up">
+  <a
+    type="button"
+    mat-icon-button
+    color="primary"
+    class="btn"
+    [routerLink]="['/project/gateways']"
+    id="it-service-detail-back"
+  >
+    <mat-icon svgIcon="icon:arrow_left" color="primary" aria-hidden="false" aria-label="Back to IT service"></mat-icon>
+  </a>
+  <h1 class="page-title">{{ gwDetailStore.gatewayDetail()?.name }}</h1>
+</div>
+<mat-card class="gateway-detail-container">
   <div class="gateway-detail-wrapper">
     <div class="gateway-detail-wrapper__left">
       @if (gatewayStatusInfo()) {

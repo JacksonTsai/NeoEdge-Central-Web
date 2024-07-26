@@ -14,7 +14,7 @@ export interface IGetSubscriptionResp {
   channel: string;
   currency: string;
   extraFee: number;
-  hourlyRate: number;
+  dailyRate: number;
   planId: number;
   sales: string;
   status: number;

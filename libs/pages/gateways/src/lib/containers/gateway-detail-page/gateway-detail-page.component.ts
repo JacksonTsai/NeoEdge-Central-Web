@@ -1,8 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/auth-store';
 import { eventLogExcludeConfig } from '@neo-edge-web/configs';
 import { GatewayDetailService } from '@neo-edge-web/global-services';
@@ -51,6 +54,7 @@ enum GATEWAY_DETAIL_TAB {
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatTabsModule,
     GatewayProfileComponent,
     GatewayStatusInfoComponent,
@@ -58,6 +62,8 @@ enum GATEWAY_DETAIL_TAB {
     GatewayLogComponent,
     DeleteGatewayConfirmDialogComponent,
     MatCardModule,
+    MatButtonModule,
+    MatIconModule,
     GatewayHwInfoComponent,
     GatewayNeoedgxComponent,
     GatewayRemoteAccessComponent,

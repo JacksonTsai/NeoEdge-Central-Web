@@ -13,6 +13,7 @@ import {
   SUBSCRIPTION_LOADING,
   SUBSCRIPTION_PLAN
 } from '@neo-edge-web/models';
+import { currencyCustomPipe } from '@neo-edge-web/pipes';
 import { datetimeFormat } from '@neo-edge-web/utils';
 @Component({
   selector: 'ne-subscription-plan',
@@ -24,7 +25,8 @@ import { datetimeFormat } from '@neo-edge-web/utils';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    currencyCustomPipe
   ],
   templateUrl: './subscription-plan.component.html',
   styleUrl: './subscription-plan.component.scss',

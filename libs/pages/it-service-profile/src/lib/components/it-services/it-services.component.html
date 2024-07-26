@@ -5,7 +5,7 @@
 <div class="top-action">
   <div class="top-action__left">
     @if (itServiceTableMode.IT_SERVICE_VIEW === tableMode() || itServiceTableMode.SELECTION === tableMode()) {
-      <mat-form-field class="search-input-field" appearance="outline" floatLabel="always">
+      <mat-form-field class="search-input-field" appearance="outline" floatLabel="always" subscriptSizing="dynamic">
         <mat-label>Search</mat-label>
         <input
           id="it-service-search-name-input"
@@ -46,9 +46,13 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let element">
-        <a [routerLink]="['/neoflow/it-service-profile/' + element.id]">
+        @if (itServiceTableMode.IT_SERVICE_VIEW === tableMode()) {
+          <a [routerLink]="['/neoflow/it-service-profile/' + element.id]">
+            {{ element.name }}
+          </a>
+        } @else {
           {{ element.name }}
-        </a>
+        }
       </td>
     </ng-container>
 

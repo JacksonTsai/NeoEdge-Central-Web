@@ -4,7 +4,7 @@
   display: flex;
   flex-wrap: wrap;
   padding: 16px;
-  padding-bottom: 0;
+  padding-left: 32px;
   gap: 32px;
   overflow: auto;
   &__left {
@@ -23,6 +23,10 @@
   fieldset + fieldset {
     margin-top: 16px;
   }
+}
+
+.gw-tab {
+  height: calc(100vh - 240px);
 }
 
 @media screen and (max-width: 1721px) {

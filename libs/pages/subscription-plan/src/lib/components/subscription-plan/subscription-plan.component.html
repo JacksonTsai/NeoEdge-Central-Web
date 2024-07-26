@@ -34,23 +34,40 @@
 
         <div class="item eula">
           <div class="label">NeoEdge Central EULA</div>
-          <div class="value">Link</div>
+          <div class="value">
+            <a
+              href="https://docs.neoedgecentral.com/legal/NeoEdge_Central_EULA_1.0.pdf"
+              target="_blank"
+              rel="noreferrer noopener"
+              >Link</a
+            >
+          </div>
         </div>
 
         <div class="current-plan__fee">
           <div class="item">
             <div class="label">Basic Fee</div>
-            <div class="value">{{ currentPlan().baseFee }} /{{ currentPlan().currency }}</div>
+            <div class="value">
+              {{ currentPlan().baseFee | currencyCustom: currentPlan().currency : false }} /{{ currentPlan().currency }}
+            </div>
           </div>
           <div class="divider"></div>
           <div class="item">
-            <div class="label">Usage Fee</div>
-            <div class="value">{{ currentPlan().hourlyRate }} /{{ currentPlan().currency }}</div>
+            <div class="label">Usage Daily Rate</div>
+            <div class="value">
+              {{ currentPlan().dailyRate | currencyCustom: currentPlan().currency : false }} /{{
+                currentPlan().currency
+              }}
+            </div>
           </div>
           <div class="divider"></div>
           <div class="item">
             <div class="label">Extra Service Fee</div>
-            <div class="value">{{ currentPlan().extraFee }} /{{ currentPlan().currency }}</div>
+            <div class="value">
+              {{ currentPlan().extraFee | currencyCustom: currentPlan().currency : false }} /{{
+                currentPlan().currency
+              }}
+            </div>
           </div>
         </div>
       </div>

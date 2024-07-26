@@ -113,11 +113,9 @@
 </div>
 
 <div class="text-center">
-  @if (!events().length) {
-    <p class="text-gray">No Data</p>
-  } @else if (!eventLogsList()?.lastEvaluatedKey) {
+  @if (events().length && !eventLogsList()?.lastEvaluatedKey) {
     <p class="text-gray">No more data available</p>
-  } @else {
+  } @else if (events().length) {
     <button type="button" mat-stroked-button color="primary" (click)="onUpdate('UPDATE')">Load More</button>
   }
 </div>

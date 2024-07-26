@@ -115,6 +115,11 @@
 
 .item {
   height: 60px;
+
+  a {
+    color: $primary;
+  }
+
   &.agreement-no {
     width: 100%;
   }
