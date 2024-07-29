@@ -28,7 +28,6 @@ import { AddNewOtDeviceDialogComponent } from '../../components/add-new-ot-devic
 import { AddOtDeviceProfileDialogComponent } from '../../components/add-ot-device-profile-dialog/add-ot-device-profile-dialog.component';
 import { CreateMessageSchemaComponent } from '../../components/create-message-schema/create-message-schema.component';
 import { ItServiceDetailDialogComponent } from '../../components/it-service-detail-dialog/it-service-detail-dialog.component';
-import { MessageLinkDataSourceComponent } from '../../components/message-link-datasource/message-link-datasource.component';
 import { MessageLinkDestinationComponent } from '../../components/message-link-destination/message-link-destination.component';
 import { NeoflowProfileComponent } from '../../components/neoflow-profile/neoflow-profile.component';
 import { OtDeviceDetailDialogComponent } from '../../components/ot-device-detail-dialog/ot-device-detail-dialog.component';
@@ -52,7 +51,6 @@ import { MessageLinkDataSourcePageComponent } from '../message-link-datasource-p
     SelectDataProviderComponent,
     NeoFlowNodeComponent,
     CreateMessageSchemaComponent,
-    MessageLinkDataSourceComponent,
     MessageLinkDestinationComponent,
     MessageLinkDataSourcePageComponent,
     SelectMessageDestinationComponent

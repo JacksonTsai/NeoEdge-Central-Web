@@ -1,5 +1,8 @@
 import { INeoFlowNode } from '@neo-edge-web/models';
 
+// eslint-disable-next-line no-var
+declare var LeaderLine: any;
+
 const color = {
   Tag: '#3bcbeb',
   Static: '#1d50a2',

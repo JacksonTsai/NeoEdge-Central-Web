@@ -1,4 +1,4 @@
-import { INeoFlowNode } from '@neo-edge-web/models';
+import { INeoFlowNode, LeaderLine } from '@neo-edge-web/models';
 
 export const isExistConnection = (source: INeoFlowNode, target: INeoFlowNode, curConnection: LeaderLine[]) => {
   return curConnection.findIndex((conn: any) => conn.start.id === source.id && conn.end.id === target.id) > -1

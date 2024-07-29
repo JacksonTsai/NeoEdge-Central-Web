@@ -1,5 +1,6 @@
 import { IGetUserProfileResp } from './auth.model';
 import { IItService } from './it-service.model';
+import { LeaderLine } from './leader-line.model';
 import { IOtDevice } from './ot-devices.model';
 import { ISupportApps } from './support-apps.model';
 

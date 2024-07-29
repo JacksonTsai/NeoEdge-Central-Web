@@ -13,6 +13,7 @@ export * from './ipcs.model';
 export * from './it-service-setting.model';
 export * from './it-service.model';
 export * from './language.model';
+export * from './leader-line.model';
 export * from './license.model';
 export * from './map.model';
 export * from './ne-menu.model';

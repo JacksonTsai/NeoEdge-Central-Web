@@ -1,3 +1,4 @@
+import { LeaderLine } from './leader-line.model';
 import { INeoFlowNode, INeoFlowNodeGroup } from './neoflow-node.model';
 
 export interface INeoFlowConnectionState {
