@@ -1,1 +1,13 @@
-<p>live-monitor-control works!</p>
+<div class="lm-ctrl">
+  <div class="lm-ctrl__l">
+    @if (!isRunning()) {
+      <mat-checkbox class="example-margin" color="primary" [(ngModel)]="useReset">Restart apps</mat-checkbox>
+      <button type="button" color="primary" mat-flat-button (click)="onStart()">Monitor</button>
+    } @else {
+      <button type="button" color="warn" mat-flat-button (click)="onStop()">Stop</button>
+    }
+  </div>
+  <div class="lm-ctrl__r">
+    <button id="live-monitor-dialog-close-btn" type="button" mat-stroked-button mat-dialog-close>Close</button>
+  </div>
+</div>

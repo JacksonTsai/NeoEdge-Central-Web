@@ -16,5 +16,9 @@
 </mat-dialog-content>
 
 <mat-dialog-actions class="dialog__action">
-  <button id="live-monitor-dialog-close-btn" type="button" mat-stroked-button mat-dialog-close>Close</button>
+  <ne-live-monitor-control
+    [isRunning]="isRunning()"
+    (handleStart)="onStartMonitor($event)"
+    (handleStop)="onStopMonitor()"
+  ></ne-live-monitor-control>
 </mat-dialog-actions>

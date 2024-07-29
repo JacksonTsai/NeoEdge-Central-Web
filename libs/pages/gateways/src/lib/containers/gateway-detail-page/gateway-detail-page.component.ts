@@ -352,7 +352,7 @@ export class GatewayDetailPageComponent {
 
   onTabChange = (event: MatTabChangeEvent): void => {
     this.tabIndex.set(event.index);
-    if (GATEWAY_DETAIL_TAB.LOG === event.index) {
+    if (GATEWAY_DETAIL_TAB.LOG === event.index || GATEWAY_DETAIL_TAB.NEOFLOW === event.index) {
       if (!this.eventDoc()) {
         this.gwDetailStore.getEventDoc();
       }

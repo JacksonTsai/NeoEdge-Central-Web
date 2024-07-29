@@ -1,3 +1,5 @@
+@use 'colors' as *;
+
 :host {
   --mat-expansion-header-text-size: 14px;
 
@@ -10,12 +12,32 @@ mat-card {
 }
 
 .lm-log {
+  font-size: 14px;
+
   &-wrapper {
     height: 300px;
     overflow-y: auto;
   }
 
+  &__datetime {
+    margin-right: 8px;
+  }
+
+  &__content {
+    color: $primary;
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+
   &__detail {
+    margin-top: 8px;
+    padding: 8px;
     font-size: 12px;
+    background-color: $hover-gray;
+    border: 1px solid $border-color;
   }
 }

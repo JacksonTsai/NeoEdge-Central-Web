@@ -52,3 +52,17 @@
     }
   }
 }
+
+::ng-deep {
+  .live-monitor {
+    &__title {
+      margin-bottom: 16px;
+      color: $primary;
+    }
+
+    &__sub-title {
+      margin-bottom: 8px;
+      color: $accent;
+    }
+  }
+}
