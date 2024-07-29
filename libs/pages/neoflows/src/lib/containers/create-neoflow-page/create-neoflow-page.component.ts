@@ -106,6 +106,8 @@ export class CreateNeoflowPageComponent implements OnInit {
           return this.#createNeoFlowStore.addedIt()?.length > 0 ? false : true;
         case CREATE_NEOFLOW_STEP.createMessageSchema:
           return this.form.get(this.stepperName).invalid;
+        case CREATE_NEOFLOW_STEP.linkDataSource:
+          return this.#createNeoFlowStore.dsToMessageConnection()?.length > 0 ? false : true;
       }
     }
     return false;
@@ -413,65 +415,4 @@ export class CreateNeoflowPageComponent implements OnInit {
       )
       .subscribe();
   }
-
-  // constructor() {
-  //   Object.keys(window).forEach((key) => {
-  //     if (/^on/.test(key)) {
-  //       window.addEventListener(key.slice(2), (event) => {
-  //         console.log(this.#createNeoFlowStore.connection());
-  //         this.#createNeoFlowStore.connection().forEach((line) => {
-  //           line.position();
-  //         });
-  //       });
-  //     }
-  //   });
-  // }
-
-  // selectedNode = signal<INeoFlowNode[]>([]);
-  // otDevices: INeoFlowNode[] = [
-  //   {
-  //     id: 'OT_DEVICE-ABC/Tag/myTag1',
-  //     name: 'myTag1',
-  //     socket: NEOFLOW_SOCKET.OUTPUT,
-  //     dataClass: NEOFLOW_DATA_CLASS.TAG
-  //   },
-  //   {
-  //     id: 'OT_DEVICE-ABC/Tag/myTag2',
-  //     name: 'tag2',
-  //     socket: NEOFLOW_SOCKET.OUTPUT,
-  //     dataClass: NEOFLOW_DATA_CLASS.TAG
-  //   }
-  // ];
-
-  // message: INeoFlowNode[] = [
-  //   {
-  //     id: 'message/Tag/messageTag1',
-  //     name: 'messageTag1',
-  //     socket: NEOFLOW_SOCKET.INPUT,
-  //     dataClass: NEOFLOW_DATA_CLASS.TAG
-  //   },
-  //   {
-  //     id: 'message/Tag/messageTag2',
-  //     name: 'messageTag2',
-  //     socket: NEOFLOW_SOCKET.INPUT,
-  //     dataClass: NEOFLOW_DATA_CLASS.TAG
-  //   }
-  // ];
-
-  // line: LeaderLine;
-
-  // onSelectedNode = (event: INeoFlowNode) => {
-  //   this.selectedNode().push(event);
-  //   if (this.selectedNode().length === 2) {
-  //     this.line = new LeaderLine(
-  //       document.getElementById(this.selectedNode()[0].id),
-  //       document.getElementById(this.selectedNode()[1].id),
-  //       { startPlug: 'disc', endPlug: 'disc', size: 1 }
-  //     );
-
-  //     this.#createNeoFlowStore.updateConnection(this.line);
-  //     this.selectedNode.set([]);
-  //     console.log(this.line);
-  //   }
-  // };
 }

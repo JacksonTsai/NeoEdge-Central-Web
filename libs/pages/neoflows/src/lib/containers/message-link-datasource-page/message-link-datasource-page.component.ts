@@ -8,7 +8,6 @@ import {
   effect,
   inject,
   input,
-  signal,
   ViewChild,
   ViewContainerRef
 } from '@angular/core';
@@ -24,6 +23,7 @@ import {
   SUPPORT_APPS_OT_DEVICE
 } from '@neo-edge-web/models';
 import { MathCalculatorComponent } from '@neo-edge-web/processor-1.0.0';
+import { CreateNeoFlowsStore } from '../../stores/create-neoflows.store';
 import { NeoFlowsConnectionStore } from '../../stores/neoflows-connection.store';
 
 @Component({
@@ -47,11 +47,15 @@ import { NeoFlowsConnectionStore } from '../../stores/neoflows-connection.store'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MessageLinkDataSourcePageComponent {
+  @ViewChild('container', { read: ViewContainerRef, static: true }) container: ViewContainerRef;
   @ViewChild(MatMenuTrigger) matMenuTrigger: MatMenuTrigger;
   otDevices = input<IOtDevice<any>[]>();
   processorVer = input('default');
   messageSchema = input<any[]>();
   #neoFlowsConnectionStore = inject(NeoFlowsConnectionStore);
+  #createNeoFlowStore = inject(CreateNeoFlowsStore);
+
+  texolTagDoc = this.#createNeoFlowStore.texolTagDoc;
   selectedNode = this.#neoFlowsConnectionStore.selectedNode;
 
   processorMenuOpt = computed(() => {
@@ -65,21 +69,11 @@ export class MessageLinkDataSourcePageComponent {
       () => {
         this.#neoFlowsConnectionStore.updateSourceNodes(this.sources());
         this.#neoFlowsConnectionStore.updateTargetNodes(this.destination());
+
+        this.#createNeoFlowStore.updateDsToMessageConnection(this.#neoFlowsConnectionStore.connection());
       },
       { allowSignalWrites: true }
     );
-
-    // ['click', 'scroll', 'resize'].forEach((event) => {
-    //   window.addEventListener(event, (_) => {
-    //     console.log();
-
-    //     this.#neoFlowsConnectionStore.connection().forEach((line) => {
-    //       if (line) {
-    //         line.position();
-    //       }
-    //     });
-    //   });
-    // });
 
     Object.keys(window).forEach((key) => {
       if (/^on/.test(key)) {
@@ -98,19 +92,19 @@ export class MessageLinkDataSourcePageComponent {
     if (this.otDevices()) {
       const sources: INeoFlowNodeGroup[] = this.otDevices().map((device: IOtDevice<any>) => {
         const nodeGroup: INeoFlowNodeGroup = {
+          id: `group_header/${device.name}/${device.name}`,
+          socket: NEOFLOW_SOCKET.OUTPUT,
           name: device.name,
           extended: true,
           nodes: []
         };
-
         if (device.appClass === SUPPORT_APPS_OT_DEVICE.MODBUS_RTU) {
           nodeGroup.nodes.push(...this.rtuDevice(device));
         } else if (device.appClass === SUPPORT_APPS_OT_DEVICE.MODBUS_TCP) {
-          console.log(SUPPORT_APPS_OT_DEVICE.MODBUS_TCP);
+          nodeGroup.nodes.push(...this.tcpDevice(device));
         } else {
-          console.log(SUPPORT_APPS_OT_DEVICE.TEXOL213MM2R1);
+          nodeGroup.nodes.push(...this.getTagsFromTexol(device));
         }
-
         return nodeGroup;
       });
       return sources;
@@ -131,7 +125,6 @@ export class MessageLinkDataSourcePageComponent {
                 name: tag.tagName,
                 socket: NEOFLOW_SOCKET.INPUT,
                 dataClass: tag.dataClass,
-                connectionLine: [],
                 properties: tag
               };
             })
@@ -145,65 +138,65 @@ export class MessageLinkDataSourcePageComponent {
     return [];
   });
 
+  tagObj = (device, tag) => ({
+    id: `${device.name}/${NEOFLOW_DATA_CLASS.TAG}/${tag.Name}`,
+    name: tag.Name,
+    socket: NEOFLOW_SOCKET.OUTPUT,
+    dataClass: NEOFLOW_DATA_CLASS.TAG,
+    properties: tag
+  });
+
   rtuDevice = (device: IOtDevice<any>) => {
     const commands = device.setting.Instances.RTU[0].Devices[0].Commands;
     const tags = Object.values(commands);
     const nodes = tags.map((tag: any) => {
-      return {
-        id: `${device.name}/${NEOFLOW_DATA_CLASS.TAG}/${tag.Name}`,
-        name: tag.Name,
-        socket: NEOFLOW_SOCKET.OUTPUT,
-        dataClass: NEOFLOW_DATA_CLASS.TAG,
-        connectionLine: [],
-        properties: tag
-      };
+      return { ...this.tagObj(device, tag) };
     });
     return nodes;
   };
+
+  tcpDevice = (device: IOtDevice<any>) => {
+    const commands = device.setting.Instances.TCP[0].Devices[0].Commands;
+    const tags = Object.values(commands);
+    const nodes = tags.map((tag: any) => {
+      return { ...this.tagObj(device, tag) };
+    });
+    return nodes;
+  };
+
+  getTagsFromTexol(device: IOtDevice<any>) {
+    const deviceCommand = device.setting?.Instances?.RTU[0]?.Devices[0];
+    const tags = [];
+    if (deviceCommand.Profile.Name === 'General.profile') {
+      const domains = deviceCommand.Profile.Domains;
+      tags.push(...this.texolTagDoc()['General']['allDomain']);
+      domains.forEach((d) => {
+        this.texolTagDoc()['General'][d].forEach((v) => tags.push(v));
+      });
+    } else {
+      const profileName = deviceCommand?.Profile?.Name.split('.');
+      if (profileName.length === 5) {
+        profileName.splice(1, 0, profileName[1]);
+      }
+      this.texolTagDoc()[profileName[0]][profileName[1]][profileName[2]][profileName[4]].forEach((v) => {
+        tags.push(v);
+      });
+    }
+
+    return tags.map((tag) => ({
+      id: `${device.name}/${NEOFLOW_DATA_CLASS.TAG}/${tag.TagName}`,
+      name: tag.TagName,
+      socket: NEOFLOW_SOCKET.OUTPUT,
+      dataClass: NEOFLOW_DATA_CLASS.TAG,
+      properties: tag
+    }));
+  }
 
   onSelectedNode = (event) => {
     this.#neoFlowsConnectionStore.updateSelectedNode(event);
   };
 
-  processorMenuPosition = signal({ x: 0, y: 0 });
-
-  onProcessorMenu(event: MouseEvent) {
-    event.preventDefault();
-    this.processorMenuPosition.set({ x: event.clientX + 8, y: event.clientY - 10 });
-    // this.contextMenuPosition.x =
-    // this.contextMenuPosition.y = event.clientY - 100 + 'px';
-
-    // this.contextMenu.menuData = { item };
-    this.matMenuTrigger.openMenu();
-  }
-
-  addProcessorUnit = (processor) => {
-    //
-  };
-
-  @ViewChild('container', { read: ViewContainerRef, static: true }) container: ViewContainerRef;
-
-  addProcessor(event, processor) {
-    // 清空容器 (如果需要)
-    // this.container.clear();
-    console.log(processor);
-
-    // const x = event.clientX;
-    // const y = event.clientY;
-
-    // const x = this.processorMenuPosition().x;
-    // const y = this.processorMenuPosition().y;
-
-    // console.log(x, y);
-
-    // 在容器中創建並插入 component
+  addProcessorUnit = (event, processor) => {
     const componentRef = this.container.createComponent(processor.component);
-
-    // componentRef.instance.clickEmit.subscribe((val) => console.log(processor));
-
-    // const element = (componentRef.hostView as any).rootNodes[0] as HTMLElement;
-    // element.style.position = 'relative';
-    // element.style.left = `1px`;
-    // element.style.top = `1px`;
-  }
+  };
 }

@@ -1,7 +1,11 @@
 <div class="neoflow-node-wrapper">
   @if (nodeGroup()) {
     <div class="group">
-      <div class="header-title" (click)="changeExpand()">{{ nodeGroup().name }}</div>
+      <div class="header">
+        <div class="header-title">
+          <span (click)="changeExpand()"> {{ nodeGroup().name }}</span>
+        </div>
+      </div>
       @for (node of nodeGroup().nodes; track node.name) {
         <div
           class="node"

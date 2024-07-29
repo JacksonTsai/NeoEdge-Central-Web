@@ -1,13 +1,6 @@
 import { inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { selectUserProfile } from '@neo-edge-web/auth-store';
-import {
-  ItServiceService,
-  NeoFlowsService,
-  OtDevicesService,
-  OtTexolService,
-  SupportAppsService
-} from '@neo-edge-web/global-services';
+import { ItServiceService, OtDevicesService, OtTexolService, SupportAppsService } from '@neo-edge-web/global-services';
 import {
   CREATE_NEOFLOW_LOADING,
   ICreateNeoFlowState,
@@ -31,9 +24,9 @@ const initialState: ICreateNeoFlowState = {
   addedOt: [],
   addedIt: [],
   addedMessageSchema: [],
-  nodeConnection: [],
   texolTagDoc: null,
   userProfile: null,
+  dsToMessageConnection: [],
   isLoading: CREATE_NEOFLOW_LOADING.NONE
 };
 
@@ -44,13 +37,18 @@ export const CreateNeoFlowsStore = signalStore(
   withMethods(
     (
       store,
-      dialog = inject(MatDialog),
-      nfService = inject(NeoFlowsService),
       otDevicesService = inject(OtDevicesService),
       itServiceService = inject(ItServiceService),
       supportAppsService = inject(SupportAppsService),
       otTexolService = inject(OtTexolService)
     ) => ({
+      updateDsToMessageConnection: rxMethod<LeaderLine[]>(
+        pipe(
+          map((dsToMessageConnection) => {
+            patchState(store, { dsToMessageConnection });
+          })
+        )
+      ),
       updateNeoFlowProfile: rxMethod<any>(
         pipe(
           map((neoflowProfile) => {
@@ -176,15 +174,6 @@ export const CreateNeoFlowsStore = signalStore(
                 });
               })
             );
-          })
-        )
-      ),
-      updateConnection: rxMethod<LeaderLine>(
-        pipe(
-          map((line) => {
-            patchState(store, {
-              nodeConnection: [...store.nodeConnection(), line]
-            });
           })
         )
       )

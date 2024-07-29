@@ -8,14 +8,11 @@ const color = {
 
 export const connectNode = ({
   source,
-  target,
-  appendRemove = true,
-  delFn
+  target
 }: {
   source: INeoFlowNode;
   target: INeoFlowNode;
   appendRemove: boolean;
-  delFn?: (v: any) => void;
 }) => {
   const dataClass = source?.id?.split('/')[1] ?? 'Tag';
   const line = new LeaderLine(document.getElementById(source.id), document.getElementById(target.id), {
@@ -24,10 +21,6 @@ export const connectNode = ({
     color: color[dataClass],
     size: 2
   });
-
-  // if (appendRemove) {
-  //   appendRemoveBtn(line, source, target, delFn);
-  // }
 
   return line;
 };

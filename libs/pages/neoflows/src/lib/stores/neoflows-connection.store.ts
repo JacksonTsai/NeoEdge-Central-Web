@@ -1,6 +1,6 @@
 import { INeoFlowConnectionState, INeoFlowNode, INeoFlowNodeGroup, NEOFLOW_SOCKET } from '@neo-edge-web/models';
 import { connectNode } from '@neo-edge-web/utils';
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { map, pipe } from 'rxjs';
 import {
@@ -35,7 +35,6 @@ export const NeoFlowsConnectionStore = signalStore(
           })
         ]
       });
-
       delRemoveBtnByLine(line);
       delConnectLine(line);
     }
@@ -74,14 +73,12 @@ export const NeoFlowsConnectionStore = signalStore(
             if (inputSocketExistConnLine) {
               store.removeConnect(inputSocketExistConnLine);
               delRemoveBtnByLine(inputSocketExistConnLine);
-              // inputSocketExistConnLine.remove();
             }
 
             const line = connectNode({
               source: store.selectedNode()[0],
               target: node,
-              appendRemove: true,
-              delFn: store.removeConnect
+              appendRemove: true
             });
 
             const elmWrapper = document.getElementById('processor-wrapper');
@@ -90,9 +87,7 @@ export const NeoFlowsConnectionStore = signalStore(
 
             lastLine.setAttribute('data-line-start', store.selectedNode()[0].id);
             lastLine.setAttribute('data-line-end', node.id);
-
             elmWrapper.appendChild(lastLine);
-
             elmWrapper.style.transform = 'none';
             const rectWrapper = elmWrapper.getBoundingClientRect();
             elmWrapper.style.transform =
@@ -101,7 +96,6 @@ export const NeoFlowsConnectionStore = signalStore(
               'px, ' +
               (rectWrapper.top + pageYOffset) * -1 +
               'px)';
-
             line.position();
 
             patchState(store, { connection: [...store.connection(), line], selectedNode: [] });
@@ -110,12 +104,5 @@ export const NeoFlowsConnectionStore = signalStore(
         })
       )
     )
-  })),
-  withHooks((store) => {
-    return {
-      onInit() {
-        //
-      }
-    };
-  })
+  }))
 );

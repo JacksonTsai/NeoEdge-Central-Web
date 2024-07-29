@@ -1,10 +1,11 @@
 <div class="processor-list">
   @for (processor of processorMenuOpt(); let i = $index; track processor.displayName) {
-    <button type="button" mat-stroked-button color="primary" (click)="addProcessor($event, processor)">
+    <button type="button" mat-stroked-button color="primary" (click)="addProcessorUnit($event, processor)">
       {{ processor.displayName }}
     </button>
   }
 </div>
+
 <div class="message-link-datasource">
   <div class="message-link-datasource__source">
     @for (source of sources(); track source.name) {
@@ -31,18 +32,3 @@
     }
   </div>
 </div>
-
-<!-- <div
-  style="visibility: hidden; position: fixed"
-  [style.left]="processorMenuPosition().x + 'px'"
-  [style.top]="processorMenuPosition().y + 'px'"
-  [matMenuTriggerFor]="processorMenu"
-></div>
-<mat-menu #processorMenu="matMenu">
-  <ng-template matMenuContent>
-    @for (processor of processorMenuOpt(); track processor.displayName) {
-      <button mat-menu-item (click)="addProcessorUnit(processor)">{{ processor.displayName }}</button>
-      <button mat-menu-item (click)="addComponent($event)">{{ processor.displayName }}</button>
-    }
-  </ng-template>
-</mat-menu> -->

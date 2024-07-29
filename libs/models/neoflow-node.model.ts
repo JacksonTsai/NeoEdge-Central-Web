@@ -1,5 +1,7 @@
 export interface INeoFlowNodeGroup {
+  id: string;
   name: string;
+  socket: NEOFLOW_SOCKET;
   extended: boolean;
   nodes: INeoFlowNode[];
   properties?: any;
@@ -10,14 +12,12 @@ export interface INeoFlowNode {
   name: string;
   socket: NEOFLOW_SOCKET;
   dataClass: NEOFLOW_DATA_CLASS;
-  connectionLine?: LeaderLine[];
   property?: any;
 }
 
 export enum NEOFLOW_SOCKET {
   INPUT,
-  OUTPUT,
-  INPUT_OUTPUT
+  OUTPUT
 }
 
 export enum NEOFLOW_DATA_CLASS {

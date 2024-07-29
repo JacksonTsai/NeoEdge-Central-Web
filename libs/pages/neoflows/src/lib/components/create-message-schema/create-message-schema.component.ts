@@ -183,14 +183,17 @@ export class CreateMessageSchemaComponent implements OnInit, AfterViewInit, Cont
       const domains = deviceCommand.Profile.Domains;
       const tags = [];
       domains.forEach((d) => {
-        tags.push(...this.texolTagDoc()['General'][d].map((v) => this.setMessageTagFg(`${v.TagName}`, 'Tag', '')));
+        tags.push(
+          ...this.texolTagDoc()['General']['allDomain'].map((v) => this.setMessageTagFg(`${v.TagName}`, 'Tag', '')),
+          ...this.texolTagDoc()['General'][d].map((v) => this.setMessageTagFg(`${v.TagName}`, 'Tag', ''))
+        );
       });
       return tags;
     } else {
       const profileName = deviceCommand?.Profile?.Name.split('.');
 
       if (profileName.length === 5) {
-        profileName.splice(1, 0, 'NonDriveEnd');
+        profileName.splice(1, 0, profileName[1]);
       }
 
       return this.texolTagDoc()[profileName[0]][profileName[1]][profileName[2]][profileName[4]].map((v) =>

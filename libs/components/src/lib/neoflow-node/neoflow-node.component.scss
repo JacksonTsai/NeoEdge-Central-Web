@@ -6,15 +6,17 @@
     margin-bottom: 16px;
     border: 1px solid $black-gary;
     position: relative;
-    & + .group {
-      margin-top: 16px;
-    }
-    .header-title {
-      padding: 16px;
+    margin-top: 16px;
+    .header {
       border-bottom: 1px solid $black-gary;
-      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .header-title {
+        padding: 16px;
+        cursor: pointer;
+      }
     }
-
     .node {
       padding: 8px;
       display: flex;
@@ -23,7 +25,6 @@
       & + .node {
         border-top: 1px solid $black-gary;
       }
-
       &__name {
         flex: 1;
         text-align: left;
@@ -37,36 +38,6 @@
         flex: 1;
         display: flex;
         justify-content: flex-end;
-
-        .socket {
-          position: relative;
-          border-radius: 50%;
-          width: 16px;
-          height: 16px;
-          &.tag {
-            border: 1px solid $neoflow-data-tag;
-            &.selected {
-              background-color: $neoflow-data-tag;
-            }
-          }
-          &.static {
-            border: 1px solid $neoflow-data-static;
-            &.selected {
-              background-color: $neoflow-data-static;
-            }
-          }
-          &.attribute {
-            border: 1px solid $neoflow-data-attribute;
-            &.selected {
-              background-color: $neoflow-data-attribute;
-            }
-          }
-
-          // &.selected {
-          //   background-color: $primary;
-          // }
-          cursor: pointer;
-        }
       }
       &__collapse {
         position: absolute;
@@ -90,4 +61,37 @@
       }
     }
   }
+}
+
+.socket {
+  position: relative;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+
+  &.header-socket {
+    border: 1px solid $black-gary;
+    &.selected {
+      background-color: $black-gary;
+    }
+  }
+  &.tag {
+    border: 1px solid $neoflow-data-tag;
+    &.selected {
+      background-color: $neoflow-data-tag;
+    }
+  }
+  &.static {
+    border: 1px solid $neoflow-data-static;
+    &.selected {
+      background-color: $neoflow-data-static;
+    }
+  }
+  &.attribute {
+    border: 1px solid $neoflow-data-attribute;
+    &.selected {
+      background-color: $neoflow-data-attribute;
+    }
+  }
+  cursor: pointer;
 }
