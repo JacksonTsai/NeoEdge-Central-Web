@@ -1,3 +1,5 @@
+import { downloadFile } from './download-file.helper';
+
 export const csvToObj = (content) => {
   const rows = content.trim().split('\n');
   const headers = rows[0].split(',').map((header) => header.trim());
@@ -45,15 +47,5 @@ export const downloadCSV = (csv: ArrayBuffer | any[], filename, isCsvFormat = fa
     return;
   }
 
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  if (link.download !== undefined) {
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  downloadFile(csvContent as ArrayBuffer, filename);
 };

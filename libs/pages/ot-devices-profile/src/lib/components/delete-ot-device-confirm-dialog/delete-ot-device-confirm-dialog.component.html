@@ -1,16 +1,16 @@
-<h1 mat-dialog-title>Delete OT Device</h1>
+<h1 mat-dialog-title>Delete OT Device Profile</h1>
 <mat-dialog-content>
   <div>
-    This operation will delete the OT Device (
+    This operation will delete the OT Device Profile (
     <span color="danger">
       {{ data.device.name }}
     </span>
     ) and associated message flows on NeoEdge Central.
   </div>
-  <div>Please enter the OT Device name to confirm.</div>
+  <div>Please enter the OT Device Profile name to confirm.</div>
 
   <mat-form-field class="login-form-field" appearance="outline" floatLabel="always">
-    <mat-label>Name</mat-label>
+    <mat-label>Input OT Device Profile name</mat-label>
     <input id="delete-ot-devcie-dialog-name-input" matInput [formControl]="nameCtrl" type="text" maxlength="128" />
     @if (nameCtrl.hasError('required')) {
       <mat-error>Required.</mat-error>

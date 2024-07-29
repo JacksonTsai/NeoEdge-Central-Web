@@ -19,3 +19,27 @@ a.text-link {
 .text-gray {
   color: $text-gary;
 }
+
+.icon-text {
+  display: flex;
+  align-items: center;
+
+  &.text-right {
+    justify-content: flex-end;
+  }
+
+  &.icon-end {
+    mat-icon {
+      margin-left: 8px;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.text-warning {
+  color: $warning;
+}
+
+.text-underline {
+  text-decoration: underline;
+}

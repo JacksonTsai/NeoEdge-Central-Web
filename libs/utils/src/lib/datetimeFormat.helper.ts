@@ -16,6 +16,18 @@ export const dateFormat = (timestamp: number | Date): string => {
 
 export const dateDashToSlash = (date: string): string => date?.replace(/-/g, '/') || '';
 
+export const setTimeToStartOfDay = (date: Date): Date => {
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+  return startOfDay;
+};
+
+export const setTimeToEndOfDay = (date: Date): Date => {
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 0);
+  return endOfDay;
+};
+
 export const getPastDay = (days: number, now?: Date): Date => {
   const nowCurrent = now || new Date();
   return dayjs(nowCurrent).subtract(days, 'day').toDate();
@@ -28,6 +40,16 @@ export const getPastMonths = (months: number, now?: Date): Date => {
 
 export const getTimeZone = (): string => {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+export const getUTCOffset = () => {
+  const date = new Date();
+  const offset = date.getTimezoneOffset();
+  const absoluteOffset = Math.abs(offset);
+  const hours = Math.floor(absoluteOffset / 60);
+  const minutes = absoluteOffset % 60;
+  const sign = offset > 0 ? '-' : '+';
+  return `UTC${sign}${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };
 
 /**

@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { NeMapMultipleMarkComponent } from '@neo-edge-web/components';
 import {
   DASHBOARD_GATEWAY_STATUE,
-  GATEWAY_STATUE,
   ICategoryCoordinate,
   STATUS_COLORS,
   TDashboardGatewayStatus,
@@ -101,6 +100,6 @@ export class DashboardGatewayLocationComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    this.gatewayStatusSelect.set(this.createEnumArray(GATEWAY_STATUE));
+    this.gatewayStatusSelect.set(this.createEnumArray(DASHBOARD_GATEWAY_STATUE));
   }
 }

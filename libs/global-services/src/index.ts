@@ -10,6 +10,7 @@ export * from './lib/http-interceptor';
 export * from './lib/http-service';
 export * from './lib/ipc-services';
 export * from './lib/it-service-services';
+export * from './lib/license-services';
 export * from './lib/neoflows-services';
 export * from './lib/ot-devices-services';
 export * from './lib/projects-services';

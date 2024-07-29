@@ -57,7 +57,7 @@
 </div>
 
 <div class="log-table">
-  <table mat-table [dataSource]="dataSource" [fixedLayout]="true">
+  <ne-expansion-table mat-table [dataSource]="dataSource" [columns]="displayedColumns" [fixedLayout]="true">
     <ng-container matColumnDef="timestamp">
       <th mat-header-cell *matHeaderCellDef>Datetime</th>
       <td mat-cell *matCellDef="let element">{{ (element?.timestamp | dateTimeFormat) ?? '-' }}</td>
@@ -85,7 +85,15 @@
 
     <ng-container matColumnDef="severity">
       <th mat-header-cell *matHeaderCellDef>Severity</th>
-      <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.severity ?? '-' }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span class="icon-text">
+          <mat-icon
+            [ngClass]="eventDoc()['' + element.eventId]?.severity === 'Notice' ? 'text-gray' : 'text-warning'"
+            [svgIcon]="eventDoc()['' + element.eventId]?.severity === 'Notice' ? 'icon:info' : 'icon:notifications'"
+          ></mat-icon>
+          {{ eventDoc()?.[element?.eventId]?.severity ?? '-' }}
+        </span>
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="content">
@@ -93,17 +101,21 @@
       <td mat-cell *matCellDef="let element">{{ eventDoc()?.[element?.eventId]?.content ?? '-' }}</td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="dispalyedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: dispalyedColumns"></tr>
-  </table>
+    <ng-template let-data #detail>
+      <h3 class="card__sub-title">Content</h3>
+      <div>{{ eventDoc()?.[data?.eventId]?.content ?? '-' }}</div>
+      <div>"eventData": {{ data.eventData | json }}</div>
+    </ng-template>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </ne-expansion-table>
 </div>
 
 <div class="text-center">
-  @if (!events().length) {
-    <p class="text-gray">No Data</p>
-  } @else if (!eventLogsList()?.lastEvaluatedKey) {
+  @if (events().length && !eventLogsList()?.lastEvaluatedKey) {
     <p class="text-gray">No more data available</p>
-  } @else {
+  } @else if (events().length) {
     <button type="button" mat-stroked-button color="primary" (click)="onUpdate('UPDATE')">Load More</button>
   }
 </div>

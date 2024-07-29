@@ -4,7 +4,7 @@
     [profileMode]="itProfileMode.NEOFLOW_VIEW"
     [itServiceDetail]="data.itServiceDetail"
     [appData]="appData()"
-    (handleSubmitItService)="handleSaveItServiceToNeoFlow.emit($event)"
+    (handleSubmitItService)="onSaveItServiceToNeoFlow($event)"
     (handleCloseDialog)="onClose()"
   ></ne-it-service-detail>
 </mat-dialog-content>

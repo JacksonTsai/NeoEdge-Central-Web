@@ -50,15 +50,14 @@ export class GatewaysPageComponent {
         if (this.isLoading() === GATEWAYS_LOADING.REFRESH_TABLE) {
           this.gatewaysStore.queryGatewayTableByPage({ size: this.tableSize() });
         }
+
+        if (this.isLoading() === GATEWAYS_LOADING.REFRESH_LABEL) {
+          this.gatewaysStore.getProjectLabels();
+          this.gatewaysStore.queryGatewayTableByPage({ size: this.tableSize() });
+        }
       },
       { allowSignalWrites: true }
     );
-
-    effect(() => {
-      if (this.isLoading() === GATEWAYS_LOADING.REFRESH_LABEL) {
-        this.gatewaysStore.getProjectLabels();
-      }
-    });
   }
 
   onAddGateway = () => {

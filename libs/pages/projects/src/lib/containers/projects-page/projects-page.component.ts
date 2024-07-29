@@ -97,7 +97,8 @@ export class ProjectsPageComponent {
     this.globalStore.dispatch(
       AuthStore.changeCurrentProjectIdAction({
         currentProjectId: event.id,
-        currentProjectName: event.name
+        currentProjectName: event.name,
+        currentProjectShortName: event.shortName
       })
     );
   };

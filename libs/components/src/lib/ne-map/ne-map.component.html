@@ -1,4 +1,6 @@
 <div class="map-wrapper">
   <div class="ne-map" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)"></div>
-  <div [ngClass]="{ 'edit-disabled': !isEdit() }"></div>
+  @if (isEdit()) {
+    <p class="map-tip">Click on the map to change the marker's latitude and longitude</p>
+  }
 </div>

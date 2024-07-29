@@ -8,8 +8,10 @@ import { SafePipe } from '@neo-edge-web/directives';
 import {
   BOOLEAN_STATUS,
   GATEWAY_SSH_MODE,
+  GATEWAY_SSH_STATUS,
   GATEWAY_STATUE,
   GW_CURRENT_MODE,
+  IGatewaySSHStatus,
   PERMISSION,
   STATUS_COLORS,
   TGatewayStatusInfo
@@ -26,6 +28,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
     SafePipe,
     MatMenuModule,
     MatButtonModule,
+    MatIconModule,
     NgxPermissionsModule,
     MatTooltipModule
   ],
@@ -39,8 +42,10 @@ export class GatewayStatusInfoComponent {
   @Output() handleDeleteGateway = new EventEmitter();
   @Output() handleGetInstallCommand = new EventEmitter();
   @Output() handleRebootGw = new EventEmitter();
+  @Output() handleSwitchSSHMode = new EventEmitter();
 
   gatewayStatusInfo = input<TGatewayStatusInfo | null>(null);
+  sshStatus = input<IGatewaySSHStatus | null>(null);
   isDetachMode = input(false);
   isWaitingOnBoard = input(false);
   isConnected = input(false);
@@ -65,7 +70,7 @@ export class GatewayStatusInfoComponent {
     }
 
     if (this.gatewayStatusInfo().isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelName}.png`;
+      return `/assets/images/default_${this.gatewayStatusInfo().ipcVendorName.toLowerCase()}_${this.gatewayStatusInfo().ipcModelName.replace(/\s+/g, '_')}.png`;
     } else {
       return '/assets/images/default_gateway.png';
     }
@@ -106,5 +111,10 @@ export class GatewayStatusInfoComponent {
 
   onReboot = () => {
     this.handleRebootGw.emit();
+  };
+
+  onSwitchSSHMode = () => {
+    const currentStatus = this.sshStatus()?.current?.connectionStatus || false;
+    this.handleSwitchSSHMode.emit(!currentStatus ? GATEWAY_SSH_STATUS.ENABLED : GATEWAY_SSH_STATUS.DISABLED);
   };
 }

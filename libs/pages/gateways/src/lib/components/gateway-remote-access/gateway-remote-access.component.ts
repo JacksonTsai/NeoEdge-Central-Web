@@ -10,6 +10,7 @@ import {
   input
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { GATEWAY_LOADING, GATEWAY_SSH_STATUS, IGatewaySSHStatus } from '@neo-edge-web/models';
@@ -17,7 +18,7 @@ import { GATEWAY_LOADING, GATEWAY_SSH_STATUS, IGatewaySSHStatus } from '@neo-edg
 @Component({
   selector: 'ne-gateway-remote-access',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatSlideToggleModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, MatSlideToggleModule, MatIconModule, MatButtonModule],
   templateUrl: './gateway-remote-access.component.html',
   styleUrl: './gateway-remote-access.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

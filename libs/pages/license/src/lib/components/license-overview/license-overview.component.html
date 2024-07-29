@@ -1,0 +1,29 @@
+<h2 class="card__title">License Overview</h2>
+<ne-expansion-table [dataSource]="dataSource" [columns]="displayedColumns">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>License</th>
+    <td mat-cell *matCellDef="let element">
+      <span class="text-underline cursor-pointer">{{ element.name }}</span>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="purchseQty">
+    <th class="text-center" mat-header-cell *matHeaderCellDef>purchse Qty</th>
+    <td class="text-center" mat-cell *matCellDef="let element">{{ element.quantity }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="consumedQty">
+    <th class="text-center" mat-header-cell *matHeaderCellDef>Consumed Qty</th>
+    <td class="text-center" mat-cell *matCellDef="let element">{{ element.consumedQty }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="avaliableQty">
+    <th class="text-center" mat-header-cell *matHeaderCellDef>Avaliable Qty</th>
+    <td class="text-center" mat-cell *matCellDef="let element">{{ element.avaliableQty }}</td>
+  </ng-container>
+
+  <ng-template let-data #detail>
+    <h3 class="card__sub-title">License Consume Detail - {{ data.name }}</h3>
+    <ne-license-consume-detail [dataTable]="data.projects"></ne-license-consume-detail>
+  </ng-template>
+</ne-expansion-table>

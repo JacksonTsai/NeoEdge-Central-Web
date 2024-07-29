@@ -109,8 +109,12 @@ export class ProjectsService {
           duration: 5000
         });
       }),
-      catchError((err) => {
-        this.#snackBar.open('Delete failure.', 'X', {
+      catchError((err: HttpErrorResponse) => {
+        const errorMessage =
+          err.error?.status === 'ProjectNotEmpty'
+            ? `Before deleting the project (${name}), you must first delete all Gateways under this project.`
+            : 'Delete failure.';
+        this.#snackBar.open(errorMessage, 'X', {
           horizontalPosition: 'end',
           verticalPosition: 'bottom',
           duration: 5000
@@ -164,8 +168,8 @@ export class ProjectsService {
       })
     );
 
-  getProjectEventLogs$ = (eventLogsParams: TGetProjectEventLogsParams) => {
-    const params = setParamsArrayWithKey(eventLogsParams);
+  getProjectEventLogs$ = (queryStr: TGetProjectEventLogsParams) => {
+    const params = setParamsArrayWithKey(queryStr);
     return this.#http.get(`${this.EVENT_LOGS_BY_PROJECT_ID_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project event logs failure.', 'X', {

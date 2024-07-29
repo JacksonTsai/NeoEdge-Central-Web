@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild, computed, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { NeoFlowNodeComponent } from '@neo-edge-web/components';
 import {
   ItServiceDetailService,
   ItServiceService,
@@ -27,13 +28,13 @@ import { AddNewOtDeviceDialogComponent } from '../../components/add-new-ot-devic
 import { AddOtDeviceProfileDialogComponent } from '../../components/add-ot-device-profile-dialog/add-ot-device-profile-dialog.component';
 import { CreateMessageSchemaComponent } from '../../components/create-message-schema/create-message-schema.component';
 import { ItServiceDetailDialogComponent } from '../../components/it-service-detail-dialog/it-service-detail-dialog.component';
-import { MessageLinkDatasourceComponent } from '../../components/message-link-datasource/message-link-datasource.component';
 import { MessageLinkDestinationComponent } from '../../components/message-link-destination/message-link-destination.component';
 import { NeoflowProfileComponent } from '../../components/neoflow-profile/neoflow-profile.component';
 import { OtDeviceDetailDialogComponent } from '../../components/ot-device-detail-dialog/ot-device-detail-dialog.component';
 import { SelectDataProviderComponent } from '../../components/select-data-provider/select-data-provider.component';
 import { SelectMessageDestinationComponent } from '../../components/select-message-destination/select-message-destination.component';
 import { CreateNeoFlowsStore } from '../../stores/create-neoflows.store';
+import { MessageLinkDataSourcePageComponent } from '../message-link-datasource-page/message-link-datasource-page.component';
 
 @UntilDestroy()
 @Component({
@@ -46,12 +47,13 @@ import { CreateNeoFlowsStore } from '../../stores/create-neoflows.store';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    CreateMessageSchemaComponent,
-    MessageLinkDatasourceComponent,
-    MessageLinkDestinationComponent,
     NeoflowProfileComponent,
-    SelectMessageDestinationComponent,
-    SelectDataProviderComponent
+    SelectDataProviderComponent,
+    NeoFlowNodeComponent,
+    CreateMessageSchemaComponent,
+    MessageLinkDestinationComponent,
+    MessageLinkDataSourcePageComponent,
+    SelectMessageDestinationComponent
   ],
   templateUrl: './create-neoflow-page.component.html',
   styleUrl: './create-neoflow-page.component.scss',
@@ -68,10 +70,15 @@ export class CreateNeoflowPageComponent implements OnInit {
   #itServiceDetailService = inject(ItServiceDetailService);
   #itServiceService = inject(ItServiceService);
 
+  processorVer = computed(() => {
+    return this.#createNeoFlowStore?.neoflowProfile()?.neoFlowDataProcessorVer?.version ?? 'default';
+  });
+
   form: UntypedFormGroup;
   processorVerOpt = this.#createNeoFlowStore.neoflowProcessorVers;
   addedOt = this.#createNeoFlowStore.addedOt;
   addedIt = this.#createNeoFlowStore.addedIt;
+  addedMessageSchema = this.#createNeoFlowStore.addedMessageSchema;
   texolTagDoc = this.#createNeoFlowStore.texolTagDoc;
 
   get currentStepperId() {
@@ -95,14 +102,21 @@ export class CreateNeoflowPageComponent implements OnInit {
           return this.#createNeoFlowStore.addedOt()?.length > 0 ? false : true;
         case CREATE_NEOFLOW_STEP.selectMessageDestination:
           return this.#createNeoFlowStore.addedIt()?.length > 0 ? false : true;
+        case CREATE_NEOFLOW_STEP.createMessageSchema:
+          return this.form.get(this.stepperName).invalid;
+        case CREATE_NEOFLOW_STEP.linkDataSource:
+          return this.#createNeoFlowStore.dsToMessageConnection()?.length > 0 ? false : true;
       }
-      // return this.form.get(this.stepperName).invalid;
     }
     return false;
   }
 
   get neoflowProfileCtrl() {
     return this.form.get('neoflowProfile') as UntypedFormControl;
+  }
+
+  get createMessageSchemaCtrl() {
+    return this.form.get('createMessageSchema') as UntypedFormControl;
   }
 
   isRtuProfile(appName) {
@@ -377,7 +391,8 @@ export class CreateNeoflowPageComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.#fb.group({
-      neoflowProfile: []
+      neoflowProfile: [],
+      createMessageSchema: []
     });
 
     this.neoflowProfileCtrl.valueChanges
@@ -385,6 +400,15 @@ export class CreateNeoflowPageComponent implements OnInit {
         untilDestroyed(this),
         map((neoflowProfile) => {
           this.#createNeoFlowStore.updateNeoFlowProfile(neoflowProfile);
+        })
+      )
+      .subscribe();
+
+    this.createMessageSchemaCtrl.valueChanges
+      .pipe(
+        untilDestroyed(this),
+        map((messageSchema) => {
+          this.#createNeoFlowStore.updateMessageSchema(messageSchema);
         })
       )
       .subscribe();

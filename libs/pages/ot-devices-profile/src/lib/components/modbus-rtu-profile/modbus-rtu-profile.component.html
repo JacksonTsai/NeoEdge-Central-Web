@@ -2,6 +2,12 @@
   @if (otDeviceProfileMode.OT_DEVICE_VIEW === otProfileMode()) {
     <h2 class="card__title">Device Profile</h2>
   }
+
+  <h5 class="tip tip--accent rtu-info">
+    Before running the Modbus RTU, ensure that the serial port interface (RS-232 or RS-485) on your Gateway is properly
+    configured using the utility provided by the gateway vendor. Detail: https://xxxx.xxxx.xxxx
+  </h5>
+
   <form [formGroup]="form">
     <section class="card__sec">
       <h3 class="card__sub-title">Basic</h3>

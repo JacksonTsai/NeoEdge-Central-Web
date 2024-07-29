@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, EventEmitter, input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { IDashboardTimeRecord } from '@neo-edge-web/models';
 import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
 
 @Component({
@@ -15,14 +16,17 @@ import { dateTimeFormatPipe } from '@neo-edge-web/pipes';
 })
 export class UpdateDashboardDateComponent {
   @Output() handleReload = new EventEmitter();
-  timestamp = signal<number>(this.getTimestamp(new Date()));
+  timeRecord = input<IDashboardTimeRecord>(null);
+
+  timestamp = computed<number>(() => {
+    return this.timeRecord()?.activitiesTime?.end || this.getTimestamp(new Date());
+  });
 
   getTimestamp(time: Date): number {
     return Math.floor(time.getTime() / 1000);
   }
 
   onReload(): void {
-    this.timestamp.set(this.getTimestamp(new Date()));
     this.handleReload.emit();
   }
 }

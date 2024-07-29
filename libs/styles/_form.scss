@@ -1,0 +1,9 @@
+// Hide input type number arrow navigation
+input.hide-input-number-arrow::-webkit-outer-spin-button,
+input.hide-input-number-arrow::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input.hide-input-number-arrow[type='number'] {
+  -moz-appearance: textfield;
+}

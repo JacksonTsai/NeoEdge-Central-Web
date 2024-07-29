@@ -60,14 +60,16 @@ export interface IBillingChartSeriesTitle {
 }
 
 export interface IBillingEstimateResp {
+  billBegin: string;
+  billEnd: string;
   baseFee: number;
   dailyRate: number;
   extraFee: number;
+  currency: string;
   totalUsage: number;
   totalFee: number;
   estimateUsage: number;
   estimateFee: number;
-  currency: string;
   caculateAt: number;
 }
 

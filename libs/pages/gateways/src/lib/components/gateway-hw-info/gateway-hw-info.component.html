@@ -60,5 +60,19 @@
         {{ profileUpdatedTime() ? handleDatetimeFormat(profileUpdatedTime()) : '-' }}
       </div>
     </div>
+
+    <div class="item">
+      <div class="label">TPM</div>
+      <div class="value">
+        @if (gwHwInfo()?.hasTPM) {
+          <div class="icon-text">
+            <mat-icon svgIcon="icon:ok" color="primary"></mat-icon>
+            <span>Has TPM protection</span>
+          </div>
+        } @else {
+          -
+        }
+      </div>
+    </div>
   </div>
 </div>

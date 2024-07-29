@@ -1,7 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IBillingEstimateResp, IBillingParamsReq, IGetBillingRecordResp, IGetBillingResp } from '@neo-edge-web/models';
+import {
+  IBillingEstimateResp,
+  IBillingParamsReq,
+  IDownloadBillingRecordReq,
+  IGetBillingRecordResp,
+  IGetBillingResp
+} from '@neo-edge-web/models';
 import { setParamsArrayWithKey } from '@neo-edge-web/utils';
 import { catchError, Observable, throwError } from 'rxjs';
 import { HttpService } from '../http-service';
@@ -21,8 +27,8 @@ export class BillingService {
     return throwError(() => err);
   }
 
-  getProjectFee$ = (feeParams: IBillingParamsReq): Observable<IGetBillingResp> => {
-    const params = setParamsArrayWithKey(feeParams);
+  getProjectFee$ = (queryStr: IBillingParamsReq): Observable<IGetBillingResp> => {
+    const params = setParamsArrayWithKey(queryStr);
     return this.#http.get(`${this.BILLING_PROJECT_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project usage and fee failure', 'X', {
@@ -35,8 +41,8 @@ export class BillingService {
     );
   };
 
-  getCompanyFee$ = (feeParams: IBillingParamsReq): Observable<IGetBillingResp> => {
-    const params = setParamsArrayWithKey(feeParams);
+  getCompanyFee$ = (queryStr: IBillingParamsReq): Observable<IGetBillingResp> => {
+    const params = setParamsArrayWithKey(queryStr);
     return this.#http.get(`${this.BILLING_COMPANY_PATH}?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Get project usage and fee failure', 'X', {
@@ -75,9 +81,9 @@ export class BillingService {
     );
   };
 
-  downloadBillingRecordPDF$ = (downloadBillingRecordParams): Observable<void> => {
-    const params = setParamsArrayWithKey(downloadBillingRecordParams);
-    return this.#http.get(`${this.BILLING_RECORDS_PATH}/download?${params}`).pipe(
+  downloadBillingRecordPDF$ = (queryStr: IDownloadBillingRecordReq): Observable<ArrayBuffer> => {
+    const params = setParamsArrayWithKey(queryStr);
+    return this.#http.getArrayBuffer(`${this.BILLING_RECORDS_PATH}/download?${params}`).pipe(
       catchError((err) => {
         this.#snackBar.open('Download company billing record failure', 'X', {
           horizontalPosition: 'end',

@@ -14,3 +14,12 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes animate-alpha {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

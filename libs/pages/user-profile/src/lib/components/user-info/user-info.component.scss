@@ -46,6 +46,13 @@ fieldset {
   }
 }
 
+.user-info {
+  &__name {
+    line-height: 1.2;
+    word-break: break-word;
+  }
+}
+
 .item {
   &__first {
     margin-top: 32px;

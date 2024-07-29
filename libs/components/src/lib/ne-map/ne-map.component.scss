@@ -10,13 +10,24 @@
     width: 100%;
     position: relative;
   }
+
+  &:hover {
+    .map-tip {
+      transform: translateY(calc(100% + 1px));
+    }
+  }
 }
-.edit-disabled {
-  z-index: 1000;
+
+.map-tip {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  z-index: 1000;
   bottom: 0;
-  background-color: $primary-bg;
+  left: 0;
+  padding: 8px;
+  width: 100%;
+  color: $white;
+  font-size: 12px;
+  background: rgba($black, 0.6);
+  transition: transform 0.5s;
+  animation: animate-alpha reverse 1 0.5s;
 }

@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>
   @if (data.type === 'ot') {
-    <span> Create OT Device From Copy </span>
+    <span> Create OT Device Profile From Copy </span>
   } @else if (data.type === 'it') {
-    <span> Create IT App From Copy </span>
+    <span> Create IT Service Profile From Copy </span>
   } @else {
     <span> Create NeoFlow From Copy </span>
   }
@@ -17,9 +17,9 @@
     <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>
         @if (data.type === 'ot') {
-          Device Name
+          OT Device Profile Name
         } @else if (data.type === 'it') {
-          App Service Name
+          IT Service Profile Name
         } @else {
           <span> NeoFlow Name </span>
         }

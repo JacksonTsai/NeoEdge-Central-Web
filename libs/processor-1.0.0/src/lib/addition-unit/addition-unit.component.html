@@ -1,0 +1,10 @@
+<div class="addition-unit" cdkDrag>
+  <div class="socket"></div>
+  <mat-form-field appearance="outline" floatLabel="always">
+    <input matInput [formControl]="valueCtrl" type="text" maxlength="64" />
+    <!-- @if (valueCtrl.hasError('required') || valueCtrl.hasError('whitespace')) {
+      <mat-error>Required.</mat-error>
+    } -->
+  </mat-form-field>
+  <div class="socket"></div>
+</div>

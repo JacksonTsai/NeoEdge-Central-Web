@@ -1,0 +1,53 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+}
+
+table {
+  width: 100%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+tr.element-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.element-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.element-row {
+  &::ng-deep {
+    td {
+      border-bottom-width: 0;
+    }
+  }
+}
+
+.element-detail {
+  overflow: hidden;
+
+  &-td {
+    padding: 0;
+  }
+
+  &__content {
+    padding: 16px;
+    background: $hover-gray;
+  }
+
+  &::ng-deep {
+    .mdc-data-table__row:not(:last-child) .mat-mdc-cell {
+      border-bottom: 1px solid $border-color !important;
+    }
+  }
+}
+
+.expand-arrow {
+  width: 52px;
+  padding: 0;
+}

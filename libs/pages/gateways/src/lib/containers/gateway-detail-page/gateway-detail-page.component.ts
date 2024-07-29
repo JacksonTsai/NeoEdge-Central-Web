@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Signal, computed, effect, inject, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { RouterModule } from '@angular/router';
 import * as AuthStore from '@neo-edge-web/auth-store';
+import { eventLogExcludeConfig } from '@neo-edge-web/configs';
 import { GatewayDetailService } from '@neo-edge-web/global-services';
 import {
   GATEWAY_LOADING,
@@ -12,6 +16,7 @@ import {
   GW_RUNNING_MODE,
   IDownloadGatewayEventLogsReq,
   IEditGatewayProfileReq,
+  IEventDoc,
   PERMISSION,
   TGatewayStatusInfo,
   TGetGatewayEventLogsReq,
@@ -49,6 +54,7 @@ enum GATEWAY_DETAIL_TAB {
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     MatTabsModule,
     GatewayProfileComponent,
     GatewayStatusInfoComponent,
@@ -56,6 +62,8 @@ enum GATEWAY_DETAIL_TAB {
     GatewayLogComponent,
     DeleteGatewayConfirmDialogComponent,
     MatCardModule,
+    MatButtonModule,
+    MatIconModule,
     GatewayHwInfoComponent,
     GatewayNeoedgxComponent,
     GatewayRemoteAccessComponent,
@@ -83,6 +91,13 @@ export class GatewayDetailPageComponent {
   eventLogsList = this.gwDetailStore.eventLogsList;
   tabIndex = signal<number>(0);
   gatewayDetailTab = GATEWAY_DETAIL_TAB;
+
+  eventDocFilter = computed<IEventDoc>(() => {
+    if (!this.eventDoc()) return null;
+    return Object.fromEntries(
+      Object.entries(this.eventDoc()).filter(([key]) => !eventLogExcludeConfig.gateway.includes(Number(key)))
+    );
+  });
 
   get isDetachMode() {
     return GW_RUNNING_MODE.Detach === this.gatewayStatusInfo()?.currentMode;
@@ -118,6 +133,10 @@ export class GatewayDetailPageComponent {
               })
             )
             .subscribe();
+        }
+
+        if (this.isConnected) {
+          this.gwDetailStore.getSSHStatus();
         }
       },
       { allowSignalWrites: true }
@@ -173,6 +192,7 @@ export class GatewayDetailPageComponent {
       currentMode,
       sshMode,
       tpmEnabled,
+      gatewaySystemInfo,
       gatewaySystemInfoUpdateAt,
       ipcModelName,
       isPartnerIpc,
@@ -188,6 +208,7 @@ export class GatewayDetailPageComponent {
       currentMode,
       sshMode,
       tpmEnabled,
+      gatewaySystemInfo,
       gatewaySystemInfoUpdateAt,
       isPartnerIpc,
       ipcModelSeriesName,
@@ -294,7 +315,7 @@ export class GatewayDetailPageComponent {
       disableClose: true,
       autoFocus: false,
       restoreFocus: false,
-      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDoc() , params}
+      data: { gwDetailStore: this.gwDetailStore, eventDoc: this.eventDocFilter(), params }
     });
     downloadGatewayEventLogsDialogRef
       .afterClosed()
@@ -306,16 +327,7 @@ export class GatewayDetailPageComponent {
 
   onTabChange = (event: MatTabChangeEvent): void => {
     this.tabIndex.set(event.index);
-    if (event.index === GATEWAY_DETAIL_TAB.OPERATION && this.isConnected) {
-      // Gateway Operation
-      this.permissionsService
-        .hasPermission(this.permission[this.permission.APPLICATION_MANAGEMENT])
-        .then((hasPermission) => {
-          if (hasPermission) {
-            this.gwDetailStore.getSSHStatus();
-          }
-        });
-    } else if (event.index === GATEWAY_DETAIL_TAB.LOG) {
+    if (GATEWAY_DETAIL_TAB.LOG === event.index) {
       if (!this.eventDoc()) {
         this.gwDetailStore.getEventDoc();
       }

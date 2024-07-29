@@ -11,6 +11,7 @@ import {
   DashboardBillingComponent,
   DashboardGatewayComponent,
   DashboardItOtComponent,
+  DashboardLicenseComponent,
   DashboardProjectComponent,
   DashboardUsersComponent,
   UpdateDashboardDateComponent
@@ -28,6 +29,7 @@ import { DashboardStore } from '../../stores/dashboard.store';
     DashboardItOtComponent,
     DashboardGatewayComponent,
     DashboardBillingComponent,
+    DashboardLicenseComponent,
     UpdateDashboardDateComponent
   ],
   templateUrl: './dashboard-page.component.html',
@@ -49,6 +51,7 @@ export class DashboardPageComponent {
   eventDoc = this.#dashboardStore.eventDoc;
   activitiesList = this.#dashboardStore.activitiesList;
   projectFee = this.#dashboardStore.projectFee;
+  projectLicenses = this.#dashboardStore.projectLicenses;
   timeRecord = this.#dashboardStore.timeRecord;
 
   constructor() {
@@ -67,6 +70,7 @@ export class DashboardPageComponent {
   }
 
   onReload(): void {
+    this.#dashboardStore.setTimeRecord();
     this.updateData();
   }
 
@@ -87,6 +91,8 @@ export class DashboardPageComponent {
     this.#dashboardStore.getAllItServiceProfiles();
     this.#dashboardStore.getAllOtDeviceProfiles();
     this.#dashboardStore.getAllGateways();
+
+    this.#dashboardStore.getProjectLicense();
 
     this.loadActivities('GET');
 

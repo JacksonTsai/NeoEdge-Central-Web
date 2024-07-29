@@ -1,0 +1,9 @@
+:host {
+  display: block;
+
+  &::ng-deep {
+    mat-tab-body {
+      padding-top: 20px;
+    }
+  }
+}

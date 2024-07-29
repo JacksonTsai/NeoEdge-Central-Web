@@ -47,10 +47,10 @@
     </mat-step>
 
     <mat-step>
-      <ng-template matStepLabel>Create Message Schema</ng-template>
+      <ng-template matStepLabel> Create NeoFlow Message </ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-create-message-schema></ne-create-message-schema>
+          <ne-create-message-schema formControlName="createMessageSchema"></ne-create-message-schema>
         </mat-card-content>
       </mat-card>
     </mat-step>
@@ -59,13 +59,18 @@
       <ng-template matStepLabel> Link Data Source </ng-template>
       <mat-card class="card">
         <mat-card-content>
-          <ne-message-link-datasource></ne-message-link-datasource>
+          <ne-message-link-datasource-page
+            [processorVer]="processorVer()"
+            [otDevices]="addedOt()"
+            [messageSchema]="addedMessageSchema()"
+          ></ne-message-link-datasource-page>
         </mat-card-content>
       </mat-card>
     </mat-step>
 
     <mat-step>
       <ng-template matStepLabel> Link Destination </ng-template>
+
       <mat-card class="card">
         <mat-card-content>
           <ne-message-link-destination></ne-message-link-destination>

@@ -54,10 +54,14 @@ export const authReducer = createReducer(
   }),
   on(AuthAction.loginFail, (state) => ({ ...state, isLoginSuccess: false, isAuthVerifying: false })),
   on(AuthAction.updateAccessTokenAction, (state, { accessToken }) => ({ ...state, accessToken })),
-  on(AuthAction.changeCurrentProjectIdAction, (state, { currentProjectId, currentProjectName }) => ({
-    ...state,
-    currentProjectId,
-    currentProjectName
-  })),
+  on(
+    AuthAction.changeCurrentProjectIdAction,
+    (state, { currentProjectId, currentProjectName, currentProjectShortName }) => ({
+      ...state,
+      currentProjectId,
+      currentProjectName,
+      currentProjectShortName
+    })
+  ),
   on(AuthAction.resetAuthState, () => ({ ...initialState }))
 );

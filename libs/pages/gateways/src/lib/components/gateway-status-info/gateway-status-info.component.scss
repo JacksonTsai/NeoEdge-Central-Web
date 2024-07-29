@@ -52,6 +52,20 @@
   }
 }
 
+.status-value {
+  font-size: 14px;
+
+  .gateway-status {
+    --size: 14px;
+  }
+
+  mat-icon {
+    margin-right: 6px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
 @media screen and (max-width: 1721px) {
   .gw-status-info-wrapper {
     flex-direction: row;

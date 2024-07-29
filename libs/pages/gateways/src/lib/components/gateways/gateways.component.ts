@@ -132,7 +132,7 @@ export class GatewaysComponent implements AfterViewInit {
     }
 
     if (element.isPartnerIpc === BOOLEAN_STATUS.TRUE) {
-      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelName}.png`;
+      return `/assets/images/default_${element.ipcVendorName.toLowerCase()}_${element.ipcModelName.replace(/\s+/g, '_')}.png`;
     } else {
       return '/assets/images/default_gateway.png';
     }

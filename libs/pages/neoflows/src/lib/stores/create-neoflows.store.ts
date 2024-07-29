@@ -1,18 +1,12 @@
 import { inject } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { selectUserProfile } from '@neo-edge-web/auth-store';
-import {
-  ItServiceService,
-  NeoFlowsService,
-  OtDevicesService,
-  OtTexolService,
-  SupportAppsService
-} from '@neo-edge-web/global-services';
+import { ItServiceService, OtDevicesService, OtTexolService, SupportAppsService } from '@neo-edge-web/global-services';
 import {
   CREATE_NEOFLOW_LOADING,
   ICreateNeoFlowState,
   IItService,
   IOtDevice,
+  LeaderLine,
   SUPPORT_APPS_FLOW_GROUPS
 } from '@neo-edge-web/models';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
@@ -30,8 +24,10 @@ const initialState: ICreateNeoFlowState = {
   itProfileList: [],
   addedOt: [],
   addedIt: [],
+  addedMessageSchema: [],
   texolTagDoc: null,
   userProfile: null,
+  dsToMessageConnection: [],
   isLoading: CREATE_NEOFLOW_LOADING.NONE
 };
 
@@ -42,13 +38,18 @@ export const CreateNeoFlowsStore = signalStore(
   withMethods(
     (
       store,
-      dialog = inject(MatDialog),
-      nfService = inject(NeoFlowsService),
       otDevicesService = inject(OtDevicesService),
       itServiceService = inject(ItServiceService),
       supportAppsService = inject(SupportAppsService),
       otTexolService = inject(OtTexolService)
     ) => ({
+      updateDsToMessageConnection: rxMethod<LeaderLine[]>(
+        pipe(
+          map((dsToMessageConnection) => {
+            patchState(store, { dsToMessageConnection });
+          })
+        )
+      ),
       updateNeoFlowProfile: rxMethod<any>(
         pipe(
           map((neoflowProfile) => {
@@ -102,6 +103,16 @@ export const CreateNeoFlowsStore = signalStore(
           })
         )
       ),
+      updateMessageSchema: rxMethod<any>(
+        pipe(
+          map((messageSchema) => {
+            patchState(store, {
+              addedMessageSchema: [...messageSchema]
+            });
+          })
+        )
+      ),
+
       getProcessorApps: rxMethod<void>(
         pipe(
           switchMap(() => {

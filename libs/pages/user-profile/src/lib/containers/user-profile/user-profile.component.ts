@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import * as AuthStore from '@neo-edge-web/auth-store';
-import { UserService } from '@neo-edge-web/global-services';
+import { ProjectsService, UserService } from '@neo-edge-web/global-services';
 import {
   IGetProjectsResp,
   IGetUserProfileResp,
@@ -43,6 +43,7 @@ export class UserProfileComponent implements OnInit {
   #dialog = inject(MatDialog);
   #globalStore = inject(Store);
   userService = inject(UserService);
+  #projectsService = inject(ProjectsService);
   userInfo$ = this.#globalStore.select(AuthStore.selectUserProfile);
   projectsOpts = signal<IProjectByIdResp[]>([]);
   isLoading = signal<USER_INFO_LOADING>(USER_INFO_LOADING.NONE);
@@ -54,7 +55,21 @@ export class UserProfileComponent implements OnInit {
         untilDestroyed(this),
         map(() => {
           this.#globalStore.dispatch(AuthStore.userProfileAction());
+          this.isChangedProject(userInfo);
           this.isLoading.set(USER_INFO_LOADING.NONE);
+        })
+      )
+      .subscribe();
+  };
+
+  isChangedProject = (newUserInfo: IUserProfile) => {
+    this.userInfo$
+      .pipe(
+        untilDestroyed(this),
+        map((userInfo) => {
+          if (userInfo.userProfile.defaultProjectId !== newUserInfo.defaultProjectId) {
+            this.#projectsService.switchProject$(newUserInfo.defaultProjectId).pipe(untilDestroyed(this)).subscribe();
+          }
         })
       )
       .subscribe();

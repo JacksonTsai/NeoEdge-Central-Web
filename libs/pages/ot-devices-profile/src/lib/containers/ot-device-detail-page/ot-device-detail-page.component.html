@@ -1,12 +1,27 @@
+<div class="page-title-box shift-up">
+  <a
+    type="button"
+    mat-icon-button
+    color="primary"
+    class="btn"
+    [routerLink]="['/neoflow/ot-device-profile']"
+    id="ot-device-detail-back"
+  >
+    <mat-icon svgIcon="icon:arrow_left" color="primary" aria-hidden="false" aria-label="Back to IT service"></mat-icon>
+  </a>
+  <h1 class="page-title">{{ otDevice()?.name }}</h1>
+</div>
 <div class="ot-device-detail-wrapper">
-  <ne-support-app-item
-    [appData]="otDeviceVersion()"
-    [versionData]="otDeviceVersion()?.appVersions"
-    [clickable]="false"
-    [single]="true"
-  ></ne-support-app-item>
   <mat-card class="card">
     <mat-card-content>
+      <h2 class="card__title">OT Device Profile</h2>
+      <h3 class="card__sub-title">Device Protocol</h3>
+      <ne-support-app-item
+        [appData]="otDeviceVersion()"
+        [versionData]="otDeviceVersion()?.appVersions"
+        [clickable]="false"
+        [single]="true"
+      ></ne-support-app-item>
       <mat-tab-group animationDuration="0ms" mat-stretch-tabs="false" mat-align-tabs="start">
         <mat-tab label="Profile">
           <div class="ot-detail-content">

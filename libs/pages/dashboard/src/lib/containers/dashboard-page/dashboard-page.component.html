@@ -1,15 +1,15 @@
-<div class="page-title-box justify-between">
+<div class="page-title-box shift-up justify-between">
   <h1 class="page-title">Dashboard</h1>
-  <ne-update-dashboard-date (handleReload)="onReload()"></ne-update-dashboard-date>
+  <ne-update-dashboard-date [timeRecord]="timeRecord()" (handleReload)="onReload()"></ne-update-dashboard-date>
 </div>
 <div class="dashboard">
   <aside class="dashboard__aside">
+    <ne-dashboard-project [projectDetail]="projectDetail()"></ne-dashboard-project>
     <ne-dashboard-activities
       [activitiesList]="activitiesList()"
       [eventDoc]="eventDoc()"
       (handleScrollEnd)="onActivitiesScrollEnd()"
     ></ne-dashboard-activities>
-    <ne-dashboard-project [projectDetail]="projectDetail()"></ne-dashboard-project>
     <ne-dashboard-users [projectDetail]="projectDetail()" [usersList]="usersList()"></ne-dashboard-users>
   </aside>
   <section class="dashboard__main">
@@ -21,6 +21,7 @@
         [projectFee]="projectFee()"
         [timeRecord]="timeRecord()?.projectFeeTime"
       ></ne-dashboard-billing>
+      <ne-dashboard-license [projectLicenses]="projectLicenses()"></ne-dashboard-license>
     </div>
   </section>
 </div>
