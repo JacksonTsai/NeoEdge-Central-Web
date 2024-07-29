@@ -86,6 +86,7 @@
             <fieldset *ngxPermissionsOnly="[permission[permission.APPLICATION_MANAGEMENT]]">
               <legend>Remote Access</legend>
               <ne-gateway-remote-access
+                [gatewayStatusInfo]="gatewayStatusInfo()"
                 [isLoading]="isLoading()"
                 [isConnected]="isConnected"
                 [sshStatus]="sshStatus()"
