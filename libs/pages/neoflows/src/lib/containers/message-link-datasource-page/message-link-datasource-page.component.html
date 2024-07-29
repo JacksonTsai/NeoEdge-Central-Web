@@ -1,0 +1,34 @@
+<div class="processor-list">
+  @for (processor of processorMenuOpt(); let i = $index; track processor.displayName) {
+    <button type="button" mat-stroked-button color="primary" (click)="addProcessorUnit($event, processor)">
+      {{ processor.displayName }}
+    </button>
+  }
+</div>
+
+<div class="message-link-datasource">
+  <div class="message-link-datasource__source">
+    @for (source of sources(); track source.name) {
+      <ne-neoflow-node
+        [nodeGroup]="source"
+        (handleSelectedNode)="onSelectedNode($event)"
+        [selectedNode]="selectedNode()"
+      ></ne-neoflow-node>
+    }
+  </div>
+
+  <div class="message-link-datasource__process">
+    <ng-container #container> </ng-container>
+    <div id="processor-wrapper"></div>
+  </div>
+
+  <div class="message-link-datasource__destination">
+    @for (destination of destination(); track destination.name) {
+      <ne-neoflow-node
+        [nodeGroup]="destination"
+        (handleSelectedNode)="onSelectedNode($event)"
+        [selectedNode]="selectedNode()"
+      ></ne-neoflow-node>
+    }
+  </div>
+</div>

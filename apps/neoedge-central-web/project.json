@@ -34,7 +34,7 @@
         "stylePreprocessorOptions": {
           "includePaths": ["libs/styles/"]
         },
-        "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"]
+        "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js", "node_modules/leader-line/leader-line.min.js"]
       },
       "configurations": {
         "production": {

@@ -1,0 +1,26 @@
+// .process-unit {
+//   width: 150px;
+//   height: 150px;
+//   border: 1px solid #000;
+// }
+
+@use 'colors' as *;
+
+.math-unit {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px;
+  width: 120px;
+  height: 100px;
+}
+mat-form-field {
+  width: 100px;
+}
+
+.socket {
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  border: 1px solid;
+  border: 1px solid gray;
+}

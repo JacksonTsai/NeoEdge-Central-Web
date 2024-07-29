@@ -6,6 +6,7 @@ export * from './download-file.helper';
 export * from './event.helper';
 export * from './generateImg2Base64.helper';
 export * from './math.helper';
+export * from './neoflow-link.helper';
 export * from './obj2FromData.helper';
 export * from './params.helper';
 export * from './pick.helper';

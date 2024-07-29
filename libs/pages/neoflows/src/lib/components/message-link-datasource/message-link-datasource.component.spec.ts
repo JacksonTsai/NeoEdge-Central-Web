@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MessageLinkDatasourceComponent } from './message-link-datasource.component';
+import { MessageLinkDataSourceComponent } from './message-link-datasource.component';
 
 describe('MessageLinkDatasourceComponent', () => {
-  let component: MessageLinkDatasourceComponent;
-  let fixture: ComponentFixture<MessageLinkDatasourceComponent>;
+  let component: MessageLinkDataSourceComponent;
+  let fixture: ComponentFixture<MessageLinkDataSourceComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MessageLinkDatasourceComponent]
+      imports: [MessageLinkDataSourceComponent]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MessageLinkDatasourceComponent);
+    fixture = TestBed.createComponent(MessageLinkDataSourceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

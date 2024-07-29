@@ -1,0 +1,27 @@
+<!-- <div class="process-unit" cdkDrag>
+  <p>math-calculator works!</p>
+</div> -->
+<div class="processor-box math-unit" cdkDrag>
+  <div class="socket"></div>
+  <div class="calc-unit">
+    <mat-form-field class="" appearance="outline" floatLabel="always">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="ctrl">
+        <mat-option [value]="mathUnit.Addition"> Addition </mat-option>
+        <mat-option [value]="mathUnit.Subtraction"> Subtraction </mat-option>
+        <mat-option [value]="mathUnit.Multiplication"> Multiplication </mat-option>
+        <mat-option [value]="mathUnit.Division"> Division </mat-option>
+        <mat-option [value]="mathUnit.Pow"> Power </mat-option>
+        <mat-option [value]="mathUnit.Absolute"> Absolute </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" floatLabel="always">
+      <input matInput [formControl]="valueCtrl" type="number" maxlength="64" />
+      <!-- @if (accountCtrl.hasError('required') || messageNameCtrl.hasError('whitespace')) {
+          <mat-error>Required.</mat-error>
+          } -->
+    </mat-form-field>
+  </div>
+  <div class="socket"></div>
+</div>
