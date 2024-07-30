@@ -32,6 +32,27 @@
     gap: 10px;
   }
 
+  &-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 40px + 9;
+    border-bottom: 1px solid $border-color;
+
+    &::before {
+      display: none;
+    }
+
+    &__title {
+      font-size: var(--mdc-dialog-subhead-size, 1rem);
+      font-weight: var(--mdc-dialog-subhead-weight, 400);
+    }
+
+    ne-live-monitor-countdown {
+      font-weight: normal;
+    }
+  }
+
   &__block {
     flex: 1;
 

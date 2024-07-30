@@ -1,4 +1,7 @@
-<h1 mat-dialog-title class="gl-h6">Live Monitor</h1>
+<div mat-dialog-title class="live-monitor-header">
+  <h1 class="live-monitor-header__title">Live Monitor</h1>
+  <ne-live-monitor-countdown [isRunning]="isRunning()"></ne-live-monitor-countdown>
+</div>
 <mat-dialog-content class="live-monitor-wrapper">
   <div class="live-monitor__block flex-2">
     <ne-live-monitor-schema></ne-live-monitor-schema>

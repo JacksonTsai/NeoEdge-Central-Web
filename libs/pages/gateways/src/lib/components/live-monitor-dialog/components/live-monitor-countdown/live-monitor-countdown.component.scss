@@ -1,0 +1,23 @@
+@use 'colors' as *;
+
+:host {
+  display: block;
+}
+
+.countdown {
+  font-size: 14px;
+  color: $text-primary;
+
+  &__time {
+    --end-alpha: 0.3;
+
+    &.is-pause {
+      animation: animate-alpha 1s linear infinite alternate-reverse;
+    }
+  }
+
+  mat-icon {
+    margin-left: 8px;
+    color: $black-gary;
+  }
+}

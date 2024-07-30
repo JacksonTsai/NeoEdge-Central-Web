@@ -8,6 +8,7 @@ import { IEventDoc } from '@neo-edge-web/models';
 import { GatewayDetailStore } from '../../../../stores/gateway-detail.store';
 import {
   LiveMonitorControlComponent,
+  LiveMonitorCountdownComponent,
   LiveMonitorCpuComponent,
   LiveMonitorLogComponent,
   LiveMonitorRamComponent,
@@ -28,7 +29,8 @@ import {
     LiveMonitorRamComponent,
     LiveMonitorStatusComponent,
     LiveMonitorLogComponent,
-    LiveMonitorControlComponent
+    LiveMonitorControlComponent,
+    LiveMonitorCountdownComponent
   ],
   templateUrl: './live-monitor-dialog.component.html',
   styleUrl: './live-monitor-dialog.component.scss',
