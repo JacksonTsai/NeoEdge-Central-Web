@@ -97,7 +97,7 @@
         </mat-tab>
         <mat-tab label="NeoFlow" id="gateway-detail-gateway-neoflow-tab">
           <div class="gw-tab">
-            <ne-gateway-neoflow></ne-gateway-neoflow>
+            <ne-gateway-neoflow (handleOpenLiveMonitor)="onOpenLiveMonitor($event)"></ne-gateway-neoflow>
           </div>
         </mat-tab>
         <mat-tab label="Log And Alert" id="gateway-detail-gateway-log-tab">

@@ -63,7 +63,7 @@ export const getCurrentDateInfo = (currentDate: Date): IBillingMonthInfo => {
   };
 };
 
-export const getChartOption = (setting: IBillingChart): ApexOptions => {
+export const getBillingChartOption = (setting: IBillingChart): ApexOptions => {
   const title: IBillingChartSeriesTitle = {
     usage: 'Usage',
     fee: 'Fee'

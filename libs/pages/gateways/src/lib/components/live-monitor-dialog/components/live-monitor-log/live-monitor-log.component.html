@@ -1,0 +1,20 @@
+<mat-card>
+  <mat-card-header>
+    <h2 class="live-monitor__title">Log</h2>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="lm-log-wrapper">
+      <mat-accordion class="lm-log">
+        <ul class="no-bullet">
+          @for (item of eventDataMock; track item.timestamp) {
+            <li class="lm-log__item">
+              <span class="lm-log__datetime">{{ item.timestamp | dateTimeFormat }}</span>
+              <span class="lm-log__content">{{ eventDoc()?.[item.eventId]?.content }}</span>
+              <div class="lm-log__detail">"eventData": {{ item.eventData | json }}</div>
+            </li>
+          }
+        </ul>
+      </mat-accordion>
+    </div>
+  </mat-card-content>
+</mat-card>

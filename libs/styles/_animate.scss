@@ -17,9 +17,9 @@
 
 @keyframes animate-alpha {
   0% {
-    opacity: 1;
+    opacity: var(--start-alpha, 1);
   }
   100% {
-    opacity: 0;
+    opacity: var(--end-alpha, 0);
   }
 }

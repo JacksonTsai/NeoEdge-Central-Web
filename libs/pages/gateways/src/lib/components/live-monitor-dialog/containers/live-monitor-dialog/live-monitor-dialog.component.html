@@ -1,0 +1,27 @@
+<div mat-dialog-title class="live-monitor-header">
+  <h1 class="live-monitor-header__title">Live Monitor</h1>
+  <ne-live-monitor-countdown [isRunning]="isRunning()"></ne-live-monitor-countdown>
+</div>
+<mat-dialog-content class="live-monitor-wrapper">
+  <div class="live-monitor__block flex-2">
+    <ne-live-monitor-schema></ne-live-monitor-schema>
+    <div class="live-monitor__sub-block">
+      <ne-live-monitor-cpu></ne-live-monitor-cpu>
+      <ne-live-monitor-ram></ne-live-monitor-ram>
+    </div>
+  </div>
+  <div class="live-monitor__block">
+    <ne-live-monitor-status></ne-live-monitor-status>
+  </div>
+  <div class="live-monitor__block">
+    <ne-live-monitor-log [eventDoc]="data.eventDoc"></ne-live-monitor-log>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="dialog__action">
+  <ne-live-monitor-control
+    [isRunning]="isRunning()"
+    (handleStart)="onStartMonitor($event)"
+    (handleStop)="onStopMonitor()"
+  ></ne-live-monitor-control>
+</mat-dialog-actions>

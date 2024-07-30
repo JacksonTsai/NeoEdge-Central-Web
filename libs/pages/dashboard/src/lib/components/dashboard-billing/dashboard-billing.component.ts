@@ -10,8 +10,8 @@ import {
   arraySum,
   dateDashToSlash,
   generatePastMonths,
+  getBillingChartOption,
   getChartColor,
-  getChartOption,
   getChartUsageAndFee
 } from '@neo-edge-web/utils';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
@@ -71,7 +71,7 @@ export class DashboardBillingComponent {
       currency: this.currencyUnit()
     };
 
-    this.chartOptions.set(getChartOption(chartSetting));
+    this.chartOptions.set(getBillingChartOption(chartSetting));
     this.total.set(arraySum(fee));
   };
 }
